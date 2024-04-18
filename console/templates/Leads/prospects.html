@@ -110,7 +110,7 @@
                       <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'opportunity' %}active{% endif %}" href="{% url 'opportunity' %}">Opportunity</a>
                   </li>
                   <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'admission' %}active{% endif %}" href="{% url 'admission' %}">Admissions</a>
+                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'admission' %}active{% endif %}" href="{% url 'admissions' %}">Admissions</a>
                   </li>
                   <li class="nav-item">
                       <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'spam' %}active{% endif %}" href="{% url 'spam' %}">Spam List</a>
@@ -349,21 +349,17 @@
           </div>
           <div class="col-md-6 mb-3">
             <label for="branch_name" class="form-label">Branch Name <span class="text-danger">*</span></label>
-            <select id="branch_name" class="form-select form-control" name="branch_name">
-              <option value="" selected disabled>Select Your Course</option>
-              {% for i in  Branches %}
-                <option value="{{i.id}}">{{i.branch_name}}</option>
-              {% endfor %}
+            <select id="branch_name" name="branch_name"  class="form-select form-control">
+              <option value="" selected disabled>Select Your Branch</option>
+              <!-- Branch options will be populated dynamically -->
             </select>
             
           </div>
           <div class="col-md-6 mb-3">
             <label for="course_name" class="form-label">Course <span class="text-danger">*</span></label>
-            <select id="course_name" class="form-select form-control" name="course_name">
+            <select id="course_name" name="course_name" class="form-select form-control" disabled>
               <option value="" selected disabled>Select Your Course</option>
-              {% for i in  courses %}
-                <option value="{{i.id}}">{{i.course_name}}</option>
-              {% endfor %}
+              <!-- Course options will be populated dynamically -->
             </select>
             
           </div>
@@ -1222,7 +1218,44 @@ $(document).ready(function() {
 });
 </script>
 
-
+<script>
+  $(document).ready(function() {
+    // Load initial branch data
+    $.ajax({
+      url: '/get_branches/',
+      type: 'GET',
+      success: function(data) {
+        var branchSelect = $('#branch_name');
+        $.each(data, function(index, branch) {
+          branchSelect.append('<option value="' + branch.id + '">' + branch.branch_name + '</option>');
+        });
+      }
+    });
+  
+    // Handle branch change event
+    $('#branch_name').on('change', function() {
+      var branchId = $(this).val();
+      var courseSelect = $('#course_name');
+      courseSelect.prop('disabled', true).find('option').not(':first').remove();
+  
+      if (branchId) {
+        $.ajax({
+          url: '/get_courses/' + branchId + '/',
+          type: 'GET',
+          success: function(data) {
+            courseSelect.prop('disabled', false);
+            $.each(data, function(index, course) {
+              courseSelect.append('<option value="' + course.course_name__id + '">' + course.course_name__course_name + '</option>');
+            });
+          },
+          error: function(xhr, status, error) {
+            console.log("Error fetching courses:", error);
+          }
+        });
+      }
+    });
+  });
+</script>
 
 {% endblock %}
 

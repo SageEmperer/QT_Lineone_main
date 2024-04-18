@@ -144,7 +144,7 @@
                       <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'opportunity' %}active{% endif %}" href="{% url 'opportunity' %}">Opportunity</a>
                   </li>
                   <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'admission' %}active{% endif %}" href="{% url 'admission' %}">Admissions</a>
+                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'admission' %}active{% endif %}" href="{% url 'admissions' %}">Admissions</a>
                   </li>
                   <li class="nav-item">
                       <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'spam' %}active{% endif %}" href="{% url 'spam' %}">Spam List</a>
@@ -501,13 +501,8 @@
                 </div>
                 <div class="col-md-6 mb-3">
                   <label for="courseFaculty" class="form-label">Course Faculty <span class="text-danger">*</span></label>
-                  <!-- <input type="text" class="form-control  bg-light text-secondary" id="courseFaculty" value="{{i.course_faculty}}" disabled> -->
-                  <select id="courseFaculty" class="form-select form-control" name="courseFaculty">
-                    <option selected disabled>Select the Course Faculty </option>
-                    {% for emp in faculty %}
-                    <option value="{{emp.id}}">{{emp.first_name}} {{emp.last_name}} ({{emp.department_name.department_name}})</option>
-                    {% endfor %}
-                  </select>
+                  <input type="text" class="form-control  bg-light text-secondary" id="courseFaculty" value="{{i.course_name.teaching_faculty.first_name}} {{i.course_name.teaching_faculty.last_name}}" disabled>
+
                     
                 </div>
                 <div class="col-md-4 mb-3">
@@ -561,7 +556,6 @@
 {% endfor %}
 
 <!-- admission modal -->
-<!-- Modal -->
 {% for i in leads %}
 <div class="modal fade" id="sumbit_admissoinmodal{{i.id}}" tabindex="-1" role="dialog" aria-labelledby="sumbit_admissoinmodal{{i.id}}" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
@@ -574,8 +568,7 @@
           </div>
           
           <div class="modal-body ">
-            
-<form action="{% url 'submit_admission' i.id %}" class="row g-3 admissionValid" method="post">
+            <form action="{% url 'move_to_admission' i.id %}" class="row g-3 admissionValid" method="post">
               {% csrf_token %}
             
               <div class="col-md-6 mb-3">
@@ -584,11 +577,11 @@
               </div>
               <div class="col-md-6 mb-3">
                 <label for="studentname" class="form-label">Student Name <span class="text-danger">*</span></label>
-                <input type="text" class="form-control  bg-light text-secondary" id="studentname" value="{{i.firstname}} {{i.lastname}}" disabled>
+                <input type="text" class="form-control  bg-light text-secondary" id="studentname" value="{{i.first_name}} {{i.last_name}}" disabled>
               </div>
               <div class="col-md-6 mb-3">
                 <label for="mblno" class="form-label">Mobile No <span class="text-danger">*</span></label>
-                <input type="tel" class="form-control  bg-light text-secondary" id="mblno" value="{{i.phone}}" disabled>
+                <input type="tel" class="form-control  bg-light text-secondary" id="mblno" value="{{i.mobile_number}}" disabled>
               </div>
               <div class="col-md-6 mb-3">
                 <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
@@ -596,54 +589,55 @@
               </div>
               <div class="col-md-6 mb-3">
                 <label for="courseinput" class="form-label">Course <span class="text-danger">*</span></label>
-                <input type="text" class="form-control  bg-light text-secondary" id="courseinput" value="{{i.course_interested_in}}" disabled>
+                <input type="text" class="form-control  bg-light text-secondary" id="courseinput" value="{{i.course_name.course_name}}" disabled>
               </div>
               <div class="col-md-6 mb-3">
                 <label for="courseFaculty" class="form-label">Course Faculty <span class="text-danger">*</span></label>
-                <!-- <input type="text" class="form-control  bg-light text-secondary" id="courseFaculty" value="{{i.course_faculty}}" disabled> -->
-                <select id="courseFaculty" class="form-select form-control" name="courseFaculty">
-                  <option selected disabled>Select the Course Faculty </option>
-                  <option>Adullah</option>
-                  <option>RamPrasad</option>
-                  <option>Raj</option>
-                </select>
+                <input type="text" class="form-control  bg-light text-secondary" id="courseFaculty" value="{{i.course_name.teaching_faculty.first_name}} {{i.course_name.teaching_faculty.last_name}}" disabled>
               </div>
-              <div class="col-md-6 mb-3">
-                <label for="plan" class="form-label">Plan <span class="text-danger">*</span></label>
-                <select id="plan" name="plan" class="form-select form-control">
-
-                  <option selected disabled>Select the Plan</option>
-                  <option>JOIP</option>
-                  <option>Internship</option>
-                </select>
+              <div class="col-md-4 mb-3">
+                <label for="plan" class="form-label">Plan <span class="text-danger" >*</span></label>
+                <input type="text" class="form-control  bg-light text-secondary" id="plan" value="{{i.course_name.course_plan.plan_name}}" disabled>
                 
               </div>
-              <div class="col-md-6 mb-3">
+              <div class="col-md-4 mb-3">
                 <label for="demodate" class="form-label">Attended Demo On <span class="text-danger">*</span></label>
                
-                <input type="text" class="form-control  bg-light text-secondary" id="demodate" value="{{i.demo_date |default:'Not Attend'}}" name="demodate" disabled>
+                <input type="text" class="form-control  bg-light text-secondary" id="demodate" value="{{i.demo.datestartat |default:'Not Attend'}}" disabled>
                
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="batchno" class="form-label">Batch Number <span class="text-danger">*</span></label>
+                <select id="batchno" class="form-select form-control" name="batchno">
+                  <option selected disabled>Select the Batch Number</option>
+                  {% for batch in batches %}
+                  {% if i.course_name.course_name == batch.course_id and i.course_name.specialization == batch.spec_id %}
+                  <option value="{{batch.id}}">{{batch.batch_number}}</option>
+                  {% endif %}
+                  {% endfor %}
+
+                </select>
+                
               </div>
               <!--  -->
               <div class="col-md-4 mb-3">
                 <label for="courseFee" class="form-label">Course Fee <span class="text-danger">*</span></label>
-                <input type="number" step="0.01"  class="form-control  bg-light text-secondary" id="courseFee" value=""  name="courseFee" >
+                <input type="text" class="form-control  bg-light text-secondary" id="courseFee" value="{{i.course_name.course_fee}}" disabled>
               </div>
               <div class="col-md-4 mb-3">
                 <label for="discount" class="form-label">Discount Fee <span class="text-danger">*</span></label>
-                <input type="number"   class="form-control" id="discount" value="" placeholder="Discount Fee (%)" name="discountFee">
+                <input type="text" class="form-control bg-light text-secondary" id="discount" placeholder="Discount Fee (%)" value="{{i.course_name.discount}}%" disabled>
               </div>
               <div class="col-md-4 mb-3">
-                <label for="finalFee" class="form-label">Final Fee <span  class="text-danger">*</span></label>
-                <input type="number" step="0.01"  class="form-control text-secondary" id="finalFee" placeholder="Final Fee" readonly name="finalFee">
-
+                <label for="finalFee" class="form-label">Final Fee <span class="text-danger">*</span></label>
+                <input type="text" class="form-control bg-light text-secondary" id="finalFee" placeholder="Final Fee" value="{{i.course_name.final_price}}" disabled>
               </div>
               
               <!--  -->
 
               <div class="col-md-4 mb-3">
                 <label for="trainingType" class="form-label">Training Type <span class="text-danger">*</span></label>
-                <input type="text" class="form-control  bg-light text-secondary" id="trainingType" value="{{i.Training_type}}" disabled>
+                <input type="text" class="form-control  bg-light text-secondary" id="trainingType" value="{{i.training_type.TrainingTypeName}}" disabled>
               </div>
               <div class="col-md-4 mb-3">
                 <label for="branch" class="form-label">Branch <span class="text-danger">*</span></label>
@@ -651,25 +645,15 @@
               </div>
               <div class="col-md-4 mb-3">
                 <label for="Leadsource" class="form-label">Lead Source <span class="text-danger">*</span></label>
-                <input type="text" class="form-control  bg-light text-secondary" id="Leadsource" value="{{i.lead_source}}" disabled>
+                <input type="text" class="form-control  bg-light text-secondary" id="Leadsource" value="{{i.lead_sourse.prospect_type}}" disabled>
               </div>
-              <div class="col-md-4 mb-3">
-                <label for="batchno" class="form-label">Batch Number <span class="text-danger">*</span></label>
-                <select id="batchno" class="form-select form-control" name="batchno">
-                  <option selected disabled>Select the Batch Number</option>
-                  <option>25</option>
-                  <option>24</option>
-                  <option>23</option>
-                </select>
-                
+              <div class="col-md-6 mb-3">
+                <label for="admissionFee" class="form-label">Admission Fee <span class="text-danger" >*</span></label>
+                <input type="text" class="form-control text-secondary" id="admissionFee" name="admissionFee" placeholder="0.00">
               </div>
-              <div class="col-md-4 mb-3">
-                <label for="admissionFee" class="form-label">Admission Fee <span class="text-danger">*</span></label>
-                <input type="number" step="0.01"  class="form-control text-secondary" id="admissionFee" name="admissionFee" placeholder="0.00">
-              </div>
-              <div class="col-md-4 mb-3">
+              <div class="col-md-6 mb-3">
                 <label for="remainingfee" class="form-label">Remainingfee Fee <span class="text-danger">*</span></label>
-                <input type="number" step="0.01"  class="form-control text-secondary" id="remainingfee" name="remainingfee" placeholder="0.00" readonly>
+                <input type="text" class="form-control text-secondary" id="remainingfee" name="remainingfee" placeholder="0.00" readonly>
               </div>
               <!-- payment details -->
               <div class="col-md-6 mb-3">
@@ -725,6 +709,7 @@
                 <button type="reset" class="btn btn-secondary" >Reset</button>
               </div>
             </form>
+
           </div>
           
       </div>
@@ -1184,6 +1169,8 @@ $(document).ready(function(){
 });
 
 </script>
+
+
 
 
   

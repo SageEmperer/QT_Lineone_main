@@ -119,6 +119,20 @@ class TrainingType(models.Model):
 class Traning_type_import_form(models.Model):
   training_type_import=models.CharField(max_length=100)  
 
+
+
+# sub category
+class Sub_Category(models.Model):
+    sub_cat_title = models.CharField(max_length=80, unique=True, null=False)
+    sub_cat_status = models.BooleanField(default=False)
+    sub_cat_date = models.DateTimeField(default=datetime.now)
+
+def __str__(self):
+    return self.sub_cat_title
+
+
+
+
 # Courses
 class Course(models.Model):
     choice_status =(
@@ -152,6 +166,46 @@ class Specialization(models.Model):
 class Specialization_import(models.Model):
     specialization_name=models.CharField(max_length=100)
     course_name=models.CharField(max_length=100)
+
+
+
+
+
+
+
+class Create_Chapter(models.Model):
+    sub_cat_title = models.ForeignKey(Sub_Category, on_delete=models.CASCADE, default=True, null=False)
+    spec_title = models.ForeignKey(Specialization, on_delete=models.CASCADE, default=True, null=False)
+    course_title = models.ForeignKey(Course, on_delete=models.CASCADE, default=True, null=False)
+    chapter_title = models.CharField(max_length=80, null=False)
+    chapter_image = models.ImageField()
+    chapter_logo = models.ImageField()
+    chapter_banner = models.ImageField()
+    chapter_description = models.TextField()
+    chapter_status = models.BooleanField(default=False)
+    chapter_date = models.DateTimeField(default=datetime.now)
+    def __str__(self):
+        return self.chapter_title
+
+
+
+# Lesson
+class Create_Lesson(models.Model):
+
+    sub_cat_title = models.ForeignKey(Sub_Category, on_delete=models.CASCADE, default=True, null=False)
+    spec_title = models.ForeignKey(Specialization, on_delete=models.CASCADE, default=True, null=False)
+    course_title = models.ForeignKey(Course, on_delete=models.CASCADE, default=True, null=False)
+    chapter_title = models.ForeignKey(Create_Chapter, on_delete=models.CASCADE, default=True, null=False)
+    lesson_title = models.CharField(max_length=80, null=False)
+    lesson_image = models.ImageField()
+    lesson_logo = models.ImageField()
+    lesson_banner = models.ImageField()
+    lesson_description = models.TextField()
+    lesson_status = models.BooleanField(default=False)
+    lesson_date = models.DateTimeField(default=datetime.now)
+
+def __str__(self):
+    return self.lesson_title
 
 
 
@@ -570,7 +624,7 @@ class CourseManage(models.Model):
     course_plan=models.ForeignKey(Plan, on_delete=models.CASCADE)
     course_name=models.ForeignKey(Course, on_delete=models.CASCADE)
     specialization=models.ForeignKey(Specialization,on_delete=models.CASCADE)
-    teaching_faculty=models.ForeignKey(Employee_model,on_delete=models.CASCADE)
+    teaching_faculty=models.ForeignKey(Employee_model,on_delete=models.SET_NULL,null=True)
     batch_type=models.ForeignKey(Batchtype,on_delete=models.CASCADE)
     duration=models.CharField(max_length=50)
     course_fee=models.DecimalField(max_digits=8,decimal_places=2)
@@ -765,7 +819,8 @@ class LeadModel(models.Model):
     lead_stage = models.ForeignKey(Leadstage, on_delete=models.SET_NULL,null=True)
     lead_type = models.CharField(max_length=100,null=True,choices=LEAD_TYPE)
     demo = models.ForeignKey(Demo, on_delete=models.SET_NULL, null=True)
-    faculty = models.ForeignKey(Employee_model, on_delete=models.SET_NULL, null=True)     
+    faculty = models.ForeignKey(Employee_model, on_delete=models.SET_NULL, null=True)  
+    batch_number = models.ForeignKey(Regulations, on_delete=models.SET_NULL, null=True)   
     token_id = models.CharField(max_length=100, unique=True, editable=False)
     token_generated_date = models.DateTimeField(null=True, blank=True)
     plan = models.ForeignKey(Plan, on_delete=models.SET_NULL, null=True)

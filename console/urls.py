@@ -58,6 +58,10 @@ urlpatterns = [
     path('reschedule_demo/<int:id>',views.reschedule_demo,name="reschedule_demo"),
     path('move_to_sql/<int:id>',views.move_to_sql,name="move_to_sql"),
     path('move_to_opportunity/<int:id>',views.move_to_opportunity,name="move_to_opportunity"),
+    path('get_branches/', views.get_branches, name='get_branches'),
+    path('get_courses/<int:branch_id>/', views.get_courses, name='get_courses'),
+    path('move_to_admission/<int:id>',views.move_to_admission,name="move_to_admission"),
+    path('admissions/',views.admissions,name="admissions"),
 
 
 
@@ -65,7 +69,7 @@ urlpatterns = [
     path('sql/',views.sql,name='sql'),
     path('request_discounts/',views.request_discounts,name='request_discounts'),
     path('opportunity/',views.opportunity,name='opportunity'),
-    path('admission/',views.admission,name='admission'),
+
     path('spam/',views.spam,name='spam'),
 
 

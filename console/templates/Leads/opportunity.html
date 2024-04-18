@@ -110,7 +110,7 @@
                       <a class="d-flex h-60p align-items-center nav-link active" href="{% url 'opportunity' %}">Opportunity</a>
                   </li>
                   <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'admission' %}active{% endif %}" href="{% url 'admission' %}">Admissions</a>
+                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'admission' %}active{% endif %}" href="{% url 'admissions' %}">Admissions</a>
                   </li>
                   <li class="nav-item">
                       <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'spam' %}active{% endif %}" href="{% url 'spam' %}">Spam List</a>
@@ -185,7 +185,7 @@
           <td>{{i.mobile_number}}</td>
           <td>{{i.email}}</td>
           <td>{{i.course_name.course_name}}</td>
-          <td>{{i.plan}}</td>
+          <td>{{i.course_name.course_plan.plan_name}}</td>
           <td>{{i.lead_type}}</td>
           
           
@@ -415,7 +415,7 @@
           </div>
           
           <div class="modal-body ">
-              <form action="{% url 'submit_admit' i.id %}" class="row g-3 admissionValid" method="post">
+              <form action="{% url 'move_to_admission' i.id %}" class="row g-3 admissionValid" method="post">
                 {% csrf_token %}
               
                 <div class="col-md-6 mb-3">
@@ -440,11 +440,11 @@
                 </div>
                 <div class="col-md-6 mb-3">
                   <label for="courseFaculty" class="form-label">Course Faculty <span class="text-danger">*</span></label>
-                  <input type="text" class="form-control  bg-light text-secondary" id="courseFaculty" value="{{i.faculty.first_name}} {{i.faculty.last_name}}" disabled>
+                  <input type="text" class="form-control  bg-light text-secondary" id="courseFaculty" value="{{i.course_name.teaching_faculty.first_name}} {{i.course_name.teaching_faculty.last_name}}" disabled>
                 </div>
                 <div class="col-md-4 mb-3">
                   <label for="plan" class="form-label">Plan <span class="text-danger" >*</span></label>
-                  <input type="text" class="form-control  bg-light text-secondary" id="plan" value="{{i.plan}}" disabled>
+                  <input type="text" class="form-control  bg-light text-secondary" id="plan" value="{{i.course_name.course_plan.plan_name}}" disabled>
                   
                 </div>
                 <div class="col-md-4 mb-3">
@@ -457,24 +457,27 @@
                   <label for="batchno" class="form-label">Batch Number <span class="text-danger">*</span></label>
                   <select id="batchno" class="form-select form-control" name="batchno">
                     <option selected disabled>Select the Batch Number</option>
-                    <option>25</option>
-                    <option>24</option>
-                    <option>23</option>
+                    {% for batch in batches %}
+                    {% if i.course_name.course_name == batch.course_id and i.course_name.specialization == batch.spec_id %}
+                    <option value="{{batch.id}}">{{batch.batch_number}}</option>
+                    {% endif %}
+                    {% endfor %}
+  
                   </select>
                   
                 </div>
                 <!--  -->
                 <div class="col-md-4 mb-3">
                   <label for="courseFee" class="form-label">Course Fee <span class="text-danger">*</span></label>
-                  <input type="text" class="form-control  bg-light text-secondary" id="courseFee" value="{{i.course_fee}}" disabled>
+                  <input type="text" class="form-control  bg-light text-secondary" id="courseFee" value="{{i.course_name.course_fee}}" disabled>
                 </div>
                 <div class="col-md-4 mb-3">
                   <label for="discount" class="form-label">Discount Fee <span class="text-danger">*</span></label>
-                  <input type="text" class="form-control bg-light text-secondary" id="discount" placeholder="Discount Fee (%)" value="{{i.discount_fee}}%" disabled>
+                  <input type="text" class="form-control bg-light text-secondary" id="discount" placeholder="Discount Fee (%)" value="{{i.course_name.discount}}%" disabled>
                 </div>
                 <div class="col-md-4 mb-3">
                   <label for="finalFee" class="form-label">Final Fee <span class="text-danger">*</span></label>
-                  <input type="text" class="form-control bg-light text-secondary" id="finalFee" placeholder="Final Fee" value="{{i.Final_fee}}" disabled>
+                  <input type="text" class="form-control bg-light text-secondary" id="finalFee" placeholder="Final Fee" value="{{i.course_name.final_price}}" disabled>
                 </div>
                 
                 <!--  -->

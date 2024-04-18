@@ -6371,7 +6371,7 @@ def lead_prospects(request):
   # getting branch
   branches = register_user.branches.filter(status='Active')
   # getting courses
-  courses = register_user.courses.filter(status='Active')
+  courses = register_user.course_manage.all()
   # getting training types
   training_types = register_user.training_types.filter(status='Active')
   # getting prospect types
@@ -6387,8 +6387,32 @@ def lead_prospects(request):
   return render(request,'Leads/prospects.html', context)
 
 
-     
+
+
+def get_branches(request):
+    crn = request.session.get('admin_user').get('crn')
+    register_user = Register_model.objects.get(crn=crn)
+    branches = register_user.branches.filter(status='Active').values('id', 'branch_name')
+    print("ajex branches",branches)
+    return JsonResponse(list(branches), safe=False)
+
+def get_courses(request, branch_id):
+    crn = request.session.get('admin_user').get('crn')
+    register_user = Register_model.objects.get(crn=crn)  # Move this line here
+    try:
+        branch = register_user.branches.get(id=branch_id, status='Active')
+        courses = register_user.course_manage.filter(branch=branch).values('course_name__id', 'course_name__course_name')
+        print("ajex course", courses)
+        return JsonResponse(list(courses), safe=False)
+    except BranchModel.DoesNotExist:
+        return JsonResponse([], safe=False)
  
+
+
+
+
+
+
 
 def lead_leads(request):
 
@@ -6404,15 +6428,195 @@ def leads(request):
     lead_stage = register_user.leadstages.filter(status='Active').all()
     faculty = register_user.employee.all()
     demo = register_user.demo.all()
+    batches = register_user.regulations.all()
 
 
     context = {
         'leads': leads,
         'lead_stage':lead_stage,
         'faculty':faculty,
-        'demo':demo
+        'demo':demo,
+        'batches':batches
     }
     return render(request, 'Leads/lead.html', context)
+
+
+
+
+def submit_enquiry_form(request):
+    crn = request.session.get('admin_user', {}).get('crn')
+    register_user = Register_model.objects.get(crn=crn)
+
+    if request.method == "POST":
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        mobile_number = request.POST.get('mobile_number')
+        email = request.POST.get('email')
+        branch_name_id = request.POST.get('branch_name')
+        course_name_id = request.POST.get('course_name')
+        training_type_id = request.POST.get('training_type')
+        lead_source_id = request.POST.get('lead_source')
+
+        print("Branch Name ID:", branch_name_id)
+        print("Course Name ID:", course_name_id)
+        print("Training Type ID:", training_type_id)
+        print("Lead Source ID:", lead_source_id)
+
+        if branch_name_id is None or branch_name_id == '':
+            print("Branch Name ID is missing or empty.")
+            return JsonResponse({'otpSent': False, 'error': 'Please select a branch.'})
+
+        if course_name_id is None or course_name_id == '':
+            print("Course Name ID is missing or empty.")
+            return JsonResponse({'otpSent': False, 'error': 'Please select a course.'})
+
+        try:
+            branch = register_user.branches.get(id=branch_name_id)
+        except BranchModel.DoesNotExist:
+            print(f"BranchModel with id {branch_name_id} does not exist.")
+            return JsonResponse({'otpSent': False, 'error': 'Invalid branch selected.'})
+
+        try:
+            course = register_user.course_manage.get(course_name__id=course_name_id)
+        except CourseManage.DoesNotExist:
+            print(f"CourseManage with course_name__id {course_name_id} does not exist.")
+            return JsonResponse({'otpSent': False, 'error': 'Invalid course selected.'})
+
+        try:
+            training_type = register_user.training_types.get(id=training_type_id)
+        except TrainingType.DoesNotExist:
+            print(f"TrainingType with id {training_type_id} does not exist.")
+            return JsonResponse({'otpSent': False, 'error': 'Invalid training type selected.'})
+
+        try:
+            lead_type = register_user.prospect_types.get(id=lead_source_id)
+        except ProspectType_model.DoesNotExist:
+            print(f"ProspectType_model with id {lead_source_id} does not exist.")
+            return JsonResponse({'otpSent': False, 'error': 'Invalid lead source selected.'})
+
+        print(first_name)
+        print(last_name)
+        print(mobile_number)
+        print(email)
+        print(branch.branch_name)
+        print(course.course_name.course_name)
+        print(training_type.TrainingTypeName)
+        print(lead_type.prospect_type)
+            # otp = send_otp_to_phone(mobile_number)
+        otp = random.randint(100000, 999999)
+        print("Generated OTP:", otp)
+
+        # Store form data and OTP in the session
+        if otp:
+          request.session['lead_data'] = {
+            'first_name': first_name,
+            'last_name': last_name,
+            'mobile_number': mobile_number,
+            'email': email,
+            'course_name': course.course_name.id,
+            'branch_name': branch.id,
+            'training_type': training_type.id,
+            'lead_source': lead_type.id,
+            'crn': crn,
+            
+            }
+          request.session['otp']=otp
+          return JsonResponse({'otpSent': True})
+        else:
+          return JsonResponse({'otpSent': False, 'error': 'Failed to generate OTP.'})
+
+    else:
+        return JsonResponse({'otpSent': False, 'error': 'Invalid request method.'})
+
+
+def enquiry_verify_otp(request):
+    if request.method == "POST":
+        otp_entered = request.POST.get('otp')
+        otp_generated = request.session.get('otp')
+        lead_data = request.session.get('lead_data', {})
+
+        print("submitted", otp_entered)
+        print("this is session data", lead_data.get('first_name'))
+        print("this is session data", lead_data.get('last_name'))
+        print("this is session data", lead_data.get('mobile_number'))
+        print("this is session data", lead_data.get('email'))
+        print("this is session data", lead_data.get('course_name'))
+        print("this is session data", lead_data.get('branch_name'))
+        print("this is session data", lead_data.get('training_type'))
+        print("this is session data", lead_data.get('lead_source'))
+        print("this is session data", lead_data.get('crn'))
+        
+        print(otp_entered,otp_generated)  
+        if otp_entered:
+            if int(otp_entered) == int(otp_generated):
+                print("verified")
+                register_user = Register_model.objects.get(crn=lead_data.get('crn'))
+                course_name = register_user.courses.get(id=lead_data.get('course_name'))
+                lead = LeadModel.objects.create(
+                    first_name=lead_data.get('first_name'),
+                    last_name=lead_data.get('last_name'),
+                    mobile_number=lead_data.get('mobile_number'),
+                    email=lead_data.get('email'),
+                    course_name=register_user.course_manage.get(pk=lead_data.get('course_name')),
+                    branch_name=register_user.branches.get(pk=lead_data.get('branch_name')),
+                    training_type=register_user.training_types.get(pk=lead_data.get('training_type')),
+                    lead_sourse=register_user.prospect_types.get(pk=lead_data.get('lead_source')),
+                    crn_number=register_user
+                )
+                print("created")
+
+                subject = 'Registration Successful'
+                message = (
+                f"Hello {lead_data.get('first_name')},\n\n"
+                "Thank you for registering with us. We are excited to have you join our community. "
+                "Here are your registration details:\n\n"
+                f"Registration Number: {lead.token_id}\n"
+                f"Course Enrolled: {course_name.course_name}.\n"
+                "\nWe look forward to providing you with a quality learning experience. "
+                "Should you have any questions or need further information, please do not hesitate to contact us.\n\n"
+                "Best Regards,\n"
+                f"{request.session.get('admin_user').get('company_name')}\n"
+                "Contact Information"
+                )
+                email_from = settings.EMAIL_HOST_USER
+                recipient_list = [lead_data.get('email')]
+                send_mail(subject, message, email_from, recipient_list)
+
+                del request.session['otp']
+                del request.session['lead_data']
+
+                success_url = reverse('lead_prospects')
+                return JsonResponse({'otpverification': True, 'redirectUrl': success_url, 'message': 'OTP verified, and lead created successfully.'})
+            else:
+                return JsonResponse({'otpverification': False, 'message': 'OTP verification failed.'}) 
+            
+        else:
+            return JsonResponse({'otpverification': False, 'message': 'OTP verification failed.'})
+
+
+
+    # Fallback redirect if request method is not POST
+    return JsonResponse({'success': False, 'message': 'Invalid request method.'})
+
+
+
+def mark_as_lead(request, prospect_id):
+    crn = request.session.get('admin_user', {}).get('crn')
+    register_user = Register_model.objects.get(crn=crn)
+
+    if register_user.leads.filter(id=prospect_id).exists():
+        prospect = register_user.leads.get(id=prospect_id)
+        prospect.lead_position = 'LEAD'
+        prospect.save(update_fields=['lead_position'])
+        return redirect('lead_prospects')
+    else:
+        messages.error(request, 'Prospect not found')
+        return redirect('lead_prospects')
+
+
+
+
+
 
 
 # moviing lead data to mql
@@ -6420,12 +6624,12 @@ def lead_move_to_mql(request,id):
     crn = request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
     if request.method == "POST":
-       facuality_name = request.POST.get('courseFaculty')
+
        leadType = request.POST.get('leadType')
        demo_assigned = request.POST.get('demodate')
        Leaddescription = request.POST.get('Leaddescription')
        register_user.leads.filter(id=id).update(
-          faculty = register_user.employee.get(pk=facuality_name),
+
           lead_type = leadType,
           demo = register_user.demo.get(pk=demo_assigned),
           lead_description = Leaddescription,
@@ -6444,10 +6648,12 @@ def mql(request):
   register_user = Register_model.objects.get(crn=crn)
   leads = register_user.leads.filter(lead_position='MQL').all().order_by('-id')
   demos = register_user.demo.filter(status='Active').all().order_by('-id')
+  batches = register_user.regulations.filter(status = 'Active').all().order_by('-id')
 
   context={
      "leads":leads,
-     "demos":demos
+     "demos":demos,
+     'batches':batches
     
   }
   return render(request,'Leads/mql.html', context)
@@ -6483,16 +6689,20 @@ def move_to_sql(request,id):
   if request.method == "POST":
      mql_lead = register_user.leads.get(id=id)
      mql_description = request.POST.get('mqldescription')
-     if mql_lead:
-        mql_lead.lead_position = 'SQL'
-        mql_lead.lead_type = request.POST.get("leadType")
-        mql_lead.mql_description = mql_description
-        mql_lead.save()
+     if register_user.leads.filter(id=id).exists():
+        register_user.leads.filter(id=id).update(
+           lead_position = 'SQL',
+           mql_description = mql_description
+        )
+
         messages.success(request,'MQL Lead moved to SQL')
         return redirect('mql')
      else:
       messages.error(request,'MQL Lead not found')
       return redirect('mql')
+  else:
+     messages.error(request,'Invalid request method')
+     return redirect('mql')   
 
 
 
@@ -6503,10 +6713,12 @@ def sql(request):
   register_user = Register_model.objects.get(crn=crn)
   leads = register_user.leads.filter(lead_position="SQL").order_by("-id")
   plans = register_user.plans.filter(status="Active").order_by("-id")
+  batches = register_user.regulations.filter(status = 'Active').all().order_by('-id')
   
   context={
      "leads":leads,
-     'plans':plans
+     'plans':plans,
+     'batches':batches
      
   }
   return render(request,'Leads/sql.html', context) 
@@ -6518,12 +6730,13 @@ def move_to_opportunity(request,id):
   register_user = Register_model.objects.get(crn=crn)
   if request.method == "POST":
      sql_lead = register_user.leads.get(id=id)
-     if sql_lead:
-        sql_lead.lead_position = 'OPPORTUNITY'
-        sql_lead.lead_type = request.POST.get("leadType")
-        sql_lead.sql_description = request.POST.get("sqldescription")
-        sql_lead.plan = register_user.plans.get(pk=request.POST.get("plan"))
-        sql_lead.save()
+     if register_user.leads.filter(id=id).exists():
+        register_user.leads.filter(id=id).update(
+          lead_position = 'OPPORTUNITY',
+          lead_type = request.POST.get("leadType"),
+          sql_description = request.POST.get("sqldescription")   
+        )
+
         messages.success(request,'SQL Lead moved to OPPORTUNITY')
         return redirect('sql')
      else:
@@ -6542,12 +6755,54 @@ def opportunity(request):
   crn = request.session.get('admin_user', {}).get('crn')
   register_user = Register_model.objects.get(crn=crn)
   leads = register_user.leads.filter(lead_position='OPPORTUNITY').order_by("-id")
+  batches = register_user.regulations.filter(status = 'Active').all().order_by('-id')
+
+
+  context={
+     "leads":leads,
+     'batches':batches
+  }
+
+  return render(request,'Leads/opportunity.html', context) 
+
+
+
+def move_to_admission(request,id):
+    crn = request.session.get('admin_user').get('crn')
+    register_user = Register_model.objects.get(crn=crn)
+    
+    if request.method == "POST":
+        opportunity_lead = register_user.leads.filter(id=id).first()
+        
+        if register_user.leads.filter(id=id).exists():
+            register_user.leads.filter(id=id).update(
+                lead_position = 'ADMITTED',
+                batch_number = register_user.regulations.get(pk=request.POST.get("batchno"))
+            )
+            messages.success(request, 'OPPORTUNITY Lead moved to ADMITTED')
+            return redirect('admissions')
+        else:
+            messages.error(request, 'OPPORTUNITY Lead not found')
+            return redirect('admissions')
+
+
+
+
+
+# adminssions
+def admissions(request):
+  crn = request.session.get('admin_user', {}).get('crn')
+  register_user = Register_model.objects.get(crn=crn)
+  leads = register_user.leads.filter(lead_position='ADMITTED').order_by("-id")
 
   context={
      "leads":leads,
   }
 
-  return render(request,'Leads/opportunity.html', context) 
+  return render(request,'Leads/admission.html', context)
+
+
+
 
 
 
@@ -6628,148 +6883,6 @@ def generate_token_id():
     # Format the token_id with leading zeros for the count
     token_id = f"QT{month_year_format}-{count_this_month:03d}"
     return token_id
-
-
-
-def submit_enquiry_form(request):
-    crn = request.session.get('admin_user', {}).get('crn')
-    register_user=Register_model.objects.get(crn=crn)
-    
-    
-    
-    try:
-        if request.method == "POST":
-            # Fetching instances for ForeignKey fields
-            first_name = request.POST.get('first_name')
-            last_name = request.POST.get('last_name')
-            mobile_number = request.POST.get('mobile_number')
-            email = request.POST.get('email')
-            branch_name = request.POST.get('branch_name')
-            course_name = request.POST.get('course_name')
-            training_type = request.POST.get('training_type')
-            lead_source = request.POST.get('lead_source')
-            branch_id=register_user.branches.get(pk=branch_name)
-            course_id=register_user.courses.get(pk=course_name)
-            training_type_id=register_user.training_types.get(pk=training_type)
-            lead_type_id=register_user.prospect_types.get(pk=lead_source)
-            print(first_name)
-            print(last_name)
-            print(mobile_number)
-            print(email)
-            print(branch_name)
-            print(course_name)
-            print(training_type)
-            print(lead_source)
-
-
-            # Note: You had trailing commas in your variable assignments which would make them tuples, removed those commas.
-            
-            # otp = send_otp_to_phone(mobile_number)
-            otp = random.randint(100000, 999900)
-            print("generated",otp)
-            
-            if otp:
-                request.session['otp'] = otp
-                request.session['lead_data'] = {
-                    'first_name': first_name,
-                    'last_name': last_name,
-                    'mobile_number': mobile_number,
-                    'email': email,
-                    'course_name': course_name,  # Store IDs for simplicity
-                    'branch_name': branch_name,
-                    'training_type': training_type,
-                    'lead_sourse': lead_source,
-                    'crn':crn# Assuming you want to store the CRN value
-                }
-
-                return JsonResponse({'otpSent': True})
-            else:
-                return JsonResponse({'otpSent': False})
-    except Exception as e:
-       
-        return JsonResponse({'otpSent': False})
-
-
-
-def enquiry_verify_otp(request):
-    if request.method == "POST":
-        otp_entered = request.POST.get('otp')
-        otp_generated = request.session.get('otp')
-        lead_data = request.session.get('lead_data', {})
-
-        print("submitted", otp_entered)
-        print("this is session data", lead_data.get('first_name'))
-        print("this is session data", lead_data.get('last_name'))
-        print("this is session data", lead_data.get('mobile_number'))
-        print("this is session data", lead_data.get('email'))
-        print("this is session data", lead_data.get('course_name'))
-        print("this is session data", lead_data.get('branch_name'))
-        print("this is session data", lead_data.get('training_type'))
-        print("this is session data", lead_data.get('lead_sourse'))
-        print("this is session data", lead_data.get('crn'))
-
-        if int(otp_entered) == int(otp_generated):
-            print("verified")
-            register_user = Register_model.objects.get(crn=lead_data.get('crn'))
-            course_name = register_user.courses.get(id=lead_data.get('course_name'))  
-            lead = LeadModel.objects.create(
-                first_name=lead_data.get('first_name'),
-                last_name=lead_data.get('last_name'),
-                mobile_number=lead_data.get('mobile_number'),
-                email=lead_data.get('email'),
-                course_name=register_user.courses.get(pk=lead_data.get('course_name')),
-                branch_name=register_user.branches.get(pk=lead_data.get('branch_name')),
-                training_type=register_user.training_types.get(pk=lead_data.get('training_type')),
-                lead_sourse = register_user.prospect_types.get(pk=lead_data.get('lead_sourse')),
-                crn_number=register_user
-            )
-            print("created")
-
-            subject = 'Registration Successful'
-            message = (
-                f"Hello {lead_data.get('first_name')},\n\n"
-                "Thank you for registering with us. We are excited to have you join our community. "
-                "Here are your registration details:\n\n"
-                f"Registration Number: {lead.token_id}\n"
-                f"Course Enrolled: {course_name.course_name}.\n"
-                "\nWe look forward to providing you with a quality learning experience. "
-                "Should you have any questions or need further information, please do not hesitate to contact us.\n\n"
-                "Best Regards,\n"
-                f"{request.session.get('admin_user').get('company_name')}\n"
-                "Contact Information"
-            )
-            email_from = settings.EMAIL_HOST_USER
-            recipient_list = [lead_data.get('email')]
-            send_mail(subject, message, email_from, recipient_list)
-
-            del request.session['otp']
-            del request.session['lead_data']
-
-            success_url = reverse('lead_prospects')
-            return JsonResponse({'otpverification': True, 'redirectUrl': success_url, 'message': 'OTP verified, and lead created successfully.'})
-        else:
-            return JsonResponse({'otpverification': False, 'message': 'OTP verification failed.'})
-
-
-
-    # Fallback redirect if request method is not POST
-    return JsonResponse({'success': False, 'message': 'Invalid request method.'})
-
-
-
-def mark_as_lead(request, prospect_id):
-    crn = request.session.get('admin_user', {}).get('crn')
-    register_user = Register_model.objects.get(crn=crn)
-
-    if register_user.leads.filter(id=prospect_id).exists():
-        prospect = register_user.leads.get(id=prospect_id)
-        prospect.lead_position = 'LEAD'
-        prospect.save(update_fields=['lead_position'])
-        return redirect('lead_prospects')
-    else:
-        messages.error(request, 'Prospect not found')
-        return redirect('lead_prospects')
-
 
 
 

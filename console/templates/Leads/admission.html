@@ -108,7 +108,7 @@
                       <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'opportunity' %}active{% endif %}" href="{% url 'opportunity' %}">Opportunity</a>
                   </li>
                   <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'admission' %}active{% endif %}" href="{% url 'admission' %}">Admissions</a>
+                      <a class="d-flex h-60p align-items-center nav-link active" href="{% url 'admissions' %}">Admissions</a>
                   </li>
                   <li class="nav-item">
                       <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'spam' %}active{% endif %}" href="{% url 'spam' %}">Spam List</a>
@@ -188,13 +188,13 @@
             
           <td><input type="checkbox" class="row-checkbox" data-id="{{ i.id }}"></td>
           <td>{{i.token_id}}</td>
-          <td>{{i.firstname}} {{i.lastname}}</td>
-          <td>{{i.phone}}</td>
+          <td>{{i.first_name}} {{i.last_name}}</td>
+          <td>{{i.mobile_number}}</td>
           <td>{{i.email}}</td>
-          <td>{{i.course_interested_in}}</td>
-          <td>{{i.course_faculty}}</td>
-          <td>{{i.plan}}</td>
-          <td>{{i.batch_no}}</td>
+          <td>{{i.course_name.course_name}}</td>
+          <td>{{i.course_name.teaching_faculty.first_name}}</td>
+          <td>{{i.batch_number.batch_number}}</td>
+          <td>{{i.course_name.course_plan.plan_name}}</td>
           <td>{{i.joining_date}}</td>
             
             </tr>
