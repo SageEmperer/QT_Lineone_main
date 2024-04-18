@@ -194,7 +194,7 @@ class BranchModel(models.Model):
         if not self.id:
             return
 
-        qr_url = f"http://192.168.219.156:8080/inquiry_form/{self.id}/{self.crn_number.crn}"
+        qr_url = f"http://192.168.1.236:8080/inquiry_form/{self.id}/{self.crn_number.crn}"
         qr = qrcode.make(qr_url)
         buffer = BytesIO()
         qr.save(buffer, format="PNG")
@@ -739,7 +739,7 @@ class LeadModel(models.Model):
     last_name = models.CharField(max_length=100)
     mobile_number = models.CharField(max_length=11)
     email = models.EmailField()
-    course_name = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course_name = models.ForeignKey(CourseManage, on_delete=models.CASCADE)
 
     branch_name = models.ForeignKey(BranchModel, on_delete=models.CASCADE, editable=False)
     training_type = models.ForeignKey(TrainingType, on_delete=models.CASCADE)

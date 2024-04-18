@@ -709,10 +709,11 @@ def inquery_form(request, id, crn):
     register_user = Register_model.objects.get(crn=crn)
     if not register_user:
        return redirect('branch_error')
-    course = register_user.courses.filter(status="Active").all()
+    course = register_user.course_manage.all()
     specialization = register_user.specializations.filter(status="Active").all()
     training_types = register_user.training_types.filter(status="Active").all()
     prospect_types = register_user.prospect_types.filter(status="Active").all()
+    print("this is course",course)
 
     branch = register_user.branches.get(id=id)
     if branch.status == "Deactive":
@@ -841,7 +842,7 @@ def verify_otp(request):
                         last_name=lead_data.get('last_name'),
                         mobile_number=lead_data.get('mobile_number'),
                         email=lead_data.get('email'),
-                        course_name=register_user.courses.get(pk=lead_data.get('course_name')),
+                        course_name=register_user.course_manage.get(pk=lead_data.get('course_name')),
                         branch_name=register_user.branches.get(pk=lead_data.get('branch_name')),
                         training_type=register_user.training_types.get(pk=lead_data.get('training_type')),
                         lead_sourse=register_user.prospect_types.get(pk=lead_data.get('lead_sourse')),
@@ -7264,3 +7265,21 @@ def faculty_completed_mocklist(request):
 # faculty pending interviews
 def faculty_pending_mocks(request):
     return render(request, 'mock_interview/faculty_pending_mocks.html')
+
+
+
+
+
+
+
+
+#certification start here
+def dashboard_certification(request):
+    return render(request,'certifications/certif_dashboard.html')
+def send_email(request):
+    return render(request,'certifications/sent_emails.html')
+def create_student(request):
+    return render(request,'certifications/create_students.html')
+
+def bounced_email(request):
+    return render(request,'certifications/bounced_mails.html') 

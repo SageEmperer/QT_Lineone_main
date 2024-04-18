@@ -158,6 +158,18 @@ urlpatterns = [
    # mock end here
    
 
+   # certification start here
+     path('certif_dashboard',views.dashboard_certification,name='certif_dashboard'),
+    path('send_email',views.send_email,name='send_email'),
+    path('create_student',views.create_student,name='create_student'),
+   
+    path('bounced_email/',views.bounced_email,name='bounced_email'),
+
+
+
+
+
+
     # training type update
     path('training_type_update/<int:id>',views.training_type_update,name="training_type_update"),
     # training type status 

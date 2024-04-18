@@ -223,7 +223,7 @@
                                   <option value="">Select Your Course</option>
                                   {% for course in courses %}
                                   <option value="{{course.id}}">
-                                    {{course.course_name}}
+                                    {{course.course_name}} - {{course.specialization.specilalization_name}}
                                   </option>
                                   {% endfor %}
                                 </select>
