@@ -369,7 +369,7 @@ $(document).ready(function () {
 
     $.validator.addMethod("noNumbers", function(value, element) {
     return this.optional(element) || !/\d/.test(value);
-}, "Purpose of visit cannot contain numbers.");
+}, "Numbers are not allowed in sub category.");
 
 $.validator.addMethod("noSpace", function(value, element) {
   return !(/^\s|\s$|\s{2,}/.test(value));

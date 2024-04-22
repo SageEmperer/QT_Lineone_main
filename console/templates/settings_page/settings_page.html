@@ -31,6 +31,18 @@
   </div>
   <div class="card-body">
     <div class="row">
+      <!-- sub category start here -->
+      <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
+        <a href="{% url 'sub_category' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+          <div class="my-auto">Sub Categories</div>
+          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top" title="
+          Create Sub Category 
+          Ex: Software Developer, Tester"></i>
+        </a>
+      </div>
+
+
+      <!-- sub category end here -->
       <!-- course here -->
       <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
         <a href="{% url 'courses' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
@@ -99,6 +111,89 @@
 </div>
 <!-- Course end here -->
 <!--  -->
+
+
+<!-- Learning path Starts here -->
+
+
+<div class="card mb-3">
+  <div class="card-header border-bottom bg-secondary hk-pg-header">
+    <h5 class="text-white hk-sec-title">Learning Path</h5>
+  </div>
+  <div class="card-body">
+    <div class="row">
+       <!-- Chapters -->
+       <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
+        <a href="{% url 'chapters' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+          <div class="my-auto">Chapters</div>
+          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top" title="
+          Create Training Types Ex: Morning, After Noon"></i>
+        </a>
+      </div>
+
+      <!-- Chapters end here -->
+
+      <!-- Lesson Title starts here -->
+
+      <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
+        <a href="{% url 'lesson_title' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+          <div class="my-auto">Lesson Title</div>
+          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top" title="
+          Create Designation for Employee Ex: Software Engineer, Manager"></i>
+        </a>
+      </div>
+
+      <!-- Lesson Title ends here -->
+
+      <!-- Topics starts here -->
+      <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
+        <a href="{% url 'topics' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+          <div class="my-auto">Topics</div>
+          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top"
+            title="Create Employee Type Ex: Part Time, Full Time"></i>
+        </a>
+      </div>
+      <!-- Topics ends here -->
+
+       <!-- quiz start here -->
+
+       <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
+        <a href="{% url 'quiz' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+          <div class="my-auto">Quiz</div>
+          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top" title="
+          Create Training Types Ex: Morning, After Noon"></i>
+        </a>
+      </div>
+
+      <!-- quiz end here -->
+
+      <!-- Worksheet  starts here -->
+
+      <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
+        <a href="{% url 'worksheet' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+          <div class="my-auto">Worksheet</div>
+          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top" title="
+          Create Designation for Employee Ex: Software Engineer, Manager"></i>
+        </a>
+      </div>
+
+      <!-- worksheet ends here -->
+
+      <!-- Assessment starts here -->
+      <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
+        <a href="{% url 'assessment' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+          <div class="my-auto">Assessment</div>
+          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top"
+            title="Create Employee Type Ex: Part Time, Full Time"></i>
+        </a>
+      </div>
+      <!-- Assessment ends here -->
+    
+    </div>
+  </div>
+</div>
+
+<!-- Learning path Ends here -->
 <!--  -->
 
 <!-- Employee start here -->

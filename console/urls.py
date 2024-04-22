@@ -15,6 +15,7 @@ urlpatterns = [
     path('training_type/',views.training_type,name="training_type"),
     path('regulations/',views.regulations,name="regulations"),
     path('upi_payments/',views.upi_payments,name="upi_payments"),
+    path('sub_category/',views.sub_category,name='sub_category'),
     path('courses/',views.courses,name="courses"),
     path('specialization/',views.specialization,name="specialization"),
     path('plans/',views.plans,name="plans"),
@@ -38,6 +39,26 @@ urlpatterns = [
     path('qualification/',views.qualification,name='qualification'),
     path('jobrole/',views.jobrole,name="jobrole"),
     path('class_room/',views.classroom,name="class_room"),
+     path('chapters/',views.chapters,name='chapters'),
+    path('lesson_title/',views.lesson_title,name='lesson_title'),
+    path('topics/',views.topics,name='topics'),
+    path('video_player',views.video_player,name='video_player'),
+    path('language/',views.language,name="language"),
+    path('finance/',views.finance,name="finance"),
+
+    #Questoning path
+    path('quiz',views.quiz,name='quiz'),
+    path('create_quiz',views.create_quiz,name='create_quiz'),
+    path('edit_quiz_question',views.edit_quiz,name='edit_quiz'),
+
+    path('worksheet',views.worksheet,name='worksheet'),
+    path('create_worksheet',views.create_worksheet,name='create_worksheet'),
+    path('edit_worksheet',views.edit_worksheet,name='edit_worksheet'),
+
+    path('assessment',views.assessment,name='assessment'),
+    path('create_assessment',views.create_assessment,name='create_assessment'),
+    path('edit_assessment',views.edit_assessment,name='edit_assessment'),
+
 
    #  student card
    path('student_card/',views.student_card,name="student_card"),
@@ -62,6 +83,12 @@ urlpatterns = [
     path('get_courses/<int:branch_id>/', views.get_courses, name='get_courses'),
     path('move_to_admission/<int:id>',views.move_to_admission,name="move_to_admission"),
     path('admissions/',views.admissions,name="admissions"),
+
+
+
+   #  fiance 
+   path('finance_and_accounts_update/',views.finance_and_accounts_update,name="finance_and_accounts_update"),
+    
 
 
 
@@ -159,6 +186,9 @@ urlpatterns = [
 
 
 
+
+
+
    # mock end here
    
 
@@ -217,9 +247,11 @@ urlpatterns = [
    #  qrcode form
    path('inquiry_form/<int:id>/<str:crn>',views.inquery_form,name="inquiry_form"),
    path('inquiry_form_default/', views.inquery_form, name='inquiry_form_default'),
+   path('opt_page/',views.opt_page,name="opt_page"),
    path('verify_otp/',views.verify_otp,name="verify_otp"),
+
    path('create_lead/',views.create_lead,name="create_lead"),
-   path('receipt/',views.receipt,name="receipt"),
+   path('receipt/<str:token_num>/<str:crn_number>',views.receipt,name="receipt"),
    path('receipt_pdf/<str:token_id>',views.receipt_pdf,name="receipt_pdf"),
    path('resend-otp/', views.resend_otp, name='resend_otp'),
    path('branch_error/',views.branch_error,name="branch_error"),   
@@ -230,6 +262,16 @@ urlpatterns = [
     path('complaints_export',views.complaints_export,name="complaints_export"),
     # complaints update
     path('complaints_update/',views.complaints_update,name="complaints_update"),
+
+   # sub category edit
+   path('sub_category_edit/<int:id>',views.sub_category_edit,name="sub_category_edit"),
+   # sub category delete
+   path('sub_category_delete/<int:id>',views.sub_category_delete,name="sub_category_delete"),
+   # sub category status
+   path('sub_category_status/<int:id>',views.sub_category_status,name="sub_category_status"),
+
+
+
     # course status
     path('courses_status/<int:id>',views.course_status,name="courses_status"),
     # course delete
@@ -294,6 +336,35 @@ urlpatterns = [
     path('specialization_export/',views.specialization_export,name="specialization_export"),
     # specialization import
     path('specialization_import/',views.specialization_import,name='specialization_import'),
+
+   # chapter status
+   path('chapter_status/<int:id>',views.chapter_status,name="chapter_status"),
+   # chapter update
+   path('chapter_update/<int:id>',views.chapter_update,name="chapter_update"),
+   # chapter delete
+   path('chapter_delete/<int:id>',views.chapter_delete,name="chapter_delete"),
+
+   path('get_courses_for_ch/<int:specialization_id>/', views.get_courses_for_ch, name='get_courses_for_ch'),
+    path('get_sub_categories/<int:course_id>/', views.get_sub_categories, name='get_sub_categories'),
+    path('get_specializations_ch/<int:chapter_id>/', views.get_specializations_ch, name='get_specializations_ch'),
+    path('get_chapters/<int:lesson_id>/',views.get_chapters,name="get_chapters"),
+
+
+
+
+   # lesson status
+   path('lesson_status/<int:id>',views.lesson_status,name="lesson_status"),
+   # lesson edit
+   path("lesson_edit/<int:id>",views.lesson_edit,name="lesson_edit"),
+   # lesson delete
+   path('lesson_delete/<int:id>',views.lesson_delete,name="lesson_delete"),
+
+   
+   # topic edit
+   path('topics_edit/<int:id>',views.topics_edit,name="topics_edit"),
+
+
+
     # clender status
     path('calender_status/<int:id>',views.calander_status,name="calender_status"),
     # calender delete

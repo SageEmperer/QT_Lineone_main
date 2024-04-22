@@ -535,7 +535,15 @@
                 </div>
                 <div class="col-md-4 mb-3">
                   <label for="courseFaculty" class="form-label">Course Faculty<span>*</span></label>
-                  <input type="text" class="form-control  bg-light text-secondary" id="courseFaculty" value="{{i.course_faculty}}" disabled>
+                  <section id="courseFaculty" name="courseFaculty" class="form-control custom-select">Select your Faculty
+                    <option value="" selected>select your faculty</option>
+                    {% for emp in faculty %}
+                    {% if emp.branch == i.branch_name %}
+                    <option value="{{emp.id}}">{{emp.first_name}}</option>
+                    {% endif %}
+                    {% endfor %}
+                  </section>
+
                 </div>
                 <div class="col-md-4 mb-3">
                   <label for="plan" class="form-label">Plan<span class="text-danger">*</span></label>
@@ -1245,7 +1253,7 @@ $(document).ready(function() {
           success: function(data) {
             courseSelect.prop('disabled', false);
             $.each(data, function(index, course) {
-              courseSelect.append('<option value="' + course.course_name__id + '">' + course.course_name__course_name + '</option>');
+              courseSelect.append('<option value="' + course.id + '">' + course.course_name + ' - ' + course.specialization + '</option>');
             });
           },
           error: function(xhr, status, error) {

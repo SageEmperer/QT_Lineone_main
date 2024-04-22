@@ -123,12 +123,15 @@ class Traning_type_import_form(models.Model):
 
 # sub category
 class Sub_Category(models.Model):
+
+    crn_number = models.ForeignKey(Register_model, on_delete=models.CASCADE, related_name='sub_category',null=True) 
+    
     sub_cat_title = models.CharField(max_length=80, unique=True, null=False)
     sub_cat_status = models.BooleanField(default=False)
     sub_cat_date = models.DateTimeField(default=datetime.now)
 
-def __str__(self):
-    return self.sub_cat_title
+    def __str__(self):
+        return self.sub_cat_title
 
 
 
@@ -140,6 +143,7 @@ class Course(models.Model):
         ('Deactive','Deactive'),
     )
     crn_number = models.ForeignKey(Register_model, on_delete=models.CASCADE, related_name='courses')
+    sub_category=models.ForeignKey(Sub_Category,on_delete=models.CASCADE,null=True)
     course_name=models.CharField(max_length=100)
     status = models.CharField(choices=choice_status,max_length=100, default='Active')
     def __str__(self):
@@ -174,15 +178,16 @@ class Specialization_import(models.Model):
 
 
 class Create_Chapter(models.Model):
+    crn_number = models.ForeignKey(Register_model, on_delete=models.CASCADE, related_name='chapters',null=True)
     sub_cat_title = models.ForeignKey(Sub_Category, on_delete=models.CASCADE, default=True, null=False)
     spec_title = models.ForeignKey(Specialization, on_delete=models.CASCADE, default=True, null=False)
     course_title = models.ForeignKey(Course, on_delete=models.CASCADE, default=True, null=False)
     chapter_title = models.CharField(max_length=80, null=False)
-    chapter_image = models.ImageField()
-    chapter_logo = models.ImageField()
+    chapter_image = models.ImageField(upload_to='chapter_image')
+    chapter_logo = models.ImageField(upload_to='chapter_logo')
     chapter_banner = models.ImageField()
     chapter_description = models.TextField()
-    chapter_status = models.BooleanField(default=False)
+    chapter_status = models.BooleanField(default=True)
     chapter_date = models.DateTimeField(default=datetime.now)
     def __str__(self):
         return self.chapter_title
@@ -192,20 +197,51 @@ class Create_Chapter(models.Model):
 # Lesson
 class Create_Lesson(models.Model):
 
+    crn_number = models.ForeignKey(Register_model, on_delete=models.CASCADE, related_name='lessons',null=True)
     sub_cat_title = models.ForeignKey(Sub_Category, on_delete=models.CASCADE, default=True, null=False)
     spec_title = models.ForeignKey(Specialization, on_delete=models.CASCADE, default=True, null=False)
     course_title = models.ForeignKey(Course, on_delete=models.CASCADE, default=True, null=False)
     chapter_title = models.ForeignKey(Create_Chapter, on_delete=models.CASCADE, default=True, null=False)
     lesson_title = models.CharField(max_length=80, null=False)
-    lesson_image = models.ImageField()
-    lesson_logo = models.ImageField()
-    lesson_banner = models.ImageField()
+    lesson_image = models.ImageField(upload_to='lesson_image',null=True)
+    lesson_logo = models.ImageField(upload_to='lesson_logo',null=True)
+    # lesson_banner = models.ImageField()
     lesson_description = models.TextField()
-    lesson_status = models.BooleanField(default=False)
+    lesson_status = models.BooleanField(default=True)
     lesson_date = models.DateTimeField(default=datetime.now)
 
-def __str__(self):
-    return self.lesson_title
+    def __str__(self):
+      return self.lesson_title
+
+
+class Language(models.Model):
+    crn_number = models.ForeignKey(Register_model, on_delete=models.CASCADE, related_name='languages')
+    language = models.CharField(max_length=100)
+    def __str__(self):
+        return self.language
+
+
+class Create_Topic(models.Model):
+
+    crn_number = models.ForeignKey(Register_model, on_delete=models.CASCADE, related_name='topics')
+    sub_cat_title = models.ForeignKey(Sub_Category, on_delete=models.CASCADE, default=True, null=False)
+    spec_title = models.ForeignKey(Specialization, on_delete=models.CASCADE, default=True, null=False)
+    course_title = models.ForeignKey(Course, on_delete=models.CASCADE, default=True, null=False)
+    chapter_title = models.ForeignKey(Create_Chapter, on_delete=models.CASCADE, default=True, null=False)
+    lesson_title = models.ForeignKey(Create_Lesson, on_delete=models.CASCADE, default=True, null=False)
+    language_name = models.ForeignKey(Language, on_delete=models.CASCADE, default=True, null=False)
+    topic_title = models.CharField(max_length=80, null=False)
+    topic_duration = models.CharField(max_length=30)
+    topic_vedio_url = models.CharField(max_length=50)
+    topic_description = models.TextField()
+    topic_status = models.BooleanField(default=True)
+    topic_date = models.DateTimeField(default=datetime.now)
+
+    def __str__(self):
+      return self.topic_title
+
+
+
 
 
 
@@ -248,7 +284,8 @@ class BranchModel(models.Model):
         if not self.id:
             return
 
-        qr_url = f"http://192.168.1.236:8080/inquiry_form/{self.id}/{self.crn_number.crn}"
+        qr_url = f"http://192.168.1.45:8080/inquiry_form/{self.id}/{self.crn_number.crn}"
+
         qr = qrcode.make(qr_url)
         buffer = BytesIO()
         qr.save(buffer, format="PNG")
@@ -486,6 +523,7 @@ class upipayments(models.Model):
     mobilenumber=models.CharField(max_length=100)
     upiid=models.CharField(max_length=100)
     status = models.CharField(max_length=100, choices=choice_status, default='Active')
+    upi_qr_code = models.ImageField(upload_to='upi_qr_code', null=False, blank=True)
 
     def __str__(self):
         return self.upipayments_name
@@ -819,8 +857,8 @@ class LeadModel(models.Model):
     lead_stage = models.ForeignKey(Leadstage, on_delete=models.SET_NULL,null=True)
     lead_type = models.CharField(max_length=100,null=True,choices=LEAD_TYPE)
     demo = models.ForeignKey(Demo, on_delete=models.SET_NULL, null=True)
-    faculty = models.ForeignKey(Employee_model, on_delete=models.SET_NULL, null=True)  
-    batch_number = models.ForeignKey(Regulations, on_delete=models.SET_NULL, null=True)   
+    batch_number = models.ForeignKey(Regulations, on_delete=models.SET_NULL, null=True)
+    faculty = models.ForeignKey(Employee_model, on_delete=models.SET_NULL, null=True)   
     token_id = models.CharField(max_length=100, unique=True, editable=False)
     token_generated_date = models.DateTimeField(null=True, blank=True)
     plan = models.ForeignKey(Plan, on_delete=models.SET_NULL, null=True)
@@ -848,7 +886,42 @@ class LeadModel(models.Model):
         super().save(*args, **kwargs)    
 
 
+
+
+
+class Finance_and_Accounts(models.Model):
     
+    choice_options=(('Received','Received'),
+        ('Not Received','Not Received'),
+        ('Mis Matched','Mis Matched'),
+        ('Suspicious','Suspicious'))
+    crn= models.ForeignKey(Register_model, on_delete=models.CASCADE, related_name='finance_and_accounts')
+    payment_status = models.CharField(max_length=100, choices=choice_options,blank=True,null=True)
+    remarks = models.TextField(null=True, blank=True)
+    fince_password=models.CharField(max_length=225,null=True,blank=True)
+    leadstage=models.ForeignKey(LeadModel,on_delete=models.CASCADE,null=True)
+
+
+
+
+
+# class add_job_post(models.Model):
+#     job_title = models.CharField(max_length=100)
+#     company_name = models.ForeignKey(CompanyName, on_delete=models.CASCADE,  related_name='job_posts')
+#     job_category = models.ForeignKey(Job_Category, on_delete=models.CASCADE)
+#     job_type = models.ForeignKey(Jobtype, on_delete=models.CASCADE)
+#     job_role = models.ForeignKey(Jobrole, on_delete=models.CASCADE)
+#     experience = models.CharField(max_length=50, blank=False, null=False)
+#     qualification = models.ForeignKey(Qualification,on_delete=models.CASCADE)
+#     skills = models.CharField(max_length=50, blank=False, null=False)
+#     role = models.CharField(max_length=50, blank=False, null=False)
+#     salary = models.DecimalField(max_digits=6,decimal_places=0)
+#     last_date_to_apply = models.DateTimeField(auto_now_add=True)
+#     job_description = models.TextField()
+
+    
+#     def _str_(self):
+#         return self.contact_number
     
 
 

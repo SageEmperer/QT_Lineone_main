@@ -709,7 +709,7 @@ def inquery_form(request, id, crn):
     register_user = Register_model.objects.get(crn=crn)
     if not register_user:
        return redirect('branch_error')
-    course = register_user.course_manage.all()
+    course = register_user.course_manage.filter(branch_id=id).all()
     specialization = register_user.specializations.filter(status="Active").all()
     training_types = register_user.training_types.filter(status="Active").all()
     prospect_types = register_user.prospect_types.filter(status="Active").all()
@@ -763,23 +763,41 @@ def create_lead(request):
             print("lead_type", lead_sourse)
             print("crn", crn)
             print("id", id)
+            register_user = Register_model.objects.get(crn=crn)
+            print(register_user)
 
             
-            register_user = Register_model.objects.get(crn=crn)
+            print("registeruser")
+            
 
-
+            if not register_user.branches.filter(id=id).exists():
+                  messages.error(request, 'Branch not found')
+                  return redirect('branch_error')
+            print("branch")
             if branch_name:
-                if not register_user.branches.filter(id=id).exists():
-                    messages.error(request, 'Branch not found')
-                    return redirect('branch_error')
+               branch_stauts = register_user.branches.filter(id=id)
 
+               if branch_stauts.first().status == "Deactive":
+                  messages.error(request, 'Branch not found')
+                  return redirect('branch_error')
+            print("filter branch")  
 
             if register_user.leads.filter((Q(mobile_number=mobile_number) | Q(email=email)) & Q(branch_name=branch_name)).exists():
                 messages.error(request, 'Lead with the same mobile number or email already exists in this branch')
                 return redirect(reverse('inquiry_form', kwargs={'id': id, 'crn': crn}))
+            print("filter all")    
+            if register_user.leads.filter(mobile_number=mobile_number).exists():
+                messages.error(request, 'Lead with the same mobile number already exists')
+                return redirect(reverse('inquiry_form', kwargs={'id': id, 'crn': crn}))
+            print("filter mobile")    
+            if register_user.leads.filter(email=email).exists():
+                messages.error(request, 'Lead with the same email already exists')
+                return redirect(reverse('inquiry_form', kwargs={'id': id, 'crn': crn}))
+            print("filter email")
 
             
             otp = send_otp_to_phone(mobile_number)
+            print(otp)
             if otp:
                 request.session['otp'] = otp
                 request.session['lead_data'] = {
@@ -793,18 +811,9 @@ def create_lead(request):
                     'lead_sourse': lead_sourse,
                     'crn': crn
                 }
-                context = {
-                    'first_name': first_name,
-                    'last_name': last_name,
-                    'mobile_number': mobile_number,
-                    'email': email,
-                    'course_name': course_name,
-                    'branch_name': branch_name,
-                    'training_type': training_type,
-                    'lead_sourse': lead_sourse,
-                    'crn': crn
-                }
-                return render(request, 'branch_qr/verify_otp.html', context)
+                print(request.session['lead_data'])
+
+                return redirect('opt_page')
             else:
                 messages.error(request, 'Failed to send OTP')
         except Register_model.DoesNotExist:
@@ -813,19 +822,24 @@ def create_lead(request):
             messages.error(request, f'An error occurred: {str(e)}')
 
     # Handle GET request
+    
     if id is None or crn is None:
-        return redirect(reverse('inquiry_form_default'))
+        return redirect('branch_error')
+
     else:
         return redirect(reverse('inquiry_form', kwargs={'id': id, 'crn': crn}))
 
 
 
-
+def opt_page(request):
+   return render(request,'branch_qr/verify_otp.html')
 
 
 
 
 def verify_otp(request):
+    crn = request.session.get('lead_data').get('crn')
+    branch_name_id = request.session.get('lead_data').get('branch_name')
     if request.method == "POST":
         try:
             otp_entered = request.POST.get('otp')
@@ -848,11 +862,29 @@ def verify_otp(request):
                         lead_sourse=register_user.prospect_types.get(pk=lead_data.get('lead_sourse')),
                         crn_number=register_user
                     )
+                    # subject = 'Registration Successful'
+                    # message = (
+                    # f"Hello {lead_data.get('first_name')},\n\n"
+                    # "Thank you for registering with us. We are excited to have you join our community. "
+                    # "Here are your registration details:\n\n"
+                    # f"Registration Number: {lead.token_id}\n"
+                    # f"Course Enrolled: {lead.course_name.course_name}.\n"
+                    # "\nWe look forward to providing you with a quality learning experience. "
+                    # "Should you have any questions or need further information, please do not hesitate to contact us.\n\n"
+                    # "Best Regards,\n"
+                    # f"{request.session.get('admin_user').get('company_name')}\n"
+                    # "Contact Information"
+                    # )
+                    # email_from = settings.EMAIL_HOST_USER
+                    # recipient_list = [lead_data.get('email')]
+                    # send_mail(subject, message, email_from, recipient_list)                    
 
                     del request.session['otp']
                     del request.session['lead_data']
 
-                    return HttpResponseRedirect(reverse('receipt') + f'?token={lead.token_id}&first_name={lead.first_name}&last_name={lead.last_name}&mobile_number={lead.mobile_number}&email={lead.email}&course_name={lead.course_name}&branch_name={lead.branch_name}&training_type={lead.training_type}&lead_type={lead.lead_sourse}')
+
+
+                    return redirect(reverse('receipt', kwargs={'token_num': lead.token_id, 'crn_number': crn}))
             else:
                 context = {'error': 'Invalid OTP'}
                 return render(request, 'branch_qr/verify_otp.html', context)
@@ -862,8 +894,11 @@ def verify_otp(request):
         except Exception as e:
             messages.error(request, f'An error occurred: {str(e)}')
             return redirect('create_lead')
-
-    return render(request, 'branch_qr/verify_otp.html')
+    context={
+       'crn':crn,
+       'branch_name_id':branch_name_id
+    }  
+    return render(request, 'branch_qr/verify_otp.html',context)
 
 
 
@@ -884,7 +919,7 @@ def resend_otp(request):
 
     return redirect('verify_otp')
 
-def receipt(request):
+def receipt(request,token_num,crn_number):
     # Retrieve lead data from query parameters
     token = request.GET.get('token')
     first_name = request.GET.get('first_name')
@@ -895,18 +930,12 @@ def receipt(request):
     branch_name = request.GET.get('branch_name')
     training_type = request.GET.get('training_type')
     lead_type = request.GET.get('lead_type')
-
+    register_user = Register_model.objects.get(crn=crn_number)
+    lead_data = register_user.leads.filter(token_id=token_num).first()
     context = {
-        'token': token,
-        'first_name': first_name,
-        'last_name': last_name,
-        'mobile_number': mobile_number,
-        'email': email,
-        'course_name': course_name,
-        'branch_name': branch_name,
-        'training_type': training_type,
-        'lead_type': lead_type,
+        'lead_data': lead_data,
     }
+        
 
     return render(request, 'branch_qr/receipt.html', context)
 
@@ -1765,6 +1794,7 @@ def upi_payments(request):
     upipayments_name= request.POST.get('upipayments_name')
     Mobilenumber=request.POST.get('mobilenumber')
     Upiid=request.POST.get('upiid')
+    up_qr_code_img = request.FILES.get('up_qr_code_img')
     if register_user.upi.filter(upiid=Upiid).exists():
       messages.error(request, f'{Upiid} Already Exists')
       return redirect('upi_payments')
@@ -1773,7 +1803,8 @@ def upi_payments(request):
         upipayments_name = upipayments_name  ,
         mobilenumber=Mobilenumber,
         upiid=Upiid,
-        crn_number=register_user
+        crn_number=register_user,
+        upi_qr_code = up_qr_code_img
       )
       messages.success(request, f'{Upiid} Added Successfully')
       return redirect('upi_payments')
@@ -1817,6 +1848,7 @@ def upi_edit(request,id):
         Upiid=request.POST.get('upiid')
         crn=request.session.get('admin_user').get('crn')
         register_user=Register_model.objects.get(crn=crn)
+        up_qr_code_img_edit = request.FILES.get('up_qr_code_img_edit')
         
         if register_user.upi.filter(upiid=Upiid).exclude(id=id).exists():
             messages.error(request, f'{Upiid} is already exists')
@@ -1827,8 +1859,10 @@ def upi_edit(request,id):
                 upipayments_name= upi,
                 mobilenumber=Mobilenumber,
                 upiid=Upiid ,
-
+                upi_qr_code = up_qr_code_img_edit
             )
+
+
             messages.success(request, f'{Upiid} Updated Successfully')
 
     return redirect('upi_payments')
@@ -1949,6 +1983,102 @@ def upi_import(request):
 
 
 
+# sub category
+@admin_required
+def sub_category(request):
+  crn = request.session.get('admin_user').get('crn')
+  register_user = Register_model.objects.get(crn=crn)
+
+  if request.method == 'POST':
+    sub_category = request.POST.get('sub_category')
+    if register_user.sub_category.filter(sub_cat_title=sub_category.strip().title()).exists():
+      messages.error(request, f'{sub_category.strip().title()} sub category already exists.')
+      return redirect('sub_category')
+    else:
+      register_user.sub_category.create(
+        sub_cat_title=sub_category.strip().title(),
+        crn_number = register_user
+      )
+      messages.success(request, f'{sub_category.strip().title()} sub category created successfully.')
+      return redirect('sub_category')
+  sub_categories = register_user.sub_category.all()
+  context = {
+    'sub_categories':sub_categories
+  }  
+
+     
+  return render(request,'settings_page/sub_category.html',context)
+
+
+
+# sub category edit
+def sub_category_edit(request,id):
+  crn = request.session.get('admin_user').get('crn')
+  register_user = Register_model.objects.get(crn=crn)
+  if request.method == "POST":
+     
+    sub_category = request.POST.get('edit_sub_category')
+    if register_user.sub_category.filter(id=id).exists():
+      register_user.sub_category.filter(id=id).update(
+        sub_cat_title=sub_category.strip().title(),
+      )
+      messages.success(request, f"{sub_category.strip().title()} updated successfully.")
+      return redirect('sub_category')
+    else:
+      messages.error(request, f"Sub category not found")
+      return redirect('sub_category')
+  else:
+     messages.error(request, "Invalid request method")
+     return redirect('sub_category')    
+
+     
+     
+
+
+def sub_category_delete(request,id):
+  crn = request.session.get('admin_user').get('crn')
+  register_user = Register_model.objects.get(crn=crn)
+  if request.method == "POST":
+    if register_user.sub_category.filter(id=id).exists():
+      register_user.sub_category.filter(id=id).delete()
+      messages.success(request,'Sub category deleted successfully')
+      return redirect('sub_category')
+    else:
+      messages.error(request,'Sub category not found')
+      return redirect('sub_category')
+  else:
+    messages.success(request,'Invalid request method')
+    return redirect('sub_category')      
+
+
+# sub category status
+def sub_category_status(request,id):
+   crn = request.session.get('admin_user').get('crn')
+   register_user = Register_model.objects.get(crn=crn)
+   
+   if register_user.sub_category.filter(id=id).exists():
+      sub_category = register_user.sub_category.get(id=id)
+      
+      if sub_category.sub_cat_status:
+         register_user.sub_category.filter(id=id).update(
+            sub_cat_status = False
+         )
+         return redirect('sub_category')
+      else:
+         register_user.sub_category.filter(id=id).update(
+            sub_cat_status = True
+         )   
+         return redirect('sub_category')
+   else:
+      messages.error(request,'Sub category not found')
+      return redirect('sub_category')
+           
+
+
+
+
+
+
 
 
 
@@ -1959,19 +2089,24 @@ def courses(request):
   register_user=Register_model.objects.get(crn=crn)
 
   cos =register_user.courses.all().order_by("-id")
+  sub_categories = register_user.sub_category.filter(sub_cat_status=True).order_by("-id")
+
   if request.method=="POST":
     course = request.POST.get('course_name')
-    if register_user.courses.filter(course_name=course.strip().title()).exists():
-      messages.error(request, f'{course.strip().title()} course already exists.')
+    sub_category = request.POST.get('sub_category_name')
+    if register_user.courses.filter(course_name=course.strip().title(),sub_category=sub_category).exists():
+      messages.error(request, f'{course.strip().title()} course already exists for {register_user.sub_category.get(id=sub_category).sub_cat_title} sub category.')
       return redirect('courses')
     else:
       register_user.courses.create(
         course_name= course.strip().title(),
+        sub_category = register_user.sub_category.get(pk=sub_category),
       )
       messages.success(request, f'{course.strip().title()} course created Successfully.')
       return redirect('courses')
   context={
     'cos':cos,
+    'sub_categories':sub_categories
   }
   return render(request,'settings_page/course.html',context)
 
@@ -2006,15 +2141,18 @@ def course_edit(request,id):
       register_user=Register_model.objects.get(crn=crn)
 
       course = request.POST.get('editcourse')
+      sub_category_edit = request.POST.get('sub_category_edit')
       if register_user.courses.filter(id=id).exists():
-        if register_user.courses.filter(course_name=course.strip().title()).exclude(id=id).exists():
-          messages.error(request, f'{course.strip().title()} course already exists.')
+        if register_user.courses.filter(course_name=course.strip().title(),sub_category=sub_category_edit).exclude(id=id).exists():
+          messages.error(request, f'{course.strip().title()} course already exists for {register_user.sub_category.get(id=sub_category_edit).sub_cat_title} sub category.')
           return redirect('courses')
         else:
             register_user.courses.filter(id=id).update(
                 course_name=course.strip().title(),
+                sub_category = register_user.sub_category.get(pk=sub_category_edit),
+
             )
-            messages.success(request, f'{course.strip().title()} course updated successfully.')
+            messages.success(request, f'{course.strip().title()} course updated successfully for {register_user.sub_category.get(id=sub_category_edit).sub_cat_title} sub category.')
             return redirect('courses')
       else:
         messages.error(request, f'Course does not exist.')
@@ -2078,11 +2216,11 @@ def course_export(request):
   register_user=Register_model.objects.get(crn=crn)
   response = HttpResponse(content_type='text/csv')
   writer = csv.writer(response)
-  writer.writerow(['S.No','Course Name'])
+  writer.writerow(['S.No',"Sub_category",'Course Name'])
   i=0
   for course in register_user.courses.all():
     i+=1
-    writer.writerow([i,course.course_name])
+    writer.writerow([i,course.sub_category.sub_cat_title,course.course_name])
 
   response['Content-Disposition'] = 'attachment; filename="course.csv"'
   return response
@@ -2106,30 +2244,33 @@ def course_import(request):
         decoded_file=csv_file.read().decode('utf-8')
         reader=csv.reader(decoded_file.splitlines())
         headers=next(reader)
-        expected_headers = 2
+        expected_headers = 3
         imported = False
         for row in reader:
           if len(row)!=expected_headers:
               messages.error(request, f'File should have {expected_headers} columns')
               return redirect('courses')
-          cos_import=row[1]
+          sub_cat_import=row[1]
+          cos_import=row[2]
+          sub_cat_instance=register_user.sub_category.filter(sub_cat_title=sub_cat_import).first()
           if not cos_import:
              continue
           
           if not re.match(r"^[^\d]{2,50}$", cos_import):
              continue
+          
 
-          if register_user.courses.filter(course_name=cos_import.strip().title()).exists():
+          if register_user.courses.filter(course_name=cos_import.strip().title(),sub_category=sub_cat_instance).exists():
            continue
           
           else:
             Course.objects.create(
-                course_name=cos_import.strip().title(),crn_number=register_user)
+                course_name=cos_import.strip().title(),crn_number=register_user,sub_category=sub_cat_instance)
             imported = True
         if imported:    
           messages.success(request, f'File imported successfully')   
         else:
-          messages.error(request,f'Course already exists')     
+          messages.error(request,f'Failed to import')     
         return redirect('courses')
       except Exception as e:
         messages.error(request, f'File Should be only in CSV Format ')
@@ -2329,6 +2470,487 @@ def specialization_import(request):
     }
 
     return render(request, 'settings_page/specialization.html', context)
+
+
+
+
+
+
+
+
+# video player, topic content, lesson video
+def video_player(request):
+   return render(request,'settings_page/video_player.html')
+
+
+# Questoning Path
+
+# Quiz
+def quiz(request):
+   return render(request,'settings_page/quiz.html')
+
+def create_quiz(request):
+   return render(request,'settings_page/create_quiz.html')
+def edit_quiz(request):
+   return render(request,'settings_page/edit_quiz_question.html')
+
+# Worksheets
+def worksheet(request):
+   return render(request,'settings_page/worksheet.html')
+def create_worksheet(request):
+   return render(request,'settings_page/create_worksheet.html')
+def edit_worksheet(request):
+   return render(request,'settings_page/edit_worksheet.html')
+
+# Assessments
+def assessment(request):
+   return render(request,'settings_page/assessment.html')
+def create_assessment(request):
+   return render(request,'settings_page/create_assessment.html')
+def edit_assessment(request):
+   return render(request,'settings_page/edit_assessment.html')
+
+
+
+def get_courses_for_ch(request, specialization_id):
+    crn = request.session.get('admin_user').get('crn')
+    register_user = Register_model.objects.get(crn=crn)
+    courses = register_user.courses.filter(specialization__id=specialization_id,status = 'Active' )
+    data = [{'id': course.id, 'course_name': course.course_name} for course in courses]
+    return JsonResponse(data, safe=False)
+
+def get_sub_categories(request, course_id):
+    
+    crn = request.session.get('admin_user').get('crn')
+    register_user = Register_model.objects.get(crn=crn)
+    sub_categories = register_user.sub_category.filter(course__id=course_id,sub_cat_status = True)
+    data = [{'id': sub_category.id, 'sub_cat_title': sub_category.sub_cat_title} for sub_category in sub_categories]
+    return JsonResponse(data, safe=False)
+
+def get_specializations_ch(request, chapter_id):
+    crn = request.session.get('admin_user').get('crn')
+    register_user = Register_model.objects.get(crn=crn)
+    chapter = register_user.chapters.get(id=chapter_id)
+    specialization = chapter.spec_title
+    if specialization.status == 'Active':
+        data = [{'id': specialization.id, 'name': specialization.specilalization_name}]
+    else:
+        data = []
+    return JsonResponse(data, safe=False)
+
+
+def get_chapters(request, lesson_id):
+    crn = request.session.get('admin_user').get('crn')
+    register_user = Register_model.objects.get(crn=crn)
+    try:
+        lesson = register_user.lessons.get(id=lesson_id)
+        chapters = register_user.chapters.filter(course_title=lesson.course_title)
+        data = [{'id': chapter.id, 'name': chapter.chapter_title} for chapter in chapters]
+        return JsonResponse(data, safe=False)
+    except Create_Lesson.DoesNotExist:
+        return JsonResponse([], safe=False)  # Return empty list if lesson doesn't exist
+
+
+
+
+
+
+
+
+
+
+
+
+
+@admin_required
+def chapters(request):
+    crn = request.session.get('admin_user').get('crn')
+    register_user=Register_model.objects.get(crn=crn)
+    sub_categories = register_user.sub_category.filter(sub_cat_status=True).all().order_by("-id")
+    courses = register_user.courses.filter(status="Active").all().order_by("-id")
+    specializations = register_user.specializations.filter(status="Active").all().order_by("-id")
+    chapters = register_user.chapters.all().order_by("-id")
+    if request.method == "POST":
+        sub_category = request.POST.get('sub_category_name')
+        course = request.POST.get('course_name')
+        specialization = request.POST.get('specialization_name')
+        chapter_title = request.POST.get('chapter_title')
+        chapter_logo = request.FILES.get('chapter_logo')
+        chapter_image = request.FILES.get('chapter_image')
+        short_description = request.POST.get('short_description')
+        if register_user.chapters.filter(chapter_title=chapter_title).exists():
+            messages.error(request, f'{chapter_title} already exists')
+            return redirect('chapters')
+
+
+        register_user.chapters.create(
+            sub_cat_title = register_user.sub_category.get(pk=sub_category),
+            course_title = register_user.courses.get(pk=course),
+            spec_title = register_user.specializations.get(pk=specialization),
+            chapter_title = chapter_title,
+            chapter_logo = chapter_logo,
+            chapter_image = chapter_image,
+            chapter_description = short_description,
+            crn_number=register_user
+        )
+        return redirect('chapters')
+    context = {
+        'sub_categories': sub_categories,
+        'courses': courses,
+        'specializations': specializations,
+        "chapters":chapters
+    }
+    
+
+    return render(request,'settings_page/chapters.html',context)
+
+
+
+
+# chapter status 
+@admin_required
+def chapter_status(request,id):
+  crn = request.session.get('admin_user').get('crn')
+  register_user = Register_model.objects.get(crn=crn)
+  chapter = register_user.chapters.get(id=id)
+  if chapter:
+    if chapter.chapter_status:
+      chapter.chapter_status = False
+    else:
+      chapter.chapter_status = True
+    chapter.save()
+    return redirect('chapters')
+  else:
+    messages.error(request, f'Chapter Not Found')
+    return redirect('chapters')
+
+
+# chapter update
+@admin_required
+def chapter_update(request,id):
+  crn = request.session.get('admin_user').get('crn')
+  register_user = Register_model.objects.get(crn=crn)
+  if request.method == "POST":
+    sub_category_edit = request.POST.get('sub_category_edit')
+    course_name_edit = request.POST.get('course_name_edit')
+    specialization_edit = request.POST.get('specialization_edit')
+    chapter_title_edit = request.POST.get('chapter_title_edit')
+    chapter_logo_edit = request.FILES.get('chapter_logo_edit')
+    chapter_image_edit = request.FILES.get('chapter_image_edit')
+    short_description_edit = request.POST.get('short_description_edit')
+    chapter = register_user.chapters.get(id=id)
+  
+
+    if register_user.chapters.exclude(id=id).filter(chapter_title=chapter_title_edit).exists():
+       messages.error(request,'Chapter already exists')
+       return redirect('chapters')
+       
+    if chapter:
+      chapter.sub_cat_title = register_user.sub_category.get(pk=sub_category_edit) 
+      chapter.course_title = register_user.courses.get(pk=course_name_edit)
+      chapter.spec_title = register_user.specializations.get(pk=specialization_edit)
+      chapter.chapter_title = chapter_title_edit
+      chapter.chapter_logo = chapter_logo_edit
+      chapter.chapter_image = chapter_image_edit
+      chapter.chapter_description = short_description_edit
+      chapter.save()
+      messages.success(request, f'Chapter updated successfully')
+      return redirect('chapters')
+    else:
+      messages.error(request, f'Chapter Not Found')
+      return redirect('chapters')
+  else:
+    messages.error(request,'Invalid request')  
+
+
+
+
+
+# chapter delete
+@admin_required
+def chapter_delete(request,id):
+  crn = request.session.get('admin_user').get('crn')
+  register_user = Register_model.objects.get(crn=crn)
+  if request.method == "POST":
+    if register_user.chapters.filter(id=id).exists():
+        register_user.chapters.get(id=id).delete()
+        messages.success(request,'Chapter deleted successfully')
+        return redirect('chapters')
+    else:
+        messages.error(request,'Chapter not found')  
+        return redirect('chapters')
+  else:
+    messages.error(request,'Invalid request')
+    return redirect('chapters')     
+      
+   
+
+
+
+
+
+
+
+# Lesson Title
+def lesson_title(request):
+   crn = request.session.get('admin_user').get('crn')
+   register_user = Register_model.objects.get(crn=crn)
+   sub_categories = register_user.sub_category.filter(sub_cat_status=True).all().order_by("-id")
+   courses = register_user.courses.filter(status="Active").all().order_by("-id")
+   specializations = register_user.specializations.filter(status="Active").all().order_by("-id")
+   chapters = register_user.chapters.all().order_by("-id")  
+   lessons = register_user.lessons.all().order_by("-id")
+   
+   if request.method == "POST":
+      sub_category = request.POST.get('sub_category_name')
+      course_name = request.POST.get('course_name')
+      specialization_name = request.POST.get('specialization_name')
+      chapter_name = request.POST.get('chapter_name')
+      lesson_title = request.POST.get('lesson_title')
+      lesson_logo = request.FILES.get('lesson_logo')
+      lesson_image = request.FILES.get('lesson_image')
+      short_description = request.POST.get('short_description')
+
+
+      if register_user.lessons.filter(lesson_title=lesson_title).exists():
+         messages.error(request,'Lesson title already exists')
+         return redirect('lesson_title')
+      else:
+         Create_Lesson.objects.create(
+          sub_cat_title_id=sub_category,
+          course_title_id=course_name,
+          spec_title_id=specialization_name,
+          chapter_title_id=chapter_name,
+          lesson_title=lesson_title,
+          lesson_logo=lesson_logo,
+          lesson_image=lesson_image,
+          lesson_description=short_description,
+          crn_number=register_user
+         )
+         return redirect('lesson_title')
+
+
+   context = {
+      
+      'sub_categories':sub_categories,
+      'courses':courses,
+      'specializations':specializations,
+      'chapters':chapters,
+      'lessons':lessons
+     } 
+
+   
+   return render(request,'settings_page/lesson_title.html',context)
+
+
+
+# lesson status
+def lesson_status(request,id):
+   crn = request.session.get('admin_user').get('crn')
+   register_user = Register_model.objects.get(crn=crn)
+   if register_user.lessons.filter(id=id).exists():
+      lesson = register_user.lessons.get(id=id)
+      print("lesson status",lesson.lesson_status)
+      if lesson.lesson_status:
+         lesson.lesson_status = False
+         lesson.save()
+         return redirect('lesson_title')
+      else:
+         lesson.lesson_status = True
+         lesson.save()
+         return redirect('lesson_title')
+   else:
+      messages.error(request,'Lesson not found')
+      return redirect('lesson_title')      
+
+
+
+
+# lesson edit
+def lesson_edit(request,id):
+  crn = request.session.get('admin_user').get('crn')
+  register_user = Register_model.objects.get(crn=crn)
+  if request.method == "POST":
+    sub_category_edit = request.POST.get('sub_category_edit')
+    course_name_edit = request.POST.get('course_name_edit')
+    specialization_edit = request.POST.get('specialization_edit')
+    chapter_name_edit = request.POST.get('chapter_name_edit')
+    lesson_title_edit = request.POST.get('lesson_title_edit')
+    lesson_logo_edit = request.FILES.get('lesson_logo_edit')
+    lesson_image_edit = request.FILES.get('lesson_image_edit')
+    short_description_edit = request.POST.get('short_description_edit')
+    print("sub_category_edit",sub_category_edit)
+    print("course_name_edit",course_name_edit)
+    print("specialization_edit",specialization_edit)
+    print("chapter_name_edit",chapter_name_edit)
+    print("lesson_title_edit",lesson_title_edit)
+    print("lesson_logo_edit",lesson_logo_edit)
+    print("lesson_image_edit",lesson_image_edit)
+    print("short_description_edit",short_description_edit)
+
+    if register_user.lessons.filter(id=id).exists():
+
+      if register_user.lessons.exclude(id=id).filter(lesson_title=lesson_title_edit,sub_cat_title=sub_category_edit,course_title=course_name_edit,spec_title=specialization_edit,chapter_title=chapter_name_edit).exists():
+        messages.error(request,'Lesson already exists')
+        return redirect('lesson_title')
+      else:
+         lesson = register_user.lessons.get(id=id)
+         
+         lesson.sub_cat_title = register_user.sub_category.get(pk=sub_category_edit)
+         lesson.course_title = register_user.courses.get(pk=course_name_edit)
+         lesson.spec_title = register_user.specializations.get(pk=specialization_edit)
+         lesson.chapter_title = register_user.chapters.get(pk=chapter_name_edit)
+         lesson.lesson_title = lesson_title_edit
+         lesson.lesson_logo = lesson_logo_edit
+         lesson.lesson_image = lesson_image_edit
+         lesson.lesson_description = short_description_edit
+         lesson.save()
+         messages.success(request, f'Lesson updated successfully')
+         return redirect('lesson_title')
+         
+  messages.error(request,'Invalid request')
+  return redirect('lesson_title')
+
+
+
+
+
+# lesson delete
+def lesson_delete(request,id):
+  crn = request.session.get('admin_user').get('crn')
+  register_user = Register_model.objects.get(crn=crn)
+  if request.method == 'POST':
+    if register_user.lessons.filter(id=id).exists():
+      lesson = register_user.lessons.get(id=id)
+      lesson.delete()
+      messages.success(request, f'Lesson deleted successfully')
+      return redirect('lesson_title')
+    else:
+      messages.error(request,'Lesson not found')
+      return redirect('lesson_title')
+  else:
+    messages.error(request,'Invalid request')
+    return redirect('lesson_title')
+
+
+
+# language
+def language(request):
+  crn = request.session.get('admin_user').get('crn')
+  register_user = Register_model.objects.get(crn=crn)
+  if request.method == "POST":
+     language_name = request.POST.get('language_name')
+     register_user.languages.create(
+      crn_number = register_user,
+      language = language_name
+     )
+     return redirect('language')
+  return render(request,'settings_page/language.html')
+
+
+
+
+# Topics
+def topics(request):
+   crn = request.session.get('admin_user').get('crn')
+   register_user = Register_model.objects.get(crn=crn)
+   sub_categories = register_user.sub_category.filter(sub_cat_status=True).all().order_by("-id")
+   courses = register_user.courses.filter(status="Active").all().order_by("-id")
+   specializations = register_user.specializations.filter(status="Active").all().order_by("-id")
+   chapters = register_user.chapters.all().order_by("-id")  
+   lessons = register_user.lessons.all().order_by("-id")
+   laguages = register_user.languages.all().order_by("-id")
+   topics = register_user.topics.all().order_by('-id')
+
+
+   if request.method == "POST":
+      lesson_title = request.POST.get('lesson_title')
+      course_name = request.POST.get('course_name')
+      specialization_name = request.POST.get('specialization_name')
+      chapter_name = request.POST.get('chapter_name')
+      sub_category_name = request.POST.get('sub_category_name')
+      language_name = request.POST.get('language_name')
+      topic_name = request.POST.get('topic_name')
+      durations = request.POST.get('durations')
+      video_url = request.POST.get('video_url')
+      short_description = request.POST.get('short_description')
+
+      if register_user.topics.filter(sub_cat_title=sub_category_name,spec_title=specialization_name,chapter_title=chapter_name,lesson_title=lesson_title,topic_title=topic_name,topic_vedio_url=video_url,topic_duration=durations).exists():
+         messages.error(request,'Topic already exists')
+         return redirect('topics')
+      else:
+         Create_Topic.objects.create(
+            crn_number = register_user,
+            sub_cat_title = register_user.sub_category.get(pk=sub_category_name),
+            spec_title = register_user.specializations.get(pk=specialization_name),
+            course_title = register_user.courses.get(pk=course_name),
+            chapter_title = register_user.chapters.get(pk=chapter_name),
+            lesson_title = register_user.lessons.get(pk=lesson_title),
+            language_name = register_user.languages.get(pk=language_name),
+            topic_title = topic_name,
+            topic_duration = durations,
+            topic_vedio_url = video_url,
+            topic_description = short_description,
+         )
+         messages.success(request, f'Topic created successfully')
+         return redirect('topics')
+   context = {
+      
+      'sub_categories':sub_categories,
+      'courses':courses,
+      'specializations':specializations,
+      'chapters':chapters,
+      'lessons':lessons,
+      'laguages':laguages,
+      'topics':topics
+     } 
+
+      
+   return render(request,'settings_page/topics.html',context)
+
+
+
+         
+def topics_edit(request,id):
+  crn = request.session.get('admin_user').get('crn')
+  register_user = Register_model.objects.get(crn=crn)
+  if request.method == "POST":
+      lesson_title = request.POST.get('lesson_title')
+      course_name = request.POST.get('course_name')
+      specialization_name = request.POST.get('specialization_name')
+      chapter_name = request.POST.get('chapter_name')
+      sub_category_name = request.POST.get('sub_category_name')
+      language_name = request.POST.get('language_name')
+      topic_name = request.POST.get('topic_name')
+      durations = request.POST.get('durations')
+      video_url = request.POST.get('video_url')
+      short_description = request.POST.get('short_description')
+      if register_user.topics.exclude(id=id).filter(sub_cat_title=sub_category_name,spec_title=specialization_name,chapter_title=chapter_name,lesson_title=lesson_title,topic_title=topic_name,topic_vedio_url=video_url,topic_duration=durations).exists():
+         messages.error(request,'Topic already exists')
+         return redirect('topics')      
+      else:
+         register_user.topics.update(
+            sub_cat_title = register_user.sub_category.get(pk=sub_category_name),
+            spec_title = register_user.specializations.get(pk=specialization_name),
+            course_title = register_user.courses.get(pk=course_name),
+            chapter_title = register_user.chapters.get(pk=chapter_name),
+            lesson_title = register_user.lessons.get(pk=lesson_title),
+            language_name = register_user.languages.get(pk=language_name),
+            topic_title = topic_name,
+            topic_duration = durations,
+            topic_vedio_url = video_url,
+            topic_description = short_description,
+         )
+         messages.success(request, f'Topic updated successfully')
+         return redirect('topics')
+
+  return redirect('topics')
+            
+
+
+
+
+
 
 
 
@@ -6376,6 +6998,8 @@ def lead_prospects(request):
   training_types = register_user.training_types.filter(status='Active')
   # getting prospect types
   prospect_types = register_user.prospect_types.filter(status='Active')
+  # getting faculty
+  faculty = register_user.employee.all()
   
   context={
      'prospects':prospects,
@@ -6383,6 +7007,7 @@ def lead_prospects(request):
      'courses':courses,
      'training_types':training_types,
      'prospect_types':prospect_types,
+     'faculty':faculty
   }
   return render(request,'Leads/prospects.html', context)
 
@@ -6398,13 +7023,21 @@ def get_branches(request):
 
 def get_courses(request, branch_id):
     crn = request.session.get('admin_user').get('crn')
-    register_user = Register_model.objects.get(crn=crn)  # Move this line here
+    register_user = Register_model.objects.get(crn=crn)
+
     try:
         branch = register_user.branches.get(id=branch_id, status='Active')
-        courses = register_user.course_manage.filter(branch=branch).values('course_name__id', 'course_name__course_name')
-        print("ajex course", courses)
-        return JsonResponse(list(courses), safe=False)
+        # Get the CourseManage objects for the specified branch
+        courses = register_user.course_manage.filter(branch=branch)
+
+        # Serialize course data manually
+        course_data = [{'id': course.id, 'course_name': str(course.course_name), 'specialization': str(course.specialization)} for course in courses]
+        
+        return JsonResponse(course_data, safe=False)
     except BranchModel.DoesNotExist:
+        return JsonResponse([], safe=False)
+    except Exception as e:
+        print(e)
         return JsonResponse([], safe=False)
  
 
@@ -6477,7 +7110,7 @@ def submit_enquiry_form(request):
             return JsonResponse({'otpSent': False, 'error': 'Invalid branch selected.'})
 
         try:
-            course = register_user.course_manage.get(course_name__id=course_name_id)
+            course = register_user.course_manage.get(id=course_name_id)
         except CourseManage.DoesNotExist:
             print(f"CourseManage with course_name__id {course_name_id} does not exist.")
             return JsonResponse({'otpSent': False, 'error': 'Invalid course selected.'})
@@ -6513,7 +7146,7 @@ def submit_enquiry_form(request):
             'last_name': last_name,
             'mobile_number': mobile_number,
             'email': email,
-            'course_name': course.course_name.id,
+            'course_name': course_name_id,
             'branch_name': branch.id,
             'training_type': training_type.id,
             'lead_source': lead_type.id,
@@ -6551,7 +7184,7 @@ def enquiry_verify_otp(request):
             if int(otp_entered) == int(otp_generated):
                 print("verified")
                 register_user = Register_model.objects.get(crn=lead_data.get('crn'))
-                course_name = register_user.courses.get(id=lead_data.get('course_name'))
+                course_name = register_user.course_manage.get(pk=lead_data.get('course_name'))
                 lead = LeadModel.objects.create(
                     first_name=lead_data.get('first_name'),
                     last_name=lead_data.get('last_name'),
@@ -6628,16 +7261,21 @@ def lead_move_to_mql(request,id):
        leadType = request.POST.get('leadType')
        demo_assigned = request.POST.get('demodate')
        Leaddescription = request.POST.get('Leaddescription')
+       courseFaculty = request.POST.get('courseFaculty')
        register_user.leads.filter(id=id).update(
 
           lead_type = leadType,
           demo = register_user.demo.get(pk=demo_assigned),
           lead_description = Leaddescription,
-          lead_position = 'MQL'
+          lead_position = 'MQL',
+          faculty = register_user.employee.get(pk=courseFaculty)
        )
 
-
+       messages.success(request,'Lead moved to MQL')   
        return redirect('leads')
+    else:
+      messages.success(request,'Invalid request')
+      return redirect('leads')   
        
 
 # mql here
@@ -6689,10 +7327,12 @@ def move_to_sql(request,id):
   if request.method == "POST":
      mql_lead = register_user.leads.get(id=id)
      mql_description = request.POST.get('mqldescription')
+     print("faculty",request.POST.get('courseFaculty'))
      if register_user.leads.filter(id=id).exists():
         register_user.leads.filter(id=id).update(
            lead_position = 'SQL',
-           mql_description = mql_description
+           mql_description = mql_description,
+          
         )
 
         messages.success(request,'MQL Lead moved to SQL')
@@ -6775,17 +7415,27 @@ def move_to_admission(request,id):
         opportunity_lead = register_user.leads.filter(id=id).first()
         
         if register_user.leads.filter(id=id).exists():
-            register_user.leads.filter(id=id).update(
-                lead_position = 'ADMITTED',
-                batch_number = register_user.regulations.get(pk=request.POST.get("batchno"))
-            )
-            messages.success(request, 'OPPORTUNITY Lead moved to ADMITTED')
-            return redirect('admissions')
+            if request.POST.get("courseFaculty"):
+                register_user.leads.filter(id=id).update(
+                    lead_position = 'ADMITTED',
+                    batch_number = register_user.regulations.get(pk=request.POST.get("batchno")),
+                    faculty = register_user.employee.get(pk=request.POST.get("courseFaculty")),
+                )
+                messages.success(request, 'OPPORTUNITY Lead moved to ADMITTED')
+                return redirect('admissions')
+            else:
+              register_user.leads.filter(id=id).update(
+                    lead_position = 'ADMITTED',
+                    batch_number = register_user.regulations.get(pk=request.POST.get("batchno")),
+                )
+              messages.success(request, 'OPPORTUNITY Lead moved to ADMITTED')
+              return redirect('admissions')
         else:
             messages.error(request, 'OPPORTUNITY Lead not found')
             return redirect('admissions')
 
 
+            
 
 
 
@@ -6800,6 +7450,37 @@ def admissions(request):
   }
 
   return render(request,'Leads/admission.html', context)
+
+
+def mark_as_spam(request,lead_id):
+   crn = request.session.get('admin_user').get('crn')
+   register_uer = Register_model.objects.get(crn=crn)
+   if request.method == "POST":
+      if register_uer.leads.filter(id=lead_id).exists():
+        register_uer.leads.filter(id=lead_id).update(
+           lead_position = 'SPAM'
+        )
+        messages.success(request,'Lead moved to SPAM')
+        return redirect('spam')
+      else:
+        messages.error(request,'Lead not found')
+        return redirect('spam')
+   else:
+      messages.error(request,'Invalid request')
+      return redirect('spam')
+
+
+
+
+def multiple_mark_as_spam(request):
+    if request.method == "POST":
+        selected_ids = request.POST.getlist('selected_ids[]')
+        for i in selected_ids:
+           print(i)
+       
+        return HttpResponseRedirect(reverse('spam'))
+
+
 
 
 
@@ -7037,20 +7718,7 @@ def submit_admission(request, lead_id):
     return redirect('admission')  
 
 
-def mark_as_spam(request,lead_id):
-    try:
-       
-        if request.method == 'POST':
-            lead = Lead_generation.objects.get(pk=lead_id)
-            lead.lead_position = 'SPAM'  # Assuming the field is named lead_postion
-            lead.save()
-            messages.warning(request, "Marked as spam.")
-            
-            
-    except :
-       messages.error("Invalid Request")
-    return redirect('spam')
-    
+
 
 def re_demo(request, lead_id):
     if request.method=='POST':
@@ -7140,17 +7808,6 @@ def stats_counts(request):
     }
 
 
-def multiple_mark_as_spam(request):
-    if request.method == "POST":
-        selected_ids = request.POST.getlist('selected_ids[]')
-        for i in selected_ids:
-           print(i)
-        # Delete the selected leads
-        # Lead_generation.objects.filter(id__in=selected_ids).delete()
-
-        # Redirect to the desired page after deletion
-        return HttpResponseRedirect(reverse('spam'))
-
 
 
 
@@ -7169,6 +7826,47 @@ def student_card(request):
 
 
 
+# finance start here
+@admin_required
+def finance(request):
+    crn = request.session.get('admin_user').get('crn')
+    register_user = Register_model.objects.get(crn=crn)
+    
+    students=register_user.leads.filter(lead_position="ADMITTED").order_by("-id")
+    finance=register_user.finance_and_accounts.all().order_by("-id")
+    context = {
+        'finance':finance,
+        'students': students
+    }
+    return render(request, 'finance_and_accounts/finance_and_accounts.html', context)
+
+      
+@admin_required
+def finance_and_accounts_update(request):
+  crn=request.session.get('admin_user').get('crn')
+  register_user=Register_model.objects.get(crn=crn)
+  if request.method == 'POST':
+    verify_id=request.POST.get('verify_id')
+    payment_status = request.POST.get('payment_status')
+    remarks = request.POST.get('remarks')
+    verify_id_list=verify_id.split(',')
+    register_user.finance_and_accounts.filter(id__in=verify_id_list).update(payment_status=payment_status,remarks=remarks)
+    if payment_status == 'Received':
+      for obj in register_user.finance_and_accounts.filter(id__in=verify_id_list):
+        new_password=random_password()
+        obj.finance_password=new_password
+        obj.save()
+        subject = f'{request.session.get('admin_user').get('company_name')}'
+ # Compose email content
+        subject = f'{request.session.get("admin_user").get("company_name")} - Welcome and New Password'
+        message = f'Hi Mr/Mrs {obj.leadstage.first_name} {obj.leadstage.last_name},\n\nThank you for joining {request.session.get("admin_user").get("company_name")}. We are thrilled to have you onboard!\n You have enrolled in the course "{obj.leadstage.course_name}" in batch number {obj.leadstage.batch_number}.\n Your token ID is: {obj.leadstage.token_id}.\n\n Your new password is: {new_password}.\n\n If you have any questions or need further assistance, feel free to contact us .\n\n Thank you,\n{request.session.get("admin_user").get("company_name")}'
+        email_from = settings.EMAIL_HOST_USER
+        to_email=f'{obj.leadstage.email}'
+        send_mail(subject, message, email_from, [to_email], fail_silently=False)
+
+    messages.success(request,'Payment status updated successfully')
+   
+    return redirect('finance')
 
 
 

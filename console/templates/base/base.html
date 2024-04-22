@@ -689,15 +689,35 @@
                                 <span class="nav-link-text">Lead Generations</span>
                             </a>
                         </li>
+                        <!-- follow ups end here -->
+
+                        <!-- finance and hrm star there -->
+
+                        <li class="nav-item {% if request.resolver_match.url_name in "['finance']" %} active {% endif %}">
+                            <a class="nav-link" href="javascript:void(0);" data-toggle="collapse" data-target="#user_drp">
+                                <i class="ion ion-ios-cash"></i>
+                                <span class="nav-link-text">Finance and Accounts</span>
+                            </a>
+                            <ul id="user_drp" class="nav flex-column collapse collapse-level-1">
+                                <li class="nav-item">
+                                    <ul class="nav flex-column">
+                                        <!-- employee start here -->
+                                        <li class="nav-item {% if request.resolver_match.url_name == 'employees' %} active {% endif %}">
+                                            <a class="nav-link" href="{% url 'finance' %}">Latest Transactions</a>
+                                        </li>
+                                       
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
                         
 
 
-                        <!-- follow ups end here -->
                        <!-- Mocks  starts here -->
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                           <a class="nav-link link-with-indicator" href="javascript:void(0);" data-toggle="collapse" data-target="#app_drp">
                               <i class="fa fa-users fa-1x font-20"></i>
-                              <span class="nav-link-text">&nbsp;Mocks</span>
+                              <span class="nav-link-text">&nbsp; Mocks</span>
                           </a>
                           <ul id="app_drp" class="nav flex-column collapse collapse-level-1">
                               <li class="nav-item">
@@ -718,7 +738,7 @@
                                   </ul>
                               </li>
                           </ul>
-                      </li>
+                      </li> -->
 <!--                        Mocks ends here -->
 
 
@@ -759,6 +779,34 @@
                                         <li class="nav-item">
                                             <a class="nav-link" href="{% url 'placementstatus' %}">Placement Status</a>
                                         </li>
+
+                                        <!-- mock  -->
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="javascript:void(0);" data-toggle="collapse" data-target="#Components_drp">
+												Mock
+												</a>
+                                            <ul id="Components_drp" class="nav flex-column collapse collapse-level-2">
+                                                <li class="nav-item">
+                                                    <ul class="nav flex-column">
+                                                        <li class="nav-item">
+                                                            <a class="nav-link" href="{% url 'faculty_dashboard' %}">Mock Dashboard</a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a class="nav-link" href="{% url 'faculty_slot' %}">Mocks Scheduling</a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a class="nav-link" href="{% url 'total_interviews' %}">Interviews</a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a class="nav-link" href="{% url 'reschedule' %}">Reschedule</a>
+                                                        </li>
+                                                        
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </li>  
+                                        <!-- mock end here -->
+
 
 
                                     </ul>
@@ -819,7 +867,7 @@
                                         <ul class="nav flex-column">
                                             <!-- employee start here -->
                                             <li class="nav-item {% if request.resolver_match.url_name == 'employees' %} active {% endif %}">
-                                                <a class="nav-link" href="{% url 'employees' %}">Employee MGMT</a>
+                                                <a class="nav-link" href="{% url 'employees' %}">Teams</a>
                                             </li>
                                             <!-- employee end here -->
                                             <!-- create course -->

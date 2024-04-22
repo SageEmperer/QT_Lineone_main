@@ -122,15 +122,15 @@
                               </div>
                               <div class="card-body">
                                   <div class="receipt-details">
-                                      <p><strong>Token ID:</strong> <strong><span class="token-id">{{ token }}</span></strong></p>
-                                      <p><strong>First Name:</strong> {{ first_name }}</p>
-                                      <p><strong>Last Name:</strong> {{ last_name }}</p>
-                                      <p><strong>Mobile Number:</strong> {{ mobile_number }}</p>
-                                      <p><strong>Email:</strong>  {{ email }}</p>
-                                      <p><strong>Course Name:</strong> {{ course_name }}</p>
-                                      <p><strong>Branch Name:</strong> {{ branch_name }}</p>
-                                      <p><strong>Training Type:</strong> {{ training_type }}</p>
-                                      <p><strong>Referral Source:</strong> {{ lead_type }}</p>
+                                      <p><strong>Token ID:</strong> <strong><span class="token-id">{{ lead_data.token_id }}</span></strong></p>
+                                      <p><strong>First Name:</strong> {{ lead_data.first_name }}</p>
+                                      <p><strong>Last Name:</strong> {{ lead_data.last_name }}</p>
+                                      <p><strong>Mobile Number:</strong> {{ lead_data.mobile_number }}</p>
+                                      <p><strong>Email:</strong>  {{ lead_data.email }}</p>
+                                      <p><strong>Course Name:</strong> {{ lead_data.course_name.course_name }}</p>
+                                      <p><strong>Branch Name:</strong> {{ lead_data.branch_name }}</p>
+                                      <p><strong>Training Type:</strong> {{ lead_data.training_type.TrainingTypeName }}</p>
+                                      <p><strong>Referral Source:</strong> {{ lead_data.lead_sourse.prospect_type }}</p>
                                   </div>
                               </div>
                           </div>
@@ -138,7 +138,7 @@
                       </div>
                   </div>
                   <div class="d-flex justify-content-center">
-                      <a href="{% url 'receipt_pdf' token %}" class="btn btn-success">Print</a>
+                      <a href="{% url 'receipt_pdf' lead_data.token_id %}" class="btn btn-success">Print</a>
                   </div>
               <!-- main content end here -->
           </div>

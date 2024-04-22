@@ -1,0 +1,590 @@
+{% extends 'base/base.html' %}
+{% block title %}QTLineone | Create Quiz{% endblock %}
+{% block breadCrum %}
+
+<!-- Breadcrumb -->
+<div class="hk-pg-header d-flex justify-content-between mb-0">
+  <h4 class="hk-pg-title m-3">Create Quiz Questions</h4>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb bg-transparent mb-0">
+      <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'settings' %}"> Settings</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'quiz' %}">Quiz</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Create Quiz</li>
+    </ol>
+  </nav>
+</div>
+<!-- /Breadcrumb -->
+{% endblock %}
+{% block content %}
+ <!-- message here -->
+
+ {% if messages %}
+ {% for message in messages %}
+   {% if message.tags == "error" %}
+     <div class="h-25 alert alert-danger alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
+   {% elif message.tags == "success" %}
+     <div class="h-25 alert alert-success alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
+     {% else %}
+    <div class="h-25 alert alert-info alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
+    {% endif %}
+   {% endfor %}
+ {% endif %}
+
+<!-- message end here -->
+<section class="hk-sec-wrapper">
+  <div class="d-flex justify-content-between">
+
+    <div class="">
+      <!-- <button type="button" class="btn btn-primary mr-2 mb-3" data-toggle="modal" data-target="#CreateSpecialization">
+        <i class="glyphicon glyphicon-plus"></i> Create Worksheet
+      </button> -->
+      <a href="" class="btn btn-success mr-2 mb-3"><i class="glyphicon glyphicon-export"></i> Export</a>
+      <button type="button" class="btn btn-secondary mr-2 mb-3" data-toggle="modal" data-target="#UploadSpecialization">
+        <i class="glyphicon glyphicon-import"></i> Import
+      </button>
+    </div>
+    <div class="">
+      <button type="button" class="btn btn-danger mr-2 mb-3" id="deleteButton" data-toggle="modal"
+        data-target="#deleteModal" style="display: none; position: relative; top: 0px; ">
+        <i class="glyphicon glyphicon-trash"></i> Delete
+    </button>
+    </div>
+  </div>
+
+
+  <div class="row">
+  <div class="col-lg-12" >
+    <div class="">
+        <div class="card-title align-items-center d-flex">
+            <h6 class="card-title mb-0 flex-grow-1">Create Quiz Questions for <span class="text-orange">{Quiz title}</span></h6>
+                <span class="justify-content-end float-end text-dark">Questions Limit:  <span class="text-orange" id="questionCounter">{no. of questions 20}</span></span>
+            
+        </div>
+    </div>
+    </div>
+    </div>
+    <hr>
+      <form action="" method="post" id="specialization_add">
+        {% csrf_token %}
+        <div class="card justify-content-center">
+            <div class="row">
+                <div class="mb-3 col-lg-12" >
+                    <label>Enter Your Question Below <span class="text-danger">*</span></label>
+                    <textarea class="container-fluid"  placeholder="Enter your question"  required name="editor1" id="editor1"></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="mb-3 col-6" >
+                    <label>Option 1<span class="text-danger">*</span></label>
+                    <textarea   class="form-control" placeholder="Enter option 1" name="editor2" id="editor2" required></textarea>
+                </div>
+                <div class="mb-3 col-6" >
+                    <label>Option 2 <span class="text-danger">*</span></label>
+                    <textarea  class="form-control" placeholder="Enter option 2" required name="editor3" id="editor3"></textarea>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="mb-3 col-6" >
+                    <label>Option 3<span class="text-danger">*</span></label>
+                    <textarea placeholder="Enter option 3"   class="form-control" id="editor4" name="editor4" required></textarea>
+                </div>
+                <div class="mb-3 col-6" >
+                    <label>Option 4 <span class="text-danger">*</span></label>
+                    <textarea  placeholder="Enter option 4" class="form-control" id="editor5" name="editor5" required></textarea>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="mb-3 col-lg-12" >
+                    <label>Enter Your explanation here <span class="text-danger">*</span></label>
+                    <textarea class="form-control"  required id="editor6" name="editor6"></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="mb-3 col-6">
+                    <label>Credits per question <span class="text-danger">*</span></label>
+                    <input name="" type="text" class="form-control" id="" name=""
+                    placeholder="Ex: 2 " aria-describedby="inputGroupPrepend" required />
+                </div>
+                <div class="mb-3 col-6">
+                    <label>Select Answer for above Question <span class="text-danger">*</span></label>
+                    <select class="form-control custom-select"  name="course_name">
+                        <option selected value="">Select answer</option>
+                        <option  value="">option 1 </option>
+                        <option  value="">option 2 </option>
+                        <option  value="">option 3 </option>
+                        <option  value="">option 4 </option>
+                    </select>
+                </div>
+
+            </div>
+        </div>
+        
+        <div class="mb-3 d-flex justify-content-center">
+          <button type="submit" class="btn btn-primary m-1">Submit</button>
+          <button type="reset" class="btn btn-secondary m-1">Reset</button>
+        </div>
+      </form>
+    </div>
+<!-- CK editor scripts -->
+<script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/classic/ckeditor.js"></script>
+<script>
+    ClassicEditor .create( document.querySelector( '#editor1' ) )
+    ClassicEditor .create( document.querySelector( '#editor2' ) )
+    ClassicEditor .create( document.querySelector( '#editor3' ) )
+    ClassicEditor .create( document.querySelector( '#editor4' ) )
+    ClassicEditor .create( document.querySelector( '#editor5' ) )
+    ClassicEditor .create( document.querySelector( '#editor6' ) )
+                                
+    CKEDITOR.replace( 'editor1' );
+    CKEDITOR.replace( 'editor2' );
+    CKEDITOR.replace( 'editor3' );
+    CKEDITOR.replace( 'editor4' );
+    CKEDITOR.replace( 'editor5' );
+    CKEDITOR.replace( 'editor6' );
+</script>
+
+<!-- CK Editor ends -->
+   
+
+
+<!-- Questions list start here -->
+
+    <section class="hk-sec-wrapper bg-light-15 m-3" style="background-color: inherit;">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-10">
+                        <br>
+
+                        <h6 class=" text-dark mb-0 flex-grow-1">Question {1}</h6>
+                    </div>
+                    <div class="col-md-2">
+                        <span class="float-right justify-content-end "> 
+                            <a class="btn btn-primary m-1" href="{% url 'edit_quiz' %}">
+                                <i class="fa fa-pencil"></i>
+                            </a>
+                              <button class="btn btn-danger m-1" data-toggle="modal" data-target="#DeleteSpecialization">
+                                <i class="fa fa-trash"></i>
+                            </span>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="card-body">
+                <h6> What does a negative slice operator do in Python?</h6>
+                <br>
+                <p class="align-items-center d-flex">
+                   
+                    <h6><span class="btn btn-light btn-xs">1</span> {option 1 context}</h6>
+                    <h6><span class="btn btn-light btn-xs">2</span> {option 2 context}</h6>
+                    <h6><span class="btn btn-light btn-xs">3</span> {option 3 context}</h6>
+                    <h6><span class="btn btn-light btn-xs">4</span> {option 4 context}</h6>
+                    
+                </p>
+               
+            </div>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-md-9">
+                        <h5 class="text-info">
+                            Answer Explanation
+                        </h5>
+                        <p>
+                            A negative slice operator selects elements from the end of a sequence, allowing you to specify ranges relative to the end.
+                        </p>
+                    </div>
+                    <div class="col-md-3">
+                        <h5 class="text-success">Correct Answer</h5>
+                        <p>Option 3</p>
+                    </div>
+                </div>
+               
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-10">
+                        <br>
+
+                        <h6 class=" text-dark mb-0 flex-grow-1">Question {2}</h6>
+                    </div>
+                    <div class="col-md-2">
+                        <span class="float-right justify-content-end "> 
+                            <a class="btn btn-primary m-1" href="{% url 'edit_quiz' %}">
+                                <i class="fa fa-pencil"></i>
+                            </a>
+                              <button class="btn btn-danger m-1" data-toggle="modal" data-target="#DeleteSpecialization">
+                                <i class="fa fa-trash"></i>
+                            </span>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="card-body">
+                <h6> What does a negative slice operator do in Python?</h6>
+                <br>
+                <p class="align-items-center d-flex">
+                   
+                    <h6><span class="btn btn-light btn-xs">1</span> {option 1 context}</h6>
+                    <h6><span class="btn btn-light btn-xs">2</span> {option 2 context}</h6>
+                    <h6><span class="btn btn-light btn-xs">3</span> {option 3 context}</h6>
+                    <h6><span class="btn btn-light btn-xs">4</span> {option 4 context}</h6>
+                    
+                </p>
+               
+            </div>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-md-9">
+                        <h5 class="text-info">
+                            Answer Explanation
+                        </h5>
+                        <p>
+                            A negative slice operator selects elements from the end of a sequence, allowing you to specify ranges relative to the end.
+                        </p>
+                    </div>
+                    <div class="col-md-3">
+                        <h5 class="text-success">Correct Answer</h5>
+                        <p>Option 4</p>
+                    </div>
+                </div>
+               
+            </div>
+        </div>
+    </section>
+       
+</section>
+
+
+
+
+
+
+
+<!-- Questions end here -->
+
+
+
+<!-- Edit model end here -->
+
+<!-- Delete model start here -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+          <div class="modal-header bg-danger">
+              <h5 class="modal-title text-white " id="deleteModalLabel">Delete question </h5>
+              <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+              <div class="mb-3 text-center">
+                  <div class="d-flex justify-content-center mb-3">
+                      <img src="../../static/triangle-exclamation-solid.svg" width="120" height="70" alt="">
+                  </div>
+                  <form action="" method="post">
+                      {% csrf_token %}
+                      <p id="deleteMessage">Are you sure you want to delete <strong><span id="selectedCount"></span></strong> question
+                    {the question }</p>
+                      <input type="hidden" id="selected_ids_input" name="selected_ids">
+              </div>
+              <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-danger m-1" id="confirmDelete">Yes</button>
+                <button type="button" class="btn btn-secondary m-1" data-dismiss="modal">No</button>
+              </div>
+              </form>
+          </div>
+
+      </div>
+  </div>
+</div>
+
+<div class="modal fade" id="DeleteSpecialization" tabindex="-1" role="dialog" aria-labelledby="DeleteSpecialization"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-danger">
+        <h5 class="modal-title text-white">Delete question</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" class="text-white">&times;</span>
+        </button>
+      </div>
+      <form action="" method="post">
+        {% csrf_token %}
+        <div class="modal-body">
+          <div class="mb-3 text-center">
+            <div class="d-flex justify-content-center mb-3">
+
+              <img src="../../static/triangle-exclamation-solid.svg" width="120" height="70" alt="">
+            </div>
+            Are you sure you want to delete  question {question context} ?
+          </div>
+        </div>
+        <div class="mb-3 d-flex justify-content-center">
+          <button type="submit" class="btn btn-danger m-1">Yes</button>
+          <button type="button" class="btn btn-secondary m-1" data-dismiss="modal" aria-label="Close">
+            No
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Delete model end here -->
+
+<!-- Upload model  -->
+
+<div class="modal fade" id="UploadSpecialization" tabindex="-1" role="dialog" aria-labelledby="UploadSpecialization" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-dark">
+        <h5 class="modal-title text-white">Upload File</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" class="text-whte">&times;</span>
+        </button>
+      </div>
+      <form action="" method="post" id="uploadfile" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="modal-body">
+          <input type="file" name="sep_file" accept=".csv" id="input-file-now" class="dropify" />
+          <div id="csvPreview"></div>
+         </div>
+        <div class="mb-3 d-flex justify-content-center">
+          <button type="submit" class="btn btn-primary m-1">Submit</button>
+          <button type="button" class="btn btn-secondary m-1" data-dismiss="modal" aria-label="Close">
+            Close
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Upload model end here -->
+
+
+{% endblock %}
+
+
+{% block scripts %}
+
+
+<script>
+  $(document).ready(function () {
+    //validationf for special charector 
+    $.validator.addMethod("noSpecialChars", function (value, element) {
+      return /^[a-zA-Z0-9\s]*$/.test(value);
+    }, "Special characters are not allowed.");
+    //no numbers
+    $.validator.addMethod("noNumbers", function (value, element) {
+      return !/\d/.test(value);
+    }, "Numbers are not allowed in the specialization name.");
+
+    $.validator.addMethod("selectRequired", function (value, element) {
+      return value !== "" && value !== null && value !== "0";
+    },
+      "Please select an option."
+    );
+
+    $.validator.addMethod("noSpace", function(value, element) {
+      return !(/^\s|\s$|\s{2,}/.test(value));
+  }, "No excessive or leading/trailing spaces");
+
+
+  $.validator.addMethod("noNumbersOrSpecialChars", function (value, element) {
+    // Check if the value contains numbers or special characters
+    var containsNumbers = /\d/.test(value);
+    var containsSpecialChars = /[^a-zA-Z0-9\s]/.test(value);
+
+    // Return false if the value contains both numbers and special characters
+    return !(containsNumbers && containsSpecialChars);
+    }, "Numbers and special characters are not allowed.");
+
+
+
+
+    $("#specialization_add").validate({
+      rules: {
+        course_name: {
+          selectRequired: true,
+
+        },
+        specialization_name: {
+          required: true,
+          noNumbersOrSpecialChars:true,
+          minlength: 3,
+          noSpecialChars: true,
+          noNumbers: true,
+          maxlength:50,
+          noSpace:true
+        },
+
+      },
+      messages: {
+        course_name: {
+
+          selectRequired: "Please Select course Name",
+        },
+        specialization_name: {
+          required: "Please Enter Specialization Name",
+          minlength: "Minimum of 3 characters",
+          maxlength:"Sorry, it takes only 50 Characters"
+        },
+
+      },
+      submitHandler: function (form) {
+        form.submit();
+      },
+    });
+    $(".Editspecialization").each(function () {
+      $(this).validate({
+        rules: {
+          editspecialization: {
+            required: true,
+            noNumbersOrSpecialChars:true,
+            minlength: 3,
+            noSpecialChars: true,
+            noNumbers: true,
+            maxlength:50,
+            noSpace:true,
+          },
+          editcourse: {
+            selectRequired: true,
+          },
+        },
+        messages: {
+          editspecialization: {
+            required: "Please Enter Specialization Name",
+            minlength: "Minimum of 3 characters",
+            
+            maxlength:"Sorry, it takes only 50 Characters"
+          },
+          editcourse: {
+
+            selectRequired: "Please Select course Name",
+          },
+        },
+        submitHandler: function (form) {
+          form.submit();
+        },
+
+      });
+    });
+  });
+</script>
+
+<script>
+  function validateUploadForm(form) {
+    $(form).find('#input-file-now').on('change', function () {
+      var file = this.files[0];
+      var fileExt = file.name.split('.').pop().toLowerCase();
+
+      if (fileExt === 'csv') {
+        $(form).find('button[type="submit"]').prop('disabled', false);
+        $(form).find('#input-file-now').html('');
+      } else {
+        $(form).find('button[type="submit"]').prop('disabled', true);
+        $(form).find('#csvPreview').html('<span style="color: red;">Only CSV files are allowed.</span>');
+      }
+    });
+
+    $(form).on('submit', function (e) {
+      var file = $(form).find('#input-file-now')[0].files[0];
+
+      if (!file) {
+        e.preventDefault();
+        $(form).find('#csvPreview').html('<span style="color: red;">Please select a csv file.</span>');
+      }
+    });
+  }
+
+  $('#UploadSpecialization').on('shown.bs.modal', function () {
+    validateUploadForm($(this).find('form'));
+  });
+</script>
+
+
+
+
+<!---Delete Script-->
+<script>
+  // Function to update the "Select All" checkbox status
+  function updateSelectAllCheckbox() {
+    var selectAllCheckbox = document.getElementById('selectAll');
+    var rowCheckboxes = document.querySelectorAll('.row-checkbox');
+    var allChecked = true;
+
+    rowCheckboxes.forEach(function (checkbox) {
+      if (!checkbox.checked) {
+        allChecked = false;
+      }
+    });
+
+    selectAllCheckbox.checked = allChecked;
+    updateSelectedRowsList(); // Update selected rows list when "Select All" checkbox is clicked
+  }
+
+  // Function to update the selected rows list and toggle delete button visibility
+  function updateSelectedRowsList() {
+    var selectedRowsList = document.getElementById('selectedRowsList');
+    var selectedIdsInput = document.getElementById('selected_ids_input');
+    var deleteButton = document.getElementById('deleteButton');
+
+    var selectedRows = document.querySelectorAll('.row-checkbox:checked');
+    var selectedCount = selectedRows.length;
+
+    if (selectedCount > 1) {
+      deleteButton.style.display = 'block'; // Show delete button if more than one row is selected
+    } else {
+      deleteButton.style.display = 'none'; // Hide delete button if only one row or none is selected
+    }
+
+    var selectedIds = [];
+    selectedRows.forEach(function (row) {
+      var courseId = row.dataset.courseId;
+      selectedIds.push(courseId);
+    });
+
+    // Set the value of the hidden input field to the selected IDs
+    selectedIdsInput.value = selectedIds.join(',');
+
+    // Update the delete modal message with the selected count
+    document.getElementById('deleteMessage').textContent = "Are you sure you want to delete " + selectedCount + " records?";
+  }
+
+  // Event listener for checkbox change
+  document.querySelectorAll('.row-checkbox').forEach(function (checkbox) {
+    checkbox.addEventListener('change', function () {
+      updateSelectedRowsList();
+      updateSelectAllCheckbox();
+    });
+  });
+
+  // Event listener for select all checkbox change
+  document.getElementById('selectAll').addEventListener('change', function () {
+    var isChecked = this.checked;
+    document.querySelectorAll('.row-checkbox').forEach(function (checkbox) {
+      checkbox.checked = isChecked;
+    });
+    updateSelectedRowsList();
+  });
+
+  // Initially update delete button visibility
+  updateSelectedRowsList();
+
+  // Event listener for delete button click
+  document.getElementById('confirmDelete').addEventListener('click', function () {
+    // Perform delete action here
+    // For now, let's just close the modal
+    $('#deleteModal').modal('hide');
+  });
+</script>
+{% endblock %}

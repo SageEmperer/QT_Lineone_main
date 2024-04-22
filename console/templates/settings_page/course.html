@@ -64,6 +64,7 @@
               <th class="text-white text-center"><input type="checkbox" id="selectAll"> All</th>
 
               <th class="text-white"> S.no</th>
+              <th class="text-white">Sub Category</th>
               <th class="text-white">Courses</th>
               <th class="text-white text-center">Status</th>
               <th class="text-white text-center">Actions</th>
@@ -76,6 +77,7 @@
                   data-course-name="{{i.course_name}}"></td>
 
               <td> {{forloop.counter}}</td>
+              <td>{{i.sub_category.sub_cat_title}}</td>
               <td>{{i.course_name}}</td>
               <td class="text-center">
                 {% if i.status == 'Active' %}
@@ -119,6 +121,23 @@
         {% csrf_token %}
         <div class="modal-body">
           <div class="mb-3">
+            <label for="" class="form-label">Sub Category Name <span class="text-danger">*</span></label>
+            
+              
+              <select
+                class="form-control custom-select"
+                name="sub_category_name"
+                id=""
+              >
+                <option value="" selected>Select your Sub Category</option>
+                {% for sub in sub_categories %}
+                <option value="{{sub.id}}">{{sub.sub_cat_title}}</option>
+                {% endfor %}
+              </select>
+
+            
+          </div> 
+          <div class="mb-3">
             <label for="" class="form-label">Course Name <span class="text-danger">*</span></label>
             <input name="course_name" type="text" placeholder="Ex: Python, Java" class="form-control" />
           </div>
@@ -148,6 +167,21 @@
       <form action="{% url 'course_update' i.id %}" method="post" class="Editcourse">
         {% csrf_token %}
         <div class="modal-body">
+          <div class="mb-3">
+            <label>Sub Category Name <span class="text-danger">*</span></label>
+            <select class="form-control custom-select" name="sub_category_edit">
+              <option selected value="">Select Sub Category Name</option>
+              {% for sub in sub_categories %}
+              {% if sub.sub_cat_title == i.sub_category.sub_cat_title %}
+              <option selected value="{{sub.id}}">{{sub.sub_cat_title}}</option>
+              {% else  %}
+              <option value="{{sub.id}}">{{sub.sub_cat_title}}</option>
+              {% endif %}
+              {% endfor %}
+              
+              
+            </select>
+          </div>
           <div class="mb-3">
             <label for="" class="form-label">Course Name <span class="text-danger">*</span></label>
             <input name="editcourse" value="{{i.course_name}}" type="text" placeholder="Ex: Python, Java"
@@ -294,13 +328,20 @@
 
 
         },
+        sub_category_name:{
+          required:true
+        }
       },
       messages: {
         course_name: {
           required: "Please Enter Course Name",
           minlength: "minimum of 2 chrector is required",
-          maxlength: "maximum of 50 charector is allowed"
+          maxlength: "maximum of 50 charector is allowed",
         },
+        sub_category_name:{
+          required:"Please select sub category"
+
+        }
       },
       submitHandler: function (form) {
         form.submit();
@@ -316,13 +357,23 @@
             minlength: 2,
             maxlength: 50,
           },
+          sub_category_edit:{
+            required:true
+          }
+          
         },
         messages: {
           editcourse: {
             required: "Please Enter Course Name",
             minlength: "minimum of 2 chrector is required",
-            maxlength: "maximum of 50 charector is allowed"
+            maxlength: "maximum of 50 charector is allowed",
           },
+          sub_category_edit:{
+            required:"Please select sub category"
+          }
+
+
+          
         },
         submitHandler: function (form) {
           form.submit();

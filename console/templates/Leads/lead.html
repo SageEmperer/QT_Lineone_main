@@ -225,7 +225,7 @@
           {% for i in leads %}
           <tr>
           
-          <td><input type="checkbox" class="row-checkbox" data-id="{{i.id}}"></td>
+          <td><input type="checkbox" class="row-checkbox" id="selectAll" data-id="{{i.id}}"></td>
           <td>
             <span data-toggle="tooltip" data-html="true" title="Name: Veerasimha Reddy<br>ID: {{i.token_id}}<br>Department: {{i.course_interested_in}}">
               {{i.token_id}}
@@ -403,61 +403,7 @@
 <!-- Edit model end here -->
 
 <!-- spam model start here -->
-{% for i in leads %}
 
-<div
-  class="modal fade"
-  id="spam{{i.id}}"
-  tabindex="-1"
-  role="dialog"
-  aria-labelledby="spam{{i.id}}"
-  aria-hidden="true"
->
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header bg-danger">
-        <h5 class="modal-title text-white">Mark As Spam</h5>
-        <button
-          type="button"
-          class="close"
-          data-dismiss="modal"
-          aria-label="Close"
-        >
-          <span aria-hidden="true" class="text-white">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form action="{% url 'mark_as_spam' i.id %}" method="post">
-          {% csrf_token %}
-          <div class="mb-3 text-center">
-            <div class="d-flex justify-content-center mb-3">
-
-              <img src="../../static/triangle-exclamation-solid.svg" width="120" height="70" alt="">
-            </div>
-            
-          Are you sure want to mark this data as spam?
-          </div>
-          <div class="modal-footer d-flex justify-content-center">
-            <button type="submit" class="btn btn-danger">Yes</button>
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              No
-            </button>
-            
-          </div>
-        </form>
-      </div>
-      
-      
-    </div>
-  </div>
-</div>
-
-{% endfor %}
 <!-- spam model end here -->
 
 
@@ -501,7 +447,15 @@
                 </div>
                 <div class="col-md-6 mb-3">
                   <label for="courseFaculty" class="form-label">Course Faculty <span class="text-danger">*</span></label>
-                  <input type="text" class="form-control  bg-light text-secondary" id="courseFaculty" value="{{i.course_name.teaching_faculty.first_name}} {{i.course_name.teaching_faculty.last_name}}" disabled>
+                  <select class="form-select form-control" name="courseFaculty" >
+                    <option value="" selected>Select your Faculty</option>
+                  
+                      {% for emp in faculty %}
+                          {% if emp.branch == i.branch_name %}
+                          <option value="{{emp.id}}" {% if i.faculty == emp.id %} selected {% endif %}  >{{emp.first_name}}</option>
+                          {% endif %}
+                          {% endfor %}
+                    </select>
 
                     
                 </div>
@@ -593,7 +547,16 @@
               </div>
               <div class="col-md-6 mb-3">
                 <label for="courseFaculty" class="form-label">Course Faculty <span class="text-danger">*</span></label>
-                <input type="text" class="form-control  bg-light text-secondary" id="courseFaculty" value="{{i.course_name.teaching_faculty.first_name}} {{i.course_name.teaching_faculty.last_name}}" disabled>
+      
+<select class="form-select form-control" name="courseFaculty" >
+<option value="" selected>Select your Faculty</option>
+  {% for emp in faculty %}
+      {% if emp.branch == i.branch_name %}
+      <option value="{{emp.id}}">{{emp.first_name}}</option>
+      {% endif %}
+      {% endfor %}
+</select>
+
               </div>
               <div class="col-md-4 mb-3">
                 <label for="plan" class="form-label">Plan <span class="text-danger" >*</span></label>
@@ -719,7 +682,9 @@
 <!-- Modal -->
 
 <!-- Spam Confirmation Modal -->
-<div class="modal fade" id="confirmSpamModal" tabindex="-1" role="dialog" aria-labelledby="confirmSpamModalLabel" aria-hidden="true">
+<!-- for single spam -->
+{% for i in leads %}
+<div class="modal fade" id="spam" tabindex="-1" role="dialog" aria-labelledby="spam" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header bg-danger">
@@ -734,7 +699,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form action="{% url 'multiple_mark_as_spam' %}" method="post">
+        <form action="{% url 'mark_as_spam' i.id %}" method="post">
           {% csrf_token %}
           <div class="mb-3 text-center">
             <div class="d-flex justify-content-center mb-3">
@@ -744,6 +709,58 @@
             
             Are you sure you want to mark the selected leads as spam?
             <div id="selectedLeadsContainer"></div>
+            
+          </div>
+          <div class="modal-footer d-flex justify-content-center">
+            <button type="submit" class="btn btn-danger">Yes</button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              No
+            </button>
+            
+          </div>
+        </form>
+        
+      </div>
+    
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+<!-- for multiple spam -->
+<!-- confirmSpamModal -->
+
+<div class="modal fade" id="confirmSpamModal" tabindex="-1" role="dialog" aria-labelledby="confirmSpamModal" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-danger">
+        <h5 class="modal-title text-white"  id="confirmSpamModalLabel">Mark As Spam</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true" class="text-white">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="" method="post">
+          {% csrf_token %}
+          <div class="mb-3 text-center">
+            <div class="d-flex justify-content-center mb-3">
+
+              <img src="../../static/triangle-exclamation-solid.svg" width="120" height="70" alt="">
+            </div>
+            
+            Are you sure you want to mark the selected leads as spam?
+            <div id="hiddenInputContainer"></div>
+            
           </div>
           <div class="modal-footer d-flex justify-content-center">
             <button type="submit" class="btn btn-danger">Yes</button>
@@ -768,9 +785,11 @@
 
 
 
+
+
+
 {% endblock %}
 {% block scripts %}
-
 
   
 
@@ -791,6 +810,10 @@
 
       $('[data-toggle="tooltip"]').tooltip(); // Initializes all tooltips
     // Function to update button operations
+   
+
+
+
     function updateButtonOperations() {
         var selectedCount = $('.row-checkbox:checked').length;
         var buttonsHtml = '';

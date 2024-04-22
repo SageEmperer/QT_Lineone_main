@@ -132,6 +132,22 @@
             <label for="">UPI Id <span class="text-danger">*</span></label>
             <input type="text" class="form-control" id="" name="upiid" oninput="this.value = this.value.toLowerCase()" placeholder="Enter UPI Id" value="" required />
           </div>
+          <div class="mb-3">
+            <label for="" class="form-label">UPI QR code Image <span class="text-danger">*</span></label>
+            <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+              <div class="input-group-prepend">
+                  <span class="input-group-text">Upload</span>
+              </div>
+              <div class="form-control text-truncate" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
+              <span class="input-group-append">
+<span class=" btn btn-primary btn-file"><span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span>
+<input aria-describedby="inputGroupFileAddon03" aria-label="Upload" 
+name="up_qr_code_img" accept="image/png, image/jpg, image/jpeg" type="file">
+              </span>
+              <a href="#" class="btn btn-secondary fileinput-exists" data-dismiss="fileinput">Remove</a>
+              </span>
+          </div>
+          </div>
         </div>
         <div class="mb-3 d-flex justify-content-center">
           <button type="submit" class="btn btn-primary m-1">Submit</button>
@@ -161,7 +177,7 @@
           <div class="mb-3">
             <label for="">UPI Type Name<span class="text-danger">*</span></label>
             <input type="text" class="form-control" id="editupitype" name="upitype"
-              placeholder="Ex:Phone pe,Google pay" value="{{i.upitype}}"  />
+              placeholder="Ex:Phone pe,Google pay" value="{{i.upipayments_name}}"  />
           </div>
 
           <div class="mb-3">
@@ -172,6 +188,22 @@
           <div class="mb-3">
             <label for="">UPI Id <span class="text-danger">*</span></label>
             <input type="text" class="form-control"value="{{i.upiid}}" id="" name="upiid" placeholder="Enter UPI Id" oninput="this.value = this.value.toUpperCase()" required />
+          </div>
+          <div class="mb-3">
+            <label for="" class="form-label">UPI QR code Image</label>
+            <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+              <div class="input-group-prepend">
+                  <span class="input-group-text">Upload</span>
+              </div>
+              <div class="form-control text-truncate" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
+              <span class="input-group-append">
+<span class=" btn btn-primary btn-file"><span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span>
+<input aria-describedby="inputGroupFileAddon03" aria-label="Upload" 
+name="up_qr_code_img_edit" accept="image/png, image/jpg, image/jpeg" type="file">
+              </span>
+              <a href="#" class="btn btn-secondary fileinput-exists" data-dismiss="fileinput">Remove</a>
+              </span>
+          </div>
           </div>
       </div>
       <div class="mb-3 d-flex justify-content-center">
@@ -333,6 +365,13 @@
 
 
 
+$.validator.addMethod("imageFileType", function (value, element) {
+  // Check if the file extension is either jpg or png (case-insensitive)
+  return this.optional(element) || /^.*\.(jpg|jpeg|png)$/i.test(value);
+}, "Please select a valid JPG or PNG or JPEG image file.");
+
+
+
 
     $("#UPIPayment").validate({
       rules: {
@@ -358,6 +397,10 @@
           noSpace:true,
           noSpecialChars:true
         },
+        up_qr_code_img:{
+          imageFileType:true,
+          required:true
+        }
       },
       messages: {
         upipayments_name: {
@@ -374,6 +417,9 @@
         mobilenumber:{
           required:'Please Enter mobile number',
         },
+        up_qr_code_img:{
+          required:'Please Upload UPI QR code image',
+        }
 
       },
       submitHandler: function (form) {
@@ -404,6 +450,10 @@
             required:true,
             validMobile:true,
             noSpecialChars:true
+          },
+          up_qr_code_img_edit:{
+            required:true,
+            imageFileType:true
           }
         },
         messages: {
@@ -419,6 +469,10 @@
             minlength: "Minimum of 4 characters",
             maxlength:"Maximum of 20 characters",
           },
+          up_qr_code_img_edit:{
+            required:'Please Upload UPI QR code image',
+            imageFileType:true
+          }
 
         },
         submitHandler: function (form) {
