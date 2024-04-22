@@ -1,0 +1,515 @@
+{% extends 'base/base.html' %}
+
+{% block title %} QTLineone | Finance and Accounts {% endblock %}
+
+{% block breadCrum %}
+
+<!-- Breadcrumb -->
+<div class="hk-pg-header d-flex justify-content-between mb-0">
+    <h4 class="hk-pg-title m-3">Latest Transactions</h4>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-transparent mb-0">
+            <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Latest Transactions</li>
+        </ol>
+    </nav>
+</div>
+
+<!-- /Breadcrumb -->
+{% endblock %}
+
+{% block content %}
+{% if messages %}
+{% for message in messages %}
+{% if message.tags == "error" %}
+<div class="h-25 alert alert-danger alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
+{% elif message.tags == "success" %}
+<div class="h-25 alert alert-success alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
+{% else %}
+<div class="h-25 alert alert-info alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
+{% endif %}
+{% endfor %}
+{% endif %}
+
+<section class="hk-sec-wrapper">
+    <!-- <div class="">
+        <button type="button" class="btn btn-primary mr-2 mb-3" data-toggle="modal" data-target="#CreateEmployee">
+            <i class="glyphicon glyphicon-plus"></i> Add Status
+        </button>
+    </div> -->
+    <div class="d-flex justify-content-end">
+
+        <div class="d-flex justify-content-between">
+            <button type="button" class="btn btn-primary mr-2 mb-3" data-toggle="modal" data-target="#exampleModalCenter" id="changeStatusButton" style="display: none;">
+                Grant Access
+            </button>
+            <a href="#" type="button" class="btn btn-success mr-2 mb-3" id="emailButton" style="display: none;">
+                <i class="glyphicon glyphicon-envelope"></i> Email
+            </a>
+            <a href="#" type="button" class="btn btn-success mr-2 mb-3" id="bdButton" style="display: none;">
+                <i class="glyphicon glyphicon-envelope"></i> Send to B.D
+            </a>
+           
+            
+            
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm">
+            <div class="table-wrap">
+                <table id="datable_1" class="table table-hover w-100 display pb-30">
+                    <thead class="bg-dark">
+                        <tr>
+                            <th class=" text-white text-center">All</th>
+                            <th class="text-white">Admission Id</th>
+                            <th class="text-white">Student Name</th>
+                            <th class="text-white">Mobile No</th>
+                            <th class="text-white">Email</th>
+                            <th class="text-white">Course</th>
+                            <th class="text-white">Specialization</th>
+                            <th class="text-white">Batch No</th>
+                            <th class="text-white">Amount</th>
+                            <th class="text-white">verification</th>
+                            
+                            <th class="text-white">Status</th>
+                            <th class="text-white">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in finance %}
+                        <tr>
+                            <td class="text-center"><input type="checkbox" name="selectedRow" data-id="{{ i.id }}"></td>
+                            <td>{{i.leadstage.token_id}}</td>
+                            <td>{{i.leadstage.first_name}} {{i.leadstage.last_name}}</td>
+                            <td>{{i.leadstage.mobile_number}}</td>
+                            <td>{{i.leadstage.email}}</td>
+                            <td>{{i.leadstage.course_name}}</td>
+                            <td>{{i.leadstage.course_name.specialization.specilalization_name}}  </td>
+                            <td> {{i.leadstage.batch_number.batch_number}} </td>
+                            <td>₹ {{i.leadstage.course_name.final_price}}</td>
+                            <td class="text-center">
+                              
+                                {% if i.payment_status == "Received" %}
+                                <p class="text-success">Recived</p>
+                                {% elif i.payment_status == "Not Received" %}
+                                 <p class="text-danger">Not Recived</p></p>
+                                {% elif i.payment_status == "Mis Matched" %}
+                                 <p class="text-secondary">Mis Matched</p>
+                                {% elif i.payment_status == "Suspicious" %}
+                                 <p class="text-warning">suspicious </p>
+                                {% endif %}
+                                <!-- <span class="bg-success"> <span class="badge badge-soft-success">{{i.change_status}}</span></span>
+                                
+                                <span class="bg-danger"> <span class="badge badge-soft-danger">{{i.change_status}}</span></span>
+                                
+                                <span class="bg-secondary"> <span class="badge badge-soft-secondary">{{i.change_status}}</span></span>
+                               
+                                <span class="bg-warning"> <span class="badge badge-soft-warning">{{i.change_status}} </span></span>
+                                 -->
+                            </td>
+                            
+                            <td class="text-center">
+                                {% if i.status %}
+                                <span class="badge badge-soft-success">Success</span>
+                                {% else %}
+                                <span class="badge badge-soft-danger">Failed</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-secondary m-1" data-toggle="modal" data-target="#exampleModalCenter2{{forloop.counter}}">
+                                    <i class="fa fa-eye"></i>
+                                </button>
+                                <!-- <button type="button" class="btn btn-primary m-1" data-toggle="modal" data-target="#exampleModalCenter1">
+                                    <i class="fa fa-pencil"></i>
+                                </button> -->
+                            </td>
+                            
+                        </tr>
+
+                        {% endfor %}
+
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--payment modal-->
+
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title text-white">Verification</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'finance_and_accounts_update'     %}" method="post" id="financeform">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="" class="form-label"><b>Verifcation</b></label>
+                        <select name="payment_status" id="payment_status" class="form-control custom-select">
+                            <option value="" selected>Select Status</option>
+                            <option value="Received">Received</option>
+                            <option value="Not Received">Not Received</option>
+                            <option value="Mis Matched">Mis Matched</option>
+                            <option value="Suspicious">Suspicious</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3" id="remarksField" style="display: none;">
+                        <label for="" class="form-label"><b>Remarks</b></label>
+                        <textarea class="form-control" name="remarks" id="remarks" rows="3"></textarea>
+                    </div>
+                    <input type="hidden" name="verify_id" id="verifyid" value="">
+
+
+                    
+                   
+                    <div class="d-flex justify-content-center">
+                        <button type="Submit" class="btn btn-primary m-1">Submit</button>
+
+                        <button type="reset" class="btn btn-secondary m-1" data-dismiss="modal">Reset</button>
+                    </div>
+                </form>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- edit modal
+<div class="modal fade" id="exampleModalCenter1" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title text-white">Edit Verifcation</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="post" class="editfinanceform">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="" class="form-label"><b>Status</b></label>
+                        <select name="finance_edit" id="" class="form-control custom-select">
+                            <option value="" selected>Select Status</option>
+                            <option value="Recived">Recived</option>
+                            <option value="Not Recived">Not Recived</option>
+                            <option value="Mis Matched">Mis Matched</option>
+                            <option value="suspicious">Suspicious</option>
+                        </select>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="Submit" class="btn btn-primary m-1">Submit</button>
+
+                        <button type="button" class="btn btn-secondary m-1" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+            
+        </div>
+    </div>
+</div> -->
+
+<!--view modal-->
+{% for i in finance %}
+<div class="modal fade" id="exampleModalCenter2{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter2{{forloop.counter}}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title text-white">View</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered" style="width: 100%;">
+                    <tbody class="center">
+                        <tr>
+                            <th class="p-2 w-50"><b>Admission Id</b></th>
+                            <td class="p-2 w-50">{{i.leadstage.token_id}}</td>
+                        </tr>
+                        <tr>
+                            <th class="p-2 "><b>Student Name</b></th>
+                            <td class="p-2 ">{{i.leadstage.first_name}} {{i.leadstage.last_name}}</td>
+                        </tr>
+                        <tr>
+                            <th class="p-2 "><b>Mobile No</b></th>
+                            <td class="p-2 ">{{i.leadstage.mobile_number}}</td>
+                        </tr>
+                        <tr>
+                            <th class="p-2 "><b>Email</b></th>
+                            <td class="p-2 ">{{i.leadstage.email}} </td>
+                        </tr>
+                        <tr>
+                            <th class="p-2 "><b>Course</b></th>
+                            <td class="p-2 "> {{i.leadstage.course_name}} </td>
+                        </tr>
+                        <tr>
+                            <th class="p-2 "><b>Specialization</b></th>
+                            <td class="p-2 "> {{i.leadstage.course_name.specialization.specilalization_name}} </td>
+                        </tr>
+                        <tr>
+                            <th class="p-2"><b>Batch No</b></th>
+                            <td class="p-2">{{i.leadstage.batch_number.batch_number}} </td>
+                        </tr>
+                        <tr>
+                            <th class="p-2 "><b>Amount</b></th>
+                            <td class="p-2 ">{{i.leadstage.course_name.final_price}}</td>
+                        </tr>
+                        <tr>
+                            <th class="p-2 "><b>verification</b></th>
+                            {% if i.payment_status %}
+                            <td class="p-2">
+                                {{i.payment_status}}
+                           
+                            </td>
+                            {% endif %}
+
+                        </tr>
+                        <tr>
+                            <th class="p-2 "><b>Recived By</b></th>
+                            <td class="p-2 ">{{i.leadstage.course_name.teaching_faculty.first_name}} {{i.leadstage.course_name.teaching_faculty.last_name}}  </td>
+                        </tr>
+                        <tr>
+                            <th class="p-2 "><b>Payment Type</b></th>
+                            <td class="p-2 ">PhonePay</td>
+                        </tr>
+                        <tr>
+                            <th class="p-2 "><b>Recived on</b></th>
+                            <td class="p-2 ">01-01-2021:12:12 AM</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="d-flex justify-content-center">
+                    <a href="" class="btn btn-success"> <i class="fa fa-print"></i> Print</a>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+    $(document).ready(function() {
+        $('#financeform').validate({
+            rules: {
+                payment_status:{
+                    required: true
+                }
+            },
+            messages: {
+                finpayment_statusance: {
+                    required: "Please Select Status"
+                }
+            },
+            submitHandler: function(form) {
+                form.submit();
+            }
+        })
+    })
+</script>
+
+
+<!-- <script>
+    $(document).ready(function() {
+        $('.editfinanceform').each(function(){
+            $(this).validate({
+                rules: {
+                    finance_edit:{
+                        required: true,
+                    },
+                },
+                messages: {
+                    finance_edit: {
+                        required: "Please Select Status"
+                    }
+                }
+            })
+           
+        })
+    })
+</script> -->
+
+
+<!-- <script>
+    // Function to handle checkbox selection
+    function handleCheckboxSelection(checkbox) {
+        var checkboxes = document.getElementsByName('selectedRow');
+        var selectedIds = '';
+
+        // Uncheck all checkboxes except the selected one
+        checkboxes.forEach(function(item) {
+            if (item !== checkbox) {
+                item.checked = false;
+            } else if (item.checked) {
+                selectedIds = item.getAttribute('data-id');
+            }
+        });
+
+        // Show/hide buttons based on checkbox selection
+        var buttons = document.querySelectorAll('#changeStatusButton, #emailButton, #bdButton');
+        buttons.forEach(function(button) {
+            button.style.display = selectedIds ? 'inline-block' : 'none';
+        });
+    }
+
+    // Add event listeners to checkboxes
+    document.querySelectorAll('[name="selectedRow"]').forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+            handleCheckboxSelection(this);
+        });
+    });
+    
+</script> -->
+
+
+<!-- <script>
+    // Function to handle checkbox selection
+    function handleCheckboxSelection() {
+        var checkboxes = document.querySelectorAll('input[name="selectedRow"]');
+        var selectedIds = [];
+
+        checkboxes.forEach(function(checkbox) {
+            if (checkbox.checked) {
+                selectedIds.push(checkbox.getAttribute('data-id'));
+            }
+        });
+
+        // Show/hide buttons based on the number of selected checkboxes
+        var grantAccessButton = document.getElementById('changeStatusButton');
+        var emailButton = document.getElementById('emailButton');
+        var bdButton = document.getElementById('bdButton');
+
+        if (selectedIds.length === 1) {
+            grantAccessButton.style.display = 'inline-block';
+            emailButton.style.display = 'inline-block';
+            bdButton.style.display = 'none';
+        } else if (selectedIds.length === 2) {
+            grantAccessButton.style.display = 'none';
+            emailButton.style.display = 'none';
+            bdButton.style.display = 'inline-block';
+        } else {
+            grantAccessButton.style.display = 'none';
+            emailButton.style.display = 'none';
+            bdButton.style.display = 'none';
+        }
+
+        // Store the selected IDs in a variable
+        // You can use these variables for further processing or sending to the server
+        console.log(selectedIds);
+    }
+</script> -->
+
+
+<script>
+// Function to handle checkbox selection
+function handleCheckboxSelection(checkbox) {
+    var checkboxes = document.getElementsByName('selectedRow');
+    var selectedIds = [];
+
+    // Loop through checkboxes to find selected ones and collect their IDs
+    checkboxes.forEach(function(item) {
+        if (item.checked) {
+            selectedIds.push(item.getAttribute('data-id'));
+        }
+    });
+
+    // Convert the array of IDs into a comma-separated string
+    var selectedIdsString = selectedIds.join(',');
+
+    // Pass the IDs to the hidden input field
+    document.getElementById('verifyid').value = selectedIdsString;
+
+    // Show/hide buttons based on checkbox selection
+    var buttons = document.querySelectorAll('#changeStatusButton, #emailButton, #bdButton');
+    buttons.forEach(function(button) {
+        button.style.display = selectedIds.length > 0 ? 'inline-block' : 'none';
+    });
+}
+
+// Add event listeners to checkboxes
+document.querySelectorAll('[name="selectedRow"]').forEach(function(checkbox) {
+    checkbox.addEventListener('change', function() {
+        handleCheckboxSelection(this);
+    });
+});
+
+// Disable multiple checkbox selection
+document.querySelectorAll('[name="selectedRow"]').forEach(function(checkbox) {
+    checkbox.addEventListener('click', function() {
+        if (this.checked) {
+            document.querySelectorAll('[name="selectedRow"]').forEach(function(otherCheckbox) {
+                if (otherCheckbox !== checkbox) {
+                    otherCheckbox.disabled = true;
+                }
+            });
+        } else {
+            document.querySelectorAll('[name="selectedRow"]').forEach(function(otherCheckbox) {
+                otherCheckbox.disabled = false;
+            });
+        }
+    });
+});
+
+</script>
+
+
+
+
+
+<!-- <script>
+    function handleCheckboxChange() {
+        const checkedCheckboxes = document.querySelectorAll('input[name="selectedRow"]:checked');
+        const changeStatusButton = document.getElementById('changeStatusButton');
+        const emailButton = document.getElementById('emailButton');
+        const bdButton = document.getElementById('bdButton');
+
+        if (checkedCheckboxes.length > 0) {
+            changeStatusButton.style.display = 'block';
+            emailButton.style.display = 'block';
+            bdButton.style.display = 'block';
+        } else {
+            changeStatusButton.style.display = 'none';
+            emailButton.style.display = 'none';
+            bdButton.style.display = 'none';
+        }
+
+        const selectedIds = Array.from(checkedCheckboxes).map(checkbox => checkbox.getAttribute('data-id'));
+        document.getElementById('selectedIds').value = selectedIds.join(',');
+    }
+
+    document.querySelectorAll('input[name="selectedRow"]').forEach((checkbox) => {
+        checkbox.addEventListener('change', handleCheckboxChange);
+    });
+</script> -->
+
+
+<script>
+    document.getElementById('payment_status').addEventListener('change', function() {
+        var remarksField = document.getElementById('remarksField');
+        if (this.value === 'Not Received') {
+            remarksField.style.display = 'block';
+        } else {
+            remarksField.style.display = 'none';
+        }
+    });
+</script>
+
+
+
+{% endblock %}
