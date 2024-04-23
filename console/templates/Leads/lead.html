@@ -683,8 +683,8 @@
 
 <!-- Spam Confirmation Modal -->
 <!-- for single spam -->
-{% for i in leads %}
-<div class="modal fade" id="spam" tabindex="-1" role="dialog" aria-labelledby="spam" aria-hidden="true">
+<!-- {% for i in leads %}
+<div class="modal fade" id="spam{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="spam" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header bg-danger">
@@ -699,7 +699,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form action="{% url 'mark_as_spam' i.id %}" method="post">
+        <form action="" method="post">
           {% csrf_token %}
           <div class="mb-3 text-center">
             <div class="d-flex justify-content-center mb-3">
@@ -730,16 +730,16 @@
     </div>
   </div>
 </div>
-{% endfor %}
+{% endfor %} -->
 
 <!-- for multiple spam -->
 <!-- confirmSpamModal -->
 
-<div class="modal fade" id="confirmSpamModal" tabindex="-1" role="dialog" aria-labelledby="confirmSpamModal" aria-hidden="true">
+<div class="modal fade" id="spamModal" tabindex="-1" role="dialog" aria-labelledby="spamModal" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header bg-danger">
-        <h5 class="modal-title text-white"  id="confirmSpamModalLabel">Mark As Spam</h5>
+        <h5 class="modal-title text-white"  id="spamModal">Mark As Spam</h5>
         <button
           type="button"
           class="close"
@@ -750,7 +750,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form action="" method="post">
+        <form action="{% url 'mark_as_spam' %}" method="post">
           {% csrf_token %}
           <div class="mb-3 text-center">
             <div class="d-flex justify-content-center mb-3">
@@ -825,7 +825,7 @@
                 <button class="btn btn-info mr-2 demo-details" data-target="#Democourse${prospectId}"><i class="fa fa-plus-circle"></i> Add Lead stage</button>
                 <button class="btn btn-dark mr-2 view-details" data-target="#submitmodal${prospectId}"><i class="fa fa-send-o"></i> Send To MQL</button>
                 <button class="btn btn-primary mr-2 view-admission" data-target="#sumbit_admissoinmodal${prospectId}"><i class="fa fa-user"></i> Admission</button>
-                <button class="btn btn-danger mr-2 view-spam" data-target="#spam${prospectId}"><i class="fa fa-info-circle"></i> Spam</button>
+                <button class="btn btn-danger mr-2 view-spam" data-target="#spamModal"><i class="fa fa-info-circle"></i> Spam</button>
             `;
             if(selectedCount > 1) {
                 // When multiple checkboxes are selected, adjust the buttons accordingly
@@ -833,7 +833,7 @@
                 <button class="btn btn-dark mr-2"><i class="fa fa-envelope"></i> Email</button>
                         <button class="btn btn-success mr-2"><i class="fa fa-phone"></i> WhatsApp</button>
                         <button class="btn btn-info mr-2"><i class="fa fa-comments"></i> SMS</button>
-                        <button class="btn btn-danger mr-2 view-spam-all" data-target="#confirmSpamModal"><i class="fa fa-info-circle"></i> Spam</button>
+                        <button class="btn btn-danger mr-2 view-spam-all" data-target="#spamModal"><i class="fa fa-info-circle"></i> Spam</button>
                 `;
             }
         }
@@ -1194,8 +1194,52 @@ $(document).ready(function(){
 </script>
 
 
+<!-- Your existing HTML code -->
 
+<!-- Your HTML code -->
 
-  
+<script>
+  // Get references to the necessary elements
+  const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+  const selectAllCheckbox = document.getElementById('checkAll');
+  const hiddenInputContainer = document.getElementById('hiddenInputContainer');
+
+  // Add event listener to the "All" checkbox
+  selectAllCheckbox.addEventListener('change', handleSelectAllChange);
+
+  // Add event listeners to each row checkbox
+  rowCheckboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', handleCheckboxChange);
+  });
+
+  function handleSelectAllChange(event) {
+    const isChecked = event.target.checked;
+    rowCheckboxes.forEach(checkbox => {
+      checkbox.checked = isChecked;
+      handleCheckboxChange({ target: checkbox });
+    });
+  }
+
+  function handleCheckboxChange(event) {
+    const checkbox = event.target;
+    const leadId = checkbox.dataset.id;
+
+    // Check if the checkbox is checked or unchecked
+    if (checkbox.checked) {
+      // Create a new hidden input field with the lead ID
+      const hiddenInput = document.createElement('input');
+      hiddenInput.type = 'hidden';
+      hiddenInput.name = 'selected_id';
+      hiddenInput.value = leadId;
+      hiddenInputContainer.appendChild(hiddenInput);
+    } else {
+      // Remove the hidden input field for the unchecked lead ID
+      const hiddenInput = hiddenInputContainer.querySelector(`input[value="${leadId}"]`);
+      if (hiddenInput) {
+        hiddenInputContainer.removeChild(hiddenInput);
+      }
+    }
+  }
+</script>
   
 {% endblock %}

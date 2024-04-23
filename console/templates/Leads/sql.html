@@ -449,20 +449,11 @@
 <!-- Edit model end here -->
 
 <!-- spam model start here -->
-{% for i in leads %}
-
-<div
-  class="modal fade"
-  id="spam{{i.id}}"
-  tabindex="-1"
-  role="dialog"
-  aria-labelledby="spam{{i.id}}"
-  aria-hidden="true"
->
+<div class="modal fade" id="spamModal" tabindex="-1" role="dialog" aria-labelledby="spamModal" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header bg-danger">
-        <h5 class="modal-title text-white">Mark As Spam</h5>
+        <h5 class="modal-title text-white"  id="spamModal">Mark As Spam</h5>
         <button
           type="button"
           class="close"
@@ -473,19 +464,17 @@
         </button>
       </div>
       <div class="modal-body">
-        <form action="{% url 'mark_as_spam' i.id %}" method="post">
+        <form action="{% url 'mark_as_spam' %}" method="post">
           {% csrf_token %}
           <div class="mb-3 text-center">
             <div class="d-flex justify-content-center mb-3">
-              <img
-                src="../../static/triangle-exclamation-solid.svg"
-                width="120"
-                height="70"
-                alt=""
-              />
-            </div>
 
-            Are you sure want to mark this data as spam?
+              <img src="../../static/triangle-exclamation-solid.svg" width="120" height="70" alt="">
+            </div>
+            
+            Are you sure you want to mark the selected leads as spam ?
+            <div id="hiddenInputContainer"></div>
+            
           </div>
           <div class="modal-footer d-flex justify-content-center">
             <button type="submit" class="btn btn-danger">Yes</button>
@@ -497,14 +486,16 @@
             >
               No
             </button>
+            
           </div>
         </form>
+        
       </div>
+    
     </div>
   </div>
 </div>
 
-{% endfor %}
 
 <!-- Delete model end here -->
 
@@ -643,16 +634,15 @@
             />
           </div>
           <div class="col-md-6 mb-3">
-            <label for="courseFaculty" class="form-label"
-              >Course Faculty <span class="">*</span></label
-            >
-            <input
-              type="text"
-              class="form-control bg-light text-secondary"
-              id="courseFaculty"
-              value="{{i.course_name.teaching_faculty.first_name}} {{i.course_name.teaching_faculty.last_name}}"
-              disabled
-            />
+            <label for="courseFaculty" class="form-label">Course Faculty <span class="text-danger">*</span></label>
+            <select class="form-select custom-select" name="courseFaculty" >
+              <option value="" selected>Select your Faculty </option>
+                {% for emp in faculty %}
+                    {% if emp.branch == i.branch_name %}
+                    <option value="{{emp.id}}" {% if i.faculty.id == emp.id %} selected {% endif %} >{{emp.first_name}} {{emp.last_name}}</option>
+                    {% endif %}
+                    {% endfor %}
+              </select>
           </div>
           <div class="col-md-6 mb-3">
             <label for="plan" class="form-label"
@@ -927,16 +917,15 @@
             />
           </div>
           <div class="col-md-6 mb-3">
-            <label for="courseFaculty" class="form-label"
-              >Course Faculty <span class="text-danger">*</span></label
-            >
-            <input
-              type="text"
-              class="form-control bg-light text-secondary"
-              id="courseFaculty"
-              value="{{i.course_name.teaching_faculty.first_name}} {{i.course_name.teaching_faculty.first_name}}"
-              disabled
-            />
+            <label for="courseFaculty" class="form-label">Course Faculty <span class="text-danger">*</span></label>
+            <select class="form-select custom-select" name="courseFaculty" >
+              <option value="" selected>Select your Faculty </option>
+                {% for emp in faculty %}
+                    {% if emp.branch == i.branch_name %}
+                    <option value="{{emp.id}}" {% if i.faculty.id == emp.id %} selected {% endif %} >{{emp.first_name}} {{emp.last_name}}</option>
+                    {% endif %}
+                    {% endfor %}
+              </select>
           </div>
           <div class="col-md-6 mb-3">
             <label for="plan" class="form-label"
@@ -1228,7 +1217,7 @@
              <button class="btn btn-info mr-2 view-request" data-target="#requestdiscount${prospectId}""><i class="fa fa-percent"></i> Request Discount </button>
               <button class="btn btn-dark mr-2 view-details" data-target="#sumbitmodal${prospectId}"><i class="fa fa-send-o"></i> Send To Opportunity</button>
               <button class="btn btn-primary mr-2 view-admission" data-target="#sumbit_admissoinmodal${prospectId}"><i class="fa fa-user"></i> Admission</button>
-              <button class="btn btn-danger mr-2 view-spam" data-target="#spam${prospectId}"><i class="fa fa-info-circle"></i> Spam</button>
+              <button class="btn btn-danger mr-2 view-spam" data-target="#spamModal"><i class="fa fa-info-circle"></i> Spam</button>
               
           `;
         if (selectedCount > 1) {
@@ -1237,7 +1226,8 @@
               <button class="btn btn-dark mr-2"><i class="fa fa-envelope"></i> Email</button>
               <button class="btn btn-success mr-2"><i class="fa fa-phone"></i> WhatsApp</button>
               <button class="btn btn-info mr-2"><i class="fa fa-comments"></i> SMS</button>
-              <button class="btn btn-danger mr-2"><i class="fa fa-trash-o"></i> Delete</button>
+              <button class="btn btn-danger mr-2 view-spam" data-target="#spamModal"><i class="fa fa-info-circle"></i> Spam</button>
+
               `;
         }
       }
@@ -1520,5 +1510,61 @@
     });
   });
 </script>
+
+
+
+<script>
+  // Get references to the necessary elements
+  const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+  const selectAllCheckbox = document.getElementById('checkAll');
+  const hiddenInputContainer = document.getElementById('hiddenInputContainer');
+
+  // Add event listener to the "All" checkbox
+  selectAllCheckbox.addEventListener('change', handleSelectAllChange);
+
+  // Add event listeners to each row checkbox
+  rowCheckboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', handleCheckboxChange);
+  });
+
+  function handleSelectAllChange(event) {
+    const isChecked = event.target.checked;
+    rowCheckboxes.forEach(checkbox => {
+      checkbox.checked = isChecked;
+      handleCheckboxChange({ target: checkbox });
+    });
+  }
+
+  function handleCheckboxChange(event) {
+    const checkbox = event.target;
+    const leadId = checkbox.dataset.id;
+
+    // Check if the checkbox is checked or unchecked
+    if (checkbox.checked) {
+      // Create a new hidden input field with the lead ID
+      const hiddenInput = document.createElement('input');
+      hiddenInput.type = 'hidden';
+      hiddenInput.name = 'selected_id';
+      hiddenInput.value = leadId;
+      hiddenInputContainer.appendChild(hiddenInput);
+    } else {
+      // Remove the hidden input field for the unchecked lead ID
+      const hiddenInput = hiddenInputContainer.querySelector(`input[value="${leadId}"]`);
+      if (hiddenInput) {
+        hiddenInputContainer.removeChild(hiddenInput);
+      }
+    }
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
 
 {% endblock %}

@@ -706,7 +706,10 @@ def branches(request):
 
 
 def inquery_form(request, id, crn):
-    register_user = Register_model.objects.get(crn=crn)
+    try:
+      register_user = Register_model.objects.get(crn=crn)
+    except Exception as e:
+      return redirect('branch_error')
     if not register_user:
        return redirect('branch_error')
     course = register_user.course_manage.filter(branch_id=id).all()
@@ -862,22 +865,22 @@ def verify_otp(request):
                         lead_sourse=register_user.prospect_types.get(pk=lead_data.get('lead_sourse')),
                         crn_number=register_user
                     )
-                    # subject = 'Registration Successful'
-                    # message = (
-                    # f"Hello {lead_data.get('first_name')},\n\n"
-                    # "Thank you for registering with us. We are excited to have you join our community. "
-                    # "Here are your registration details:\n\n"
-                    # f"Registration Number: {lead.token_id}\n"
-                    # f"Course Enrolled: {lead.course_name.course_name}.\n"
-                    # "\nWe look forward to providing you with a quality learning experience. "
-                    # "Should you have any questions or need further information, please do not hesitate to contact us.\n\n"
-                    # "Best Regards,\n"
-                    # f"{request.session.get('admin_user').get('company_name')}\n"
-                    # "Contact Information"
-                    # )
-                    # email_from = settings.EMAIL_HOST_USER
-                    # recipient_list = [lead_data.get('email')]
-                    # send_mail(subject, message, email_from, recipient_list)                    
+                    subject = 'Registration Successful'
+                    message = (
+                    f"Hello {lead_data.get('first_name')},\n\n"
+                    "Thank you for registering with us. We are excited to have you join our community. "
+                    "Here are your registration details:\n\n"
+                    f"Registration Number: {lead.token_id}\n"
+                    f"Course Enrolled: {lead.course_name.course_name}.\n"
+                    "\nWe look forward to providing you with a quality learning experience. "
+                    "Should you have any questions or need further information, please do not hesitate to contact us.\n\n"
+                    "Best Regards,\n"
+                    
+                    "Contact Information"
+                    )
+                    email_from = settings.EMAIL_HOST_USER
+                    recipient_list = [lead_data.get('email')]
+                    send_mail(subject, message, email_from, recipient_list)                    
 
                     del request.session['otp']
                     del request.session['lead_data']
@@ -2946,6 +2949,8 @@ def topics_edit(request,id):
 
   return redirect('topics')
             
+
+
 
 
 
@@ -7135,8 +7140,8 @@ def submit_enquiry_form(request):
         print(course.course_name.course_name)
         print(training_type.TrainingTypeName)
         print(lead_type.prospect_type)
-            # otp = send_otp_to_phone(mobile_number)
-        otp = random.randint(100000, 999999)
+        otp = send_otp_to_phone(mobile_number)
+        # otp = random.randint(100000, 999999)
         print("Generated OTP:", otp)
 
         # Store form data and OTP in the session
@@ -7287,11 +7292,13 @@ def mql(request):
   leads = register_user.leads.filter(lead_position='MQL').all().order_by('-id')
   demos = register_user.demo.filter(status='Active').all().order_by('-id')
   batches = register_user.regulations.filter(status = 'Active').all().order_by('-id')
+  faculty = register_user.employee.all()
 
   context={
      "leads":leads,
      "demos":demos,
-     'batches':batches
+     'batches':batches,
+     'faculty':faculty
     
   }
   return render(request,'Leads/mql.html', context)
@@ -7327,11 +7334,15 @@ def move_to_sql(request,id):
   if request.method == "POST":
      mql_lead = register_user.leads.get(id=id)
      mql_description = request.POST.get('mqldescription')
+     courseFaculty = request.POST.get('courseFaculty')
+     leadType = request.POST.get('leadType')
      print("faculty",request.POST.get('courseFaculty'))
      if register_user.leads.filter(id=id).exists():
         register_user.leads.filter(id=id).update(
            lead_position = 'SQL',
            mql_description = mql_description,
+           lead_type = leadType,
+           faculty = register_user.employee.get(pk=courseFaculty)
           
         )
 
@@ -7354,11 +7365,13 @@ def sql(request):
   leads = register_user.leads.filter(lead_position="SQL").order_by("-id")
   plans = register_user.plans.filter(status="Active").order_by("-id")
   batches = register_user.regulations.filter(status = 'Active').all().order_by('-id')
+  faculty = register_user.employee.all()
   
   context={
      "leads":leads,
      'plans':plans,
-     'batches':batches
+     'batches':batches,
+     'faculty':faculty
      
   }
   return render(request,'Leads/sql.html', context) 
@@ -7374,17 +7387,18 @@ def move_to_opportunity(request,id):
         register_user.leads.filter(id=id).update(
           lead_position = 'OPPORTUNITY',
           lead_type = request.POST.get("leadType"),
-          sql_description = request.POST.get("sqldescription")   
+          sql_description = request.POST.get("sqldescription"),
+          faculty = register_user.employee.get(pk=request.POST.get('courseFaculty'))   
         )
 
         messages.success(request,'SQL Lead moved to OPPORTUNITY')
-        return redirect('sql')
+        return redirect('opportunity')
      else:
       messages.error(request,'SQL Lead not found')
-      return redirect('sql')
+      return redirect('opportunity')
   else:
     messages.error(request,"Invalid request")
-    return redirect('sql')
+    return redirect('opportunity')
     
 
 
@@ -7420,6 +7434,7 @@ def move_to_admission(request,id):
                     lead_position = 'ADMITTED',
                     batch_number = register_user.regulations.get(pk=request.POST.get("batchno")),
                     faculty = register_user.employee.get(pk=request.POST.get("courseFaculty")),
+                    
                 )
                 messages.success(request, 'OPPORTUNITY Lead moved to ADMITTED')
                 return redirect('admissions')
@@ -7452,23 +7467,20 @@ def admissions(request):
   return render(request,'Leads/admission.html', context)
 
 
-def mark_as_spam(request,lead_id):
-   crn = request.session.get('admin_user').get('crn')
-   register_uer = Register_model.objects.get(crn=crn)
-   if request.method == "POST":
-      if register_uer.leads.filter(id=lead_id).exists():
-        register_uer.leads.filter(id=lead_id).update(
-           lead_position = 'SPAM'
-        )
-        messages.success(request,'Lead moved to SPAM')
-        return redirect('spam')
-      else:
-        messages.error(request,'Lead not found')
-        return redirect('spam')
-   else:
-      messages.error(request,'Invalid request')
-      return redirect('spam')
+def mark_as_spam(request):
+    crn = request.session.get('admin_user').get('crn')
+    register_user = get_object_or_404(Register_model, crn=crn)
 
+    if request.method == "POST":
+        selected_ids = request.POST.getlist('selected_id')
+        leads = LeadModel.objects.filter(crn_number=register_user, id__in=selected_ids)
+
+        if leads:
+            leads.update(lead_position="SPAM")
+
+        return redirect('spam')
+
+    return redirect('spam')
 
 
 

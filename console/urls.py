@@ -83,6 +83,7 @@ urlpatterns = [
     path('get_courses/<int:branch_id>/', views.get_courses, name='get_courses'),
     path('move_to_admission/<int:id>',views.move_to_admission,name="move_to_admission"),
     path('admissions/',views.admissions,name="admissions"),
+    path('mark_as_spam/', views.mark_as_spam, name='mark_as_spam'),
 
 
 
@@ -116,7 +117,6 @@ urlpatterns = [
     path('submit_to_mql/<int:lead_id>/', views.submit_to_mql, name='submit_to_mql'),
     path('submit_to_sql/<int:lead_id>/', views.submit_to_sql, name='submit_to_sql'),
     path('submit_admission/<int:lead_id>/', views.submit_admission, name='submit_admission'),
-    path('mark_as_spam/<int:lead_id>/', views.mark_as_spam, name='mark_as_spam'),
     path('request_discount/<int:lead_id>/', views.request_discount, name='request_discount'),
     path('submit_admit/<int:lead_id>/', views.submit_admit, name='submit_admit'),
     path('enquiry_verify_otp/', views.enquiry_verify_otp, name='enquiry_verify_otp'),

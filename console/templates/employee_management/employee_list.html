@@ -715,9 +715,7 @@
                                     <option selected value="">Select Employee Type</option>
                                     {% for type in employee_type %}
                                     {% if type.status == 'Active' %}
-                                    {% if type.id == employees.employee_type_id %}
-                                    <option selected value="{{type.id}}">{{type.employee_type}} </option>
-                                    {% endif %}
+                                    
                                     <option value="{{type.id}}">{{type.employee_type}} </option>
                                     {% endif %}
                                     {% endfor %}
@@ -763,9 +761,7 @@
                                     <option selected value="">Select Branch</option>
                                     {% for branches in branch %}
                                     {% if branches.status == 'Active' %}
-                                    {% if branches.id == employees.branch_id %}
-                                    <option selected value="{{branches.id}}">{{branches.branch_name}}</option>
-                                    {% endif %}
+                                    
                                     <option value="{{branches.id}}">{{branches.branch_name}}</option>
                                     {% endif %}
                                     {% endfor %}
@@ -1482,158 +1478,177 @@
         
         $('.EmployeeEdit').each(function () {
             $(this).validate({
-                rules: {
-                    first_name_edit: {
-                        required: true,
-                        noSpecialChars: true,
-                        maxlength: 50,
+                rules:{
+                    first_name_edit:{
+                        required:true,
+                        maxlength: 100,
                         minlength: 3,
+                        noSpecialChars: true,
+                        noSpace:true
+
+                    },
+                    last_name_edit:{
+                        required:true,
+                        maxlength: 100,
+                        minlength: 3,
+                        noSpecialChars: true,
                         noSpace:true
                     },
-                    last_name_edit: {
-                        required: true,
-                        noSpecialChars: true,
-                        maxlength: 50,
-                        minlength: 3,
-                        noSpace:true
+                    personal_number_edit:{
+                        required:true,
+                        customphone: true
+
                     },
-                    personal_number_edit: {
-                        required: true,
+                    alternative_number_edit:{
                         customphone: true
                     },
-                    alternative_number: {
-                        customphone: true
-                    },
-                    personal_email_edit: {
+                    personal_email_edit:{
                         required: true,
                         customEmail: true,
                         noSpace:true
                     },
-                    professional_email_edit: {
+                    professional_email_edit:{
                         customEmail: true,
                         noSpace:true
                     },
-                    gender_edit: {
-                        required: true
+                    gender_edit:{
+                        required:true,
                     },
-                    date_of_birth_edit: {
-                        required: true,
+                    date_of_birth_edit:{
+                        required:true,
                         validAge: true
+                    },
+                    employee_type_edit:{
+                        required:true
 
                     },
-                    employee_type_edit: {
-                        required: true,
-
+                    department_name_edit:{
+                        required:true
                     },
-                    department_name_edit: {
-                        required: true,
+                    designation_name_edit:{
+                        required:true
                     },
-                    designation_name_edit: {
-                        required: true,
-                    },
-                    branch_edit: {
-                        required: true,
+                    branch_edit:{
+                        required:true
                     },
                     pincode_edit:{
                         digits: true,
                         minlength: 6,
                         maxlength: 6
                     },
-                    address_edit: {
+                    address_edit:{
                         noSpace:true,
                         maxlength: 1200,
                         minlength:10
-                    },
-
-                    aadhar_card_edit: {
-                        required: true,
-                        digits: true,
-                        minlength: 12,
-                        maxlength: 12,
-                        aadharNumber
-                    },
-                    pan_card_edit: {
-                        validPANCard:true,
-                        maxlength: 10
                     },
                     profile_image_edit:{
                         required:true,
                         accept: "image/png,image/jpeg,image/jpg"
                     },
+                    aadhar_card_edit:{
+                        required: true,
+                        digits: true,
+                        minlength: 12,
+                        maxlength: 12,
+                        aadharNumber: true
+
+                    },
+                    pan_card_edit:{
+                        validPANCard: true,
+                        maxlength: 10
+                    },
                     aadhar_card_pdf_edit:{
-                        accept:'application/pdf',
-                        required:true,
+                        accept: "application/pdf",
+                        required:true
                     },
                     pan_card_pdf_edit:{
-                        accept:'application/pdf',
-                    },
-                    pincode_edit: {
-                        digits: true,
-                        minlength: 6,
-                        maxlength: 6
-                    },
+                        accept: "application/pdf",
 
+                    },
                 },
-                messages: {
-                    first_name_edit: {
-                        required: 'First Name is required',
-                        minlength: 'Minimum of 3 characters',
-                        maxlength: 'Maximum of 50 characters'
+                messages:{
+                    first_name_edit:{
+                        required:"Please enter first name",
+                        minlength:"Minimum of 3 characters",
+                        maxlength:"Maximum of 100 characters",
                     },
-                    last_name_edit: {
-                        required: 'Last Name is required',
-                        minlength: 'Minimum of 3 characters',
-                        maxlength: 'Maximum of 50 characters'
+                    last_name_edit:{
+                        required:"Please enter last name",
+                        minlength:"Minimum of 3 characters",
+                        maxlength:"Maximum of 100 characters",
                     },
-                    personal_number_edit: {
-                        required: 'Mobile number is required',
+                    personal_number_edit:{
+                        required:"Please enter mobile number",
 
                     },
-                    personal_email_edit: {
-                        required: 'Email is required',
+                    alternative_number_edit:{
+                        customphone: "Please enter a valid mobile number",
                     },
-                    gender_edit: {
-                        required: 'Gender is required',
+                    personal_email_edit:{
+                        required:"Please enter email address",
+
                     },
-                    date_of_birth_edit: {
-                        required: 'Date of birth is required',
+                    professional_email_edit:{
+                        customEmail: "Please enter a valid email address",
                     },
-                    employee_type_edit: {
-                        required: 'Employee type is required',
+                    gender_edit:{
+                        required:"Please select gender",
                     },
-                    department_name_edit: {
-                        required: 'Department name is required',
+                    date_of_birth_edit:{
+                        required:"Please select date of birth",
                     },
-                    designation_name_edit: {
-                        required: 'Designation name is required',
+                    employee_type_edit:{
+                        required:"Please select employee type",
                     },
-                    branch_edit: {
-                        required: 'Branch is required',
+                    department_name_edit:{
+                        required:"Please select department name",
                     },
-                    profile_image_edit: {
-                        required: 'Profile image is required',
+                    designation_name_edit:{
+                        required:"Please select designation name",
+
+                    },
+                    branch_edit:{
+                        required:"Please select branch",
+                    },
+                    pincode_edit:{
+                        digits:"Alphabets and special characters are not allowed",
+                        minlength:"Minimum of 6 characters",
+                        maxlength:"Maximum of 6 characters",
+                    },
+                    address_edit:{
+                        maxlength:"Maximum of 1200 characters",
+                        minlength:"Minimum of 10 characters",
+
+                    },
+                    profile_image_edit:{
+                        required:"Please select profile image",
                         accept: "Only PNG/JPG/JPEG files are allowed."
                     },
-                    aadhar_card_edit: {
-                        required: 'Aadhar card is required',
+                    aadhar_card_edit:{
+                        required:"Please select aadhar card",
+                        digits:"Alphabets and special characters are not allowed",
+                        minlength:"Minimum of 12 characters",
+                        maxlength:"Maximum of 12 characters",
                     },
-                    pan_card_edit: {
-                        validPANCard:true,
-                        maxlength: 'Maximum of 10 characters'
+                    pan_card_edit:{
+                        validPANCard: "Please enter a valid PAN card number",
+                        maxlength:"Maximum of 10 characters",
+
                     },
                     aadhar_card_pdf_edit:{
-                        accept:'Only PDF files are allowed.',
-                        required:'Aadhar card pdf is required',
+                        required:"Please select aadhar card",
+                        accept: "Only PDF files are allowed."
                     },
                     pan_card_pdf_edit:{
-                        accept:'Only PDF files are allowed.',
-                    }
-                    
+                        accept: "Only PDF files are allowed.",
+
+                    },
+
                 },
                 submitHandler: function (form) {
                     form.submit();
                 }
-
+                
             })
         })
 
