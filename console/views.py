@@ -1798,6 +1798,7 @@ def upi_payments(request):
     Mobilenumber=request.POST.get('mobilenumber')
     Upiid=request.POST.get('upiid')
     up_qr_code_img = request.FILES.get('up_qr_code_img')
+    print("qr code",up_qr_code_img)
     if register_user.upi.filter(upiid=Upiid).exists():
       messages.error(request, f'{Upiid} Already Exists')
       return redirect('upi_payments')
@@ -2688,9 +2689,18 @@ def chapter_delete(request,id):
       
    
 
-
-
-
+@admin_required
+def chapters_all(request):
+  crn = request.session.get('admin_user').get('crn')
+  register_user = Register_model.objects.get(crn=crn)
+  if request.method == 'POST':
+    selected_ids=request.POST.get('selected_ids')
+    selected_ids_list=selected_ids.split(',')
+    register_user.chapters.filter(id__in=selected_ids_list).delete()
+    messages.success(request, 'Records deleted successfully')
+    return redirect('chapters')
+    
+    
 
 
 
@@ -7026,6 +7036,7 @@ def get_branches(request):
     print("ajex branches",branches)
     return JsonResponse(list(branches), safe=False)
 
+
 def get_courses(request, branch_id):
     crn = request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
@@ -7067,6 +7078,8 @@ def leads(request):
     faculty = register_user.employee.all()
     demo = register_user.demo.all()
     batches = register_user.regulations.all()
+    upi = register_user.upi.filter(status = "Active")
+
 
 
     context = {
@@ -7074,9 +7087,33 @@ def leads(request):
         'lead_stage':lead_stage,
         'faculty':faculty,
         'demo':demo,
-        'batches':batches
+        'batches':batches,
+        'upi':upi
     }
     return render(request, 'Leads/lead.html', context)
+
+
+
+def get_upi_details(request, upi_id):
+    
+    try:
+        upi_payment = upipayments.objects.get(id=upi_id)        
+    
+        upi_details = {
+            'upipayments_name': upi_payment.upipayments_name,
+            'mobilenumber': upi_payment.mobilenumber,
+            'upiid': upi_payment.upiid,
+            'status': upi_payment.status,
+      
+        }
+        
+     
+        return JsonResponse(upi_details)
+    
+    except upipayments.DoesNotExist:
+  
+        return JsonResponse({'error': 'UPI ID does not exist'}, status=404)
+
 
 
 
@@ -7140,8 +7177,8 @@ def submit_enquiry_form(request):
         print(course.course_name.course_name)
         print(training_type.TrainingTypeName)
         print(lead_type.prospect_type)
-        otp = send_otp_to_phone(mobile_number)
-        # otp = random.randint(100000, 999999)
+        # otp = send_otp_to_phone(mobile_number)
+        otp = random.randint(100000, 999999)
         print("Generated OTP:", otp)
 
         # Store form data and OTP in the session
@@ -7484,6 +7521,23 @@ def mark_as_spam(request):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 def multiple_mark_as_spam(request):
     if request.method == "POST":
         selected_ids = request.POST.getlist('selected_ids[]')
@@ -7538,21 +7592,19 @@ def admission(request):
 
 def spam(request):
   try:
-     context={}
-     crn = request.session.get('admin_user', {}).get('crn')
-     register_user = Register_model.objects.get(crn=crn)
-     admin_user_info = request.session['admin_user']  # Retrieve the stored dictionary
-     crn1 = admin_user_info.get('id')
-     leads = Lead_generation.objects.filter(lead_position='SPAM',crn_number=register_user).order_by('-token_generated_date')
+    crn = request.session.get('admin_user', {}).get('crn')
+    register_user = Register_model.objects.get(crn=crn)
+    leads = register_user.leads.filter(lead_position="SPAM").order_by("-id")
     #  leads = Lead_generation.objects.filter(lead_postion="SPAM").order_by('-token_generated_date')
     
-     context={
-        "leads":leads,
-        'active_tab': 'spam'
-      }
-  except:
+  except Exception as e:
      messages.error(request,'data was not found')
+
      
+  context={
+        "leads":leads,
+        
+      }
      
   return render(request,'Leads/spam.html', context) 
 

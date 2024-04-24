@@ -866,6 +866,7 @@ class LeadModel(models.Model):
     lead_description = models.TextField(null=True)
     mql_description = models.TextField(null=True)
     sql_description = models.TextField(null=True)
+    token_generated_at = models.DateTimeField(default=datetime.now()) 
     
     
 

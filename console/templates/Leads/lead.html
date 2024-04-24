@@ -496,9 +496,9 @@
                   <textarea name="Leaddescription" class="form-control text-secondary" id="Leaddescription" cols="30" rows="3" placeholder="Enter Your Feedback here"></textarea>
                 </div>
 
-                <div class="modal-footer d-flex justify-content-center col-md-12 mb-3">
-                  <button type="submit" class="btn btn-primary">Submit</button>
-                  <button type="reset" class="btn btn-secondary" >Reset</button>
+                <div class="mb-3 d-flex justify-content-center col-md-12 mb-3">
+                  <button type="submit" class="btn btn-primary m-1">Submit</button>
+                  <button type="reset" class="btn btn-secondary m-1" >Reset</button>
                 </div>
               </form>
           </div>
@@ -621,7 +621,7 @@
               <!-- payment details -->
               <div class="col-md-6 mb-3">
                 <label for="paymenttype" class="form-label">Mode of Payment <span class="text-danger">*</span></label>
-                <select id="paymenttype{{i.id}}" class="form-select form-control" name="paymenttype" onchange="showPaymentFields('{{i.id}}')">
+                <select id="paymenttype" class="form-select form-control payment_type" name="paymenttype" onchange="showPaymentFields('{{i.id}}')">
 
                     <option selected disabled>Select Mode of Payment</option>
                     <option value="UPI">UPI</option>
@@ -632,16 +632,34 @@
             </div>
             
             <!-- UPI Details -->
-            <div class="col-md-6 mb-3 payment-details{{i.id}}" id="UPI{{i.id}}" style="display: none;">
+            <div class="col-md-6 mb-3 upi_dropdown" id="UPI" style="display: none;">
 
-                <label for="upiId" class="form-label">UPI ID <span class="text-danger">*</span></label>
-                <input type="text" class="form-control text-secondary" id="upiId" name="upiId" placeholder="UPI ID">
-                <div>
-                  <label for="upiTransactionId" class="form-label">Transaction Id <span class="text-danger">*</span></label>
-                  <input type="text" class="form-control text-secondary" id="upiTransactionId" name="upiTransactionId" placeholder="TransactionId">
-                </div>
-                
+                <label for="" class="form-label">UPI Payment</label>
+                <select name="" class="form-select form-control upi_drop_select" id="">
+                  
+                  <option value="" selected>Select your UPI</option>
+                  {% for i in upi %}
+  
+                  <option value="{{i.id}}">{{i.upipayments_name}} {{i.upiid}}</option>
+                  {% endfor %}
+                </select>
+
             </div>
+            {% for i in upi %}
+            <div class="col-md-6  upi_id" id="upi_id{{i.id}}" style="display: none;">
+              <input type="text" readonly  value="{{i.upiid}}" class="form-control upi_id_input">
+
+            </div>
+            {% endfor %}
+            {% for i in upi %}
+            <div class="col-md-6  upi_id_img" id="upi_id_img{{i.id}}" style="display: none;">
+              <img src="{{i.upi_qr_code}}" alt="hello" width="100">
+
+            </div>
+            {% endfor %}
+            
+
+                
             
             <!-- Paytm Details -->
             <div class="col-md-6 mb-3 payment-details{{i.id}}" id="Paytm{{i.id}}" style="display: none;">
@@ -762,16 +780,16 @@
             <div id="hiddenInputContainer"></div>
             
           </div>
-          <div class="modal-footer d-flex justify-content-center">
-            <button type="submit" class="btn btn-danger">Yes</button>
+          <div class="mb-3 d-flex justify-content-center">
             <button
               type="button"
-              class="btn btn-secondary"
+              class="btn btn-secondary m-1"
               data-dismiss="modal"
               aria-label="Close"
             >
               No
             </button>
+            <button type="submit" class="btn btn-danger m-1">Yes</button>
             
           </div>
         </form>
@@ -789,6 +807,10 @@
 
 
 {% endblock %}
+
+
+
+
 {% block scripts %}
 
   
@@ -1242,4 +1264,34 @@ $(document).ready(function(){
   }
 </script>
   
+<script>
+  $(document).ready(function() {
+    $('.payment_type').change(function() {
+      var paymentType = $(this).val();
+      var upiDropdown = $('.upi_dropdown');
+      var upiIdElements = $('.upi_id').hide(); // Hide all UPI ID elements
+
+      if (paymentType === 'UPI') {
+        upiDropdown.show(); // Show UPI dropdown
+      } else {
+        upiDropdown.hide(); // Hide UPI dropdown if payment type is not UPI
+      }
+    });
+
+    $('.upi_drop_select').change(function() {
+      var selectedUpiId = $(this).val();
+      $('.upi_id').hide(); // Hide all UPI ID elements
+      $('#upi_id' + selectedUpiId).show();
+      $('#upi_id_img' + selectedUpiId).show();
+       // Show UPI ID element based on selected UPI ID
+    });
+  });
+
+
+
+</script>
+
+
+
+
 {% endblock %}

@@ -394,59 +394,7 @@
 {% endfor %}
 
 <!-- Create model end here -->
-<!-- Edit model start here -->
 
-<div
-  class="modal fade"
-  id="EditCourse"
-  tabindex="-1"
-  role="dialog"
-  aria-labelledby="EditCourse"
-  aria-hidden="true"
->
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header bg-dark">
-        <h5 class="modal-title text-white">Edit Course</h5>
-        <button
-          type="button"
-          class="close"
-          data-dismiss="modal"
-          aria-label="Close"
-        >
-          <span aria-hidden="true" class="text-white">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form action="">
-          <div class="mb-3">
-            <label for="" class="form-label"
-              >Course Name <span class="text-danger">*</span></label
-            >
-            <input
-              type="text"
-              placeholder="Ex: Python, Java"
-              class="form-control"
-            />
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer d-flex justify-content-center">
-        <button type="button" class="btn btn-primary">Submit</button>
-        <button
-          type="button"
-          class="btn btn-secondary"
-          data-dismiss="modal"
-          aria-label="Close"
-        >
-          Close
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Edit model end here -->
 
 <!-- spam model start here -->
 <div class="modal fade" id="spamModal" tabindex="-1" role="dialog" aria-labelledby="spamModal" aria-hidden="true">
@@ -476,11 +424,11 @@
             <div id="hiddenInputContainer"></div>
             
           </div>
-          <div class="modal-footer d-flex justify-content-center">
-            <button type="submit" class="btn btn-danger">Yes</button>
+          <div class="mb-3 d-flex justify-content-center">
+            <button type="submit" class="btn btn-danger m-1">Yes</button>
             <button
               type="button"
-              class="btn btn-secondary"
+              class="btn btn-secondary m-1"
               data-dismiss="modal"
               aria-label="Close"
             >
@@ -811,10 +759,10 @@
           </div>
 
           <div
-            class="modal-footer d-flex justify-content-center col-md-12 mb-3"
+            class="mb-3 d-flex justify-content-center col-md-12 mb-3"
           >
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <button type="reset" class="btn btn-secondary">Reset</button>
+            <button type="submit" class="btn btn-primary m-1">Submit</button>
+            <button type="reset" class="btn btn-secondary m-1">Reset</button>
           </div>
         </form>
       </div>
@@ -1182,10 +1130,10 @@
           </div>
 
           <div
-            class="modal-footer d-flex justify-content-center col-md-12 mb-3"
+            class="mb-3 d-flex justify-content-center col-md-12 mb-3"
           >
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <button type="reset" class="btn btn-secondary">Reset</button>
+            <button type="submit" class="btn btn-primary m-1">Submit</button>
+            <button type="reset" class="btn btn-secondary m-1">Reset</button>
           </div>
         </form>
       </div>
@@ -1219,6 +1167,7 @@
               <button class="btn btn-primary mr-2 view-admission" data-target="#sumbit_admissoinmodal${prospectId}"><i class="fa fa-user"></i> Admission</button>
               <button class="btn btn-danger mr-2 view-spam" data-target="#spamModal"><i class="fa fa-info-circle"></i> Spam</button>
               
+              
           `;
         if (selectedCount > 1) {
           // When multiple checkboxes are selected, adjust the buttons accordingly
@@ -1227,6 +1176,9 @@
               <button class="btn btn-success mr-2"><i class="fa fa-phone"></i> WhatsApp</button>
               <button class="btn btn-info mr-2"><i class="fa fa-comments"></i> SMS</button>
               <button class="btn btn-danger mr-2 view-spam" data-target="#spamModal"><i class="fa fa-info-circle"></i> Spam</button>
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Launch demo modal
+              </button>
 
               `;
         }
@@ -1253,6 +1205,10 @@
       $(targetModal).modal("show");
     });
     $("#button_operations").on("click", ".view-request", function () {
+      var targetModal = $(this).data("target");
+      $(targetModal).modal("show");
+    });
+    $("#button_operations").on("click", ".view-spam", function () {
       var targetModal = $(this).data("target");
       $(targetModal).modal("show");
     });

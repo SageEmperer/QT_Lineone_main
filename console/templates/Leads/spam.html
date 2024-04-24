@@ -113,7 +113,7 @@
                       <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'admission' %}active{% endif %}" href="{% url 'admissions' %}">Admissions</a>
                   </li>
                   <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'spam' %}active{% endif %}" href="{% url 'spam' %}">Spam List</a>
+                      <a class="d-flex h-60p align-items-center nav-link active" href="{% url 'spam' %}">Spam List</a>
                   </li>
                   
 
@@ -185,21 +185,21 @@
                 
               <td><input type="checkbox" class="row-checkbox" data-id="{{ i.id }}"></td>
               <td>{{i.token_id}}</td>
-              <td>{{i.firstname}} {{i.lastname}}</td>
-              <td>{{i.phone}}</td>
+              <td>{{i.first_name}} {{i.last_name}}</td>
+              <td>{{i.mobile_number}}</td>
               <td>{{i.email}}</td>
-              <td>{{i.course_interested_in}}</td>
+              <td>{{i.course_name.course_name}}</td>
              
            
               
-              {% if i.has_attended_demo %}
-                
-                <td>Not Assigned</td>
-                {% else %}
-                <td>{{i.demo_date}}</td>
+              {% if i.demo.datestartat %}
+              
+              <td>{{i.demo.datestartat}}</td>
+              {% else %}
+              <td>Not Assigned</td>
                 
                 {% endif %}
-                <td>{{i.token_generated_date}}</td>
+                <td>{{i.token_generated_at}}</td>
                 
                 </tr>
               {% endfor %} 

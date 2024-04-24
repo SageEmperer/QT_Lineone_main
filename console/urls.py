@@ -84,6 +84,7 @@ urlpatterns = [
     path('move_to_admission/<int:id>',views.move_to_admission,name="move_to_admission"),
     path('admissions/',views.admissions,name="admissions"),
     path('mark_as_spam/', views.mark_as_spam, name='mark_as_spam'),
+    path('get_upi_details/<int:upi_id>',views.get_upi_details,name="get_upi_details"),
 
 
 
@@ -343,6 +344,8 @@ urlpatterns = [
    path('chapter_update/<int:id>',views.chapter_update,name="chapter_update"),
    # chapter delete
    path('chapter_delete/<int:id>',views.chapter_delete,name="chapter_delete"),
+   # chapters delete all
+   path('chapters_all/',views.chapters_all,name="chapters_all"),
 
    path('get_courses_for_ch/<int:specialization_id>/', views.get_courses_for_ch, name='get_courses_for_ch'),
     path('get_sub_categories/<int:course_id>/', views.get_sub_categories, name='get_sub_categories'),

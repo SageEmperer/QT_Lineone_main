@@ -352,7 +352,7 @@
                   <div class="d-flex justify-content-center mb-3">
                       <img src="../../static/triangle-exclamation-solid.svg" width="120" height="70" alt="">
                   </div>
-                  <form action="" method="post">
+                  <form action="{% url 'chapters_all' %}" method="post">
                       {% csrf_token %}
                       <p id="deleteMessage">Are you sure you want to delete <strong><span id="selectedCount"></span></strong> records?</p>
                       <input type="hidden" id="selected_ids_input" name="selected_ids">
@@ -776,7 +776,7 @@
       });
   });
 </script>
-
+ 
 
 
 <script>
