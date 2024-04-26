@@ -102,7 +102,7 @@
                       <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'sql' %}active{% endif %}" href="{% url 'sql' %}">SQL</a>
                   </li>
                   <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'request_discounts' %}active{% endif %}" href="{% url 'request_discounts' %}">Request Discounts</a>
+                      <a class="d-flex h-60p align-items-center nav-link active" href="{% url 'request_discounts' %}">Request Discounts</a>
                   </li>
                   <li class="nav-item">
                       <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'opportunity' %}active{% endif %}" href="{% url 'opportunity' %}">Opportunity</a>
@@ -182,14 +182,14 @@
           
           
           <td>{{i.token_id}}</td>
-          <td>{{i.firstname}} {{i.lastname}}</td>
-          <td>{{i.phone}}</td>
+          <td>{{i.first_name}} {{i.last_name}}</td>
+          <td>{{i.mobile_number}}</td>
           <td>{{i.email}}</td>
-          <td>{{i.course_interested_in}}</td>
-          <td>{{i.plan}}</td>
-          <td>{{i.course_fee}}</td>
-          <td>{{i.discount_fee}}%</td>
-          <td>{{i.Final_fee}}</td>
+          <td>{{i.course_name.course_name}}</td>
+          <td>{{i.course_name.course_plan.plan_name}}</td>
+          <td>{{i.course_name.course_fee}}</td>
+          <td>{{i.course_name.discount}}%</td>
+          <td>{{i.course_name.final_price}}</td>
           <td>{{i.lead_type}}</td>
           {% if i.request_acceptance %}
           <td>accepted</td>

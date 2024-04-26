@@ -452,7 +452,7 @@
                   
                       {% for emp in faculty %}
                           {% if emp.branch == i.branch_name %}
-                          <option value="{{emp.id}}" {% if i.faculty == emp.id %} selected {% endif %}  >{{emp.first_name}}</option>
+                          <option value="{{emp.id}}" {% if i.faculty == emp.id %} selected {% endif %}  >{{emp.first_name}} {{emp.last_name}}</option>
                           {% endif %}
                           {% endfor %}
                     </select>
@@ -621,43 +621,72 @@
               <!-- payment details -->
               <div class="col-md-6 mb-3">
                 <label for="paymenttype" class="form-label">Mode of Payment <span class="text-danger">*</span></label>
-                <select id="paymenttype" class="form-select form-control payment_type" name="paymenttype" onchange="showPaymentFields('{{i.id}}')">
-
+                <select id="paymenttype" class="form-select form-control payment_type" name="paymenttype">
                     <option selected disabled>Select Mode of Payment</option>
                     <option value="UPI">UPI</option>
-                    <option value="Paytm">Paytm</option>
                     <option value="Cash">Cash</option>
-                    <option value="BankTransfer">Bank Transfer</option>
+                    <option value="netbanking">Bank Transfer</option>
                 </select>
             </div>
             
             <!-- UPI Details -->
             <div class="col-md-6 mb-3 upi_dropdown" id="UPI" style="display: none;">
-
                 <label for="" class="form-label">UPI Payment</label>
-                <select name="" class="form-select form-control upi_drop_select" id="">
-                  
-                  <option value="" selected>Select your UPI</option>
-                  {% for i in upi %}
-  
-                  <option value="{{i.id}}">{{i.upipayments_name}} {{i.upiid}}</option>
-                  {% endfor %}
+                <select name="upi_id_id" class="form-select form-control upi_drop_select" id="">
+                    <option value="" selected>Select your UPI</option>
+                    {% for i in upi %}
+                    <option value="{{i.id}}">{{i.upipayments_name}} {{i.upiid}}</option>
+                    {% endfor %}
                 </select>
-
             </div>
+            
             {% for i in upi %}
-            <div class="col-md-6  upi_id" id="upi_id{{i.id}}" style="display: none;">
-              <input type="text" readonly  value="{{i.upiid}}" class="form-control upi_id_input">
-
-            </div>
-            {% endfor %}
-            {% for i in upi %}
-            <div class="col-md-6  upi_id_img" id="upi_id_img{{i.id}}" style="display: none;">
-              <img src="{{i.upi_qr_code}}" alt="hello" width="100">
-
+            <div class="col-md-6 mb-3 upi_id" id="upi_id{{i.id}}" style="display: none;">
+                <input type="text" readonly  value="{{i.upiid}}" class="form-control upi_id_input">
             </div>
             {% endfor %}
             
+            {% for i in upi %}
+            <div class="col-md-6 mb-3 upi_id_img" id="upi_id_img{{i.id}}" style="display: none;">
+              <span data-toggle="modal" data-target="#qrcode{{i.id}}">  <img src="../../../static/media/{{i.upi_qr_code}}"  alt="hello" width="100%" height="100%">
+              </span>
+            </div>
+            {% endfor %}
+            
+            <div class="col-md-6 mb-3 net_banking_div" style="display: none;">
+                <label for="" class="form-label">Net Banking</label>
+                <select name="net_banking_id" class="form-select form-control net_banking_select" id="">
+                    <option value="" selected>Select your netbanking"</option>
+                    {% for net in net_banking %}
+                    <option value="{{net.id}}">{{net.netbanking_name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            {% for net in net_banking %}
+            <div class="col-md-6 mb-3 net-baking_all net-baking_all{{net.id}}" style="display: none;">
+                <div class="">
+                    <input type="text" readonly value="{{net.netbanking_name}}" class="form-control">
+                </div>
+            </div>
+            
+            <div class="col-md-6 mb-3 net-baking_all net-baking_all{{net.id}}" style="display: none;">
+                <div class="">
+                    <input type="text" readonly value="{{net.ifscode}}" class="form-control">
+                </div>
+            </div>
+            {% endfor %}
+          <div class="col-md-6 mb-3 transaction-id" style="display: none;">
+            <label for="" class="form-label">Transaction Id </label>
+            <input type="text" class="form-control text-secondary" id="transactionId" name="transactionId">
+        </div>
+        
+    
+
+              
+    
+    
+    
 
                 
             
@@ -701,12 +730,12 @@
 
 <!-- Spam Confirmation Modal -->
 <!-- for single spam -->
-<!-- {% for i in leads %}
-<div class="modal fade" id="spam{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="spam" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
+{% for i in upi %}
+<div class="modal fade" id="qrcode{{i.id}}" tabindex="-1" role="dialog" aria-labelledby="spam" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-top modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header bg-danger">
-        <h5 class="modal-title text-white"  id="confirmSpamModalLabel">Mark As Spam</h5>
+        <h5 class="modal-title text-white"  id="confirmSpamModalLabel">QR Code of {{i.upiid}}</h5>
         <button
           type="button"
           class="close"
@@ -717,38 +746,26 @@
         </button>
       </div>
       <div class="modal-body">
-        <form action="" method="post">
-          {% csrf_token %}
-          <div class="mb-3 text-center">
-            <div class="d-flex justify-content-center mb-3">
+      
+          
+          <div class=" text-center">
+            <div class="d-flex justify-content-center p-3">
 
-              <img src="../../static/triangle-exclamation-solid.svg" width="120" height="70" alt="">
+              <img src="../../static/media/{{i.upi_qr_code}}" width="100%" height="100%" alt="">
             </div>
             
-            Are you sure you want to mark the selected leads as spam?
-            <div id="selectedLeadsContainer"></div>
+            
             
           </div>
-          <div class="modal-footer d-flex justify-content-center">
-            <button type="submit" class="btn btn-danger">Yes</button>
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              No
-            </button>
-            
-          </div>
-        </form>
+         
+       
         
       </div>
     
     </div>
   </div>
 </div>
-{% endfor %} -->
+{% endfor %}
 
 <!-- for multiple spam -->
 <!-- confirmSpamModal -->
@@ -1013,143 +1030,86 @@ $('.modal').on('input', '#admissionFee', function() {
 
 <!-- fileds validations -->
 <script>
-$(document).ready(function(){
-  $(".mqlForm").each(function(){
-    $(this).validate({
-      ignore: [], // This line tells the validator not to ignore any fields
+  $(document).ready(function() {
+    // Add validation rules to your form
+    $(".admissionValid").validate({
       rules: {
-        leadType: {
+        admissionFee: {
           required: true,
-        },
-        demodate: {
-          required: true, // Ensure this is structured as an object for consistency
-        },
-        Leaddescription:{
-          required:true,
+          number: true
         },
         courseFaculty:{
           required:true
+        },
+        batchno:{
+          required:true
+        },
+        paymenttype: {
+          required: true
+        },
+        transactionId: {
+          required: function(element) {
+            return $("#paymenttype").val() !== "Cash";
+          }
+        },
+        paytmNumber: {
+          required: function(element) {
+            return $("#paymenttype").val() === "UPI";
+          }
+        },
+        paytmTransactionId: {
+          required: function(element) {
+            return $("#paymenttype").val() === "UPI";
+          }
+        },
+        bankAccount: {
+          required: function(element) {
+            return $("#paymenttype").val() === "netbanking";
+          }
+        },
+        bankTransactionId: {
+          required: function(element) {
+            return $("#paymenttype").val() === "netbanking";
+          }
         }
-        // Add other field rules here as necessary
       },
       messages: {
-        leadType: {
-          required: "Please select the Lead Type.",
+        // Define custom error messages for each field
+        admissionFee: {
+          required: "Please enter the admission fee",
+          number: "Please enter a valid number"
         },
-        demodate: "Please select the Demo Date",
-        Leaddescription:"Please provide a description",
-        courseFaculty:"Please select the Course Faculty",
-        // Add other field messages here as necessary
-      },
-      submitHandler: function (form) {
-        console.log("Form is valid and being submitted", form);
-        form.submit();
+        courseFaculty:{
+          required:"Please select a faculty"
+        },
+        batchno:{
+          required:"Please select a batch no."
+        },
+        paymenttype: {
+          required: "Please select a payment type"
+        },
+        transactionId: {
+          required: "Please enter the transaction ID"
+        },
+        paytmNumber: {
+          required: "Please enter the Paytm number"
+        },
+        paytmTransactionId: {
+          required: "Please enter the Paytm transaction ID"
+        },
+        bankAccount: {
+          required: "Please enter the bank account number"
+        },
+        bankTransactionId: {
+          required: "Please enter the bank transaction ID"
+        }
       }
     });
   });
-});
-
-  
-  
-  </script>
+</script>
     
 
-<!-- admission form validation -->
-<script>
-  $(document).ready(function() {
-      // Validate each form identified by the 'admissionValid' class
-      $(".admissionValid").each(function() {
-          $(this).validate({
-              // Ignore disabled fields
-              ignore: ":disabled",
-              rules: {
-                  // Assuming 'name' attributes are correctly set. Adjust as necessary.
-                  plan: "required",
-                  discountFee: {
-                      required: true,
-                      range: [1, 20]
-                      
-                  },
-                  admissionFee: {
-                    required: true,
-                    number: true,
-                    min: 1000,
-                    // Dynamically set the max based on the finalFee's value at the time of validation
-                    max: function() {
-                        var finalFeeVal = parseFloat($('#finalFee').val());
-                        if (!isNaN(finalFeeVal)) {
-                            return finalFeeVal;
-                        }
-                        // If finalFee is NaN, use this to force a validation error
-                        return -1; 
-                    }
-                },
-                  batchno: "required",
-                  paymenttype: "required",
-                //     upiId: {
-                //     required: function(element) {
-                //         return true
-                //     }
-                // },
-                // paytmNumber: {
-                //     required: function(element) {
-                //         return true
-                //     }
-                // },
-                // bankAccount: {
-                //     required: function(element) {
-                //         return true
-                //     }
-                // },
-                // bankTransactionId:"required",
-                // paytmTransactionId:"required",
-                // upiTransactionId:"required",
-                  // Add additional fields and rules here as needed
-              },
-              messages: {
-                  plan: "Please select a plan",
-                  discountFee: {
-                      required: "Please enter a discount fee",
-                      range: "Discount fee must be between 1% and 100%"
-                  },
-                  admissionFee: {
-                    required: "Admission fee is required",
-                    number: "Please enter a valid number for the admission fee",
-                    min: "Admission fee must be at least 1000",
-                    max: function() {
-                        var finalFeeVal = $('#finalFee').val();
-                        if (!finalFeeVal || isNaN(parseFloat(finalFeeVal))) {
-                            return "Please enter a valid discount before setting the admission fee.";
-                        }
-                        return "Admission fee cannot exceed the final fee";
-                    }
-                },
-                  batchno: "Please select a batch number",
-                  paymenttype: "Please select a mode of payment",
-                //   upiId: "UPI ID is required",
-                // paytmNumber: "Paytm number is required",
-                // bankAccount: "Bank account number is required",
-                // TransactionId: "Transaction ID is required",
-                // bankTransactionId:"Transaction ID is required",
-                // paytmTransactionId:"Transaction ID is required",
-                // upiTransactionId:"Transaction ID is required",
-              },
-              submitHandler: function(form) {
-                  form.submit();
-              }
-          });
-      });
-  
-      // Function to show/hide payment details based on the selected payment type
-      window.showPaymentFields = function(uniqueId) {
-          $('.payment-details' + uniqueId).hide(); // Hide all payment detail fields initially
-          var paymentType = $('#paymenttype' + uniqueId).val(); // Get selected payment type
-          if (paymentType) {
-              $('#' + paymentType + uniqueId).show(); // Show the fields related to the selected payment type
-          }
-      }
-  });
-  </script>
+
 
   <!-- Lead stage validation -->
   
@@ -1182,39 +1142,6 @@ $(document).ready(function(){
   
   </script>
 <!-- for multiple spam list -->
-<script>
-  $(document).ready(function() {
-    // Button to open confirmation modal
-    $('.view-spam-all').click(function() {
-        var selectedIds = $('.row-checkbox:checked').map(function() {
-            return $(this).data('id');
-        }).get();
-        
-        if (selectedIds.length) {
-          
-            
-            // Confirm spam action
-            $('#confirmSpam').click(function() {
-                $.ajax({
-                    url: '/multiple_mark_as_spam/',
-                    method: 'POST',
-                    data: {
-                        'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
-                        'selectedIds': selectedIds,
-                    },
-                    success: function() {
-                        $('#confirmSpamModal').modal('hide');
-                        // Reload or update UI accordingly
-                        location.reload(); // Simple page reload for demonstration
-                    }
-                });
-            });
-        }
-    });
-});
-
-</script>
-
 
 <!-- Your existing HTML code -->
 
@@ -1263,34 +1190,103 @@ $(document).ready(function(){
     }
   }
 </script>
+
+
   
 <script>
   $(document).ready(function() {
     $('.payment_type').change(function() {
-      var paymentType = $(this).val();
-      var upiDropdown = $('.upi_dropdown');
-      var upiIdElements = $('.upi_id').hide(); // Hide all UPI ID elements
+        var paymentType = $(this).val();
+        var upiDropdown = $('.upi_dropdown');
+        var netBankingDiv = $('.net_banking_div');
+        var transactionIdDiv = $('.transaction-id'); // Select the transaction-id div
 
-      if (paymentType === 'UPI') {
-        upiDropdown.show(); // Show UPI dropdown
-      } else {
-        upiDropdown.hide(); // Hide UPI dropdown if payment type is not UPI
-      }
+        if (paymentType === 'UPI') {
+            upiDropdown.show(); // Show UPI dropdown
+            netBankingDiv.hide(); // Hide net banking dropdown
+            $('.net_banking_select').val(''); // Reset net banking dropdown selection
+            $('.net-baking_all').hide(); // Hide all net banking related divs
+            transactionIdDiv.show(); // Show the transaction-id div for UPI payment
+        } else if (paymentType === 'netbanking') {
+            upiDropdown.hide(); // Hide UPI dropdown
+            netBankingDiv.show(); // Show net banking dropdown
+            $('.upi_drop_select').val(''); // Reset UPI dropdown selection
+            $('.upi_id, .upi_id_img').hide(); // Hide all UPI ID and image elements
+            transactionIdDiv.show(); // Show the transaction-id div for net banking payment
+        } else {
+            // If payment type is not UPI or net banking, hide all related elements
+            upiDropdown.hide();
+            netBankingDiv.hide();
+            transactionIdDiv.hide(); // Hide the transaction-id div for other payment types
+        }
     });
 
     $('.upi_drop_select').change(function() {
-      var selectedUpiId = $(this).val();
-      $('.upi_id').hide(); // Hide all UPI ID elements
-      $('#upi_id' + selectedUpiId).show();
-      $('#upi_id_img' + selectedUpiId).show();
-       // Show UPI ID element based on selected UPI ID
+        var selectedUpiId = $(this).val();
+        $('.upi_id, .upi_id_img').hide(); // Hide all UPI ID and image elements
+        if (selectedUpiId !== '') { // Check if a UPI is selected
+            $('#upi_id' + selectedUpiId).show(); // Show UPI ID element based on selected UPI ID
+            $('#upi_id_img' + selectedUpiId).show(); // Show UPI image element based on selected UPI ID
+        }
     });
-  });
+
+    $('.net_banking_select').change(function() {
+        var selectedNetBankingId = $(this).val();
+        $('.net-baking_all').hide(); // Hide all net banking related divs
+        if (selectedNetBankingId !== '') { // Check if a net banking option is selected
+            $('.net-baking_all' + selectedNetBankingId).show(); // Show net banking related div based on selected ID
+        }
+    });
+});
+
 
 
 
 </script>
 
+<script>
+  $(document).ready(function(){
+    $('.mqlForm').each(function(){
+      $(this).validate({
+        rules:{
+          courseFaculty:{
+            required:true
+          },
+          leadType:{
+            required:true
+          },
+          demodate:{
+            required:true
+          },
+          Leaddescription:{
+            required:true,
+            minlength:20,
+            maxlength:1000
+          }
+        },
+        messages:{
+          courseFaculty:{
+            required:"Please select a faculty"
+          },
+          leadType:{
+            required:"Please select a lead type"
+          },
+          demodate:{
+            required:"Please select a demo"
+          },
+          Leaddescription:{
+            required:"Please enter lead description",
+            minlength:"Please enter at least 20 characters",
+            maxlength:"Please enter a maximum of 1000 characters"
+          }
+        },
+        submitHandler:function(form){
+          form.submit();
+        }
+      })
+    })
+  })
+</script>
 
 
 

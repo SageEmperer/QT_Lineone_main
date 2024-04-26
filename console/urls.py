@@ -85,6 +85,7 @@ urlpatterns = [
     path('admissions/',views.admissions,name="admissions"),
     path('mark_as_spam/', views.mark_as_spam, name='mark_as_spam'),
     path('get_upi_details/<int:upi_id>',views.get_upi_details,name="get_upi_details"),
+    path('request_dis/<int:id>',views.request_dis,name="request_dis"),
 
 
 
@@ -166,6 +167,15 @@ urlpatterns = [
     path('level2/',views.level2, name='level2'),
     path('level1/',views.level1, name='level1'),
     path('createvendor/',views.createvendor, name='createvendor'),
+
+
+     path('company_vendor_edit/<int:id>',views.company_vendor_edit,name="company_vendor_edit"),
+     path('delete_company_vendor/<int:id>',views.delete_company_vendor,name="delete_company_vendor"), 
+     path('company_vendor_mul_delter/',views.company_vendor_mul_delter,name="company_vendor_mul_delter"),
+     path('company_vendor_export/',views.company_vendor_export,name="company_vendor_export"),
+
+
+
 
    #  mock start here
     path('faculty_login/',views.faculty_login,name="faculty_login"),
@@ -450,6 +460,21 @@ urlpatterns = [
    path('emplpoyee_type_export/', views.emplpoyee_type_export, name='emplpoyee_type_export'),
 #    employee type import
    path('Employee_import/', views.Employee_import, name="Employee_import"),
+   path('employee_info/<int:id>',views.employee_infos,name="employee_info"),
+        #employee schedules
+    path('employee_schedules/<int:id>',views.employee_schedules,name="employee_schedules"),
+    #employee mock schedule
+    path('employee_mock_schedule/<int:id>',views.employee_schedules_mock,name="employee_mock_schedule"),
+    #employee complaints
+    path('employee_complaints/<int:id>',views.employee_complaints,name="employee_complaints"),
+    
+    #employee maintaince
+    path('employee_history/<int:id>',views.employee_history,name="employee_history"),
+    #employee leaves
+    path('employee_leaves/<int:id>',views.employee_leaves,name="employee_leaves"),
+
+
+
 
    # class room edit
    path('classroomedit/<int:pk>',views.classroomedit,name='classroomedit'),

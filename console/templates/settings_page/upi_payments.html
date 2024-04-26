@@ -65,6 +65,7 @@
               <th class="text-white">UPI Type</th>
               <th class="text-white">Mobile Number</th>
               <th class="text-white">UPI Id</th>
+              <th class="text-white">QR Code</th>
               <th class="text-white text-center">Status</th>
               <th class="text-white text-center">Actions</th>
             </tr>
@@ -78,6 +79,7 @@
               <td>{{i.upipayments_name}}</td>
               <td class="">{{i.mobilenumber}}</td>
               <td class="">{{i.upiid}}</td>
+              <td class=" text-center"><img src="../../static/media/{{i.upi_qr_code}}" height="50" width="50"  alt=""></td>
               <td class="text-center">
                 {% if i.status == 'Active' %}
                 <a href="{% url 'upi_status' i.id %}" class="btn btn-success badge text-bg-light rounded-pill">Active</a>

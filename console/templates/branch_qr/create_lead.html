@@ -433,7 +433,7 @@
 </script>
 
     <!-- Scripts block end here -->
-
+ 
     <script>
       $(document).ready(function () {
         $.validator.addMethod(
@@ -454,11 +454,10 @@
           "Please enter a valid phone number"
         );
         $.validator.addMethod("customEmail", function(value, element) {
-          // Regular expression pattern for custom email validation
-          var emailRegex = /[^\.][a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-          // Check if the value matches the custom email pattern
+          // Regular expression for validating email
+          var emailRegex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
           return this.optional(element) || emailRegex.test(value);
-        }, "Please enter a valid email address.");
+      }, "Please enter a valid email address.");            
 
       $.validator.addMethod("noSpace", function(value, element) {
         return !(/^\s|\s$|\s{2,}/.test(value));

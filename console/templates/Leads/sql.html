@@ -153,9 +153,12 @@
           </li>
           <li class="nav-item">
             <a
-              class="d-flex h-60p align-items-center nav-link active"
-              href="{% url 'sql' %}"
-              >SQL</a
+            class="d-flex h-60p align-items-center nav-link active" 
+            href="{% url 'sql' %}"
+            >SQL
+            
+            
+            </a
             >
           </li>
           <li class="nav-item">
@@ -313,7 +316,7 @@
       </div>
       <div class="modal-body">
         <form
-          action="{% url 'request_discount' i.id %}"
+          action="{% url 'request_dis' i.id %}"
           class="request_discount"
           method="post"
         >
@@ -327,20 +330,14 @@
               class="form-select form-control"
               name="leadType"
             >
-              <option selected disabled>Select Lead Type</option>
-              <option>warm</option>
-              <option>cold</option>
+              <option selected value="">Select Lead Type</option>
+              <option value="WARM" {% if i.lead_type == "WARM" %} selected {% endif %}>warm</option>
+              <option value="COLD" {% if i.lead_type == "COLD" %} selected {% endif %}>cold</option>
             </select>
           </div>
           <div class="mb-3">
-            <label for="plan" class="form-label"
-              >Plan <span class="text-danger">*</span></label
-            >
-            <select id="plan" name="plan" class="form-select form-control">
-              <option selected disabled>Select the Plan</option>
-              <option>JOIP</option>
-              <option>Internship</option>
-            </select>
+            <label for="plan" class="form-label">Plan <span class="text-danger">*</span></label>
+            <input type="text" value="{{i.course_name.course_plan.plan_name}}" disabled class="form-control bg-light text-secondary">
           </div>
           <div class="mb-3">
             <label for="courseFee" class="form-label"
@@ -351,7 +348,8 @@
               step="0.01"
               class="form-control bg-light text-secondary"
               id="courseFee"
-              value=""
+              disabled
+              value="{{i.course_name.course_fee}}"
               name="courseFee"
             />
           </div>
@@ -363,8 +361,9 @@
               type="number"
               class="form-control"
               id="discount"
-              value=""
-              placeholder="Discount Fee (%)"
+              value="{{i.course_name.discount}}"
+              disabled
+              
               name="discountFee"
             />
           </div>
@@ -378,13 +377,22 @@
               class="form-control text-secondary"
               id="finalFee"
               placeholder="Final Fee"
-              readonly
+              disabled
+              value="{{i.course_name.final_price}}"
               name="finalFee"
             />
           </div>
-          <div class="modal-footer d-flex justify-content-center">
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <button type="reset" class="btn btn-secondary">Reset</button>
+          <div class="mb-3">
+            <label for="" class="form-label">Requested Amount <span class="text-danger">*</span></label>
+            <input type="text" name="requested_amount" class="form-control">
+          </div>
+          <div class="mb-3">
+            <label for="" class="form-label">Comments <span class="text-danger">*</span></label>
+            <textarea name="messages_for_discount" id="" class="form-control" cols="30" rows="2"></textarea>
+          </div>
+          <div class="mb-3 d-flex justify-content-center">
+            <button type="submit" class="btn btn-primary m-1">Submit</button>
+            <button type="reset" class="btn btn-secondary m-1">Reset</button>
           </div>
         </form>
       </div>
@@ -772,372 +780,219 @@
 {% endfor %}
 <!-- Modal -->
 <!-- admission modal -->
-<!-- Modal -->
 {% for i in leads %}
-<div
-  class="modal fade"
-  id="sumbit_admissoinmodal{{i.id}}"
-  tabindex="-1"
-  role="dialog"
-  aria-labelledby="sumbit_admissoinmodal{{i.id}}"
-  aria-hidden="true"
->
+<div class="modal fade" id="sumbit_admissoinmodal{{i.id}}" tabindex="-1" role="dialog" aria-labelledby="sumbit_admissoinmodal{{i.id}}" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
-    <div class="modal-content">
-      <div class="modal-header bg-dark">
-        <h5 class="modal-title text-white">Admission Form</h5>
-        <button
-          type="button"
-          class="close text-white"
-          data-dismiss="modal"
-          aria-label="Close"
-        >
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
+      <div class="modal-content">
+          <div class="modal-header bg-dark">
+              <h5 class="modal-title text-white">Admission Form</h5>
+              <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          
+          <div class="modal-body ">
+            <form action="{% url 'move_to_admission' i.id %}" class="row g-3 admissionValid" method="post">
+              {% csrf_token %}
+            
+              <div class="col-md-6 mb-3">
+                <label for="Tokenid" class="form-label">Token Id <span class="text-danger">*</span></label>
+                <input type="text" class="form-control  bg-light text-secondary" id="Tokenid" value="{{i.token_id}}" disabled>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="studentname" class="form-label">Student Name <span class="text-danger">*</span></label>
+                <input type="text" class="form-control  bg-light text-secondary" id="studentname" value="{{i.first_name}} {{i.last_name}}" disabled>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="mblno" class="form-label">Mobile No <span class="text-danger">*</span></label>
+                <input type="tel" class="form-control  bg-light text-secondary" id="mblno" value="{{i.mobile_number}}" disabled>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                <input type="email" class="form-control  bg-light text-secondary" id="email" value="{{i.email}}" disabled>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="courseinput" class="form-label">Course <span class="text-danger">*</span></label>
+                <input type="text" class="form-control  bg-light text-secondary" id="courseinput" value="{{i.course_name.course_name}}" disabled>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="courseFaculty" class="form-label">Course Faculty <span class="text-danger">*</span></label>
+      
+<select class="form-select form-control" name="courseFaculty" >
+<option value="" selected>Select your Faculty</option>
+  {% for emp in faculty %}
+      {% if emp.branch == i.branch_name %}
+      <option value="{{emp.id}}">{{emp.first_name}}</option>
+      {% endif %}
+      {% endfor %}
+</select>
 
-      <div class="modal-body">
-        <form
-          action="{% url 'move_to_admission' i.id %}"
-          class="row g-3 admissionValid"
-          method="post"
-        >
-          {% csrf_token %}
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="plan" class="form-label">Plan <span class="text-danger" >*</span></label>
+                <input type="text" class="form-control  bg-light text-secondary" id="plan" value="{{i.course_name.course_plan.plan_name}}" disabled>
+                
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="demodate" class="form-label">Attended Demo On <span class="text-danger">*</span></label>
+               
+                <input type="text" class="form-control  bg-light text-secondary" id="demodate" value="{{i.demo.datestartat |default:'Not Attend'}}" disabled>
+               
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="batchno" class="form-label">Batch Number <span class="text-danger">*</span></label>
+                <select id="batchno" class="form-select form-control" name="batchno">
+                  <option selected disabled>Select the Batch Number</option>
+                  {% for batch in batches %}
+                  {% if i.course_name.course_name == batch.course_id and i.course_name.specialization == batch.spec_id %}
+                  <option value="{{batch.id}}">{{batch.batch_number}}</option>
+                  {% endif %}
+                  {% endfor %}
 
-          <div class="col-md-6 mb-3">
-            <label for="Tokenid" class="form-label"
-              >Token Id <span class="text-danger">*</span></label
-            >
-            <input
-              type="text"
-              class="form-control bg-light text-secondary"
-              id="Tokenid"
-              value="{{i.token_id}}"
-              disabled
-            />
-          </div>
-          <div class="col-md-6 mb-3">
-            <label for="studentname" class="form-label"
-              >Student Name <span class="text-danger">*</span></label
-            >
-            <input
-              type="text"
-              class="form-control bg-light text-secondary"
-              id="studentname"
-              value="{{i.first_name}} {{i.last_name}}"
-              disabled
-            />
-          </div>
-          <div class="col-md-6 mb-3">
-            <label for="mblno" class="form-label"
-              >Mobile No <span class="text-danger">*</span></label
-            >
-            <input
-              type="tel"
-              class="form-control bg-light text-secondary"
-              id="mblno"
-              value="{{i.mobile_number}}"
-              disabled
-            />
-          </div>
-          <div class="col-md-6 mb-3">
-            <label for="email" class="form-label"
-              >Email <span class="text-danger">*</span></label
-            >
-            <input
-              type="email"
-              class="form-control bg-light text-secondary"
-              id="email"
-              value="{{i.email}}"
-              disabled
-            />
-          </div>
-          <div class="col-md-6 mb-3">
-            <label for="courseinput" class="form-label"
-              >Course <span class="text-danger">*</span></label
-            >
-            <input
-              type="text"
-              class="form-control bg-light text-secondary"
-              id="courseinput"
-              value="{{i.course_name.course_name}}"
-              disabled
-            />
-          </div>
-          <div class="col-md-6 mb-3">
-            <label for="courseFaculty" class="form-label">Course Faculty <span class="text-danger">*</span></label>
-            <select class="form-select custom-select" name="courseFaculty" >
-              <option value="" selected>Select your Faculty </option>
-                {% for emp in faculty %}
-                    {% if emp.branch == i.branch_name %}
-                    <option value="{{emp.id}}" {% if i.faculty.id == emp.id %} selected {% endif %} >{{emp.first_name}} {{emp.last_name}}</option>
-                    {% endif %}
+                </select>
+                
+              </div>
+              <!--  -->
+              <div class="col-md-4 mb-3">
+                <label for="courseFee" class="form-label">Course Fee <span class="text-danger">*</span></label>
+                <input type="text" class="form-control  bg-light text-secondary" id="courseFee" value="{{i.course_name.course_fee}}" disabled>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="discount" class="form-label">Discount Fee <span class="text-danger">*</span></label>
+                <input type="text" class="form-control bg-light text-secondary" id="discount" placeholder="Discount Fee (%)" value="{{i.course_name.discount}}%" disabled>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="finalFee" class="form-label">Final Fee <span class="text-danger">*</span></label>
+                <input type="text" class="form-control bg-light text-secondary" id="finalFee" placeholder="Final Fee" value="{{i.course_name.final_price}}" disabled>
+              </div>
+              
+              <!--  -->
+
+              <div class="col-md-4 mb-3">
+                <label for="trainingType" class="form-label">Training Type <span class="text-danger">*</span></label>
+                <input type="text" class="form-control  bg-light text-secondary" id="trainingType" value="{{i.training_type.TrainingTypeName}}" disabled>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="branch" class="form-label">Branch <span class="text-danger">*</span></label>
+                <input type="email" class="form-control  bg-light text-secondary" id="branch" value="{{i.branch_name}}" disabled>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="Leadsource" class="form-label">Lead Source <span class="text-danger">*</span></label>
+                <input type="text" class="form-control  bg-light text-secondary" id="Leadsource" value="{{i.lead_sourse.prospect_type}}" disabled>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="admissionFee" class="form-label">Admission Fee <span class="text-danger" >*</span></label>
+                <input type="text" class="form-control text-secondary" id="admissionFee" name="admissionFee" placeholder="0.00">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="remainingfee" class="form-label">Remainingfee Fee <span class="text-danger">*</span></label>
+                <input type="text" class="form-control text-secondary" id="remainingfee" name="remainingfee" placeholder="0.00" readonly>
+              </div>
+              <!-- payment details -->
+              <div class="col-md-6 mb-3">
+                <label for="paymenttype" class="form-label">Mode of Payment <span class="text-danger">*</span></label>
+                <select id="paymenttype" class="form-select form-control payment_type" name="paymenttype">
+                    <option selected disabled>Select Mode of Payment</option>
+                    <option value="UPI">UPI</option>
+                    <option value="Cash">Cash</option>
+                    <option value="netbanking">Bank Transfer</option>
+                </select>
+            </div>
+            
+            <!-- UPI Details -->
+            <div class="col-md-6 mb-3 upi_dropdown" id="UPI" style="display: none;">
+                <label for="" class="form-label">UPI Payment</label>
+                <select name="upi_id_id" class="form-select form-control upi_drop_select" id="">
+                    <option value="" selected>Select your UPI</option>
+                    {% for i in upi %}
+                    <option value="{{i.id}}">{{i.upipayments_name}} {{i.upiid}}</option>
                     {% endfor %}
-              </select>
-          </div>
-          <div class="col-md-6 mb-3">
-            <label for="plan" class="form-label"
-              >Plan <span class="text-danger">*</span></label
-            >
-            <input type="text" value="{{i.course_name.course_plan.plan_name}}" disabled class="form-control bg-light text-secondary">
+                </select>
+            </div>
+            
+            {% for i in upi %}
+            <div class="col-md-6 mb-3 upi_id" id="upi_id{{i.id}}" style="display: none;">
+                <input type="text" readonly  value="{{i.upiid}}" class="form-control upi_id_input">
+            </div>
+            {% endfor %}
+            
+            {% for i in upi %}
+            <div class="col-md-6 mb-3 upi_id_img" id="upi_id_img{{i.id}}" style="display: none;">
+              <span data-toggle="modal" data-target="#qrcode{{i.id}}">  <img src="../../../static/media/{{i.upi_qr_code}}"  alt="hello" width="100%" height="100%">
+              </span>
+            </div>
+            {% endfor %}
+            
+            <div class="col-md-6 mb-3 net_banking_div" style="display: none;">
+                <label for="" class="form-label">Net Banking</label>
+                <select name="net_banking_id" class="form-select form-control net_banking_select" id="">
+                    <option value="" selected>Select your netbanking"</option>
+                    {% for net in net_banking %}
+                    <option value="{{net.id}}">{{net.netbanking_name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            {% for net in net_banking %}
+            <div class="col-md-6 mb-3 net-baking_all net-baking_all{{net.id}}" style="display: none;">
+                <div class="">
+                    <input type="text" readonly value="{{net.netbanking_name}}" class="form-control">
+                </div>
+            </div>
+            
+            <div class="col-md-6 mb-3 net-baking_all net-baking_all{{net.id}}" style="display: none;">
+                <div class="">
+                    <input type="text" readonly value="{{net.ifscode}}" class="form-control">
+                </div>
+            </div>
+            {% endfor %}
+          <div class="col-md-6 mb-3 transaction-id" style="display: none;">
+            <label for="" class="form-label">Transaction Id </label>
+            <input type="text" class="form-control text-secondary" id="transactionId" name="transactionId">
+        </div>
         
+    
 
-          </div>
-          <div class="col-md-6 mb-3">
-            <label for="demodate" class="form-label"
-              >Attended Demo On <span class="text-danger">*</span></label
-            >
+              
+    
+    
+    
 
-            <input
-              type="text"
-              class="form-control bg-light text-secondary"
-              id="demodate"
-              value="{{i.demo.datestartat |default:'Not Attend'}}"
-              disabled
-            />
-          </div>
-          <!--  -->
-          <div class="col-md-4 mb-3">
-            <label for="courseFee" class="form-label"
-              >Course Fee <span class="text-danger">*</span></label
-            >
-            <input
-              type="number"
-              step="0.01"
-              class="form-control bg-light text-secondary"
-              id="courseFee"
-              value="{{i.course_name.course_fee}}"
-              name="courseFee"
-              disabled
-            />
-          </div>
-          <div class="col-md-4 mb-3">
-            <label for="discount" class="form-label"
-              >Discount Fee <span class="text-danger">*</span></label
-            >
-            <input
-              type="number"
-              class="form-control bg-light text-secondary"
-              id="discount"
-              value="{{i.course_name.discount}}"
-              placeholder="Discount Fee (%)"
-              name="discountFee"
-              disabled
-            />
-          </div>
-          <div class="col-md-4 mb-3">
-            <label for="finalFee" class="form-label"
-              >Final Fee <span class="text-danger">*</span></label
-            >
-            <input
-              type="number"
-              step="0.01"
-              class="form-control text-secondary"
-              id="finalFee"
-              placeholder="Final Fee"
-              disabled
-              value="{{i.course_name.final_price}}"
-              name="finalFee"
-            />
-          </div>
-
-          <!--  -->
-
-          <div class="col-md-4 mb-3">
-            <label for="trainingType" class="form-label"
-              >Training Type <span>*</span></label
-            >
-            <input
-              type="text"
-              class="form-control bg-light text-secondary"
-              id="trainingType"
-              value="{{i.training_type.TrainingTypeName}}"
-              disabled
-            />
-          </div>
-          <div class="col-md-4 mb-3">
-            <label for="branch" class="form-label"
-              >Branch <span class="text-danger">*</span></label
-            >
-            <input
-              type="email"
-              class="form-control bg-light text-secondary"
-              id="branch"
-              value="{{i.branch_name}}"
-              disabled
-            />
-          </div>
-          <div class="col-md-4 mb-3">
-            <label for="Leadsource" class="form-label"
-              >Lead Source <span class="text-danger">*</span></label
-            >
-            <input
-              type="text"
-              class="form-control bg-light text-secondary"
-              id="Leadsource"
-              value="{{i.lead_sourse.prospect_type}}"
-              disabled
-            />
-          </div>
-          <div class="col-md-4 mb-3">
-            <label for="batchno" class="form-label"
-              >Batch Number <span class="text-danger">*</span></label
-            >
-            <select id="batchno" class="form-select form-control" name="batchno">
-              <option selected disabled>Select the Batch Number</option>
-              {% for batch in batches %}
-              {% if i.course_name.course_name == batch.course_id and i.course_name.specialization == batch.spec_id %}
-              <option value="{{batch.id}}">{{batch.batch_number}}</option>
-              {% endif %}
-              {% endfor %}
-
-            </select>
-          </div>
-          <div class="col-md-4 mb-3">
-            <label for="admissionFee" class="form-label"
-              >Admission Fee <span class="text-danger">*</span></label
-            >
-            <input
-              type="text"
-              class="form-control text-secondary"
-              id="admissionFee"
-              name="admissionFee"
-              placeholder="0.00"
-            />
-          </div>
-          <div class="col-md-4 mb-3">
-            <label for="remainingfee" class="form-label"
-              >Remainingfee Fee <span class="text-danger">*</span></label
-            >
-            <input
-              type="text"
-              class="form-control text-secondary"
-              id="remainingfee"
-              name="remainingfee"
-              placeholder="0.00"
-              readonly
-            />
-          </div>
-          <!-- payment details -->
-          <div class="col-md-6 mb-3">
-            <label for="paymenttype" class="form-label"
-              >Mode of Payment <span class="text-danger">*</span></label
-            >
-            <select
-              id="paymenttype{{i.id}}"
-              class="form-select form-control"
-              name="paymenttype"
-              onchange="showPaymentFields('{{i.id}}')"
-            >
-              <option selected disabled>Select Mode of Payment</option>
-              <option value="UPI">UPI</option>
-              <option value="Paytm">Paytm</option>
-              <option value="Cash">Cash</option>
-              <option value="BankTransfer">Bank Transfer</option>
-            </select>
-          </div>
-
-          <!-- UPI Details -->
-          <div
-            class="col-md-6 mb-3 payment-details{{i.id}}"
-            id="UPI{{i.id}}"
-            style="display: none"
-          >
-            <label for="upiId" class="form-label"
-              >UPI ID <span class="text-danger">*</span></label
-            >
-            <input
-              type="text"
-              class="form-control text-secondary"
-              id="upiId"
-              name="upiId"
-              placeholder="UPI ID"
-            />
-            <div>
-              <label for="upiTransactionId" class="form-label"
-                >Transaction Id <span class="text-danger">*</span></label
-              >
-              <input
-                type="text"
-                class="form-control text-secondary"
-                id="upiTransactionId"
-                name="upiTransactionId"
-                placeholder="TransactionId"
-              />
+                
+            
+            <!-- Paytm Details -->
+            <div class="col-md-6 mb-3 payment-details{{i.id}}" id="Paytm{{i.id}}" style="display: none;">
+                <label for="paytmNumber" class="form-label">Paytm Number <span class="text-danger">*</span></label>
+                <input type="text" class="form-control text-secondary" id="paytmNumber" name="paytmNumber" placeholder="Paytm Number">
+                <div>
+                  <label for="paytmTransactionId" class="form-label">Transaction Id <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control text-secondary" id="paytmTransactionId" name="paytmTransactionId" placeholder="TransactionId">
+                </div>
             </div>
-          </div>
-
-          <!-- Paytm Details -->
-          <div
-            class="col-md-6 mb-3 payment-details{{i.id}}"
-            id="Paytm{{i.id}}"
-            style="display: none"
-          >
-            <label for="paytmNumber" class="form-label"
-              >Paytm Number <span class="text-danger">*</span></label
-            >
-            <input
-              type="text"
-              class="form-control text-secondary"
-              id="paytmNumber"
-              name="paytmNumber"
-              placeholder="Paytm Number"
-            />
-            <div>
-              <label for="paytmTransactionId" class="form-label"
-                >Transaction Id <span class="text-danger">*</span></label
-              >
-              <input
-                type="text"
-                class="form-control text-secondary"
-                id="paytmTransactionId"
-                name="paytmTransactionId"
-                placeholder="TransactionId"
-              />
+            
+            <!-- Bank Transfer Details -->
+            <div class="col-md-6 mb-3 payment-details{{i.id}}" id="BankTransfer{{i.id}}" style="display: none;">
+                <div>
+                  <label for="bankAccount" class="form-label">Bank Account Number <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control text-secondary" id="bankAccount" name="bankAccount" placeholder="Bank Account Number">
+                </div>
+                <div>
+                  <label for="bankTransactionId" class="form-label">Transaction Id <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control text-secondary" id="bankTransactionId" name="bankTransactionId" placeholder="TransactionId">
+                </div>
+                
             </div>
-          </div>
+            
+              
+              <div class="modal-footer d-flex justify-content-center col-md-12 mb-3">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="reset" class="btn btn-secondary" >Reset</button>
+              </div>
+            </form>
 
-          <!-- Bank Transfer Details -->
-          <div
-            class="col-md-6 mb-3 payment-details{{i.id}}"
-            id="BankTransfer{{i.id}}"
-            style="display: none"
-          >
-            <div>
-              <label for="bankAccount" class="form-label"
-                >Bank Account Number <span class="text-danger">*</span></label
-              >
-              <input
-                type="text"
-                class="form-control text-secondary"
-                id="bankAccount"
-                name="bankAccount"
-                placeholder="Bank Account Number"
-              />
-            </div>
-            <div>
-              <label for="bankTransactionId" class="form-label"
-                >Transaction Id <span class="text-danger">*</span></label
-              >
-              <input
-                type="text"
-                class="form-control text-secondary"
-                id="bankTransactionId"
-                name="bankTransactionId"
-                placeholder="TransactionId"
-              />
-            </div>
           </div>
-
-          <div
-            class="mb-3 d-flex justify-content-center col-md-12 mb-3"
-          >
-            <button type="submit" class="btn btn-primary m-1">Submit</button>
-            <button type="reset" class="btn btn-secondary m-1">Reset</button>
-          </div>
-        </form>
+          
       </div>
-    </div>
   </div>
 </div>
 {% endfor %}
@@ -1308,146 +1163,125 @@
 
 <!-- admission form validation -->
 <script>
-  $(document).ready(function () {
-    // Validate each form identified by the 'admissionValid' class
-    $(".admissionValid").each(function () {
-      $(this).validate({
-        // Ignore disabled fields
-        ignore: ":disabled",
-        rules: {
-          // Assuming 'name' attributes are correctly set. Adjust as necessary.
-          plan:{
-            required:true
-          } ,
-
-
-          //   admissionFee: {
-          //     required: true,
-          //     number: true,
-          //     min: 1000,
-          //     // Dynamically set the max based on the finalFee's value at the time of validation
-          //     max: function() {
-          //         var finalFeeVal = parseFloat($('#finalFee').val());
-          //         if (!isNaN(finalFeeVal)) {
-          //             return finalFeeVal;
-          //         }
-          //         // If finalFee is NaN, use this to force a validation error
-          //         return -1;
-          //     }
-          // },
-          batchno: "required",
-          paymenttype: "required",
-          //   upiId: {
-          //     required: function(element) {
-          //         return true
-          //     }
-          // },
-          // paytmNumber: {
-          //     required: function(element) {
-          //         return true
-          //     }
-          // },
-          // bankAccount: {
-          //     required: function(element) {
-          //         return true
-          //     }
-          // },
-          // bankTransactionId:"required",
-          // paytmTransactionId:"required",
-          // upiTransactionId:"required",
-          //   // Add additional fields and rules here as needed
+  $(document).ready(function() {
+    // Add validation rules to your form
+    $(".admissionValid").validate({
+      rules: {
+        admissionFee: {
+          required: true,
+          number: true
         },
-        messages: {
-          plan:{
-            messages:{
-
-              required:"Please select a plan",
-            }
-
-          } ,
-
-          //   admissionFee: {
-          //     required: "Admission fee is required",
-          //     number: "Please enter a valid number for the admission fee",
-          //     min: "Admission fee must be at least 1000",
-          //     max: function() {
-          //         var finalFeeVal = $('#finalFee').val();
-          //         if (!finalFeeVal || isNaN(parseFloat(finalFeeVal))) {
-          //             return "Please enter a valid discount before setting the admission fee.";
-          //         }
-          //         return "Admission fee cannot exceed the final fee";
-          //     }
-          // },
-          batchno: "Please select a batch number",
-          paymenttype: "Please select a mode of payment",
-          //   upiId: "UPI ID is required",
-          // paytmNumber: "Paytm number is required",
-          // bankAccount: "Bank account number is required",
-          // TransactionId: "Transaction ID is required",
-          // bankTransactionId:"Transaction ID is required",
-          // paytmTransactionId:"Transaction ID is required",
-          // upiTransactionId:"Transaction ID is required",
+        courseFaculty:{
+          required:true
         },
-        submitHandler: function (form) {
-          form.submit();
+        batchno:{
+          required:true
         },
-      });
-    });
-
-    // Function to show/hide payment details based on the selected payment type
-    window.showPaymentFields = function (uniqueId) {
-      $(".payment-details" + uniqueId).hide(); // Hide all payment detail fields initially
-      var paymentType = $("#paymenttype" + uniqueId).val(); // Get selected payment type
-      if (paymentType) {
-        $("#" + paymentType + uniqueId).show(); // Show the fields related to the selected payment type
+        paymenttype: {
+          required: true
+        },
+        transactionId: {
+          required: function(element) {
+            return $("#paymenttype").val() !== "Cash";
+          }
+        },
+        paytmNumber: {
+          required: function(element) {
+            return $("#paymenttype").val() === "UPI";
+          }
+        },
+        paytmTransactionId: {
+          required: function(element) {
+            return $("#paymenttype").val() === "UPI";
+          }
+        },
+        bankAccount: {
+          required: function(element) {
+            return $("#paymenttype").val() === "netbanking";
+          }
+        },
+        bankTransactionId: {
+          required: function(element) {
+            return $("#paymenttype").val() === "netbanking";
+          }
+        }
+      },
+      messages: {
+        // Define custom error messages for each field
+        admissionFee: {
+          required: "Please enter the admission fee",
+          number: "Please enter a valid number"
+        },
+        courseFaculty:{
+          required:"Please select a faculty"
+        },
+        batchno:{
+          required:"Please select a batch no."
+        },
+        paymenttype: {
+          required: "Please select a payment type"
+        },
+        transactionId: {
+          required: "Please enter the transaction ID"
+        },
+        paytmNumber: {
+          required: "Please enter the Paytm number"
+        },
+        paytmTransactionId: {
+          required: "Please enter the Paytm transaction ID"
+        },
+        bankAccount: {
+          required: "Please enter the bank account number"
+        },
+        bankTransactionId: {
+          required: "Please enter the bank transaction ID"
+        }
       }
-    };
+    });
   });
 </script>
+    
 
 <!-- fileds validations -->
 <script>
   $(document).ready(function () {
     $(".opportuntyForm").each(function () {
       $(this).validate({
-        ignore: [], // This line tells the validator not to ignore any fields
+       
         rules: {
-          leadType: {
+          courseFaculty: {
             required: true,
           },
 
-          sqldescription: {
+          leadType: {
             required: true,
           },
-          discountFee: {
-            required: true,
-            range: [1, 20],
-          },
-          plan: "required",
-          courseFee: "required",
-          finalFee: "required",
-          // Add other field rules here as necessary
-        },
+          sqldescription:{
+            required:true,
+            minlength:20,
+            maxlength:1000
+          },  
+        
         messages: {
-          leadType: {
-            required: "Please select the Lead Type.",
+          courseFaculty: {
+            required: "Please select a faculty.",
+          },
+          leadType:{
+            required: "Please select a lead type."
+          },
+          sqldescription:{
+            required:"Please enter the sql description.",
+            minlength:"Please enter atleast 20 characters.",
+            maxlength:"Please enter maximum 1000 characters."
           },
 
-          sqldescription: "Please provide a description",
-          discountFee: {
-            required: "Please enter a discount fee",
-            range: "Discount fee must be between 1% and 100%",
-          },
-          plan: "Please select the plan",
-          courseFee: "Please provide Couse Fee",
-          finalFee: "Please provide the Final Fee",
-          // Add other field messages here as necessary
+          
         },
         submitHandler: function (form) {
           console.log("Form is valid and being submitted", form);
           form.submit();
         },
-      });
+      }});
     });
   });
 
@@ -1455,13 +1289,30 @@
     $(".request_discount").each(function () {
       $(this).validate({
         rules: {
-          leadType: "required",
-          // Add other validation rules as needed
+          leadType:{
+            required:true
+          },
+          requested_amount:{
+            required:true
+          },
+          messages_for_discount:{
+            required:true
+          }
         },
         messages: {
-          leadType: "Please select a lead type",
-          // Add other validation messages as needed
+          leadType:{
+            required:"Please select a lead type"
+          },
+          requested_amount:{
+            required:"Please enter requested amount"
+          },
+          messages_for_discount:{
+            required:"Please enter the comment"
+          }
         },
+        submitHandler:function (form){
+          form.submit();
+        }
       });
     });
   });
@@ -1514,6 +1365,56 @@
 </script>
 
 
+<script>
+  $(document).ready(function() {
+    $('.payment_type').change(function() {
+        var paymentType = $(this).val();
+        var upiDropdown = $('.upi_dropdown');
+        var netBankingDiv = $('.net_banking_div');
+        var transactionIdDiv = $('.transaction-id'); // Select the transaction-id div
+
+        if (paymentType === 'UPI') {
+            upiDropdown.show(); // Show UPI dropdown
+            netBankingDiv.hide(); // Hide net banking dropdown
+            $('.net_banking_select').val(''); // Reset net banking dropdown selection
+            $('.net-baking_all').hide(); // Hide all net banking related divs
+            transactionIdDiv.show(); // Show the transaction-id div for UPI payment
+        } else if (paymentType === 'netbanking') {
+            upiDropdown.hide(); // Hide UPI dropdown
+            netBankingDiv.show(); // Show net banking dropdown
+            $('.upi_drop_select').val(''); // Reset UPI dropdown selection
+            $('.upi_id, .upi_id_img').hide(); // Hide all UPI ID and image elements
+            transactionIdDiv.show(); // Show the transaction-id div for net banking payment
+        } else {
+            // If payment type is not UPI or net banking, hide all related elements
+            upiDropdown.hide();
+            netBankingDiv.hide();
+            transactionIdDiv.hide(); // Hide the transaction-id div for other payment types
+        }
+    });
+
+    $('.upi_drop_select').change(function() {
+        var selectedUpiId = $(this).val();
+        $('.upi_id, .upi_id_img').hide(); // Hide all UPI ID and image elements
+        if (selectedUpiId !== '') { // Check if a UPI is selected
+            $('#upi_id' + selectedUpiId).show(); // Show UPI ID element based on selected UPI ID
+            $('#upi_id_img' + selectedUpiId).show(); // Show UPI image element based on selected UPI ID
+        }
+    });
+
+    $('.net_banking_select').change(function() {
+        var selectedNetBankingId = $(this).val();
+        $('.net-baking_all').hide(); // Hide all net banking related divs
+        if (selectedNetBankingId !== '') { // Check if a net banking option is selected
+            $('.net-baking_all' + selectedNetBankingId).show(); // Show net banking related div based on selected ID
+        }
+    });
+});
+
+
+
+
+</script>
 
 
 

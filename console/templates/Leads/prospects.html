@@ -20,7 +20,7 @@
           <div class="bg-overlay bg-trans-dark-60"></div>
           <div class="container profile-cover-content py-50">
               <div class="hk-row"> 
-                  <div class="col-lg-4">
+                  <div class="col-lg-5">
                       <div class="media align-items-center">
                           <div class="media-img-wrap  d-flex">
                               <div class="avatar">
@@ -28,26 +28,29 @@
                               </div>
                           </div>
                           <div class="media-body">
-                              <div class="text-white text-capitalize display-6 mb-5 font-weight-400">{{request.session.admin_user.full_name}}</div>
+                              <div class="text-white text-capitalize display-6 mb-5 font-weight-400 ">{{request.session.admin_user.full_name}}</div>
                               <div class="font-14 text-white">
                                   <span class="mr-5">
                                       <span class="font-weight-bold pr-5">JOINING DATE:</span>
                                       <span class="mr-5">12/03/24</span>
                                   </span>
+                                </div>
+                                <div class="font-14 text-white" >
+
                                   <span>
-                                      <span class="font-weight-bold pr-5">Department:</span>
-                                      <span>Python Department</span>
+                                    <span class="font-weight-bold pr-5">Department:</span>
+                                    <span>Python Department</span>
                                   </span>
+                                </div>
                                   
-                              </div>
                           </div>
                       </div>
                   </div>
                  
                   <div class="col-lg-8">
-                      <div class="container mt-3 ml-md-100">
+                      <!-- <div class="container mt-3 ml-md-100">
                                                           <div class="row">
-                                                              <!-- Enquiries Card -->
+                                                          
                       <div class="col-md-3">
                           <div class="stats-card p-2 mb-3 text-white" style="border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); background-color: rgba(23, 163, 184, 0.479);">
                               <h5 class="stats-title  text-white"><i class="fa fa-microphone text-dark" aria-hidden="true"></i> Enquiries</h5>
@@ -55,7 +58,7 @@
                           </div>
                       </div>
 
-                      <!-- Follow-ups Card -->
+                
                       <div class="col-md-3">
                           <div class="stats-card p-2 mb-3 text-dark" style="border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); background-color: rgba(107, 111, 231, 0.458);">
                               <h5 class="stats-title  text-white"><i class="fa fa-retweet text-dark" aria-hidden="true"></i> Follow-ups</h5>
@@ -63,7 +66,7 @@
                           </div>
                       </div>
 
-                      <!-- Admissions Card -->
+             
                       <div class="col-md-3">
                           <div class="stats-card p-2 mb-3 text-white" style="border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); background-color: rgba(235, 115, 137, 0.468);">
                               <h5 class="stats-title  text-white"><i class="fa fa-user text-dark" aria-hidden="true"></i> Admissions</h5>
@@ -76,11 +79,11 @@
                           </div>
                       </div>
                       <div >
-                          <!-- Dynamically filled with latest enquiries -->
+                      
                       </div>
                       
                           </div>
-                      </div>
+                      </div> -->
                   </div>
                   
                   
@@ -92,28 +95,71 @@
           <div class="container">
               <ul class="nav nav-light nav-tabs" role="tablist">
                   <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if request.resolver_match.url_name == 'lead_prospects' %}active{% endif %}" href="{% url 'lead_prospects' %}">Prospects</a>
+                      <a class="d-flex h-60p align-items-center nav-link {% if request.resolver_match.url_name == 'lead_prospects' %}active{% endif %}" href="{% url 'lead_prospects' %}">Prospects &nbsp;&nbsp;<span class="badge badge-primary badge-pill d-block"> 
+                        {% if prospect_count %}
+                        {{prospect_count}}
+
+                          {% else %}
+                          0
+                          {% endif %}
+
+                      </span></a>
                   </li>
                   <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if request.resolver_match.url_name == 'leads' %}active{% endif %}" href="{% url 'leads' %}">Leads</a>
+                      <a class="d-flex h-60p align-items-center nav-link {% if request.resolver_match.url_name == 'leads' %}active{% endif %}" href="{% url 'leads' %}">Leads &nbsp;&nbsp;<span class="badge badge-warning badge-pill d-block"> {% if lead_count %}
+                        {{lead_count}}
+
+                          {% else %}
+                          0
+                          {% endif %}</span></a>
                   </li>
                   <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'mql' %}active{% endif %}" href="{% url 'mql' %}">MQL</a>
+                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'mql' %}active{% endif %}" href="{% url 'mql' %}">MQL &nbsp;&nbsp;<span class="badge badge-secondary badge-pill d-block"> {% if mql_count %}
+                        {{mql_count}}
+
+                          {% else %}
+                          0
+                          {% endif %}</span></a>
                   </li>
                   <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'sql' %}active{% endif %}" href="{% url 'sql' %}">SQL</a>
+                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'sql' %}active{% endif %}" href="{% url 'sql' %}">SQL &nbsp;&nbsp;<span class="badge badge-light badge-pill d-block"> {% if prospect_count %}
+                        {{prospect_count}}
+
+                          {% else %}
+                          0
+                          {% endif %}</span></a>
                   </li>
                   <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'request_discounts' %}active{% endif %}" href="{% url 'request_discounts' %}">Request Discounts</a>
+                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'request_discounts' %}active{% endif %}" href="{% url 'request_discounts' %}">Request Discounts &nbsp;&nbsp;<span class="badge badge-dark badge-pill d-block"> {% if prospect_count %}
+                        {{prospect_count}}
+
+                          {% else %}
+                          0
+                          {% endif %}</span></a>
                   </li>
                   <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'opportunity' %}active{% endif %}" href="{% url 'opportunity' %}">Opportunity</a>
+                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'opportunity' %}active{% endif %}" href="{% url 'opportunity' %}">Opportunity &nbsp;&nbsp;<span class="badge badge-info badge-pill d-block"> {% if prospect_count %}
+                        {{prospect_count}}
+
+                          {% else %}
+                          0
+                          {% endif %}</span></a>
                   </li>
                   <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'admission' %}active{% endif %}" href="{% url 'admissions' %}">Admissions</a>
+                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'admission' %}active{% endif %}" href="{% url 'admissions' %}">Admissions &nbsp;&nbsp;<span class="badge badge-success badge-pill d-block"> {% if prospect_count %}
+                        {{prospect_count}}
+
+                          {% else %}
+                          0
+                          {% endif %}</span></a>
                   </li>
                   <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'spam' %}active{% endif %}" href="{% url 'spam' %}">Spam List</a>
+                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'spam' %}active{% endif %}" href="{% url 'spam' %}">Spam List &nbsp;&nbsp;<span class="badge badge-danger badge-pill d-block"> {% if prospect_count %}
+                        {{prospect_count}}
+
+                          {% else %}
+                          0
+                          {% endif %}</span></a>
                   </li>
                   
 
@@ -157,7 +203,7 @@
     >
     <i class="glyphicon glyphicon-plus"></i> New Enquiry
     </button>
-    <button type="button" class="btn btn-success mr-2 mb-3"><i class="glyphicon glyphicon-export"></i> Export</button>
+    <!-- <button type="button" class="btn btn-success mr-2 mb-3"><i class="glyphicon glyphicon-export"></i> Export</button>
     <button
       type="button"
       class="btn btn-secondary mr-2 mb-3"
@@ -165,7 +211,7 @@
       data-target="#UploadCourse"
     >
     <i class="glyphicon glyphicon-import"></i> Import
-    </button>
+    </button> -->
     </div>
   
     <div class="button_operations  col-auto ml-auto p-0"  id="button_operations">
@@ -225,7 +271,7 @@
 
          </td>
          <td>{{prospect.lead_sourse.prospect_type}}</td>
-         <td>{{prospect.token_generated_date}}</td>
+         <td>{{prospect.token_generated_at}}</td>
          <td><a href="{% url 'mark_as_lead' prospect.id %}" class="btn btn-dark mr-2"><i class="fa fa-rocket"></i></a>
          </td>
          <!-- <td>{{i.branch_name}}</td> -->
@@ -349,7 +395,7 @@
           </div>
           <div class="col-md-6 mb-3">
             <label for="branch_name" class="form-label">Branch Name <span class="text-danger">*</span></label>
-            <select id="branch_name" name="branch_name"  class="form-select form-control">
+            <select id="branch_name" name="branch_name"  class="custom-select form-control">
               <option value="" selected disabled>Select Your Branch</option>
               <!-- Branch options will be populated dynamically -->
             </select>
@@ -357,7 +403,7 @@
           </div>
           <div class="col-md-6 mb-3">
             <label for="course_name" class="form-label">Course <span class="text-danger">*</span></label>
-            <select id="course_name" name="course_name" class="form-select form-control" disabled>
+            <select id="course_name" name="course_name" class="custom-select form-control" disabled>
               <option value="" selected disabled>Select Your Course</option>
               <!-- Course options will be populated dynamically -->
             </select>
@@ -366,7 +412,7 @@
           
           <div class="col-md-6 mb-3">
             <label for="training_type" class="form-label">Training Type <span class="text-danger">*</span></label>
-            <select id="training_type" class="form-select form-control" name="training_type">
+            <select id="training_type" class="custom-select form-control" name="training_type">
               <option value="" selected disabled>Select Your Training Type</option>
               {% for i in  training_types %}
                 <option value="{{i.id}}">{{i.TrainingTypeName}}</option>
@@ -376,7 +422,7 @@
           </div>
           <div class="col-md-6 mb-3">
             <label for="lead_source" class="form-label">lead source <span class="text-danger">*</span></label>
-            <select id="lead_source" class="form-select form-control" name="lead_source">
+            <select id="lead_source" class="custom-select form-control" name="lead_source">
               <option value="" selected disabled>Select Your lead  Source</option>
               {% for i in  prospect_types %}
                 <option value="{{i.id}}">{{i.prospect_type}}</option>
@@ -1076,25 +1122,50 @@ $('#input-file-now').change(function() {
   }, "Numbers are not allowed.");
 
   $.validator.addMethod("customEmail", function(value, element) {
-    return this.optional(element) || /^[\w\.-]+@[\w\.-]+\.\w{2,4}$/i.test(value);
-  }, "Please enter a valid email address.");
+    // Regular expression for validating email
+    var emailRegex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/;
+    return this.optional(element) || emailRegex.test(value);
+}, "Please enter a valid Gmail address.");
+
+
+
+  $.validator.addMethod(
+    "customphone",
+    function (value, element) {
+      return (
+        this.optional(element) || /^(\+91-|0)?[6-9]\d{9}$/.test(value)
+      );
+    },
+    "Please enter a valid phone number"
+  );
+
+  $.validator.addMethod("noSpace", function(value, element) {
+    return !(/^\s|\s$|\s{2,}/.test(value));
+}, "No excessive or leading/trailing spaces");
+
 
   $("#enquiryForm").validate({
     
     rules: {
       first_name: {
         required: true,
-        noSpecialChars: true
+        noSpace:true,
+        minlength:3,
+        maxlength:50
+        
       },
       last_name: {
         required: true,
-        noSpecialChars: true
+        noSpace:true,
+        minlength:3,
+        maxlength:50
       },
       mobile_number: {
         required: true,
         digits: true,
         minlength: 10,
-        maxlength: 10
+        maxlength: 10,
+        customphone:true
       },
       email: {
         required: true,

@@ -1,0 +1,116 @@
+{% extends 'base/base.html' %}
+
+{% block title %}QTLineone | Employee Certificates{% endblock %}
+
+
+
+{% block content %}
+
+<div class="profile-cover-wrap overlay-wrap">
+    <div class="profile-cover-img" style="background-image:url('../../static/dist/img/trans-bg.jpg')"></div>
+    <div class="bg-overlay bg-trans-dark-60"></div>
+    <div class="container profile-cover-content py-50">
+        <div class="hk-row"> 
+            <div class="col-lg-6">
+                <div class="media align-items-center">
+                    <div class="media-img-wrap  d-flex">
+                        <div class="avatar">
+                            <img src="{{employee.profile_image.url}}" alt="user" class="avatar-img rounded-circle">
+                        </div>
+                    </div>
+                    <div class="media-body">
+                        <div class="text-white text-capitalize display-6 mb-5 font-weight-400">{{employee.first_name}} {{employee.last_name}}</div>
+                        <div class="font-14 text-white"><span class="mr-5"><span class="font-weight-500 pr-5">{{employee.department_name}}</span></div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="col-lg-6">
+                <div class="button-list">
+                    <a href="#" class="btn btn-dark btn-wth-icon icon-wthot-bg btn-rounded"><span class="btn-text">Message</span><span class="icon-label"><i class="icon ion-md-mail"></i> </span></a>
+                    <a href="#" class="btn btn-icon btn-icon-circle btn-indigo btn-icon-style-2"><span class="btn-icon-wrap"><i class="fa fa-facebook"></i></span></a>
+                    <a href="#" class="btn btn-icon btn-icon-circle btn-sky btn-icon-style-2"><span class="btn-icon-wrap"><i class="fa fa-twitter"></i></span></a>
+                    <a href="#" class="btn btn-icon btn-icon-circle btn-purple btn-icon-style-2"><span class="btn-icon-wrap"><i class="fa fa-instagram"></i></span></a> 
+                    <div class="pa-15">
+                        <span class="d-block display-6 text-white mb-5">154</span>
+                        <span class="d-block text-capitalize text-white font-14">Projects</span>
+                    </div>
+                    <div class="pa-15">
+                        <span class="d-block display-6 text-white mb-5">154</span>
+                        <span class="d-block text-capitalize text-white font-14">Certificates</span>
+                    </div>
+                    <div class="pa-15">
+                        <span class="d-block display-6 text-white mb-5">154</span>
+                        <span class="d-block text-capitalize text-white font-14">Complaints</span>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+    </div>
+</div>
+<div class="bg-white shadow-bottom">
+    <div class="container">
+        <ul class="nav nav-light nav-tabs" role="tablist">
+            <li class="nav-item">
+                <a href="{% url 'employee_info' employee.id %}" class="d-flex h-60p align-items-center nav-link ">Profile</a>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'employee_leaves' employee.id %}" class="d-flex h-60p align-items-center nav-link active">Attandance</a>
+            </li>
+            
+            <li class="nav-item">
+                <a href="{% url 'employee_schedules' employee.id %}" class="d-flex h-60p align-items-center nav-link">Schudles</a>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'employee_mock_schedule' employee.id %}" class="d-flex h-60p align-items-center nav-link">Mocks Schudles</a>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'employee_complaints' employee.id %}" class="d-flex h-60p align-items-center nav-link">Reviews</a>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'employee_history' employee.id %}" class="d-flex h-60p align-items-center nav-link ">Histroy</a>
+            </li>
+        </ul>
+    </div>	
+</div>	
+<section class="hk-sec-wrapper mt-30">
+
+    <div class="table-wrap ">
+        <div class="table-responsive">
+            <table class="table">
+                <thead class="bg-dark">
+                    <tr>
+                        <th class="text-white">Employee Id</th>
+                        <th class="text-white">Name</th>
+                        <th class="text-white">Leave Type</th>
+                        <th class="text-white">From Date</th>
+                        <th class="text-white">To Date</th>
+                        <th class="text-white">Reason</th>
+                        
+
+                        
+
+                    </tr>
+    
+                </thead>
+    
+                <tbody>
+                    <tr>
+                        <!-- <td>{{employee.Employee_id}}</td>
+                        <td>{{employee.first_name}} {{employee.last_name}}</td>
+                        <td>{{employee.personal_email}}</td>
+                        <td>{{employee.personal_number}}</td>
+                        <td>{{employee.department_name}}</td>
+                        <td>{{employee.designation_name}}</td>
+                        <td>₹ {{employee.salary}}</td> -->
+    
+                    </tr>
+                </tbody>
+    
+            </table>
+    
+        </div>
+    </div>
+</section>
+
+
+{% endblock %}

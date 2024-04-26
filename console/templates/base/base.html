@@ -750,7 +750,7 @@
                         <li class="nav-item">
                             <a class="nav-link link-with-indicator" href="javascript:void(0);" data-toggle="collapse" data-target="#app_drp">
                                 <i class="ion ion-ios-apps"></i>
-                                <span class="nav-link-text">HR Portal</span>
+                                <span class="nav-link-text">Job Portal</span>
                             </a>
                             <ul id="app_drp" class="nav flex-column collapse collapse-level-1">
                                 <li class="nav-item">
@@ -860,7 +860,7 @@
                             <li class="nav-item {% if request.resolver_match.url_name in "['employees','course_manage','demo']" %} active {% endif %}">
                                 <a class="nav-link" href="javascript:void(0);" data-toggle="collapse" data-target="#user_drp">
                                     <i class="ion ion-ios-albums"></i>
-                                    <span class="nav-link-text">Console</span>
+                                    <span class="nav-link-text">HRM</span>
                                 </a>
                                 <ul id="user_drp" class="nav flex-column collapse collapse-level-1">
                                     <li class="nav-item">
@@ -871,14 +871,14 @@
                                             </li>
                                             <!-- employee end here -->
                                             <!-- create course -->
-                                            <li class="nav-item {% if request.resolver_match.url_name == 'course_manage' %} active {% endif %}">
+                                            <!-- <li class="nav-item {% if request.resolver_match.url_name == 'course_manage' %} active {% endif %}">
                                                 <a class="nav-link" href="{% url 'course_manage' %}">Course MGMT</a>
-                                            </li>
+                                            </li> -->
                                             <!-- create course end here -->
                                             <!--create demo start here -->
-                                            <li class="nav-item {% if request.resolver_match.url_name == 'demo' %} active {% endif %}">
+                                            <!-- <li class="nav-item {% if request.resolver_match.url_name == 'demo' %} active {% endif %}">
                                                 <a class="nav-link" href="{% url 'demo' %}">Demo MGMT</a>
-                                            </li>
+                                            </li> -->
                                             <!-- create demo end here -->
                                         </ul>
                                     </li>

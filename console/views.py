@@ -5810,6 +5810,7 @@ def employee_list(request):
    designation_name=register_user.designations.get(pk=request.POST.get('designation_name'))
    branch=register_user.branches.get(pk=request.POST.get('branch'))
    profile_image=request.FILES.get('profile_image')
+   salary=request.POST.get('salary')
    country=request.POST.get('country')
    state=request.POST.get('state')
    city=request.POST.get('city')
@@ -5869,6 +5870,7 @@ def employee_list(request):
       designation_name=designation_name,
       branch=branch,
       profile_image=profile_image,
+      salary=salary,
       country=country,
       state=state,
       city=city,
@@ -5945,7 +5947,74 @@ def employee_list_all(request):
     messages.success(request, f'Employee Deleted Successfully')
     return redirect('employees')
 
+@admin_required
+def employee_infos(request,id):
+  crn=request.session.get('admin_user').get('crn')
+  register_user=Register_model.objects.get(crn=crn)
+  employee=register_user.employee.get(id=id)
+  # department=register_user.departments.all().order_by('-id')
+  # short_list=[]
+  # for departments in department:
+  #   # Split department name by space and capitalize the first letter of each word
+  #       department_words = [word[0].upper() for word in departments.department_name.split()]
+  #       # Join the capitalized first letters to form the short form
+  #       short_form = ''.join(department_words)
+  #       short_list.append(short_form)
+    
+  
+  context={
+    'employee':employee,
+    # 'department':zip(department,short_list)
+    
+  }
+  return render(request,'employee_management/employee_info.html',context)
 
+@admin_required
+def employee_schedules(request,id):
+  crn=request.session.get('admin_user').get('crn')
+  register_user=Register_model.objects.get(crn=crn)
+  employee=register_user.employee.get(id=id)
+  context={
+    'employee':employee
+  }
+  return render(request,'employee_management/employee_schudles.html',context)
+@admin_required
+def employee_schedules_mock(request,id):
+  crn=request.session.get('admin_user').get('crn')
+  register_user=Register_model.objects.get(crn=crn)
+  employee=register_user.employee.get(id=id)
+  context={
+    'employee':employee
+  }
+  return render(request,'employee_management/employee_schudles_mock.html',context)
+@admin_required
+def employee_complaints(request,id):
+  crn=request.session.get('admin_user').get('crn')
+  register_user=Register_model.objects.get(crn=crn)
+  employee=register_user.employee.get(id=id)
+  context={
+    'employee':employee
+  }
+  return render(request,'employee_management/employee_complaints.html',context)
+
+@admin_required
+def employee_history(request,id):
+  crn=request.session.get('admin_user').get('crn')
+  register_user=Register_model.objects.get(crn=crn)
+  employee=register_user.employee.get(id=id)
+  context={
+    'employee':employee
+  }
+  return render(request,'employee_management/employee_histroy.html',context)
+@admin_required
+def employee_leaves(request,id):
+  crn=request.session.get('admin_user').get('crn')
+  register_user=Register_model.objects.get(crn=crn)
+  employee=register_user.employee.get(id=id)
+  context={
+    'employee':employee
+  }
+  return render(request,'employee_management/employee_leaves.html',context)
 
 
 @admin_required
@@ -5971,6 +6040,7 @@ def employee_update(request,id):
     designation_name=register_user.designations.get(pk=request.POST.get('designation_name_edit'))
     branch=register_user.branches.get(pk=request.POST.get('branch_edit'))
     profile_image=request.FILES.get('profile_image_edit')
+    salary=request.POST.get('salary_edit')
     country=request.POST.get('country_edit')
     state=request.POST.get('state_edit')
     city=request.POST.get('city_edit')
@@ -6042,6 +6112,7 @@ def employee_update(request,id):
       department_name=department_name,
       designation_name=designation_name,
       branch=branch,
+      salary=salary,
       country=country,
       state=state,
       city=city,
@@ -6053,7 +6124,6 @@ def employee_update(request,id):
       
     )
     messages.success(request, f'Employee updated successfully')
-    return redirect('employees')
    
 
 
@@ -6996,7 +7066,7 @@ def jobrole_import(request):
 
 
 # Leads start here
-
+@admin_required
 def lead_prospects(request):
  
   crn = request.session.get('admin_user').get('crn')
@@ -7015,6 +7085,10 @@ def lead_prospects(request):
   prospect_types = register_user.prospect_types.filter(status='Active')
   # getting faculty
   faculty = register_user.employee.all()
+  prospect_count = register_user.leads.filter(lead_position = "PROSPECT").count()
+  lead_count = register_user.leads.filter(lead_position = "LEAD").count()
+  mql_count = register_user.leads.filter(lead_position = 'MQL').count()
+
   
   context={
      'prospects':prospects,
@@ -7022,13 +7096,16 @@ def lead_prospects(request):
      'courses':courses,
      'training_types':training_types,
      'prospect_types':prospect_types,
-     'faculty':faculty
+     'faculty':faculty,
+     'prospect_count':prospect_count,
+     'lead_count':lead_count,
+     'mql_count':mql_count
   }
   return render(request,'Leads/prospects.html', context)
 
 
 
-
+@admin_required
 def get_branches(request):
     crn = request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
@@ -7036,7 +7113,7 @@ def get_branches(request):
     print("ajex branches",branches)
     return JsonResponse(list(branches), safe=False)
 
-
+@admin_required
 def get_courses(request, branch_id):
     crn = request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
@@ -7062,7 +7139,7 @@ def get_courses(request, branch_id):
 
 
 
-
+@admin_required
 def lead_leads(request):
 
   
@@ -7070,6 +7147,7 @@ def lead_leads(request):
 
 
 # leads 
+@admin_required
 def leads(request):
     crn = request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
@@ -7079,6 +7157,8 @@ def leads(request):
     demo = register_user.demo.all()
     batches = register_user.regulations.all()
     upi = register_user.upi.filter(status = "Active")
+    net_banking = register_user.net_banking.filter(status="Active")
+
 
 
 
@@ -7088,12 +7168,13 @@ def leads(request):
         'faculty':faculty,
         'demo':demo,
         'batches':batches,
-        'upi':upi
+        'upi':upi,
+        'net_banking':net_banking
     }
     return render(request, 'Leads/lead.html', context)
 
 
-
+@admin_required
 def get_upi_details(request, upi_id):
     
     try:
@@ -7116,8 +7197,7 @@ def get_upi_details(request, upi_id):
 
 
 
-
-
+@admin_required
 def submit_enquiry_form(request):
     crn = request.session.get('admin_user', {}).get('crn')
     register_user = Register_model.objects.get(crn=crn)
@@ -7131,6 +7211,17 @@ def submit_enquiry_form(request):
         course_name_id = request.POST.get('course_name')
         training_type_id = request.POST.get('training_type')
         lead_source_id = request.POST.get('lead_source')
+
+        # Validate mobile number format
+        mobile_pattern = r'^\d{10}$'
+        if not re.match(mobile_pattern, mobile_number):
+            return JsonResponse({'otpSent': False, 'error': 'Invalid mobile number format.'})
+
+        # Check if a lead with the same mobile number already exists
+        existing_lead = register_user.leads.filter(mobile_number=mobile_number).first()
+        if existing_lead:
+            print("error")
+            return JsonResponse({'otpSent': False, 'error': 'A lead with this mobile number already exists.'})
 
         print("Branch Name ID:", branch_name_id)
         print("Course Name ID:", course_name_id)
@@ -7177,13 +7268,12 @@ def submit_enquiry_form(request):
         print(course.course_name.course_name)
         print(training_type.TrainingTypeName)
         print(lead_type.prospect_type)
-        # otp = send_otp_to_phone(mobile_number)
+
         otp = random.randint(100000, 999999)
         print("Generated OTP:", otp)
 
         # Store form data and OTP in the session
-        if otp:
-          request.session['lead_data'] = {
+        request.session['lead_data'] = {
             'first_name': first_name,
             'last_name': last_name,
             'mobile_number': mobile_number,
@@ -7193,22 +7283,25 @@ def submit_enquiry_form(request):
             'training_type': training_type.id,
             'lead_source': lead_type.id,
             'crn': crn,
-            
-            }
-          request.session['otp']=otp
-          return JsonResponse({'otpSent': True})
-        else:
-          return JsonResponse({'otpSent': False, 'error': 'Failed to generate OTP.'})
+        }
+        request.session['otp'] = otp
+
+        return JsonResponse({'otpSent': True})
 
     else:
         return JsonResponse({'otpSent': False, 'error': 'Invalid request method.'})
 
 
+@admin_required
 def enquiry_verify_otp(request):
     if request.method == "POST":
         otp_entered = request.POST.get('otp')
         otp_generated = request.session.get('otp')
         lead_data = request.session.get('lead_data', {})
+
+        # Retrieve the register_user object
+        crn = lead_data.get('crn')
+        register_user = Register_model.objects.get(crn=crn)
 
         print("submitted", otp_entered)
         print("this is session data", lead_data.get('first_name'))
@@ -7220,6 +7313,16 @@ def enquiry_verify_otp(request):
         print("this is session data", lead_data.get('training_type'))
         print("this is session data", lead_data.get('lead_source'))
         print("this is session data", lead_data.get('crn'))
+
+        if register_user.leads.filter(mobile_number=lead_data.get('mobile_number')).exists():
+            print("exists")
+            return JsonResponse({'otpVerified': False, 'error': 'A lead with this mobile number already exists.'})
+        if register_user.leads.filter(mobile_number=lead_data.get('email')).exists():
+            print("email exists")
+            return JsonResponse({'otpVerified': False, 'error': 'A lead with this email already exists.'})
+        if register_user.leads.filter(Q (mobile_number=lead_data.get('mobile_number')) & Q(email=lead_data.get('email'))).exists():
+            print("both exists")
+            return JsonResponse({'otpVerified': False, 'error': 'A lead with this mobile number and email already exists.'})    
         
         print(otp_entered,otp_generated)  
         if otp_entered:
@@ -7274,7 +7377,7 @@ def enquiry_verify_otp(request):
     return JsonResponse({'success': False, 'message': 'Invalid request method.'})
 
 
-
+@admin_required
 def mark_as_lead(request, prospect_id):
     crn = request.session.get('admin_user', {}).get('crn')
     register_user = Register_model.objects.get(crn=crn)
@@ -7295,6 +7398,7 @@ def mark_as_lead(request, prospect_id):
 
 
 # moviing lead data to mql
+@admin_required
 def lead_move_to_mql(request,id):
     crn = request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
@@ -7321,6 +7425,7 @@ def lead_move_to_mql(request,id):
        
 
 # mql here
+@admin_required
 def mql(request):
   
   
@@ -7330,12 +7435,16 @@ def mql(request):
   demos = register_user.demo.filter(status='Active').all().order_by('-id')
   batches = register_user.regulations.filter(status = 'Active').all().order_by('-id')
   faculty = register_user.employee.all()
+  upi = register_user.upi.filter(status = "Active")
+  net_banking = register_user.net_banking.filter(status="Active")
 
   context={
      "leads":leads,
      "demos":demos,
      'batches':batches,
-     'faculty':faculty
+     'faculty':faculty,
+     'upi':upi,
+     'net_banking':net_banking
     
   }
   return render(request,'Leads/mql.html', context)
@@ -7343,6 +7452,7 @@ def mql(request):
 
 
 # reschedule the demo here
+@admin_required
 def reschedule_demo(request,id):
   crn = request.session.get('admin_user').get('crn')
   register_user = Register_model.objects.get(crn=crn)
@@ -7365,6 +7475,7 @@ def reschedule_demo(request,id):
 
 
 # moveing from mql to sql
+@admin_required
 def move_to_sql(request,id):
   crn = request.session.get('admin_user').get('crn')
   register_user = Register_model.objects.get(crn=crn)
@@ -7380,9 +7491,7 @@ def move_to_sql(request,id):
            mql_description = mql_description,
            lead_type = leadType,
            faculty = register_user.employee.get(pk=courseFaculty)
-          
         )
-
         messages.success(request,'MQL Lead moved to SQL')
         return redirect('mql')
      else:
@@ -7391,10 +7500,13 @@ def move_to_sql(request,id):
   else:
      messages.error(request,'Invalid request method')
      return redirect('mql')   
+          
+
 
 
 
 # sql here
+@admin_required
 def sql(request):
   
   crn = request.session.get('admin_user', {}).get('crn')
@@ -7403,18 +7515,23 @@ def sql(request):
   plans = register_user.plans.filter(status="Active").order_by("-id")
   batches = register_user.regulations.filter(status = 'Active').all().order_by('-id')
   faculty = register_user.employee.all()
+  upi = register_user.upi.filter(status = "Active")
+  net_banking = register_user.net_banking.filter(status="Active")  
   
   context={
      "leads":leads,
      'plans':plans,
      'batches':batches,
-     'faculty':faculty
+     'faculty':faculty,
+     'upi':upi,
+     'net_banking':net_banking
      
   }
   return render(request,'Leads/sql.html', context) 
 
 
 # move to opportunity
+@admin_required
 def move_to_opportunity(request,id):
   crn = request.session.get('admin_user').get('crn')
   register_user = Register_model.objects.get(crn=crn)
@@ -7441,50 +7558,115 @@ def move_to_opportunity(request,id):
 
 
 
-
+@admin_required
 def opportunity(request):
   crn = request.session.get('admin_user', {}).get('crn')
   register_user = Register_model.objects.get(crn=crn)
   leads = register_user.leads.filter(lead_position='OPPORTUNITY').order_by("-id")
   batches = register_user.regulations.filter(status = 'Active').all().order_by('-id')
+  faculty = register_user.employee.all()
+  upi = register_user.upi.filter(status = "Active")
+  net_banking = register_user.net_banking.filter(status="Active")   
 
 
   context={
      "leads":leads,
-     'batches':batches
+     'batches':batches,
+     'faculty':faculty,
+     'upi':upi,
+     'net_banking':net_banking
   }
 
   return render(request,'Leads/opportunity.html', context) 
 
-
-
-def move_to_admission(request,id):
+@admin_required
+def move_to_admission(request, id):
     crn = request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
-    
+
     if request.method == "POST":
         opportunity_lead = register_user.leads.filter(id=id).first()
         
-        if register_user.leads.filter(id=id).exists():
+        if opportunity_lead:
+            student = opportunity_lead
+            data = {
+                'lead_position': 'ADMITTED',
+                'batch_number': register_user.regulations.get(pk=request.POST.get("batchno")),
+                'admission_date': datetime.now()
+            }
+            
             if request.POST.get("courseFaculty"):
-                register_user.leads.filter(id=id).update(
-                    lead_position = 'ADMITTED',
-                    batch_number = register_user.regulations.get(pk=request.POST.get("batchno")),
-                    faculty = register_user.employee.get(pk=request.POST.get("courseFaculty")),
-                    
-                )
-                messages.success(request, 'OPPORTUNITY Lead moved to ADMITTED')
-                return redirect('admissions')
+                data['faculty'] = register_user.employee.get(pk=request.POST.get("courseFaculty"))
+            
+            register_user.leads.filter(id=id).update(**data)
+            
+            payment_data = {
+                'studend_id': register_user.leads.get(pk=id),
+                'payment_amount': request.POST.get('admissionFee'),
+                'mode_of_payment': request.POST.get('paymenttype'),
+                'transaction_id': request.POST.get('transactionId'),
+                'course_id': student.course_name,
+                'crn_number': register_user
+            }
+            
+            if request.POST.get('upi_id_id'):
+                payment_data['upi_id'] = register_user.upi.get(pk=request.POST.get('upi_id_id'))
+            elif request.POST.get('net_banking_id'):
+                payment_data['net_banking'] = register_user.net_banking.get(pk=request.POST.get('net_banking_id'))
+            elif request.POST.get('Cash'):
+                pass
             else:
-              register_user.leads.filter(id=id).update(
-                    lead_position = 'ADMITTED',
-                    batch_number = register_user.regulations.get(pk=request.POST.get("batchno")),
-                )
-              messages.success(request, 'OPPORTUNITY Lead moved to ADMITTED')
-              return redirect('admissions')
+                messages.error(request, "Please select a payment method")
+                return redirect('admissions')
+            
+            Student_payment.objects.create(**payment_data)
+            messages.success(request, 'OPPORTUNITY Lead moved to ADMITTED')
+            return redirect('admissions')
         else:
             messages.error(request, 'OPPORTUNITY Lead not found')
             return redirect('admissions')
+
+
+
+@admin_required
+def request_dis(request,id):
+  crn = request.session.get('admin_user').get('crn')
+  register_user = Register_model.objects.get(crn=crn)
+  if request.method == "POST":
+    # sql_lead = register_user.leads.get(id=id)
+    if register_user.leads.filter(id=id).exists():
+      register_user.leads.filter(id=id).update(
+        requested_amount = request.POST.get("requested_amount"),
+        request_for_discount = True,
+        lead_position  = "REQUEST_DISCOUNT",
+        messages_for_discount = request.POST.get('messages_for_discount')
+      )
+    messages.success(request,'Request sent successfully')
+    return redirect('request_discounts')
+  else:
+    messages.error(request,'Invalid request')
+    return redirect('request_discounts')
+
+
+
+@admin_required
+def request_discounts(request):
+  crn = request.session.get('admin_user').get('crn')
+  register_user = Register_model.objects.get(crn=crn)
+  leads = register_user.leads.filter(lead_position='REQUEST_DISCOUNT').order_by("-id")
+  
+  
+  context={
+     "leads":leads,
+  }
+  return render(request,'Leads/request_discounts.html', context) 
+
+
+
+
+
+
+
 
 
             
@@ -7492,6 +7674,7 @@ def move_to_admission(request,id):
 
 
 # adminssions
+@admin_required
 def admissions(request):
   crn = request.session.get('admin_user', {}).get('crn')
   register_user = Register_model.objects.get(crn=crn)
@@ -7503,7 +7686,7 @@ def admissions(request):
 
   return render(request,'Leads/admission.html', context)
 
-
+@admin_required
 def mark_as_spam(request):
     crn = request.session.get('admin_user').get('crn')
     register_user = get_object_or_404(Register_model, crn=crn)
@@ -7554,16 +7737,6 @@ def multiple_mark_as_spam(request):
 
 
 
-
-
-def request_discounts(request):
-  context={}
-  
-  context={
-     "leads":leads,
-     'active_tab': 'request_discounts'
-  }
-  return render(request,'Leads/request_discounts.html', context) 
 
 
 
@@ -7892,7 +8065,7 @@ def student_card(request):
 
 # finance start here
 @admin_required
-def finance(request):
+def finance_view(request):
     crn = request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
     
@@ -7915,22 +8088,86 @@ def finance_and_accounts_update(request):
     remarks = request.POST.get('remarks')
     verify_id_list=verify_id.split(',')
     register_user.finance_and_accounts.filter(id__in=verify_id_list).update(payment_status=payment_status,remarks=remarks)
+    
     if payment_status == 'Received':
+      password=random_password()
+      register_user.finance_and_accounts.filter(id__in=verify_id_list).update(fince_password=password)
+      
       for obj in register_user.finance_and_accounts.filter(id__in=verify_id_list):
-        new_password=random_password()
-        obj.finance_password=new_password
-        obj.save()
-        subject = f'{request.session.get('admin_user').get('company_name')}'
- # Compose email content
-        subject = f'{request.session.get("admin_user").get("company_name")} - Welcome and New Password'
-        message = f'Hi Mr/Mrs {obj.leadstage.first_name} {obj.leadstage.last_name},\n\nThank you for joining {request.session.get("admin_user").get("company_name")}. We are thrilled to have you onboard!\n You have enrolled in the course "{obj.leadstage.course_name}" in batch number {obj.leadstage.batch_number}.\n Your token ID is: {obj.leadstage.token_id}.\n\n Your new password is: {new_password}.\n\n If you have any questions or need further assistance, feel free to contact us .\n\n Thank you,\n{request.session.get("admin_user").get("company_name")}'
-        email_from = settings.EMAIL_HOST_USER
-        to_email=f'{obj.leadstage.email}'
-        send_mail(subject, message, email_from, [to_email], fail_silently=False)
-
+        
+                subject = f'{request.session.get("admin_user").get("company_name")} - Welcome and New Password'
+                message = (
+                    f'Hi {obj.leadstage.first_name} {obj.leadstage.last_name},\n\n'
+                    f'Thank you for joining {request.session.get("admin_user").get("company_name")}. We are thrilled to have you onboard!'
+                    f'Your token ID is: {obj.leadstage.token_id}. You have enrolled in the course "{obj.leadstage.course_name}" in batch number {obj.leadstage.batch_number}.\n\n'
+                    f'Login to your account using your email and password.\n'
+                    f'Your username is: {obj.leadstage.email}.\n'
+                    f'Your new password is: {password}.\n\n'
+                    f'URL: http://192.168.1.56:8080/\n\n'
+                    f'If you have any questions or need further assistance, feel free to contact us.\n {obj.leadstage.faculty.first_name} {obj.leadstage.faculty.last_name}\n {obj.leadstage.faculty.personal_email}\n\n'
+                    f'Thank you,\n{request.session.get("admin_user").get("company_name")}\n'
+                )
+                
+                # Send email to the student
+                email_from = settings.EMAIL_HOST_USER
+                to_email = [obj.leadstage.email]
+                send_mail(subject, message, email_from, to_email)
+    elif payment_status =='Not Received':
+            # Send complaint email for other payment statuses
+            for obj in register_user.finance_and_accounts.filter(id__in=verify_id_list):
+                subject = f'{request.session.get("admin_user").get("company_name")} - Payment Status Update'
+                message = (
+                  f'Dear {obj.leadstage.faculty.first_name} {obj.leadstage.faculty.last_name},\n\n'
+                  f'We hope this email finds you well\n\n'
+                  f'it is with a sense of duty that we inform you of an issue regarding the payment status of {obj.leadstage.first_name} {obj.leadstage.last_name} ({obj.leadstage.token_id}), for the course "{obj.leadstage.course_name}" in batch number {obj.leadstage.batch_number}.We request you to please update the payment status of this student. Student currently has {obj.leadstage.course_name.final_price}. Your attention to this matter is greatly appreciated, as it is crucial for maintaining the integrity of our enrollment process\n\n'
+                  f'Thank you for your cooperation and support.\n\n'
+                  f'Your Sincerely,\n{request.session.get("admin_user").get("company_name")}\n'
+                )
+                
+                # Send email to the student
+                email_from = settings.EMAIL_HOST_USER
+                to_email = [obj.leadstage.faculty.personal_email]
+                
+                send_mail(subject, message, email_from, to_email)
+                
+    else:
+        for obj in register_user.finance_and_accounts.filter(id__in=verify_id_list):
+            subject = f'{request.session.get("admin_user").get("company_name")} - Payment Status Update'
+            message = (
+            f'Dear {obj.leadstage.faculty.first_name} {obj.leadstage.faculty.last_name},\n\n'
+            f'We hope this email finds you well.\n\n'
+            f'It has come to our attention that there is a discrepancy or suspicious activity '
+            f'in the payment status of {obj.leadstage.token_id} ({obj.leadstage.first_name} {obj.leadstage.last_name}), '
+            f'for the course "{obj.leadstage.course_name}" in batch number {obj.leadstage.batch_number}.\n\n'
+            f'We kindly request your immediate attention and further investigation into this matter. '
+            f'Your cooperation in resolving this issue is greatly appreciated.\n\n'
+            f'Thank you for your prompt action and support.\n\n'
+            f'Yours sincerely,\n'
+            f'{request.session.get("admin_user").get("company_name")}')
+            
+            email_from = settings.EMAIL_HOST_USER
+            to_email = [obj.leadstage.faculty.personal_email]
+            send_mail(subject, message, email_from, to_email)
+      
     messages.success(request,'Payment status updated successfully')
    
     return redirect('finance')
+@admin_required
+def finance_and_accounts_view(request,id):
+  crn=request.session.get('admin_user').get('crn')
+  register_user=Register_model.objects.get(crn=crn)
+  finance=register_user.finance_and_accounts.get(id=id)
+  context = {
+    'finance':finance
+  }
+  html_template=render_to_string('finance_and_accounts/finance_and_accounts_view.html',context)
+  response=HttpResponse(content_type='application/pdf')
+  response['Content-Disposition'] = 'attachment; filename="finance_and_accounts_view.pdf"'
+  pisa_status = pisa.CreatePDF(html_template,dest=response)
+  if pisa_status.err:
+    messages.error(request,'Error Rendering PDF')
+  return response
+
 
 
 
@@ -8032,9 +8269,23 @@ def profilesent(request):
 
 def not_interested_hr(request):
     return render(request,'hr_portal/dashboard/company leads/not_interested_hr.html')
-
+@admin_required
 def job_gallery(request):
-    return render(request, 'hr_portal/job gallery/job_gallery.html')
+    crn= request.session.get('admin_user').get('crn')
+    register_user = Register_model.objects.get(crn=crn)
+    company_vendor = register_user.company_vendor.all()
+    job_category = register_user.job_category.all()
+    qualification = register_user.qualifications.all()
+    context={
+      'company_vendor':company_vendor,
+      'job_category':job_category,
+      'qualification':qualification
+
+    }
+    return render(request, 'hr_portal/job gallery/job_gallery.html',context)
+
+
+
 
 def job_gallery_applied(request):
     return render(request,'hr_portal/job gallery/jobgalleryapplied.html')
@@ -8066,8 +8317,168 @@ def level2(request):
 def level3(request):
     return render(request,'hr_portal/dashboard/placement details/level3.html')
 
+
+
+@admin_required
 def createvendor(request):
-    return render(request,'hr_portal/vendor/createvendor.html')   
+  crn = request.session.get('admin_user').get('crn')
+  register_user = Register_model.objects.get(crn=crn)
+  job_category = register_user.job_category.all().order_by('-id')
+  company_vendors = register_user.company_vendor.all().order_by('-id')
+
+  
+  if request.method == "POST":
+      companyname = request.POST.get('companyname')
+      hrname = request.POST.get('hrname')
+      location = request.POST.get('location')
+      category = request.POST.get('category')
+      mobile = request.POST.get('mobile')
+      alternatemobile = request.POST.get('alternatemobile')
+      email = request.POST.get('email')
+      website = request.POST.get('website')
+      pocname = request.POST.get('pocname')
+      pocmobile = request.POST.get('pocmobile')
+
+      if register_user.company_vendor.filter(mobile=mobile,email=email).exists():
+        messages.error(request,'Company vendor already exists')
+        return redirect('createvendor')
+      
+      if register_user.company_vendor.filter(companyname=companyname,location=location).exists():
+        messages.error(request,'Company vendor already exists')
+        return redirect('createvendor')
+
+      Company_vendor.objects.create(
+        crn_number = register_user,
+        companyname = companyname.strip().title(),
+        hrname = hrname.strip().title(),
+        location = location.strip().title(),
+        category = register_user.job_category.get(pk=category),
+        mobile = mobile,
+        alternatemobile = alternatemobile,
+        email = email,
+        website = website,
+        pocname = pocname.strip().title(),
+        pocmobile = pocmobile,
+      )
+      return redirect('createvendor')
+  context={
+    'job_category':job_category,
+    'company_vendors':company_vendors
+    }    
+
+  return render(request,'hr_portal/vendor/createvendor.html',context)   
+
+
+
+# company vendor edit
+def company_vendor_edit(request,id):
+  crn = request.session.get('admin_user').get('crn')
+  register_user = Register_model.objects.get(crn=crn)
+  company_vendor = register_user.company_vendor.get(id=id)
+  if request.method == "POST":
+    companyname = request.POST.get('companyname')
+    hrname = request.POST.get('hrname')
+    location = request.POST.get('location')
+    category = request.POST.get('category')
+    mobile = request.POST.get('mobile')
+    alternatemobile = request.POST.get('alternatemobile')
+    email = request.POST.get('email')
+    website = request.POST.get('website')
+    pocname = request.POST.get('pocname')
+    pocmobile = request.POST.get('pocmobile')
+
+    if register_user.company_vendor.exclude(id=id).filter(mobile=mobile,email=email).exists():
+      messages.error(request,'Company vendor already exists')
+      return redirect('createvendor')
+
+    if register_user.company_vendor.exclude(id=id).filter(companyname=companyname,location=location).exists():
+      messages.error(request,'Company vendor already exists')
+      return redirect('createvendor')  
+    
+    register_user.company_vendor.filter(id=id).update(
+       companyname = companyname.strip().title(),
+       hrname = hrname.strip().title(),
+       location = location.strip().title(),
+       category = category,
+       mobile = mobile,
+       alternatemobile = alternatemobile,
+       email = email,
+       website = website,
+       pocname = pocname.strip().title(),
+       pocmobile = pocmobile,
+
+    )
+    return redirect('createvendor')
+
+
+  else:
+    messages.error(request,'Invalid request')
+    return redirect('createvendor')  
+
+
+
+
+# company delete
+def delete_company_vendor(request,id):
+  crn = request.session.get('admin_user').get('crn')
+  register_user = Register_model.objects.get(crn=crn)
+
+  if request.method == "POST":
+    if register_user.company_vendor.filter(id=id).exists():
+      register_user.company_vendor.filter(id=id).delete()
+      messages.success(request,'Company vendor deleted successfully')
+      return redirect('createvendor')
+    else:
+      messages.error(request,'Company vendor not found')
+      return redirect('createvendor')
+  else:
+    messages.error(request,'Invalid request')
+    return redirect('createvendor')  
+
+
+def company_vendor_mul_delter(request):
+  crn=request.session.get('admin_user').get('crn')
+  register_user=Register_model.objects.get(crn=crn)
+  if request.method == "POST":
+    company_vendor=request.POST.get('selected_ids')
+    selected_list=company_vendor.split(",")
+    register_user.company_vendor.filter(id__in=selected_list).delete()
+    messages.success(request, 'Records deleted successfully')
+    return redirect('company_vendor')
+
+  else:
+     return redirect('createvendor')   
+
+
+
+def company_vendor_export(request):
+    crn = request.session.get('admin_user').get('crn')
+    if crn:
+        register_user = Register_model.objects.get(crn=crn)
+        vendor = register_user.company_vendor.all()
+    else:
+        messages.error(request, 'Invalid User Session')
+        return redirect('company_vendor')
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="company_vendor.csv"'
+    writer = csv.writer(response)
+    writer.writerow(['S.No', 'company Name','HR Name','Location','Category','Mobile','Alternate Mobile','Email','Website','Poc Name','Poc Mobile'])
+
+
+    num = 0
+    for i in vendor:
+        num += 1
+        writer.writerow([num,i.companyname,i.hrname,i.location,i.category,i.mobile,i.alternatemobile,i.email,i.website,i.pocname,i.pocmobile])
+
+    return response    
+
+
+
+
+     
+
+
 
 
 

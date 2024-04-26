@@ -284,7 +284,7 @@ class BranchModel(models.Model):
         if not self.id:
             return
 
-        qr_url = f"http://192.168.1.45:8080/inquiry_form/{self.id}/{self.crn_number.crn}"
+        qr_url = f"http://192.168.1.141:8080/inquiry_form/{self.id}/{self.crn_number.crn}"
 
         qr = qrcode.make(qr_url)
         buffer = BytesIO()
@@ -525,6 +525,7 @@ class upipayments(models.Model):
     status = models.CharField(max_length=100, choices=choice_status, default='Active')
     upi_qr_code = models.ImageField(upload_to='upi_qr_code', null=False, blank=True)
 
+
     def __str__(self):
         return self.upipayments_name
     
@@ -601,6 +602,7 @@ class Employee_model(models.Model):
     department_name=models.ForeignKey(Department,on_delete=models.CASCADE,null=True)
     designation_name=models.ForeignKey(Designation,on_delete=models.CASCADE,null=True)
     branch=models.ForeignKey(BranchModel,on_delete=models.CASCADE)
+    salary=models.DecimalField(max_digits=20,decimal_places=2)
     profile_image= models.ImageField(upload_to='profile_image',null=True,blank=True)
     country= models.CharField(max_length=100,null=True,blank=True)
     state= models.CharField(max_length=100,null=True,blank=True)
@@ -612,19 +614,27 @@ class Employee_model(models.Model):
     aadhar_card_pdf= models.FileField(upload_to='aadhar_card_pdf',null=True,blank=True)
     pan_card_pdf= models.FileField(upload_to='pan_card_pdf',default=None,blank=True)
     status = models.CharField(max_length=20, choices=choice_status, default='Active')
+    def generate_employee_id(self):
+        prefix=f'{self.crn_number.company_short_name}'
+        today=datetime.now().date()
+        year=today.year%100
+        month=today.month
+        day=today.day
+        last_employee=Employee_model.objects.filter().order_by('-Employee_id').first()
+        if last_employee:
+            last_number = int(last_employee.Employee_id[-3:]) + 1
+        else:
+            last_number = 1
+        return f'{prefix}E{day:02d}{month:02d}{year:02d}{last_number:03d}'
     def save(self, *args, **kwargs):
         if not self.Employee_id:
-            last_employee = Employee_model.objects.order_by('-Employee_id').first()
-            if last_employee and last_employee.Employee_id:
-                last_id = int(last_employee.Employee_id[3:])
-                new_id = last_id + 1
-                self.Employee_id = f"EMP{new_id}"
-            else:
-                self.Employee_id = f"EMP100"
+            self.Employee_id = self.generate_employee_id()
         super().save(*args, **kwargs)
+            
 
     def __str__(self) ->str:
         return self.first_name 
+
 
 
 
@@ -860,13 +870,22 @@ class LeadModel(models.Model):
     batch_number = models.ForeignKey(Regulations, on_delete=models.SET_NULL, null=True)
     faculty = models.ForeignKey(Employee_model, on_delete=models.SET_NULL, null=True)   
     token_id = models.CharField(max_length=100, unique=True, editable=False)
-    token_generated_date = models.DateTimeField(null=True, blank=True)
+    # token_generated_date = models.DateTimeField(null=True, blank=True)
     plan = models.ForeignKey(Plan, on_delete=models.SET_NULL, null=True)
     prospect_taken = models.BooleanField(default=False)
     lead_description = models.TextField(null=True)
     mql_description = models.TextField(null=True)
     sql_description = models.TextField(null=True)
     token_generated_at = models.DateTimeField(default=datetime.now()) 
+    admission_date = models.DateTimeField(null=True)
+    request_for_discount = models.BooleanField(default=False)
+    requested_amount = models.DecimalField(max_digits=9,decimal_places=2,null=True)
+    messages_for_discount = models.TextField(null=True)
+    # transaction_id = models.CharField(max_length=100,null=True)
+    # mode_of_payment = models.CharField(max_length=100,null=True)
+    # upi_payment = models.ForeignKey(upipayments,on_delete=models.SET_NULL,null=True)
+
+    
     
     
 
@@ -885,6 +904,21 @@ class LeadModel(models.Model):
 
         self.token_generated_date = datetime.now()
         super().save(*args, **kwargs)    
+
+
+class Student_payment(models.Model):
+    crn_number = models.ForeignKey(Register_model, on_delete=models.CASCADE, related_name='student_payment')
+    payment_amount = models.DecimalField(max_digits=9,decimal_places=2)
+    studend_id = models.ForeignKey(LeadModel,on_delete=models.CASCADE)
+    mode_of_payment = models.CharField(max_length=100)
+    transaction_id = models.CharField(max_length=100)
+    date_of_payment = models.DateTimeField(default=datetime.now())
+    upi_id = models.ForeignKey(upipayments,on_delete=models.SET_NULL,null=True)
+    net_banking = models.ForeignKey(netbanking,on_delete=models.SET_NULL,null=True)
+    course_id = models.ForeignKey(CourseManage, on_delete=models.SET_NULL,null=True)
+    def __str__(self):
+        return str(self.crn_number.first_name)
+
 
 
 
@@ -906,25 +940,19 @@ class Finance_and_Accounts(models.Model):
 
 
 
-# class add_job_post(models.Model):
-#     job_title = models.CharField(max_length=100)
-#     company_name = models.ForeignKey(CompanyName, on_delete=models.CASCADE,  related_name='job_posts')
-#     job_category = models.ForeignKey(Job_Category, on_delete=models.CASCADE)
-#     job_type = models.ForeignKey(Jobtype, on_delete=models.CASCADE)
-#     job_role = models.ForeignKey(Jobrole, on_delete=models.CASCADE)
-#     experience = models.CharField(max_length=50, blank=False, null=False)
-#     qualification = models.ForeignKey(Qualification,on_delete=models.CASCADE)
-#     skills = models.CharField(max_length=50, blank=False, null=False)
-#     role = models.CharField(max_length=50, blank=False, null=False)
-#     salary = models.DecimalField(max_digits=6,decimal_places=0)
-#     last_date_to_apply = models.DateTimeField(auto_now_add=True)
-#     job_description = models.TextField()
-
-    
-#     def _str_(self):
-#         return self.contact_number
-    
+class Company_vendor(models.Model):
+    crn_number = models.ForeignKey(Register_model, on_delete=models.CASCADE, related_name='company_vendor')
+    companyname = models.CharField(max_length=100) 
+    hrname = models.CharField(max_length=100)
+    location = models.CharField(max_length=100)
+    category = models.ForeignKey(Job_Category, on_delete=models.SET_NULL, null=True)    
+    mobile = models.CharField(max_length=100)
+    alternatemobile = models.CharField(max_length=100)
+    email = models.CharField(max_length=100)
+    website = models.CharField(max_length=100)
+    pocname = models.CharField(max_length=100)
+    pocmobile = models.CharField(max_length=100)
 
 
 
-    
+ 

@@ -4,9 +4,7 @@
 {% block title %}QTLineone | Settings Page{% endblock %}
 <!--  -->
 
-{% block style %}
-
-{% endblock %}
+{% block style %} {% endblock %}
 <!--  -->
 <!-- title end here -->
 
@@ -16,14 +14,15 @@
   <h4 class="hk-pg-title m-3">Settings</h4>
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb bg-transparent mb-0">
-      <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+      <li class="breadcrumb-item">
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+      </li>
       <li class="breadcrumb-item active" aria-current="page">Settings</li>
     </ol>
   </nav>
 </div>
 <!-- /Breadcrumb -->
-{% endblock %}
-{% block content %}
+{% endblock %} {% block content %}
 <!-- Course start here -->
 <div class="card mb-3">
   <div class="card-header border-bottom bg-secondary hk-pg-header">
@@ -33,88 +32,175 @@
     <div class="row">
       <!-- sub category start here -->
       <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-        <a href="{% url 'sub_category' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+        <a
+          href="{% url 'sub_category' %}"
+          class="btn-block btn btn-primary d-flex justify-content-between shadow"
+        >
           <div class="my-auto">Sub Categories</div>
-          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top" title="
+          <i
+            class="ion ion-ios-alert my-auto"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="
           Create Sub Category 
-          Ex: Software Developer, Tester"></i>
+          Ex: Software Developer, Tester"
+          ></i>
         </a>
       </div>
-
 
       <!-- sub category end here -->
       <!-- course here -->
       <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-        <a href="{% url 'courses' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+        <a
+          href="{% url 'courses' %}"
+          class="btn-block btn btn-primary d-flex justify-content-between shadow"
+        >
           <div class="my-auto">Courses</div>
-          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top" title="
+          <i
+            class="ion ion-ios-alert my-auto"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="
           Create Courses 
-          Ex: Python , Java, Testing"></i>
+          Ex: Python , Java, Testing"
+          ></i>
         </a>
       </div>
       <!-- course end here -->
 
       <!-- specializations -->
       <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-        <a href="{% url 'specialization' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+        <a
+          href="{% url 'specialization' %}"
+          class="btn-block btn btn-primary d-flex justify-content-between shadow"
+        >
           <div class="my-auto">Specializations</div>
-          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top" title="
+          <i
+            class="ion ion-ios-alert my-auto"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="
           Create Specialization
-          Ex: Python Fullstack, Java Fullstack"></i>
+          Ex: Python Fullstack, Java Fullstack"
+          ></i>
         </a>
       </div>
       <!-- specializations end here -->
 
       <!-- Branch Here -->
       <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-        <a href="{% url 'branches' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+        <a
+          href="{% url 'branches' %}"
+          class="btn-block btn btn-primary d-flex justify-content-between shadow"
+        >
           <div class="my-auto">Branches</div>
-          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top"
-            title="Create Branch     Ex: Madhapur, Kukatpally"></i>
+          <i
+            class="ion ion-ios-alert my-auto"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Create Branch     Ex: Madhapur, Kukatpally"
+          ></i>
         </a>
       </div>
       <!-- Branch end here -->
 
       <!-- Batch types -->
       <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-        <a href="{% url 'batch_type' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+        <a
+          href="{% url 'batch_type' %}"
+          class="btn-block btn btn-primary d-flex justify-content-between shadow"
+        >
           <div class="my-auto">Batch Types</div>
-          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top" title="
+          <i
+            class="ion ion-ios-alert my-auto"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="
           Create Batch Types 
-          Ex: Morning, Evening"></i>
+          Ex: Morning, Evening"
+          ></i>
         </a>
       </div>
       <!-- Batch type end here -->
 
       <!-- Regulaitons -->
       <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-        <a href="{% url 'regulations' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+        <a
+          href="{% url 'regulations' %}"
+          class="btn-block btn btn-primary d-flex justify-content-between shadow"
+        >
           <div class="my-auto">Regulations</div>
-          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top" title="
-          Create Regulations for Batches"></i>
+          <i
+            class="ion ion-ios-alert my-auto"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="
+          Create Regulations for Batches"
+          ></i>
         </a>
       </div>
       <!-- Regulations -->
 
       <!-- Training Type -->
       <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-        <a href="{% url 'training_type' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+        <a
+          href="{% url 'training_type' %}"
+          class="btn-block btn btn-primary d-flex justify-content-between shadow"
+        >
           <div class="my-auto">Training Types</div>
-          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top" title="
-          Create Training Types Ex: Morning, After Noon"></i>
+          <i
+            class="ion ion-ios-alert my-auto"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="
+          Create Training Types Ex: Morning, After Noon"
+          ></i>
         </a>
       </div>
 
       <!-- Training Type end here -->
+      <!-- course management -->
+
+      <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
+        <a
+          href="{% url 'course_manage' %}"
+          class="btn-block btn btn-primary d-flex justify-content-between shadow"
+        >
+          <div class="my-auto">Course Management</div>
+          <i
+            class="ion ion-ios-alert my-auto"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="
+          Create Training Types Ex: Morning, After Noon"
+          ></i>
+        </a>
+      </div>
+
+      <!-- course management end here -->
+      <!--Demo managemenet-->
+      <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
+        <a
+          href="{% url 'demo' %}"
+          class="btn-block btn btn-primary d-flex justify-content-between shadow"
+        >
+          <div class="my-auto">Demo Management</div>
+          <i
+            class="ion ion-ios-alert my-auto"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="
+    Create Training Types Ex: Morning, After Noon"
+          ></i>
+        </a>
+      </div>
     </div>
   </div>
 </div>
 <!-- Course end here -->
 <!--  -->
 
-
 <!-- Learning path Starts here -->
-
 
 <div class="card mb-3">
   <div class="card-header border-bottom bg-secondary hk-pg-header">
@@ -122,12 +208,20 @@
   </div>
   <div class="card-body">
     <div class="row">
-       <!-- Chapters -->
-       <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-        <a href="{% url 'chapters' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+      <!-- Chapters -->
+      <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
+        <a
+          href="{% url 'chapters' %}"
+          class="btn-block btn btn-primary d-flex justify-content-between shadow"
+        >
           <div class="my-auto">Chapters</div>
-          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top" title="
-          Create Training Types Ex: Morning, After Noon"></i>
+          <i
+            class="ion ion-ios-alert my-auto"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="
+          Create Training Types Ex: Morning, After Noon"
+          ></i>
         </a>
       </div>
 
@@ -136,10 +230,18 @@
       <!-- Lesson Title starts here -->
 
       <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-        <a href="{% url 'lesson_title' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+        <a
+          href="{% url 'lesson_title' %}"
+          class="btn-block btn btn-primary d-flex justify-content-between shadow"
+        >
           <div class="my-auto">Lesson Title</div>
-          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top" title="
-          Create Designation for Employee Ex: Software Engineer, Manager"></i>
+          <i
+            class="ion ion-ios-alert my-auto"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="
+          Create Designation for Employee Ex: Software Engineer, Manager"
+          ></i>
         </a>
       </div>
 
@@ -147,21 +249,36 @@
 
       <!-- Topics starts here -->
       <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-        <a href="{% url 'topics' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+        <a
+          href="{% url 'topics' %}"
+          class="btn-block btn btn-primary d-flex justify-content-between shadow"
+        >
           <div class="my-auto">Topics</div>
-          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top"
-            title="Create Employee Type Ex: Part Time, Full Time"></i>
+          <i
+            class="ion ion-ios-alert my-auto"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Create Employee Type Ex: Part Time, Full Time"
+          ></i>
         </a>
       </div>
       <!-- Topics ends here -->
 
-       <!-- quiz start here -->
+      <!-- quiz start here -->
 
-       <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-        <a href="{% url 'quiz' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+      <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
+        <a
+          href="{% url 'quiz' %}"
+          class="btn-block btn btn-primary d-flex justify-content-between shadow"
+        >
           <div class="my-auto">Quiz</div>
-          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top" title="
-          Create Training Types Ex: Morning, After Noon"></i>
+          <i
+            class="ion ion-ios-alert my-auto"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="
+          Create Training Types Ex: Morning, After Noon"
+          ></i>
         </a>
       </div>
 
@@ -170,10 +287,18 @@
       <!-- Worksheet  starts here -->
 
       <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-        <a href="{% url 'worksheet' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+        <a
+          href="{% url 'worksheet' %}"
+          class="btn-block btn btn-primary d-flex justify-content-between shadow"
+        >
           <div class="my-auto">Worksheet</div>
-          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top" title="
-          Create Designation for Employee Ex: Software Engineer, Manager"></i>
+          <i
+            class="ion ion-ios-alert my-auto"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="
+          Create Designation for Employee Ex: Software Engineer, Manager"
+          ></i>
         </a>
       </div>
 
@@ -181,14 +306,20 @@
 
       <!-- Assessment starts here -->
       <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-        <a href="{% url 'assessment' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+        <a
+          href="{% url 'assessment' %}"
+          class="btn-block btn btn-primary d-flex justify-content-between shadow"
+        >
           <div class="my-auto">Assessment</div>
-          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top"
-            title="Create Employee Type Ex: Part Time, Full Time"></i>
+          <i
+            class="ion ion-ios-alert my-auto"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Create Employee Type Ex: Part Time, Full Time"
+          ></i>
         </a>
       </div>
       <!-- Assessment ends here -->
-    
     </div>
   </div>
 </div>
@@ -198,7 +329,6 @@
 
 <!-- Employee start here -->
 
-
 <div class="card mb-3">
   <div class="card-header border-bottom bg-secondary hk-pg-header">
     <h5 class="text-white hk-sec-title">Employee</h5>
@@ -207,10 +337,17 @@
     <div class="row">
       <!-- Department here -->
       <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-        <a href="{% url 'departments' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+        <a
+          href="{% url 'departments' %}"
+          class="btn-block btn btn-primary d-flex justify-content-between shadow"
+        >
           <div class="my-auto">Departments</div>
-          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top"
-            title="Create Department for Employee Ex: IT, Finance"></i>
+          <i
+            class="ion ion-ios-alert my-auto"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Create Department for Employee Ex: IT, Finance"
+          ></i>
         </a>
       </div>
       <!-- Department end here -->
@@ -218,10 +355,18 @@
       <!-- designation start here -->
 
       <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-        <a href="{% url 'designations' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+        <a
+          href="{% url 'designations' %}"
+          class="btn-block btn btn-primary d-flex justify-content-between shadow"
+        >
           <div class="my-auto">Designations</div>
-          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top" title="
-          Create Designation for Employee Ex: Software Engineer, Manager"></i>
+          <i
+            class="ion ion-ios-alert my-auto"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="
+          Create Designation for Employee Ex: Software Engineer, Manager"
+          ></i>
         </a>
       </div>
 
@@ -229,10 +374,17 @@
 
       <!-- Employee Type start here -->
       <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-        <a href="{% url 'employee_type' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+        <a
+          href="{% url 'employee_type' %}"
+          class="btn-block btn btn-primary d-flex justify-content-between shadow"
+        >
           <div class="my-auto">Employee Types</div>
-          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top"
-            title="Create Employee Type Ex: Part Time, Full Time"></i>
+          <i
+            class="ion ion-ios-alert my-auto"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Create Employee Type Ex: Part Time, Full Time"
+          ></i>
         </a>
       </div>
       <!-- Employee Type end here -->
@@ -254,10 +406,17 @@
     <div class="row">
       <!-- Department here -->
       <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-        <a href="{% url 'net_banking' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+        <a
+          href="{% url 'net_banking' %}"
+          class="btn-block btn btn-primary d-flex justify-content-between shadow"
+        >
           <div class="my-auto">Net Bankings</div>
-          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top"
-            title="Add Net Banking Transactions"></i>
+          <i
+            class="ion ion-ios-alert my-auto"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Add Net Banking Transactions"
+          ></i>
         </a>
       </div>
       <!-- Department end here -->
@@ -265,10 +424,17 @@
       <!-- designation start here -->
 
       <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-        <a href="{% url 'upi_payments' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+        <a
+          href="{% url 'upi_payments' %}"
+          class="btn-block btn btn-primary d-flex justify-content-between shadow"
+        >
           <div class="my-auto">UPI Payments</div>
-          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top"
-            title="Add UPI Payment Transactions"></i>
+          <i
+            class="ion ion-ios-alert my-auto"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Add UPI Payment Transactions"
+          ></i>
         </a>
       </div>
 
@@ -276,17 +442,23 @@
 
       <!-- Employee Type start here -->
       <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-        <a href="{% url 'plans' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+        <a
+          href="{% url 'plans' %}"
+          class="btn-block btn btn-primary d-flex justify-content-between shadow"
+        >
           <div class="my-auto">Plans</div>
-          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top"
-            title="Create Planes Ex: Monthly, Yearly"></i>
+          <i
+            class="ion ion-ios-alert my-auto"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Create Planes Ex: Monthly, Yearly"
+          ></i>
         </a>
       </div>
       <!-- Employee Type end here -->
     </div>
   </div>
 </div>
-
 
 <!-- Finance and ACcount Type end here -->
 <!--  -->
@@ -302,10 +474,17 @@
     <div class="row">
       <!-- Purpose of visiting here -->
       <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-        <a href="{% url 'purpose_of_visit' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+        <a
+          href="{% url 'purpose_of_visit' %}"
+          class="btn-block btn btn-primary d-flex justify-content-between shadow"
+        >
           <div class="my-auto">Purpose of visit</div>
-          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top"
-            title="Create Purpose of visit ex: internship"></i>
+          <i
+            class="ion ion-ios-alert my-auto"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Create Purpose of visit ex: internship"
+          ></i>
         </a>
       </div>
       <!-- Purpose of visiting end here -->
@@ -313,70 +492,104 @@
       <!-- Prospect type start here -->
 
       <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-        <a href="{% url 'prospect_type' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+        <a
+          href="{% url 'prospect_type' %}"
+          class="btn-block btn btn-primary d-flex justify-content-between shadow"
+        >
           <div class="my-auto">Prospect Types</div>
-          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top"
-            title="Create prospect type Ex: Instagram, Friend"></i>
+          <i
+            class="ion ion-ios-alert my-auto"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Create prospect type Ex: Instagram, Friend"
+          ></i>
         </a>
       </div>
 
       <!-- Prospect type end here -->
 
-    
-
       <!-- forum category start here -->
       <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-        <a href="{% url 'forum_category' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+        <a
+          href="{% url 'forum_category' %}"
+          class="btn-block btn btn-primary d-flex justify-content-between shadow"
+        >
           <div class="my-auto">Forum Category</div>
-          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top"
-            title="Create Forum Category for the Course"></i>
+          <i
+            class="ion ion-ios-alert my-auto"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Create Forum Category for the Course"
+          ></i>
         </a>
       </div>
       <!-- Forum category end here -->
       <!-- Complaints start here -->
       <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-        <a href="{% url 'complaints' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+        <a
+          href="{% url 'complaints' %}"
+          class="btn-block btn btn-primary d-flex justify-content-between shadow"
+        >
           <div class="my-auto">Complaints</div>
-          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top"
-            title="Create Complaints Ex: services, faculty, other"></i>
+          <i
+            class="ion ion-ios-alert my-auto"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Create Complaints Ex: services, faculty, other"
+          ></i>
         </a>
       </div>
       <!-- Complaints end here -->
       <!-- Calender start here -->
       <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-        <a href="{% url 'calender' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+        <a
+          href="{% url 'calender' %}"
+          class="btn-block btn btn-primary d-flex justify-content-between shadow"
+        >
           <div class="my-auto">Calendars</div>
-          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top"
-            title="Create Events Ex: meeting, training, conference, holiday"></i>
+          <i
+            class="ion ion-ios-alert my-auto"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Create Events Ex: meeting, training, conference, holiday"
+          ></i>
         </a>
       </div>
       <!-- Calender end here -->
       <!-- lead stage start here -->
       <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-        <a href="{% url 'Leads' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+        <a
+          href="{% url 'Leads' %}"
+          class="btn-block btn btn-primary d-flex justify-content-between shadow"
+        >
           <div class="my-auto">Leads Stages</div>
-          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top"
-            title="Create Lead Stage Ex: Call not responding, Not interested"></i>
+          <i
+            class="ion ion-ios-alert my-auto"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Create Lead Stage Ex: Call not responding, Not interested"
+          ></i>
         </a>
       </div>
       <!-- lead stage end here -->
       <!-- class room start here -->
 
       <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-        <a href="{% url 'class_room' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+        <a
+          href="{% url 'class_room' %}"
+          class="btn-block btn btn-primary d-flex justify-content-between shadow"
+        >
           <div class="my-auto">Class Rooms</div>
-          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top"
-            title="Create Lead Stage Ex: Call not responding, Not interested"></i>
+          <i
+            class="ion ion-ios-alert my-auto"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Create Lead Stage Ex: Call not responding, Not interested"
+          ></i>
         </a>
       </div>
 
-
       <!-- class room end here -->
-
-
-
-
-
     </div>
   </div>
 </div>
@@ -386,7 +599,6 @@
 <!--  -->
 <!--  -->
 
-
 <!-- Vendor start here -->
 
 <div class="card mb-3">
@@ -395,23 +607,25 @@
   </div>
   <div class="card-body">
     <div class="row">
-
       <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-        <a href="{% url 'vendor' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+        <a
+          href="{% url 'vendor' %}"
+          class="btn-block btn btn-primary d-flex justify-content-between shadow"
+        >
           <div class="my-auto">Vendor Types</div>
-          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top"
-            title="Create Vendor Type"></i>
+          <i
+            class="ion ion-ios-alert my-auto"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Create Vendor Type"
+          ></i>
         </a>
       </div>
- 
-
     </div>
   </div>
 </div>
 
-
 <!-- Vendor end here -->
-
 
 <!--  -->
 <!--  -->
@@ -424,61 +638,77 @@
     <div class="row">
       <!-- main job category start here -->
       <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-        <a href="{% url 'Job_type' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+        <a
+          href="{% url 'Job_type' %}"
+          class="btn-block btn btn-primary d-flex justify-content-between shadow"
+        >
           <div class="my-auto">Job Types</div>
-          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top"
-            title="Add Main Job Category ex: Software Developer"></i>
+          <i
+            class="ion ion-ios-alert my-auto"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Add Main Job Category ex: Software Developer"
+          ></i>
         </a>
       </div>
       <!-- main job category end here -->
       <!-- sub job category start here -->
       <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-        <a href="{% url 'job_category' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+        <a
+          href="{% url 'job_category' %}"
+          class="btn-block btn btn-primary d-flex justify-content-between shadow"
+        >
           <div class="my-auto">Job Cateogories</div>
-          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top"
-            title="Add Sub job category ex: Tester, Developer"></i>
+          <i
+            class="ion ion-ios-alert my-auto"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Add Sub job category ex: Tester, Developer"
+          ></i>
         </a>
       </div>
       <!-- sub job category end here -->
       <!-- qualification -->
       <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-        <a href="{% url 'qualification' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+        <a
+          href="{% url 'qualification' %}"
+          class="btn-block btn btn-primary d-flex justify-content-between shadow"
+        >
           <div class="my-auto">Qualifications</div>
-          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top"
-            title="Add Qualification Ex: B.Sc, B.Tech"></i>
+          <i
+            class="ion ion-ios-alert my-auto"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Add Qualification Ex: B.Sc, B.Tech"
+          ></i>
         </a>
       </div>
-
 
       <!-- qualification end here -->
 
       <!-- job role start here -->
       <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-        <a href="{% url 'jobrole' %}" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+        <a
+          href="{% url 'jobrole' %}"
+          class="btn-block btn btn-primary d-flex justify-content-between shadow"
+        >
           <div class="my-auto">Job Roles</div>
-          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top"
-            title="Add Job Roles Ex: Software Developer, Tester"></i>
+          <i
+            class="ion ion-ios-alert my-auto"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Add Job Roles Ex: Software Developer, Tester"
+          ></i>
         </a>
       </div>
 
-
-
-
-
       <!-- job role end here -->
-
-
-
-
-
     </div>
   </div>
 </div>
 
-
 <!--  -->
 <!--  -->
-
 
 <!--  -->
 <!--  -->
@@ -491,44 +721,45 @@
     <div class="row">
       <!-- Certification name start here -->
       <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-        <a href="#" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+        <a
+          href="#"
+          class="btn-block btn btn-primary d-flex justify-content-between shadow"
+        >
           <div class="my-auto">Certification Name</div>
-          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top"
-            title="Create Certification Name ex: Python, Java"></i>
+          <i
+            class="ion ion-ios-alert my-auto"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Create Certification Name ex: Python, Java"
+          ></i>
         </a>
       </div>
       <!-- Certification name end here -->
       <!-- certification template start here -->
       <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-        <a href="#" class="btn-block btn btn-primary d-flex justify-content-between shadow">
+        <a
+          href="#"
+          class="btn-block btn btn-primary d-flex justify-content-between shadow"
+        >
           <div class="my-auto">Certification Template</div>
-          <i class="ion ion-ios-alert my-auto" data-toggle="tooltip" data-placement="top"
-            title="Create Certification Template, images for certification creation"></i>
+          <i
+            class="ion ion-ios-alert my-auto"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Create Certification Template, images for certification creation"
+          ></i>
         </a>
       </div>
       <!-- certification template end here -->
-
-
-
-
-
-
     </div>
   </div>
 </div>
 
-
 <!--  -->
 <!--  -->
 
+{% endblock %} {% block scripts %}
 
-
-
-{% endblock %}
-{% block scripts %}
-
-<scripts  src="../../static/dist/js/feather.min.js"></scripts> 
-
-
+<scripts src="../../static/dist/js/feather.min.js"></scripts>
 
 {% endblock %}

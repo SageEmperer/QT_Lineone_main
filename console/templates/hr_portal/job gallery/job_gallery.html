@@ -208,153 +208,101 @@ aria-hidden="true"
           </div>
     
           <div class="modal-body">
+            <!--  -->
             <div class="row">
-              <div class="col-xl-12">
-                      <div class="row ">
-                          <div class="col-sm">
-                              <div class="row">
-                                  <!-- <div class="col-md-4 mb-3">
-                                      <label for="" class="form-label">Job ID <span class="text-danger">*</span></label>
-                                      <input type="text"placeholder="4545" class="form-control mb-3"/>
-                                  </div> -->
-    
-                                  <div class="col-md-4 mb-3">
-                                    <label for="" class="form-label">Job Title <span class="text-danger">*</span></label>
-                                      <input type="text"placeholder="Full Stack developer" name="jobtitle" class="form-control mb-3"/>
-                                  </div>
-    
-                                  <div class="col-md-4">
-                                    <label for="" class="form-label">Company Name <span class="text-danger">*</span></label>
-                                    <!-- <input type="text"placeholder="TCS" name="companyname" class="form-control mb-3"/> -->
-                                    <select class="form-control select2 sm-3" aria-label="Default select example" name="company"  required>
-                                      <option selected>Select</option>
-                                      <option value="1">TCS</option>
-                                      <option value="2">wipro</option>
-                                      <option value="2">Mindtree</option>
-                                    </select>
-                                  </div>
-                                  <div class="col-md-4 mb-3">
-                                    <label for="" class="form-label">Job Category <span class="text-danger">*</span></label>
-                                    <!-- <input type="text"placeholder="Technical" class="form-control mb-3"/> -->
-                                    <select class="form-control select2 sm-3" aria-label="Default select example" name="category"  required>
-                                      <option selected>Select</option>
-                                      <option value="1">Technical</option>
-                                      <option value="2">Non Technical</option>
-                                    </select>
-                                </div>
-                              </div>
-          
-    
-    
-                              <div class="row">
-                                  <div class="col-sm">
-                                    <div class="row">
-                                      
-                                      <div class="col-md-4">
-                                        <label for="" class="form-label">Experience <span class="text-danger">*</span></label>
-                                          <input type="text"placeholder="1-2 years" name="experience" class="form-control mb-3"/>
-                                      </div>
-                                      <div class="col-md-4">
-                                        <label for="" class="form-label">Qualification <span class="text-danger">*</span></label>
-                                          <!-- <input type="text"placeholder="Btech" name="qualification" class="form-control mb-3"/> -->
-                                          <select class="form-control select2 sm-3" aria-label="Default select example" name="category"  required>
-                                            <option selected>Select</option>
-                                            <option value="1">B.tech</option>
-                                            <option value="2">MCA</option>
-                                            <option value="2">Bsc</option>
-                                          </select>
-                                      </div>
-                                      <div class="col-md-4 mb-3" >
-                                        <label for="" class="form-label">Skills <span class="text-danger">*</span></label>
-                                        <input type="text"placeholder="Python, django" name="skills" class="form-control mb-3"/>
-                                      </div>
 
-                                      <!-- <div class="form-group">
-                                        <label for="input_tags">Tags</label>
-                                        <select id="input_tags" class="form-control" multiple="multiple">
-                                            <option selected="selected">orange</option>
-                                            <option>white</option>
-                                            <option selected="selected">purple</option>
-                                        </select>
-                                    </div> -->
-                                    
-                                      
-                                    </div>
-                                  </div>
-                                </div>
+              <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+                <label for="" class="form-label">Job Title <span class="text-danger">*</span></label>
+                <input type="text"placeholder="Full Stack developer" name="jobtitle" class="form-control"/>
+              </div>
+              <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+                <label for="" class="form-label">Company Name <span class="text-danger">*</span></label>
+                <!-- <input type="text"placeholder="TCS" name="companyname" class="form-control mb-3"/> -->
+                <select class="form-control custom-select" aria-label="Default select example" name="company" >
+                  <option selected value="">Select</option>
+                  {% for i in company_vendor %}
+                  <option value="{{i.id}}">{{i.companyname}} {{i.location}}</option>
+                  {% endfor %}
 
-                              <div class="row">
-                                <div class="col-sm">
-                                  <div class="row">
-                                    
-                                    <div class="col-md-4">
-                                      <label for="" class="form-label">Role <span class="text-danger">*</span></label>
-                                      <input type="text"placeholder="Junior Python Developer" name="role" class="form-control"/>
-                                    </div>
-                                    <div class="col-md-4">
-                                      <label for="" class="form-label">Salary <span class="text-danger">*</span></label>
-                                      <input type="text"placeholder="4LPA" name="salary" class="form-control mb-3"/>
-                                    </div>
-                                    <div class="col-md-4 mb-3">
-                                      <label for="" class="form-label">Location <span class="text-danger">*</span></label>
-                                      <input type="text"placeholder="Hyderabad" name="location" class="form-control mb-3"/>
-                                   </div>
-                                  </div>
-                                </div>
-                              </div>
-          
-    
-    
-    
-    
-                              <div class="row">
-                                <div class="col-sm">
-                                  <div class="row">
-                                    
-                                   <div class="col-md-4">
-                                        <label for="" class="form-label">Email <span class="text-danger">*</span></label>
-                                        <input type="email"placeholder="Lokesh@gmail.com" name="email" class="form-control mb-3"/>
-    
-                                  </div>
-                                  <div class="col-md-4">
-                                        <label for="" class="form-label">Contact Number <span class="text-danger">*</span></label>
-                                        <input type="number"placeholder="9876598765" name="contactnumber" class="form-control mb-3"/>
-                                  </div>
-                                  <div class="col-md-4 mb-3">
-                                    <!-- <label for="" class="form-label">Last Date to Apply <span class="text-danger">*</span></label>
-                                    <input type="text"placeholder="30,march" class="form-control mb-3"/> -->
+                </select>
 
-                                    <label for="date-field" class="form-label">Last Date to Apply <span class="text-danger">*</span></label>
-                                    <input type="date" id="date-field" name="date-field" class="form-control mb-3"> 
-                                  </div>
-                                  </div>
-                                </div>
-                              </div>
-          
+              </div>
+              <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+                <label for="" class="form-label">Job Category <span class="text-danger">*</span></label>
+                <!-- <input type="text"placeholder="Technical" class="form-control mb-3"/> -->
+                <select class="form-control custom-select" aria-label="Default select example" name="category"  required>
+                  <option selected>Select Job Category</option>
+                  {% for i in job_category %}
+                  <option value="{{i.id}}">{{i.Jobcategory_name}}</option>
+                  {% endfor %}
+                </select>
 
-                              <div class="row">
-                                <div class="col-sm">
-                                  <div class="row">
-                                    
-                                  
-                                      
-                                      <div class="col-md-12 mb-3">
-                                        <label for="" class="form-label">Job Description <span class="text-danger">*</span></label>
-                                        <input type="text"placeholder="need skills like python" name="requirements" id="Suggestions" class="form-control mb-3"/>
-                                            <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
-                                              <script>
-                                              CKEDITOR.replace('Suggestions')
-                                            </script>
-                                      </div>
-                                      
-                                  </div>
-                                </div>
-                              </div>
+              </div>
+              <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+                <label for="" class="form-label">Experience <span class="text-danger">*</span></label>
+                <input type="text"placeholder="1-2 years" name="experience" class="form-control"/>
 
-                            </div>
-                          </div>
-                      </div>
-                    </div>
+              </div>
+              <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+                <label for="" class="form-label">Qualification <span class="text-danger">*</span></label>
+                <!-- <input type="text"placeholder="Btech" name="qualification" class="form-control mb-3"/> -->
+                <select class="form-control custom-select" aria-label="Default select example" name="category"  required>
+                  <option selected value="">Select Qualification</option>
+                  {% for i in qualification %}
+                  <option value="{{i.id}}">{{i.qualification_name}}</option>
+                  {% endfor %}
+                </select>   
+              </div>
+
+
+              <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+                <label for="" class="form-label">Skills <span class="text-danger">*</span></label>
+                <input type="text"placeholder="Python, django" name="skills" class="form-control"/>
+              </div>
+
+
+
+            
+
+            <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+              <label for="" class="form-label">Role <span class="text-danger">*</span></label>
+              <input type="text"placeholder="Junior Python Developer" name="role" class="form-control"/>
+
+              
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+              <label for="" class="form-label">Salary <span class="text-danger">*</span></label>
+              <input type="text"placeholder="4LPA" name="salary" class="form-control mb-3"/>
+
+
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+              <label for="" class="form-label">Location <span class="text-danger">*</span></label>
+              <input type="text"placeholder="Hyderabad" name="location" class="form-control mb-3"/>
+
+
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+              <label for="" class="form-label">Email <span class="text-danger">*</span></label>
+              <input type="email"placeholder="Lokesh@gmail.com" name="email" class="form-control mb-3"/>
+
+
+            </div>
+
+            <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+              <label for="" class="form-label">Contact Number <span class="text-danger">*</span></label>
+              <input type="number"placeholder="9876598765" name="contactnumber" class="form-control mb-3"/>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+              
+              <label for="date-field" class="form-label">Last Date to Apply <span class="text-danger">*</span></label>
+              <input type="date" id="date-field" name="date-field" class="form-control mb-3"> 
+
+            </div>
+            
+          </div>
+
+
                   </div>
                   
     

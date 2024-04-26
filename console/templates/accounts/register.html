@@ -296,10 +296,10 @@
                 );
                 $.validator.addMethod("customEmail", function(value, element) {
                     // Regular expression for validating email
-                    var emailRegex =  /^(?!.\.@)[a-zA-Z0-9][a-zA-Z0-9+_.-]+@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)$/;
-
+                    var emailRegex = /^((a-zA-Z0-9. _%-)+@(a-zA-Z0-9. -)+\. (a-zA-Z)(2,))$/;
                     return this.optional(element) || emailRegex.test(value);
-                }, "Invalid email address");
+                }, "Please enter a valid Gmail address.");
+                                
           
 
         

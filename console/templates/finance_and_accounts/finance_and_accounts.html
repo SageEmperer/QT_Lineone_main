@@ -1,6 +1,6 @@
 {% extends 'base/base.html' %}
 
-{% block title %} QTLineone | Finance and Accounts {% endblock %}
+{% block title %} QTLineone | Latest Transactions {% endblock %}
 
 {% block breadCrum %}
 
@@ -43,12 +43,12 @@
             <button type="button" class="btn btn-primary mr-2 mb-3" data-toggle="modal" data-target="#exampleModalCenter" id="changeStatusButton" style="display: none;">
                 Grant Access
             </button>
-            <a href="#" type="button" class="btn btn-success mr-2 mb-3" id="emailButton" style="display: none;">
+            <!-- <a href="#" type="button" class="btn btn-success mr-2 mb-3" id="emailButton" style="display: none;">
                 <i class="glyphicon glyphicon-envelope"></i> Email
             </a>
             <a href="#" type="button" class="btn btn-success mr-2 mb-3" id="bdButton" style="display: none;">
                 <i class="glyphicon glyphicon-envelope"></i> Send to B.D
-            </a>
+            </a> -->
            
             
             
@@ -173,7 +173,7 @@
                     <div class="d-flex justify-content-center">
                         <button type="Submit" class="btn btn-primary m-1">Submit</button>
 
-                        <button type="reset" class="btn btn-secondary m-1" data-dismiss="modal">Reset</button>
+                        <button type="reset" class="btn btn-secondary m-1" >Reset</button>
                     </div>
                 </form>
             </div>
@@ -264,22 +264,32 @@
                         </tr>
                         <tr>
                             <th class="p-2 "><b>Amount</b></th>
-                            <td class="p-2 ">{{i.leadstage.course_name.final_price}}</td>
+                            <td class="p-2 "> ₹{{i.leadstage.course_name.final_price}}</td>
                         </tr>
                         <tr>
                             <th class="p-2 "><b>verification</b></th>
-                            {% if i.payment_status %}
+                            
                             <td class="p-2">
-                                {{i.payment_status}}
+                                
+                               {% if i.payment_status == "Received"  %}
+                               <p class="text-success">Recived</p>
+                               {% elif i.payment_status == "Not Received" %}
+                                <p class="text-danger">Not Received</p>
+                                {% elif i.payment_status == "Mis Matched" %}
+                                <p class="text-secondary">Mis Matched</p>
+                                {% elif i.payment_status == "Suspicious" %}
+                                <p class="text-warning">suspicious </p>
+                                {% endif %}
                            
                             </td>
-                            {% endif %}
+                            
 
                         </tr>
                         <tr>
                             <th class="p-2 "><b>Recived By</b></th>
-                            <td class="p-2 ">{{i.leadstage.course_name.teaching_faculty.first_name}} {{i.leadstage.course_name.teaching_faculty.last_name}}  </td>
+                            <td class="p-2 "> {{i.leadstage.course_name.teaching_faculty.first_name}} {{i.leadstage.course_name.teaching_faculty.last_name}}  </td>
                         </tr>
+
                         <tr>
                             <th class="p-2 "><b>Payment Type</b></th>
                             <td class="p-2 ">PhonePay</td>
@@ -291,7 +301,7 @@
                     </tbody>
                 </table>
                 <div class="d-flex justify-content-center">
-                    <a href="" class="btn btn-success"> <i class="fa fa-print"></i> Print</a>
+                    <a href="{% url 'finance_and_accounts_view' i.id %}" class="btn btn-success"> <i class="fa fa-print"></i> Print</a>
                 </div>
             </div>
             
@@ -306,15 +316,34 @@
 
 <script>
     $(document).ready(function() {
+        $.validator.addMethod("noSpecialChars", function (value, element) {
+            return /^[a-zA-Z\s]*$/.test(value);
+        }, 'No Special Charectors and numbers are not allowed');
+        $.validator.addMethod("noSpace", function (value, element) {
+            return !(/^\s|\s$|\s{2,}/.test(value));
+          }, "No excessive or leading/trailing spaces");
+      
         $('#financeform').validate({
             rules: {
                 payment_status:{
                     required: true
+                },
+                remarks:{
+                    required: true,
+                    maxlength: 200,
+                    minlength: 5,
+                    noSpace: true,
+                    noSpecialChars: true
                 }
             },
             messages: {
-                finpayment_statusance: {
+                payment_status: {
                     required: "Please Select Status"
+                },
+                remarks: {
+                    required: "Please Enter Remarks",
+                    maxlength: "Maximum of 200 characters",
+                    minlength: "Minimum of 5 characters",
                 }
             },
             submitHandler: function(form) {

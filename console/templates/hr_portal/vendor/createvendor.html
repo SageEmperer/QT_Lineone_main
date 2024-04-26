@@ -20,6 +20,22 @@
 
 {% block content %}
 
+ <!-- message here -->
+
+ {% if messages %}
+ {% for message in messages %}
+   {% if message.tags == "error" %}
+     <div class="h-25 alert alert-danger alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
+   {% elif message.tags == "success" %}
+     <div class="h-25 alert alert-success alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
+     {% else %}
+    <div class="h-25 alert alert-info alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
+    {% endif %}
+   {% endfor %}
+ {% endif %}
+
+<!-- message end here -->
+
 
 
 <section class="hk-sec-wrapper">
@@ -33,8 +49,14 @@
         >
         <i class="glyphicon glyphicon-plus"></i> Create Vendor
       </button>
-   </div>
-    <a href='#' type="button" class="btn btn-success mr-2 mb-3"><i class="fa fa-download"></i> Print</a>
+        
+    </div>
+    
+    <a href="{% url 'company_vendor_export' %}" type="button" class="btn btn-success mr-2 mb-3"><i class="fa fa-download"></i> Print</a>
+    <button type="button" class="btn btn-danger mr-2 mb-3" id="deleteButton" data-toggle="modal"
+    data-target="#deleteModal" style="display: none;">
+    <i class="glyphicon glyphicon-trash"></i> Delete
+  </button>
   </div>
   <div class="row">
   <div class="col-sm">
@@ -44,7 +66,8 @@
         class="table table-hover w-100 display pb-30 table-bordered">
       <thead class="bg-dark" >
         <tr>
-          <th class="text-white">CRN</th>
+          <th class="text-white text-center"><input type="checkbox" id="selectAll"> All</th>
+          <th class="text-white">S.No</th>
           <th class="text-white">Company</th>
           <th class="text-white">Location</th>
           <th class="text-white">Category</th>
@@ -55,24 +78,33 @@
           <th class="text-white">Website</th>
           <th class="text-white">POC Name</th>
           <th class="text-white">POC Mobile</th>
-          <th class="text-white text-center">Status</th>
+          <th class="text-white text-center">Actions</th>
         </tr>
       </thead>
       <tbody>
+        {% for i in company_vendors %}
         <tr>
-          <td>45</td>
-          <td>TCS</td>
-          <td>Hyderabad</td>
-          <td>Technical</td>
-          <td>Kolluru Lokesh</td>
-          <td>9876598765</td>
-          <td>9876598765</td>
-          <td>lokesh@gmail.com</td>
-          <td>www.tcs.com</td>
-          <td>Lokesh</td>
-          <td>9876598765</td>
-          <td class="text-center text-white"><a type="button" class="badge badge badge-pill bg-green">Registered</a> </td>
+          <td class="text-center"><input type="checkbox" class="row-checkbox" data-course-id="{{i.id}}"
+            data-course-name="{{i.companyname}}"></td>
+          <td>{{forloop.counter}}</td>
+          <td>{{i.companyname}}</td>
+          <td>{{i.location}}</td>
+          <td>{{i.category.Jobcategory_name}}</td>
+          <td>{{i.hrname}}</td>
+          <td>{{i.mobile}}</td>
+          <td>{{i.alternatemobile}}</td>
+          <td>{{i.email}}</td>
+          <td><a href="{{i.website}}" target="_blank">Web_link</a></td>
+          <td>{{i.pocname}}</td>
+          <td>{{i.pocmobile}}</td>
+          <td class="text-center text-white"> <button class="btn btn-primary m-1" data-toggle="modal" data-target="#create_company_vendor_model{{forloop.counter}}">
+            <i class="fa fa-pencil"></i>
+          </button>
+          <button class="btn btn-danger m-1" data-toggle="modal" data-target="#delete_company_model{{forloop.counter}}">
+            <i class="fa fa-trash"></i>
+          </button> </td>
         </tr>
+        {% endfor %}
         
       </tbody>
     </table>
@@ -98,7 +130,8 @@ aria-hidden="true"
   </div>
 
   <div class="modal-body">
-    <form action="">
+    <form action="{% url 'createvendor' %}" method="post" class="company_vendor_create">
+      {% csrf_token %}
     <div class="row">
       <div class="col-xl-12">
               <div class="row ">
@@ -128,9 +161,11 @@ aria-hidden="true"
                           <label for="" class="form-label">Category <span class="text-danger">*</span></label>
                           <!-- <input type="text"placeholder="Ex:TCS" name="companyname" class="form-control mb-3"/> -->
                           <select class="form-control select2 sm-3" aria-label="Default select example" name="category"  required>
-                            <option selected>Select</option>
-                            <option value="1">Technical</option>
-                            <option value="2">Non Technical</option>
+                            <option selected value="">Select</option>
+                            {% for jobc in job_category %}
+                            <option value="{{jobc.id}}">{{jobc.Jobcategory_name}}</option>
+                            {% endfor %}
+                            
                           </select>
                         </div>
                         
@@ -140,12 +175,12 @@ aria-hidden="true"
 
                       <div class="col-md-6 mb-2">
                         <label for="" class="form-label">Mobile <span class="text-danger">*</span></label>
-                        <input type="number" placeholder="Ex:98976598765" name="mobile" class="form-control mb-3"/>
+                        <input type="text" placeholder="Ex:98976598765" name="mobile" class="form-control mb-3"/>
                       </div>
 
                       <div class="col-md-6">
                         <label for="" class="form-label">Alternate Mobile <span class="text-danger">*</span></label>
-                        <input type="number" placeholder="Ex:9876598765" name="alternatemobile" class="form-control mb-3"/>
+                        <input type="text" placeholder="Ex:9876598765" name="alternatemobile" class="form-control mb-3"/>
                       </div>
                       
                     </div>
@@ -159,7 +194,7 @@ aria-hidden="true"
 
                       <div class="col-md-6 mb-2">
                         <label for="" class="form-label">Website <span class="text-danger">*</span></label>
-                        <input type="email" placeholder="Ex:www.tcs.com" name="website" class="form-control mb-3"/>
+                        <input type="text" placeholder="Ex:www.tcs.com" name="website" class="form-control mb-3"/>
                       </div>
                       
                     </div>
@@ -174,7 +209,7 @@ aria-hidden="true"
                       
                       <div class="col-md-6">
                         <label for="" class="form-label">POC Mobile <span class="text-danger">*</span></label>
-                        <input type="website" placeholder="9876598765" name="pocmobile" class="form-control mb-3"/>
+                        <input type="text" placeholder="9876598765" name="pocmobile" class="form-control mb-3"/>
                       </div>
                       
                     </div>
@@ -194,8 +229,586 @@ aria-hidden="true"
         </form>
         </div>
       </div>
-    </div>        
+    </div>   
+</div>     
 
 <!-- Create modal ends here -->
+
+<!-- edit create vender start here -->
+
+{% for i in company_vendors %}
+<div class="modal fade" id="create_company_vendor_model{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="create_company_vendor_model"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-dark">
+        <h5 class="modal-title text-white">Edit Company vendor</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" class="text-white">&times;</span>
+        </button>
+      </div>
+   
+    
+        <div class="modal-body">
+          <form action="{% url 'company_vendor_edit' i.id %}" method="post" class="company_vendor_edit">
+            {% csrf_token %}
+          <div class="row">
+            <div class="col-xl-12">
+                    <div class="row ">
+                        <div class="col-sm">
+                            <div class="row">
+      
+                                <div class="col-md-6">
+                                  <label for="" class="form-label">Company Name <span class="text-danger">*</span></label>
+                                  <input type="text"placeholder="Ex:TCS" name="companyname" value="{{i.companyname}}" class="form-control mb-3"/>
+                                </div>
+      
+                                <div class="col-md-6 mb-2">
+                                  <label for="" class="form-label">HR Name <span class="text-danger">*</span></label>
+                                  <input type="text"placeholder="Ex:Full Stack developer" name="hrname" value="{{i.hrname}}" class="form-control mb-3"/>
+                                </div>
+                                
+                            </div>
+      
+                            <div class="row">
+                              
+                              <div class="col-md-6 mb-2">
+                                <label for="" class="form-label">Location <span class="text-danger">*</span></label>
+                                <input type="text"placeholder="Ex:Hyderabad" name="location" value="{{i.location}}" class="form-control mb-3"/>
+                              </div>
+      
+                              <div class="col-md-6">
+                                <label for="" class="form-label">Category <span class="text-danger">*</span></label>
+                                <!-- <input type="text"placeholder="Ex:TCS" name="companyname" class="form-control mb-3"/> -->
+                                <select class="form-control select2 sm-3" aria-label="Default select example" name="category"  required>
+                                  <option  value="">Select</option>
+                                  {% for jobc in job_category %}
+                                  <option {% if jobc.id == i.category %} selected {% endif %} value="{{jobc.id}}">{{jobc.Jobcategory_name}}</option>
+                                  {% endfor %}
+                                  
+                                </select>
+                              </div>
+                              
+                          </div>
+      
+                          <div class="row">
+      
+                            <div class="col-md-6 mb-2">
+                              <label for="" class="form-label">Mobile <span class="text-danger">*</span></label>
+                              <input type="text" placeholder="Ex:98976598765" value="{{i.mobile}}" name="mobile" class="form-control mb-3"/>
+                            </div>
+      
+                            <div class="col-md-6">
+                              <label for="" class="form-label">Alternate Mobile <span class="text-danger">*</span></label>
+                              <input type="text" placeholder="Ex:9876598765" value="{{i.alternatemobile}}" name="alternatemobile" class="form-control mb-3"/>
+                            </div>
+                            
+                          </div>
+      
+                          <div class="row">
+      
+                            <div class="col-md-6 mb-2">
+                              <label for="" class="form-label">Email <span class="text-danger">*</span></label>
+                              <input type="email" placeholder="Ex:lokesh@gmial.com" value="{{i.email}}" name="email" class="form-control mb-3"/>
+                            </div>
+      
+                            <div class="col-md-6 mb-2">
+                              <label for="" class="form-label">Website <span class="text-danger">*</span></label>
+                              <input type="text" placeholder="Ex:www.tcs.com" name="website" value="{{i.website}}" class="form-control mb-3"/>
+                            </div>
+                            
+                          </div>
+      
+                          <div class="row">
+      
+                            <div class="col-md-6">
+                              <label for="" class="form-label">POC Name <span class="text-danger">*</span></label>
+                              <input type="website" placeholder="Lokesh" value="{{i.pocname}}" name="pocname" class="form-control mb-3"/>
+                            </div>
+                            
+                            
+                            <div class="col-md-6">
+                              <label for="" class="form-label">POC Mobile <span class="text-danger">*</span></label>
+                              <input type="text" placeholder="9876598765" value="{{i.pocmobile}}" name="pocmobile" class="form-control mb-3"/>
+                            </div>
+                            
+                          </div>
+      
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="modal-footer d-flex justify-content-center">
+                  <button type="submit" class="btn btn-primary">Create Vendor</button>
+                  <button type="reset" class="btn btn-secondary">Reset</button>
+                </div>
+                <!-- <div class="modal-footer justify-content-md-center d-grid gap-2 col-6 mx-auto ">
+                  <button type="submit" class="btn btn-info btn-md btn-block" data-bs-dismiss="modal">ADD</button>
+                </div> -->
+              </form>
+        </div>
+      
+    
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+
+
+
+<!-- edit create vender end here -->
+
+
+<!-- delete model start here -->
+
+
+{% for i in company_vendors %}
+<div class="modal fade" id="delete_company_model{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="delete_company_model"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-danger">
+        <h5 class="modal-title text-white">Delete Company vendor</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" class="text-white">&times;</span>
+        </button>
+      </div>
+      <form action="{% url 'delete_company_vendor' i.id %}"  method="post" >
+        {% csrf_token %}
+        <div class="modal-body">
+          <div class="mb-3 text-center">
+            <div class="d-flex justify-content-center mb-3">
+              <img src="../../static/triangle-exclamation-solid.svg" width="120" height="70" alt="">
+            </div>
+            Are you sure you want to delete {{i.companyname}} company vendor ?
+          </div>
+        </div>
+        <div class="mb-3 d-flex justify-content-center">
+          <button type="button" class="btn btn-secondary m-1" data-dismiss="modal" aria-label="Close">
+            No
+          </button>
+          <button type="submit" class="btn btn-danger m-1">Yes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+
+
+
+<!-- delete model end herer -->
+
+
+<!-- multiple delete model start here -->
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+          <div class="modal-header bg-danger">
+              <h5 class="modal-title text-white " id="deleteModalLabel">Delete Company vendor</h5>
+              <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+              <div class="mb-3 text-center">
+                  <div class="d-flex justify-content-center mb-3">
+                      <img src="../../static/triangle-exclamation-solid.svg" width="120" height="70" alt="">
+                  </div>
+                  <form action="{% url 'company_vendor_mul_delter' %}" method="post">
+                      {% csrf_token %}
+                      <p id="deleteMessage">Are you sure you want to delete <span id="selectedCount"></span> records?</p>
+                      <input type="hidden" id="selected_ids_input" name="selected_ids">
+              </div>
+              <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-danger m-1" id="confirmDelete">Yes</button>
+                <button type="button" class="btn btn-secondary m-1" data-dismiss="modal">No</button>
+              </div>
+              </form>
+          </div>
+
+      </div>
+  </div>
+</div>
+
+
+
+
+
+
+<!-- multiple delete model end here -->
+
+
+
+
+
+
+
+
+{% endblock %} 
+
+{% block scripts %}
+<!---Delete Script-->
+<script>
+  // Function to update the "Select All" checkbox status
+  function updateSelectAllCheckbox() {
+    var selectAllCheckbox = document.getElementById('selectAll');
+    var rowCheckboxes = document.querySelectorAll('.row-checkbox');
+    var allChecked = true;
+
+    rowCheckboxes.forEach(function (checkbox) {
+      if (!checkbox.checked) {
+        allChecked = false;
+      }
+    });
+
+    selectAllCheckbox.checked = allChecked;
+    updateSelectedRowsList(); // Update selected rows list when "Select All" checkbox is clicked
+  }
+
+  // Function to update the selected rows list and toggle delete button visibility
+  function updateSelectedRowsList() {
+    var selectedRowsList = document.getElementById('selectedRowsList');
+    var selectedIdsInput = document.getElementById('selected_ids_input');
+    var deleteButton = document.getElementById('deleteButton');
+
+    var selectedRows = document.querySelectorAll('.row-checkbox:checked');
+    var selectedCount = selectedRows.length;
+
+    if (selectedCount > 1) {
+      deleteButton.style.display = 'block'; // Show delete button if more than one row is selected
+    } else {
+      deleteButton.style.display = 'none'; // Hide delete button if only one row or none is selected
+    }
+
+    var selectedIds = [];
+    selectedRows.forEach(function (row) {
+      var courseId = row.dataset.courseId;
+      selectedIds.push(courseId);
+    });
+
+    // Set the value of the hidden input field to the selected IDs
+    selectedIdsInput.value = selectedIds.join(',');
+
+    // Update the delete modal message with the selected count
+    document.getElementById('deleteMessage').textContent = "Are you sure you want to delete " + selectedCount + " records?";
+  }
+
+  // Event listener for checkbox change
+  document.querySelectorAll('.row-checkbox').forEach(function (checkbox) {
+    checkbox.addEventListener('change', function () {
+      updateSelectedRowsList();
+      updateSelectAllCheckbox();
+    });
+  });
+
+  // Event listener for select all checkbox change
+  document.getElementById('selectAll').addEventListener('change', function () {
+    var isChecked = this.checked;
+    document.querySelectorAll('.row-checkbox').forEach(function (checkbox) {
+      checkbox.checked = isChecked;
+    });
+    updateSelectedRowsList();
+  });
+
+  // Initially update delete button visibility
+  updateSelectedRowsList();
+
+  // Event listener for delete button click
+  document.getElementById('confirmDelete').addEventListener('click', function () {
+    // Perform delete action here
+    // For now, let's just close the modal
+    $('#deleteModal').modal('hide');
+  });
+</script>
+<script>
+  $(document).ready(function(){
+
+    $.validator.addMethod("noSpace", function(value, element) {
+      return !(/^\s|\s$|\s{2,}/.test(value));
+  }, "No excessive or leading/trailing spaces");
+
+
+  //email
+
+  $.validator.addMethod("customEmail", function(value, element) {
+    // Regular expression for validating email
+    var emailRegex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+    return this.optional(element) || emailRegex.test(value);
+}, "Please enter a valid email address.");    
+
+//mobile number
+
+
+$.validator.addMethod(
+          "customphone",
+          function (value, element) {
+            return (
+              this.optional(element) || /^(\+91-|0)?[6-9]\d{9}$/.test(value)
+            );
+          },
+          "Please enter a valid phone number"
+        );
+
+
+        $.validator.addMethod("noNumbersOrSpecialChars", function (value, element) {
+          // Check if the value contains numbers or special characters
+          var containsNumbers = /\d/.test(value);
+          var containsSpecialChars = /[^a-zA-Z0-9\s]/.test(value);
+      
+          // Return false if the value contains both numbers and special characters
+          return !(containsNumbers && containsSpecialChars);
+          }, "Numbers and special characters are not allowed.");
+
+
+
+          $.validator.addMethod("noSpecialChars", function (value, element) {
+            return /^[a-zA-Z0-9\s]*$/.test(value);
+          }, "Special characters are not allowed.");
+
+
+
+
+          //no numbers
+          $.validator.addMethod("noNumbers", function (value, element) {
+            return !/\d/.test(value);
+          }, "Numbers are not allowed in the designtion name.");
+
+
+
+
+
+
+    $('.company_vendor_create').validate({
+      rules:{
+        companyname:{
+          required:true,
+          noSpace:true,
+          minlength:3,
+          maxlength:50
+        },
+        hrname:{
+          required:true,
+          noSpace:true,
+          noNumbersOrSpecialChars:true,
+          noSpecialChars:true,
+          noNumbers:true,
+          minlength:3,
+          maxlength:50
+        },
+        location:{
+          required:true,
+          noSpace:true,
+          noNumbersOrSpecialChars:true,
+          noSpecialChars:true,
+          noNumbers:true,
+          minlength:3,
+          maxlength:50
+        },
+        category:{
+          required:true,
+         
+        },
+        mobile:{
+          required:true,
+          customphone:true
+
+        },
+        alternatemobile:{
+          required:true,
+          customphone:true
+        },
+        email:{
+          required:true,
+          customEmail:true
+        },
+        website:{
+          required:true,
+          noSpace:true,
+          minlength:5,
+          maxlength:200
+        },
+        pocname:{
+          required:true,
+          noSpace:true,
+          noNumbersOrSpecialChars:true,
+          noSpecialChars:true,
+          noNumbers:true
+        },
+        pocmobile:{
+          required:true,
+          customphone:true
+
+        }
+      },
+      messages:{
+        companyname:{
+          required:"Please Enter Company Name",
+          minlength:"Minimum 3 characters required",
+          maxlength:"Maximum 50 characters allowed"
+        },
+        hrname:{
+          required:"Please Enter HR Name",
+          minlength:"Minimum 3 characters required",
+          maxlength:"Maximum 50 characters allowed"
+        },
+        location:{
+          required:"Please Enter Location",
+        },
+        category:{
+          required:"Please Select Category",
+        },
+        mobile:{
+          required:"Please Enter Mobile",
+        },
+        alternatemobile:{
+          required:"Please Enter Alternate Mobile",
+        },
+        email:{
+          required:"Please Enter Email",
+        },
+        website:{
+          required:"Please Enter Website",
+          minlength:"Minimum 5 characters required",
+          maxlength:"Maximum 200 characters allowed"
+        },
+        pocname:{
+          required:"Please enter POC name",
+        minlength: "Minimum 3 characters required",
+        maxlength: "Maximum 50 characters allowed"
+
+        },
+        pocmobile:{
+          required:"Please Enter POC Mobile",
+        }
+      },
+        submitHandler:function(form){
+          form.submit();
+        }
+          
+    })
+
+    ///
+    $('.company_vendor_edit').validate({
+      rules:{
+        companyname:{
+          required:true,
+          noSpace:true,
+          minlength:3,
+          maxlength:50
+        },
+        hrname:{
+          required:true,
+          noSpace:true,
+          noNumbersOrSpecialChars:true,
+          noSpecialChars:true,
+          noNumbers:true,
+          minlength:3,
+          maxlength:50
+        },
+        location:{
+          required:true,
+          noSpace:true,
+          noNumbersOrSpecialChars:true,
+          noSpecialChars:true,
+          noNumbers:true,
+          minlength:3,
+          maxlength:50
+        },
+        category:{
+          required:true,
+         
+        },
+        mobile:{
+          required:true,
+          customphone:true
+
+        },
+        alternatemobile:{
+          required:true,
+          customphone:true
+        },
+        email:{
+          required:true,
+          customEmail:true
+        },
+        website:{
+          required:true,
+          noSpace:true,
+          minlength:5,
+          maxlength:200
+        },
+        pocname:{
+          required:true,
+          noSpace:true,
+          noNumbersOrSpecialChars:true,
+          noSpecialChars:true,
+          noNumbers:true
+        },
+        pocmobile:{
+          required:true,
+          customphone:true
+
+        }
+      },
+      messages:{
+        companyname:{
+          required:"Please Enter Company Name",
+          minlength:"Minimum 3 characters required",
+          maxlength:"Maximum 50 characters allowed"
+        },
+        hrname:{
+          required:"Please Enter HR Name",
+          minlength:"Minimum 3 characters required",
+          maxlength:"Maximum 50 characters allowed"
+        },
+        location:{
+          required:"Please Enter Location",
+        },
+        category:{
+          required:"Please Select Category",
+        },
+        mobile:{
+          required:"Please Enter Mobile",
+        },
+        alternatemobile:{
+          required:"Please Enter Alternate Mobile",
+        },
+        email:{
+          required:"Please Enter Email",
+        },
+        website:{
+          required:"Please Enter Website",
+          minlength:"Minimum 5 characters required",
+          maxlength:"Maximum 200 characters allowed"
+        },
+        pocname:{
+          required:"Please enter POC name",
+        minlength: "Minimum 3 characters required",
+        maxlength: "Maximum 50 characters allowed"
+
+        },
+        pocmobile:{
+          required:"Please Enter POC Mobile",
+        }
+      },
+        submitHandler:function(form){
+          form.submit();
+        }
+          
+    })
+
+    //
+
+
+
+
+
+  })
+</script>
 
 {% endblock %}

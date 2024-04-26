@@ -19,6 +19,7 @@
 {% endblock %}
 
 
+
 {% block content %}
 {% if messages %}
 {% for message in messages %}
@@ -48,12 +49,12 @@
         </div>
         <div>
             <button type="button" class="btn btn-danger mr-2 mb-3" id="deleteButton" data-toggle="modal"
-          data-target="#deleteModal" style="display: none; ">
-          <i class="glyphicon glyphicon-trash"></i> Delete
-      </button>
-          </div>
+                data-target="#deleteModal" style="display: none; ">
+                <i class="glyphicon glyphicon-trash"></i> Delete
+            </button>
+        </div>
     </div>
-    
+
     <div class="row">
         <div class="col-sm">
             <div class="table-wrap">
@@ -77,16 +78,16 @@
                     <tbody>
                         {% for i in employee %}
                         <tr>
-                            <td class="text-center"><input type="checkbox" class="row-checkbox" data-course-id="{{i.id}}"
-                                data-course-name="{{i.Employee_id}}"></td>
-                          
-                            <td>{{i.Employee_id}}</td>
+                            <td class="text-center"><input type="checkbox" class="row-checkbox"
+                                    data-course-id="{{i.id}}" data-course-name="{{i.Employee_id}}"></td>
+
+                            <td><a href="{% url 'employee_info' i.id %}">  {{i.Employee_id}}</a></td>
 
                             <td class="text-center">
                                 {% if i.profile_image %}
                                 <img src="{{i.profile_image.url}}" alt="" width="80px" class="rounded-circle"
                                     height="80px">
-                                    {% endif %}
+                                {% endif %}
 
                             </td>
 
@@ -96,7 +97,7 @@
                             <td> {{i.personal_number}} </td>
                             <td> {{i.department_name}} ({{i.designation_name}}) </td>
                             <td> {{i.branch}} </td>
-                            <td> {{i.employee_type}} </td>
+                            <td>₹ {{i.salary}} </td>
                             <td class="text-center">
                                 {% if i.status == 'Active' %}
                                 <a href="{% url 'employee_status1' i.id %}"
@@ -108,10 +109,10 @@
 
                             </td>
                             <td class="text-center">
-                                <button type="button" class="btn btn-secondary m-1" data-toggle="modal"
+                                <!-- <button type="button" class="btn btn-secondary m-1" data-toggle="modal"
                                     data-target="#ViewEmployee{{forloop.counter}}">
                                     <i class="fa fa-eye"></i>
-                                </button>
+                                </button> -->
                                 <button type="button" class="btn btn-primary m-1" data-toggle="modal"
                                     data-target="#CreateEmployee1{{forloop.counter}}">
                                     <i class="fa fa-pencil"></i>
@@ -234,7 +235,202 @@
                                 <label for="" class="form-label"><b>Nationality </b></label>
                                 <select class="form-control custom-select" name="nationality">
                                     <option selected value="">Select Your Nationality</option>
-                                    <option value="India">India</option>
+                                    <option value="Afghan">Afghan</option>
+                                    <option value="Albanian">Albanian</option>
+                                    <option value="Algerian">Algerian</option>
+                                    <option value="American">American</option>
+                                    <option value="Andorran">Andorran</option>
+                                    <option value="Angolan">Angolan</option>
+                                    <option value="Argentinian">Argentinian</option>
+                                    <option value="Armenian">Armenian</option>
+                                    <option value="Australian">Australian</option>
+                                    <option value="Austrian">Austrian</option>
+                                    <option value="Azerbaijani">Azerbaijani</option>
+                                    <option value="Bahamian">Bahamian</option>
+                                    <option value="Bahraini">Bahraini</option>
+                                    <option value="Bangladeshi">Bangladeshi</option>
+                                    <option value="Barbadian">Barbadian</option>
+                                    <option value="Belarusian">Belarusian</option>
+                                    <option value="Belgian">Belgian</option>
+                                    <option value="Belizean">Belizean</option>
+                                    <option value="Beninese">Beninese</option>
+                                    <option value="Bhutanese">Bhutanese</option>
+                                    <option value="Bolivian">Bolivian</option>
+                                    <option value="Bosnian">Bosnian</option>
+                                    <option value="Brazilian">Brazilian</option>
+                                    <option value="British">British</option>
+                                    <option value="Bruneian">Bruneian</option>
+                                    <option value="Bulgarian">Bulgarian</option>
+                                    <option value="Burkinabe">Burkinabe</option>
+                                    <option value="Burmese">Burmese</option>
+                                    <option value="Burundian">Burundian</option>
+                                    <option value="Cambodian">Cambodian</option>
+                                    <option value="Cameroonian">Cameroonian</option>
+                                    <option value="Canadian">Canadian</option>
+                                    <option value="Cape Verdean">Cape Verdean</option>
+                                    <option value="Central African">Central African</option>
+                                    <option value="Chadian">Chadian</option>
+                                    <option value="Chilean">Chilean</option>
+                                    <option value="Chinese">Chinese</option>
+                                    <option value="Colombian">Colombian</option>
+                                    <option value="Comoran">Comoran</option>
+                                    <option value="Congolese">Congolese</option>
+                                    <option value="Costa Rican">Costa Rican</option>
+                                    <option value="Croatian">Croatian</option>
+                                    <option value="Cuban">Cuban</option>
+                                    <option value="Cypriot">Cypriot</option>
+                                    <option value="Czech">Czech</option>
+                                    <option value="Danish">Danish</option>
+                                    <option value="Djibouti">Djibouti</option>
+                                    <option value="Dominican">Dominican</option>
+                                    <option value="Dutch">Dutch</option>
+                                    <option value="East Timorese">East Timorese</option>
+                                    <option value="Ecuadorean">Ecuadorean</option>
+                                    <option value="Egyptian">Egyptian</option>
+                                    <option value="Emirian">Emirian</option>
+                                    <option value="Equatorial Guinean">Equatorial Guinean</option>
+                                    <option value="Eritrean">Eritrean</option>
+                                    <option value="Estonian">Estonian</option>
+                                    <option value="Ethiopian">Ethiopian</option>
+                                    <option value="Fijian">Fijian</option>
+                                    <option value="Filipino">Filipino</option>
+                                    <option value="Finnish">Finnish</option>
+                                    <option value="French">French</option>
+                                    <option value="Gabonese">Gabonese</option>
+                                    <option value="Gambian">Gambian</option>
+                                    <option value="Georgian">Georgian</option>
+                                    <option value="German">German</option>
+                                    <option value="Ghanaian">Ghanaian</option>
+                                    <option value="Greek">Greek</option>
+                                    <option value="Grenadian">Grenadian</option>
+                                    <option value="Guatemalan">Guatemalan</option>
+                                    <option value="Guinea-Bissauan">Guinea-Bissauan</option>
+                                    <option value="Guinean">Guinean</option>
+                                    <option value="Guyanese">Guyanese</option>
+                                    <option value="Haitian">Haitian</option>
+                                    <option value="Herzegovinian">Herzegovinian</option>
+                                    <option value="Honduran">Honduran</option>
+                                    <option value="Hungarian">Hungarian</option>
+                                    <option value="I-Kiribati">I-Kiribati</option>
+                                    <option value="Icelander">Icelander</option>
+                                    <option value="Indian">Indian</option>
+                                    <option value="Indonesian">Indonesian</option>
+                                    <option value="Iranian">Iranian</option>
+                                    <option value="Iraqi">Iraqi</option>
+                                    <option value="Irish">Irish</option>
+                                    <option value="Israelii">Israelii</option>
+                                    <option value="Italian">Italian</option>
+                                    <option value="Ivorian">Ivorian</option>
+                                    <option value="Jamaican">Jamaican</option>
+                                    <option value="Japanese">Japanese</option>
+                                    <option value="Jordanian">Jordanian</option>
+                                    <option value="Kazakhstani">Kazakhstani</option>
+                                    <option value="Kenyan">Kenyan</option>
+                                    <option value="Kittian and Nevisian">Kittian and Nevisian</option>
+                                    <option value="Kuwaiti">Kuwaiti</option>
+                                    <option value="Kyrgyz">Kyrgyz</option>
+                                    <option value="Laotian">Laotian</option>
+                                    <option value="Latvian">Latvian</option>
+                                    <option value="Lebanese">Lebanese</option>
+                                    <option value="Liberian">Liberian</option>
+                                    <option value="Libyan">Libyan</option>
+                                    <option value="Liechtensteiner">Liechtensteiner</option>
+                                    <option value="Lithuanian">Lithuanian</option>
+                                    <option value="Luxembourger">Luxembourger</option>
+                                    <option value="Macedonian">Macedonian</option>
+                                    <option value="Malagasy">Malagasy</option>
+                                    <option value="Malawian">Malawian</option>
+                                    <option value="Malaysian">Malaysian</option>
+                                    <option value="Maldivan">Maldivan</option>
+                                    <option value="Malian">Malian</option>
+                                    <option value="Maltese">Maltese</option>
+                                    <option value="Marshallese">Marshallese</option>
+                                    <option value="Mauritanian">Mauritanian</option>
+                                    <option value="Mauritian">Mauritian</option>
+                                    <option value="Mexican">Mexican</option>
+                                    <option value="Micronesian">Micronesian</option>
+                                    <option value="Moldovan">Moldovan</option>
+                                    <option value="Monacan">Monacan</option>
+                                    <option value="Mongolian">Mongolian</option>
+                                    <option value="Moroccan">Moroccan</option>
+                                    <option value="Mosotho">Mosotho</option>
+                                    <option value="Motswana">Motswana</option>
+                                    <option value="Mozambican">Mozambican</option>
+                                    <option value="Namibian">Namibian</option>
+                                    <option value="Nauruan">Nauruan</option>
+                                    <option value="Nepalese">Nepalese</option>
+                                    <option value="New Zealander">New Zealander</option>
+                                    <option value="Ni-Vanuatu">Ni-Vanuatu</option>
+                                    <option value="Nicaraguan">Nicaraguan</option>
+                                    <option value="Nigerian">Nigerian</option>
+                                    <option value="Nigerien">Nigerien</option>
+                                    <option value="North Korean">North Korean</option>
+                                    <option value="Northern Irish">Northern Irish</option>
+                                    <option value="Norwegian">Norwegian</option>
+                                    <option value="Omani">Omani</option>
+                                    <option value="Pakistani">Pakistani</option>
+                                    <option value="Palauan">Palauan</option>
+                                    <option value="Panamanian">Panamanian</option>
+                                    <option value="Papua New Guinean">Papua New Gu
+                                        inean</option>
+                                    <option value="Paraguayan">Paraguayan</option>
+                                    <option value="Peruvian">Peruvian</option>
+                                    <option value="Polish">Polish</option>
+                                    <option value="Portuguese">Portuguese</option>
+                                    <option value="Qatari">Qatari</option>
+                                    <option value="Romanian">Romanian</option>
+                                    <option value="Russian">Russian</option>
+                                    <option value="Rwandan">Rwandan</option>
+                                    <option value="Saint Lucian">Saint Lucian</option>
+                                    <option value="Salvadoran">Salvadoran</option>
+                                    <option value="Samoan">Samoan</option>
+                                    <option value="San Marinese">San Marinese</option>
+                                    <option value="Sao Tomean">Sao Tomean</option>
+                                    <option value="Saudi">Saudi</option>
+                                    <option value="Scottish">Scottish</option>
+                                    <option value="Senegalese">Senegalese</option>
+                                    <option value="Serbian">Serbian</option>
+                                    <option value="Seychellois">Seychellois</option>
+                                    <option value="Sierra Leonean
+                                        ">Sierra Leonean</option>
+                                    <option value="Singaporean">Singaporean</option>
+                                    <option value="Slovakian">Slovakian</option>
+                                    <option value="Slovenian">Slovenian</option>
+                                    <option value="Solomon Islander">Solomon Islander
+                                    </option>
+                                    <option value="Somali">Somali</option>
+                                    <option value="South African">South African</option>
+                                    <option value="South Korean">South Korean</option>
+                                    <option value="Spanish">Spanish</option>
+                                    <option value="Sri Lankan">Sri Lankan</option>
+                                    <option value="Sudanese">Sudanese</option>
+                                    <option value="Surinamer">Surinamer</option>
+                                    <option value="Swazi">Swazi</option>
+                                    <option value="Swedish">Swedish</option>
+                                    <option value="Swiss">Swiss</option>
+                                    <option value="Syrian">Syrian</option>
+                                    <option value="Taiwanese">Taiwanese</option>
+                                    <option value="Tajik">Tajik</option>
+                                    <option value="Tanzanian">Tanzanian</option>
+                                    <option value="Thai">Thai</option>
+                                    <option value="Togolese">Togolese</option>
+                                    <option value="Tongan">Tongan</option>
+                                    <option value="Trinidadian or Tobagonian">Trinidadian
+                                        or Tobagonian</option>
+                                    <option value="Tunisian">Tunisian</option>
+                                    <option value="Turkish">Turkish</option>
+                                    <option value="Tuvaluan">Tuvaluan</option>
+                                    <option value="Ugandan">Ugandan</option>
+                                    <option value="Ukrainian">Ukrainian</option>
+                                    <option value="Uruguayan">Uruguayan</option>
+                                    <option value="Uzbekistani">Uzbekistani</option>
+                                    <option value="Venezuelan">Venezuelan</option>
+                                    <option value="Vietnamese">Vietnamese</option>
+                                    <option value="Welsh">Welsh</option>
+                                    <option value="Yemenite">Yemenite</option>
+                                    <option value="Zambian">Zambian</option>
+                                    <option value="Zimbabwean">Zimbabwean</option>
+
 
                                 </select>
                             </div>
@@ -245,9 +441,10 @@
                                 <label for="" class="form-label">Religion </label>
                                 <select class="form-control custom-select" name="religion">
                                     <option selected value="">Select Your Religion</option>
+                                    <option value="Islam">Islam</option>
                                     <option value="Hindu">Hindu</option>
-                                    <option value="Muslim">Muslim</option>
                                     <option value="Christian">Christian</option>
+                                    <option value="Buddhist">Buddhist</option>
                                     <option value="Other">Other</option>
 
                                 </select>
@@ -258,11 +455,12 @@
                                 <label for="" class="form-label">Caste </label>
                                 <select class="form-control custom-select" name="caste">
                                     <option selected value="">Select Your Caste</option>
-                                    <option value="ST">ST</option>
-                                    <option value="SC">SC</option>
-                                    <option value="OBC">OBC</option>
+                                    <option value="ST">Scheduled Tribes(ST)</option>
+                                    <option value="SC">Scheduled Castes(SC)</option>
+                                    <option value="OBC">Other Backward Classes(OBC)</option>
                                     <option value="General">General</option>
                                     <option value="Other">Other</option>
+
 
                                 </select>
                             </div>
@@ -369,7 +567,8 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-12 ">
+                        
+                        <div class="col-sm-12 col-md-6 ">
                             <div class="mb-3">
                                 <label for="" class="form-label">Profile Img(PNG/JPG/JPEG) <span
                                         class="text-red">*</span></label>
@@ -386,15 +585,15 @@
                                         <span class=" btn btn-primary btn-file"><span class="fileinput-new">Select
                                                 file</span><span class="fileinput-exists">Change</span>
                                             <input type="file" name="profile_image" id="profileImage"
-                                                class="input_image" >
-                                                
+                                                class="input_image">
+
 
                                         </span>
                                         <a href="#" class="btn btn-secondary fileinput-exists" onclick="removeImage()"
                                             data-dismiss="fileinput">Remove</a>
 
                                     </span>
-                                    
+
 
                                 </div>
                                 <div id="profile_error"></div>
@@ -404,13 +603,19 @@
                                     alt="Capture Image">
 
                                 <a id="shutterButton" class="btn btn-primary text-white mt-1"
-                                    style="display: none; width: 18%">Take
+                                    style="display: none; width:200px">Take
                                     Picture</a>
 
 
                                 <!--<video id="camera-stream" ></video>
                                 <canvas id="canvas-stram" ></canvas>
                                 <a id="takePhoto" style="display: none;" class="btn btn-primary">Take Photo</a>-->
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 ">
+                            <div class="mb-3">
+                                <label for="" class="form-label">Salary <span class="text-red">*</span></label>
+                                <input type="text" name="salary" id="" class="form-control" placeholder="₹ 20000">
                             </div>
                         </div>
 
@@ -623,8 +828,203 @@
                                 <label for="" class="form-label"><b>Nationality </b></label>
                                 <select class="form-control custom-select" name="nationality_edit">
                                     <option selected value="">Select Your Nationality</option>
-                                    
-                                    <option value="India">India</option>
+
+                                    <option value="Afghan">Afghan</option>
+                                    <option value="Albanian">Albanian</option>
+                                    <option value="Algerian">Algerian</option>
+                                    <option value="American">American</option>
+                                    <option value="Andorran">Andorran</option>
+                                    <option value="Angolan">Angolan</option>
+                                    <option value="Argentinian">Argentinian</option>
+                                    <option value="Armenian">Armenian</option>
+                                    <option value="Australian">Australian</option>
+                                    <option value="Austrian">Austrian</option>
+                                    <option value="Azerbaijani">Azerbaijani</option>
+                                    <option value="Bahamian">Bahamian</option>
+                                    <option value="Bahraini">Bahraini</option>
+                                    <option value="Bangladeshi">Bangladeshi</option>
+                                    <option value="Barbadian">Barbadian</option>
+                                    <option value="Belarusian">Belarusian</option>
+                                    <option value="Belgian">Belgian</option>
+                                    <option value="Belizean">Belizean</option>
+                                    <option value="Beninese">Beninese</option>
+                                    <option value="Bhutanese">Bhutanese</option>
+                                    <option value="Bolivian">Bolivian</option>
+                                    <option value="Bosnian">Bosnian</option>
+                                    <option value="Brazilian">Brazilian</option>
+                                    <option value="British">British</option>
+                                    <option value="Bruneian">Bruneian</option>
+                                    <option value="Bulgarian">Bulgarian</option>
+                                    <option value="Burkinabe">Burkinabe</option>
+                                    <option value="Burmese">Burmese</option>
+                                    <option value="Burundian">Burundian</option>
+                                    <option value="Cambodian">Cambodian</option>
+                                    <option value="Cameroonian">Cameroonian</option>
+                                    <option value="Canadian">Canadian</option>
+                                    <option value="Cape Verdean">Cape Verdean</option>
+                                    <option value="Central African">Central African</option>
+                                    <option value="Chadian">Chadian</option>
+                                    <option value="Chilean">Chilean</option>
+                                    <option value="Chinese">Chinese</option>
+                                    <option value="Colombian">Colombian</option>
+                                    <option value="Comoran">Comoran</option>
+                                    <option value="Congolese">Congolese</option>
+                                    <option value="Costa Rican">Costa Rican</option>
+                                    <option value="Croatian">Croatian</option>
+                                    <option value="Cuban">Cuban</option>
+                                    <option value="Cypriot">Cypriot</option>
+                                    <option value="Czech">Czech</option>
+                                    <option value="Danish">Danish</option>
+                                    <option value="Djibouti">Djibouti</option>
+                                    <option value="Dominican">Dominican</option>
+                                    <option value="Dutch">Dutch</option>
+                                    <option value="East Timorese">East Timorese</option>
+                                    <option value="Ecuadorean">Ecuadorean</option>
+                                    <option value="Egyptian">Egyptian</option>
+                                    <option value="Emirian">Emirian</option>
+                                    <option value="Equatorial Guinean">Equatorial Guinean</option>
+                                    <option value="Eritrean">Eritrean</option>
+                                    <option value="Estonian">Estonian</option>
+                                    <option value="Ethiopian">Ethiopian</option>
+                                    <option value="Fijian">Fijian</option>
+                                    <option value="Filipino">Filipino</option>
+                                    <option value="Finnish">Finnish</option>
+                                    <option value="French">French</option>
+                                    <option value="Gabonese">Gabonese</option>
+                                    <option value="Gambian">Gambian</option>
+                                    <option value="Georgian">Georgian</option>
+                                    <option value="German">German</option>
+                                    <option value="Ghanaian">Ghanaian</option>
+                                    <option value="Greek">Greek</option>
+                                    <option value="Grenadian">Grenadian</option>
+                                    <option value="Guatemalan">Guatemalan</option>
+                                    <option value="Guinea-Bissauan">Guinea-Bissauan</option>
+                                    <option value="Guinean">Guinean</option>
+                                    <option value="Guyanese">Guyanese</option>
+                                    <option value="Haitian">Haitian</option>
+                                    <option value="Herzegovinian">Herzegovinian</option>
+                                    <option value="Honduran">Honduran</option>
+                                    <option value="Hungarian">Hungarian</option>
+                                    <option value="I-Kiribati">I-Kiribati</option>
+                                    <option value="Icelander">Icelander</option>
+                                    <option value="Indian">Indian</option>
+                                    <option value="Indonesian">Indonesian</option>
+                                    <option value="Iranian">Iranian</option>
+                                    <option value="Iraqi">Iraqi</option>
+                                    <option value="Irish">Irish</option>
+                                    <option value="Israelii">Israelii</option>
+                                    <option value="Italian">Italian</option>
+                                    <option value="Ivorian">Ivorian</option>
+                                    <option value="Jamaican">Jamaican</option>
+                                    <option value="Japanese">Japanese</option>
+                                    <option value="Jordanian">Jordanian</option>
+                                    <option value="Kazakhstani">Kazakhstani</option>
+                                    <option value="Kenyan">Kenyan</option>
+                                    <option value="Kittian and Nevisian">Kittian and Nevisian</option>
+                                    <option value="Kuwaiti">Kuwaiti</option>
+                                    <option value="Kyrgyz">Kyrgyz</option>
+                                    <option value="Laotian">Laotian</option>
+                                    <option value="Latvian">Latvian</option>
+                                    <option value="Lebanese">Lebanese</option>
+                                    <option value="Liberian">Liberian</option>
+                                    <option value="Libyan">Libyan</option>
+                                    <option value="Liechtensteiner">Liechtensteiner</option>
+                                    <option value="Lithuanian">Lithuanian</option>
+                                    <option value="Luxembourger">Luxembourger</option>
+                                    <option value="Macedonian">Macedonian</option>
+                                    <option value="Malagasy">Malagasy</option>
+                                    <option value="Malawian">Malawian</option>
+                                    <option value="Malaysian">Malaysian</option>
+                                    <option value="Maldivan">Maldivan</option>
+                                    <option value="Malian">Malian</option>
+                                    <option value="Maltese">Maltese</option>
+                                    <option value="Marshallese">Marshallese</option>
+                                    <option value="Mauritanian">Mauritanian</option>
+                                    <option value="Mauritian">Mauritian</option>
+                                    <option value="Mexican">Mexican</option>
+                                    <option value="Micronesian">Micronesian</option>
+                                    <option value="Moldovan">Moldovan</option>
+                                    <option value="Monacan">Monacan</option>
+                                    <option value="Mongolian">Mongolian</option>
+                                    <option value="Moroccan">Moroccan</option>
+                                    <option value="Mosotho">Mosotho</option>
+                                    <option value="Motswana">Motswana</option>
+                                    <option value="Mozambican">Mozambican</option>
+                                    <option value="Namibian">Namibian</option>
+                                    <option value="Nauruan">Nauruan</option>
+                                    <option value="Nepalese">Nepalese</option>
+                                    <option value="New Zealander">New Zealander</option>
+                                    <option value="Ni-Vanuatu">Ni-Vanuatu</option>
+                                    <option value="Nicaraguan">Nicaraguan</option>
+                                    <option value="Nigerian">Nigerian</option>
+                                    <option value="Nigerien">Nigerien</option>
+                                    <option value="North Korean">North Korean</option>
+                                    <option value="Northern Irish">Northern Irish</option>
+                                    <option value="Norwegian">Norwegian</option>
+                                    <option value="Omani">Omani</option>
+                                    <option value="Pakistani">Pakistani</option>
+                                    <option value="Palauan">Palauan</option>
+                                    <option value="Panamanian">Panamanian</option>
+                                    <option value="Papua New Guinean">Papua New Gu
+                                        inean</option>
+                                    <option value="Paraguayan">Paraguayan</option>
+                                    <option value="Peruvian">Peruvian</option>
+                                    <option value="Polish">Polish</option>
+                                    <option value="Portuguese">Portuguese</option>
+                                    <option value="Qatari">Qatari</option>
+                                    <option value="Romanian">Romanian</option>
+                                    <option value="Russian">Russian</option>
+                                    <option value="Rwandan">Rwandan</option>
+                                    <option value="Saint Lucian">Saint Lucian</option>
+                                    <option value="Salvadoran">Salvadoran</option>
+                                    <option value="Samoan">Samoan</option>
+                                    <option value="San Marinese">San Marinese</option>
+                                    <option value="Sao Tomean">Sao Tomean</option>
+                                    <option value="Saudi">Saudi</option>
+                                    <option value="Scottish">Scottish</option>
+                                    <option value="Senegalese">Senegalese</option>
+                                    <option value="Serbian">Serbian</option>
+                                    <option value="Seychellois">Seychellois</option>
+                                    <option value="Sierra Leonean
+                                        ">Sierra Leonean</option>
+                                    <option value="Singaporean">Singaporean</option>
+                                    <option value="Slovakian">Slovakian</option>
+                                    <option value="Slovenian">Slovenian</option>
+                                    <option value="Solomon Islander">Solomon Islander
+                                    </option>
+                                    <option value="Somali">Somali</option>
+                                    <option value="South African">South African</option>
+                                    <option value="South Korean">South Korean</option>
+                                    <option value="Spanish">Spanish</option>
+                                    <option value="Sri Lankan">Sri Lankan</option>
+                                    <option value="Sudanese">Sudanese</option>
+                                    <option value="Surinamer">Surinamer</option>
+                                    <option value="Swazi">Swazi</option>
+                                    <option value="Swedish">Swedish</option>
+                                    <option value="Swiss">Swiss</option>
+                                    <option value="Syrian">Syrian</option>
+                                    <option value="Taiwanese">Taiwanese</option>
+                                    <option value="Tajik">Tajik</option>
+                                    <option value="Tanzanian">Tanzanian</option>
+                                    <option value="Thai">Thai</option>
+                                    <option value="Togolese">Togolese</option>
+                                    <option value="Tongan">Tongan</option>
+                                    <option value="Trinidadian or Tobagonian">Trinidadian
+                                        or Tobagonian</option>
+                                    <option value="Tunisian">Tunisian</option>
+                                    <option value="Turkish">Turkish</option>
+                                    <option value="Tuvaluan">Tuvaluan</option>
+                                    <option value="Ugandan">Ugandan</option>
+                                    <option value="Ukrainian">Ukrainian</option>
+                                    <option value="Uruguayan">Uruguayan</option>
+                                    <option value="Uzbekistani">Uzbekistani</option>
+                                    <option value="Venezuelan">Venezuelan</option>
+                                    <option value="Vietnamese">Vietnamese</option>
+                                    <option value="Welsh">Welsh</option>
+                                    <option value="Yemenite">Yemenite</option>
+                                    <option value="Zambian">Zambian</option>
+                                    <option value="Zimbabwean">Zimbabwean</option>
+
 
                                 </select>
                             </div>
@@ -635,9 +1035,10 @@
                                 <label for="" class="form-label">Religion </label>
                                 <select class="form-control custom-select" name="religion_edit">
                                     <option selected value="">Select Your Religion</option>
+                                    <option value="Islam">Islam</option>
                                     <option value="Hindu">Hindu</option>
-                                    <option value="Muslim">Muslim</option>
                                     <option value="Christian">Christian</option>
+                                    <option value="Buddhist">Buddhist</option>
                                     <option value="Other">Other</option>
 
                                 </select>
@@ -648,9 +1049,9 @@
                                 <label for="" class="form-label">Caste </label>
                                 <select class="form-control custom-select" name="caste_edit">
                                     <option selected value="">Select Your Caste</option>
-                                    <option value="ST">ST</option>
-                                    <option value="SC">SC</option>
-                                    <option value="OBC">OBC</option>
+                                    <option value="ST">Scheduled Tribes(ST)</option>
+                                    <option value="SC">Scheduled Castes(SC)</option>
+                                    <option value="OBC">Other Backward Classes(OBC)</option>
                                     <option value="General">General</option>
                                     <option value="Other">Other</option>
 
@@ -715,7 +1116,7 @@
                                     <option selected value="">Select Employee Type</option>
                                     {% for type in employee_type %}
                                     {% if type.status == 'Active' %}
-                                    
+
                                     <option value="{{type.id}}">{{type.employee_type}} </option>
                                     {% endif %}
                                     {% endfor %}
@@ -731,9 +1132,9 @@
                                     {% for departments in department %}
                                     {% if departments.status == 'Active' %}
                                     {% if departments.id == employees.department_id %}
-                                    <option selected value="{{departments.id}}" >{{departments.department_name}}</option>
+                                    <option selected value="{{departments.id}}">{{departments.department_name}}</option>
                                     {% endif %}
-                                    <option  value="{{departments.id}}" >{{departments.department_name}}</option>
+                                    <option value="{{departments.id}}">{{departments.department_name}}</option>
                                     {% endif %}
                                     {% endfor %}
                                 </select>
@@ -761,7 +1162,7 @@
                                     <option selected value="">Select Branch</option>
                                     {% for branches in branch %}
                                     {% if branches.status == 'Active' %}
-                                    
+
                                     <option value="{{branches.id}}">{{branches.branch_name}}</option>
                                     {% endif %}
                                     {% endfor %}
@@ -770,7 +1171,7 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-12" data-employee-id="{{ employees.id }}">
+                        <div class="col-sm-12 col-md-6" data-employee-id="{{ employees.id }}">
                             <div class="mb-3">
                                 <label for="" class="form-label">Profile Img(PNG/JPG/JPEG) <span
                                         class="text-red">*</span></label>
@@ -798,17 +1199,23 @@
                                     class="capturedImageEdit" style="display: none; width: 200px;margin-top: 10px"
                                     alt="Capture Image">
                                 <a class="editShutterButton btn btn-primary text-white mt-1"
-                                    style="display: none; width: 200px">Take Picture</a>
+                                    style="display: none; width: 200px; padding: 10px">Take Picture</a>
                             </div>
                         </div>
-
+                        <div class="col-sm-12 col-md-6 ">
+                            <div class="mb-3">
+                                <label for="" class="form-label">Salary <span class="text-red">*</span></label>
+                                <input type="text" name="salary_edit" id="" class="form-control" value="{{employees.salary}}" placeholder="₹ 20000">
+                            </div>
+                        </div>
                     </div>
 
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="mb-3">
                                 <label for="" class="form-label">Address </label>
-                                <textarea class="form-control" rows="3" placeholder="Enter Address" name="adddress_edit" >{{employees.address|safe}}</textarea>
+                                <textarea class="form-control" rows="3" placeholder="Enter Address"
+                                    name="adddress_edit">{{employees.address|safe}}</textarea>
 
                             </div>
                         </div>
@@ -846,7 +1253,8 @@
                                     <span class="input-group-append">
                                         <span class=" btn btn-primary btn-file"><span class="fileinput-new">Select
                                                 file</span><span class="fileinput-exists">Change</span>
-                                            <input type="file" name="aadhar_card_pdf_edit" id='aadhar_card_pdf_edit' onchange="displaySelectedFile()" value={{employees.aadhar_card_pdf}}  >
+                                            <input type="file" name="aadhar_card_pdf_edit" id='aadhar_card_pdf_edit'
+                                                onchange="displaySelectedFile()" value={{employees.aadhar_card_pdf}}>
                                         </span>
                                         <a href="#" class="btn btn-secondary fileinput-exists"
                                             data-dismiss="fileinput">Remove</a>
@@ -868,7 +1276,8 @@
                                     <span class="input-group-append">
                                         <span class=" btn btn-primary btn-file"><span class="fileinput-new">Select
                                                 file</span><span class="fileinput-exists">Change</span>
-                                            <input type="file" name="pan_card_pdf_edit" value={{employees.pan_card_pdf}}>
+                                            <input type="file" name="pan_card_pdf_edit"
+                                                value={{employees.pan_card_pdf}}>
                                         </span>
                                         <a href="#" class="btn btn-secondary fileinput-exists"
                                             data-dismiss="fileinput">Remove</a>
@@ -897,7 +1306,8 @@
 <!--Delete Employee-->
 
 
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header bg-danger">
@@ -913,7 +1323,8 @@
                     </div>
                     <form action="{% url 'employee_delete_all'  %}" method="post">
                         {% csrf_token %}
-                        <p id="deleteMessage">Are you sure you want to delete <strong><span id="selectedCount"></span></strong> records?</p>
+                        <p id="deleteMessage">Are you sure you want to delete <strong><span
+                                    id="selectedCount"></span></strong> records?</p>
                         <input type="hidden" id="selected_ids_input" name="selected_ids">
                 </div>
                 <div class="d-flex justify-content-center mb-3">
@@ -922,10 +1333,10 @@
                 </div>
                 </form>
             </div>
-  
+
         </div>
     </div>
-  </div>
+</div>
 
 {% for employees in employee %}
 <div class="modal fade" id="DeleteEvent{{forloop.counter}}" tabindex="-1" role="dialog"
@@ -966,7 +1377,7 @@
 
 
 <!--View Employee-->
-{% for employees in employee %}
+<!-- {% for employees in employee %}
 <div class="modal fade" id="ViewEmployee{{forloop.counter}}" tabindex="-1" role="dialog"
     aria-labelledby="ViewEmployee{{forloop.counter}}" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -979,7 +1390,7 @@
             </div>
             <div class="modal-body">
 
-                
+
 
 
                 <table class="table table-bordered" style="width: 100%;">
@@ -1052,7 +1463,7 @@
                             <td class="p-2">{{employees.caste}}</td>
                         </tr>
                         {% endif %}
-                        
+
                         <tr>
                             <th class="p-2">Employee Type</th>
                             <td class="p-2">{{employees.employee_type}}</td>
@@ -1098,13 +1509,13 @@
                             <th class="p-2">Aadhar Card</th>
                             <td class="p-2">{{employees.aadhar_card}}</td>
                         </tr>
-                        {% if employees.pan_card  %}
+                        {% if employees.pan_card %}
                         <tr>
                             <th class="p-2">Pan Card</th>
                             <td class="p-2">{{employees.pan_card}}</td>
                         </tr>
                         {% endif %}
-                        
+
 
 
 
@@ -1117,7 +1528,7 @@
 
 
                 <div class="d-flex justify-content-center">
-                    <a href="{% url 'employee_detail' employees.id %}" class="btn btn-success"> <i
+                    <a href="" class="btn btn-success"> <i
                             class="fa fa-print"></i> Print</a>
                 </div>
             </div>
@@ -1126,7 +1537,7 @@
     </div>
 </div>
 
-{% endfor %}
+{% endfor %} -->
 
 
 <!--upload form-->
@@ -1186,21 +1597,21 @@
         );
         $.validator.addMethod("noSpace", function (value, element) {
             return !(/^\s|\s$|\s{2,}/.test(value));
-          }, "No excessive or leading/trailing spaces");
-      
+        }, "No excessive or leading/trailing spaces");
 
-        $.validator.addMethod("customEmail", function(value, element) {
+
+        $.validator.addMethod("customEmail", function (value, element) {
             // Regular expression pattern for custom email validation
             var emailRegex = /^[^\.][a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
             // Check if the value matches the custom email pattern
             return this.optional(element) || emailRegex.test(value);
-          }, "Please enter a valid email address.");
+        }, "Please enter a valid email address.");
 
-          $.validator.addMethod("aadharNumber", function(value, element) {
+        $.validator.addMethod("aadharNumber", function (value, element) {
             var aadharRegex = /^[2-9]\d{11}$/; // Aadhaar number without spaces and starting with 2-9
             return this.optional(element) || aadharRegex.test(value);
         }, "Please enter a valid Aadhaar number starting with 2-9 and exactly 12 digits.");
-    
+
 
         $.validator.setDefaults({
             errorPlacement: function (error, element) {
@@ -1209,7 +1620,7 @@
                 } else if (element.attr("name") === "aadhar_card_pdf") {
                     // If the element is aadhar_card_pdf, display the error message after the input file field
                     error.appendTo(".aadhar_pdf_error"); // Adjust the selector as per your HTML structure
-                }else if(element.attr("name") === "pan_card_pdf"){
+                } else if (element.attr("name") === "pan_card_pdf") {
                     error.appendTo("#pan-pdf");
 
                 } else {
@@ -1217,8 +1628,8 @@
                 }
             }
         });
-        
-        $.validator.addMethod("validAge", function(value, element) {
+
+        $.validator.addMethod("validAge", function (value, element) {
             // Get today's date
             var today = new Date();
             // Get the date of birth entered by the user
@@ -1232,14 +1643,14 @@
             // Check if age is at least 20 years
             return age >= 18;
         }, "Age must be at least 18 years old.");
-        
-        $.validator.addMethod("validPANCard", function(value, element) {
+
+        $.validator.addMethod("validPANCard", function (value, element) {
             // Regular expression for PAN card format
             var panCardRegex = /[A-Z]{5}[0-9]{4}[A-Z]{1}/;
             // Check if the value matches the PAN card format
             return this.optional(element) || panCardRegex.test(value.toUpperCase());
         }, "Please enter a valid PAN card number.");
-        
+
 
 
         $('#EmployeeForm').validate({
@@ -1249,14 +1660,14 @@
                     noSpecialChars: true,
                     maxlength: 50,
                     minlength: 3,
-                    noSpace:true,
+                    noSpace: true,
                 },
                 last_name: {
                     required: true,
                     noSpecialChars: true,
                     maxlength: 50,
                     minlength: 3,
-                    noSpace:true,
+                    noSpace: true,
                 },
                 personal_number: {
                     required: true,
@@ -1268,21 +1679,21 @@
                 personal_email: {
                     required: true,
                     customEmail: true,
-                    noSpace:true
+                    noSpace: true
                 },
                 professional_email: {
                     customEmail: true,
-                    noSpace:true
+                    noSpace: true
                 },
-                
+
                 gender: {
                     required: true
                 },
                 date_of_birth: {
                     required: true,
                     validAge: true
-                    
-                    
+
+
 
                 },
                 employee_type: {
@@ -1302,14 +1713,18 @@
                     minlength: 6,
                     maxlength: 6
                 },
-                profile_image:{
-                    required:true,
+                profile_image: {
+                    required: true,
                     accept: "image/png,image/jpeg,image/jpg"
                 },
-                address:{
-                    noSpace:true,
+                salary:{
+                    required: true,
+                    digits: true
+                },
+                address: {
+                    noSpace: true,
                     maxlength: 1200,
-                    minlength:10
+                    minlength: 10
 
                 },
                 aadhar_card: {
@@ -1323,13 +1738,13 @@
                     validPANCard: true,
                     maxlength: 10
                 },
-                aadhar_card_pdf:{
-                    accept:'application/pdf',
-                    required:true,
+                aadhar_card_pdf: {
+                    accept: 'application/pdf',
+                    required: true,
                 },
-                pan_card_pdf:{
-                    accept:'application/pdf',
-                    
+                pan_card_pdf: {
+                    accept: 'application/pdf',
+
                 }
 
 
@@ -1370,14 +1785,17 @@
                 branch: {
                     required: 'Branch is required',
                 },
-                address:{
+                address: {
                     maxlength: 'Maximum of 1200 characters',
                     minlength: 'Minimum of 10 characters'
                 },
-                 profile_image:{
-                     required:'Profile image is required',
-                     accept: 'Only PNG/JPG/JPEG files are allowed.'
-                 },
+                profile_image: {
+                    required: 'Profile image is required',
+                    accept: 'Only PNG/JPG/JPEG files are allowed.'
+                },
+                salary: {
+                    required: 'Salary is required',
+                },
                 aadhar_card: {
                     required: 'Aadhar card is required',
                     minlength: 'Aadhar card number should not be less than 12 digits.',
@@ -1387,14 +1805,14 @@
                     required: 'PAN card is required',
                     maxlength: 'PAN card number should not be more than 10 digits.'
                 },
-                aadhar_card_pdf:{
-                     required:'Aadhar card is required',
+                aadhar_card_pdf: {
+                    required: 'Aadhar card is required',
                     accept: 'Only PDF files are allowed.'
                 },
-                pan_card_pdf:{
-                     accept: 'Only PDF files are allowed.'
+                pan_card_pdf: {
+                    accept: 'Only PDF files are allowed.'
                 }
-                
+
             },
             submitHandler: function (form) {
                 form.submit();
@@ -1419,19 +1837,19 @@
         );
         $.validator.addMethod("noSpace", function (value, element) {
             return !(/^\s|\s$|\s{2,}/.test(value));
-          }, "No excessive or leading/trailing spaces");
-      
+        }, "No excessive or leading/trailing spaces");
 
-        $.validator.addMethod("customEmail", function(value, element) {
+
+        $.validator.addMethod("customEmail", function (value, element) {
             // Regular expression pattern for custom email validation
             var emailRegex = /^[^\.][a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
             // Check if the value matches the custom email pattern
             return this.optional(element) || emailRegex.test(value);
-          }, "Please enter a valid email address.");
-        
+        }, "Please enter a valid email address.");
+
 
         // PAN card number
-        $.validator.addMethod("validPANCard", function(value, element) {
+        $.validator.addMethod("validPANCard", function (value, element) {
             // Regular expression for PAN card format
             var panCardRegex = /[A-Z]{5}[0-9]{4}[A-Z]{1}/;
             // Check if the value matches the PAN card format
@@ -1442,10 +1860,10 @@
             errorPlacement: function (error, element) {
                 if (element.attr("name") === "profile_image_edit") {
                     error.appendTo(".profile_error_edit");
-                } else if(element.attr("name") === 'aadhar_card_pdf_edit'){
+                } else if (element.attr("name") === 'aadhar_card_pdf_edit') {
                     error.appendTo(".aadhar_pdf_error_edit");
 
-                }else if (element.attr("name") === "pan_card_pdf_edit") {
+                } else if (element.attr("name") === "pan_card_pdf_edit") {
                     error.appendTo(".pan_pdf_error_edit");
 
                 } else {
@@ -1453,15 +1871,15 @@
                 }
             }
         });
-        
-        $.validator.addMethod("aadharNumber", function(value, element) {
+
+        $.validator.addMethod("aadharNumber", function (value, element) {
             var aadharRegex = /^[2-9]\d{11}$/; // Aadhaar number without spaces and starting with 2-9
             return this.optional(element) || aadharRegex.test(value);
         }, "Please enter a valid Aadhaar number starting with 2-9 and exactly 12 digits.");
-    
 
 
-        $.validator.addMethod("validAge", function(value, element) {
+
+        $.validator.addMethod("validAge", function (value, element) {
             // Get today's date
             var today = new Date();
             // Get the date of birth entered by the user
@@ -1475,77 +1893,82 @@
             // Check if age is at least 20 years
             return age >= 18;
         }, "Age must be at least 18 years old.");
-        
+
         $('.EmployeeEdit').each(function () {
             $(this).validate({
-                rules:{
-                    first_name_edit:{
-                        required:true,
+                rules: {
+                    first_name_edit: {
+                        required: true,
                         maxlength: 100,
                         minlength: 3,
                         noSpecialChars: true,
-                        noSpace:true
+                        noSpace: true
 
                     },
-                    last_name_edit:{
-                        required:true,
+                    last_name_edit: {
+                        required: true,
                         maxlength: 100,
                         minlength: 3,
                         noSpecialChars: true,
-                        noSpace:true
+                        noSpace: true
                     },
-                    personal_number_edit:{
-                        required:true,
+                    personal_number_edit: {
+                        required: true,
                         customphone: true
 
                     },
-                    alternative_number_edit:{
+                    alternative_number_edit: {
                         customphone: true
                     },
-                    personal_email_edit:{
+                    personal_email_edit: {
                         required: true,
                         customEmail: true,
-                        noSpace:true
+                        noSpace: true
                     },
-                    professional_email_edit:{
+                    professional_email_edit: {
                         customEmail: true,
-                        noSpace:true
+                        noSpace: true
                     },
-                    gender_edit:{
-                        required:true,
+                    gender_edit: {
+                        required: true,
                     },
-                    date_of_birth_edit:{
-                        required:true,
+                    date_of_birth_edit: {
+                        required: true,
                         validAge: true
                     },
-                    employee_type_edit:{
-                        required:true
+                    employee_type_edit: {
+                        required: true
 
                     },
-                    department_name_edit:{
-                        required:true
+                    department_name_edit: {
+                        required: true
                     },
-                    designation_name_edit:{
-                        required:true
+                    designation_name_edit: {
+                        required: true
                     },
-                    branch_edit:{
-                        required:true
+                    branch_edit: {
+                        required: true
                     },
-                    pincode_edit:{
+                    pincode_edit: {
                         digits: true,
                         minlength: 6,
                         maxlength: 6
                     },
-                    address_edit:{
-                        noSpace:true,
+                    address_edit: {
+                        noSpace: true,
                         maxlength: 1200,
-                        minlength:10
+                        minlength: 10
                     },
-                    profile_image_edit:{
-                        required:true,
+                    profile_image_edit: {
+                        required: true,
                         accept: "image/png,image/jpeg,image/jpg"
                     },
-                    aadhar_card_edit:{
+                    salary_edit:{
+                        required: true,
+                        digits: true,
+                        
+                    },
+                    aadhar_card_edit: {
                         required: true,
                         digits: true,
                         minlength: 12,
@@ -1553,93 +1976,96 @@
                         aadharNumber: true
 
                     },
-                    pan_card_edit:{
+                    pan_card_edit: {
                         validPANCard: true,
                         maxlength: 10
                     },
-                    aadhar_card_pdf_edit:{
+                    aadhar_card_pdf_edit: {
                         accept: "application/pdf",
-                        required:true
+                        required: true
                     },
-                    pan_card_pdf_edit:{
+                    pan_card_pdf_edit: {
                         accept: "application/pdf",
 
                     },
                 },
-                messages:{
-                    first_name_edit:{
-                        required:"Please enter first name",
-                        minlength:"Minimum of 3 characters",
-                        maxlength:"Maximum of 100 characters",
+                messages: {
+                    first_name_edit: {
+                        required: "Please enter first name",
+                        minlength: "Minimum of 3 characters",
+                        maxlength: "Maximum of 100 characters",
                     },
-                    last_name_edit:{
-                        required:"Please enter last name",
-                        minlength:"Minimum of 3 characters",
-                        maxlength:"Maximum of 100 characters",
+                    last_name_edit: {
+                        required: "Please enter last name",
+                        minlength: "Minimum of 3 characters",
+                        maxlength: "Maximum of 100 characters",
                     },
-                    personal_number_edit:{
-                        required:"Please enter mobile number",
+                    personal_number_edit: {
+                        required: "Please enter mobile number",
 
                     },
-                    alternative_number_edit:{
+                    alternative_number_edit: {
                         customphone: "Please enter a valid mobile number",
                     },
-                    personal_email_edit:{
-                        required:"Please enter email address",
+                    personal_email_edit: {
+                        required: "Please enter email address",
 
                     },
-                    professional_email_edit:{
+                    professional_email_edit: {
                         customEmail: "Please enter a valid email address",
                     },
-                    gender_edit:{
-                        required:"Please select gender",
+                    gender_edit: {
+                        required: "Please select gender",
                     },
-                    date_of_birth_edit:{
-                        required:"Please select date of birth",
+                    date_of_birth_edit: {
+                        required: "Please select date of birth",
                     },
-                    employee_type_edit:{
-                        required:"Please select employee type",
+                    employee_type_edit: {
+                        required: "Please select employee type",
                     },
-                    department_name_edit:{
-                        required:"Please select department name",
+                    department_name_edit: {
+                        required: "Please select department name",
                     },
-                    designation_name_edit:{
-                        required:"Please select designation name",
+                    designation_name_edit: {
+                        required: "Please select designation name",
 
                     },
-                    branch_edit:{
-                        required:"Please select branch",
+                    branch_edit: {
+                        required: "Please select branch",
                     },
-                    pincode_edit:{
-                        digits:"Alphabets and special characters are not allowed",
-                        minlength:"Minimum of 6 characters",
-                        maxlength:"Maximum of 6 characters",
+                    pincode_edit: {
+                        digits: "Alphabets and special characters are not allowed",
+                        minlength: "Minimum of 6 characters",
+                        maxlength: "Maximum of 6 characters",
                     },
-                    address_edit:{
-                        maxlength:"Maximum of 1200 characters",
-                        minlength:"Minimum of 10 characters",
+                    address_edit: {
+                        maxlength: "Maximum of 1200 characters",
+                        minlength: "Minimum of 10 characters",
 
                     },
-                    profile_image_edit:{
-                        required:"Please select profile image",
+                    profile_image_edit: {
+                        required: "Please select profile image",
                         accept: "Only PNG/JPG/JPEG files are allowed."
                     },
-                    aadhar_card_edit:{
-                        required:"Please select aadhar card",
-                        digits:"Alphabets and special characters are not allowed",
-                        minlength:"Minimum of 12 characters",
-                        maxlength:"Maximum of 12 characters",
+                    salary_edit: {
+                      required: "Please enter salary",  
                     },
-                    pan_card_edit:{
+                    aadhar_card_edit: {
+                        required: "Please select aadhar card",
+                        digits: "Alphabets and special characters are not allowed",
+                        minlength: "Minimum of 12 characters",
+                        maxlength: "Maximum of 12 characters",
+                    },
+                    pan_card_edit: {
                         validPANCard: "Please enter a valid PAN card number",
-                        maxlength:"Maximum of 10 characters",
+                        maxlength: "Maximum of 10 characters",
 
                     },
-                    aadhar_card_pdf_edit:{
-                        required:"Please select aadhar card",
+                    aadhar_card_pdf_edit: {
+                        required: "Please select aadhar card",
                         accept: "Only PDF files are allowed."
                     },
-                    pan_card_pdf_edit:{
+                    pan_card_pdf_edit: {
                         accept: "Only PDF files are allowed.",
 
                     },
@@ -1648,7 +2074,7 @@
                 submitHandler: function (form) {
                     form.submit();
                 }
-                
+
             })
         })
 
@@ -1661,76 +2087,76 @@
 
 <!---Delete Script-->
 <script>
-  // Function to update the "Select All" checkbox status
-  function updateSelectAllCheckbox() {
-    var selectAllCheckbox = document.getElementById('selectAll');
-    var rowCheckboxes = document.querySelectorAll('.row-checkbox');
-    var allChecked = true;
+    // Function to update the "Select All" checkbox status
+    function updateSelectAllCheckbox() {
+        var selectAllCheckbox = document.getElementById('selectAll');
+        var rowCheckboxes = document.querySelectorAll('.row-checkbox');
+        var allChecked = true;
 
-    rowCheckboxes.forEach(function (checkbox) {
-      if (!checkbox.checked) {
-        allChecked = false;
-      }
-    });
+        rowCheckboxes.forEach(function (checkbox) {
+            if (!checkbox.checked) {
+                allChecked = false;
+            }
+        });
 
-    selectAllCheckbox.checked = allChecked;
-    updateSelectedRowsList(); // Update selected rows list when "Select All" checkbox is clicked
-  }
-
-  // Function to update the selected rows list and toggle delete button visibility
-  function updateSelectedRowsList() {
-    var selectedRowsList = document.getElementById('selectedRowsList');
-    var selectedIdsInput = document.getElementById('selected_ids_input');
-    var deleteButton = document.getElementById('deleteButton');
-
-    var selectedRows = document.querySelectorAll('.row-checkbox:checked');
-    var selectedCount = selectedRows.length;
-
-    if (selectedCount > 1) {
-      deleteButton.style.display = 'block'; // Show delete button if more than one row is selected
-    } else {
-      deleteButton.style.display = 'none'; // Hide delete button if only one row or none is selected
+        selectAllCheckbox.checked = allChecked;
+        updateSelectedRowsList(); // Update selected rows list when "Select All" checkbox is clicked
     }
 
-    var selectedIds = [];
-    selectedRows.forEach(function (row) {
-      var courseId = row.dataset.courseId;
-      selectedIds.push(courseId);
-    });
+    // Function to update the selected rows list and toggle delete button visibility
+    function updateSelectedRowsList() {
+        var selectedRowsList = document.getElementById('selectedRowsList');
+        var selectedIdsInput = document.getElementById('selected_ids_input');
+        var deleteButton = document.getElementById('deleteButton');
 
-    // Set the value of the hidden input field to the selected IDs
-    selectedIdsInput.value = selectedIds.join(',');
+        var selectedRows = document.querySelectorAll('.row-checkbox:checked');
+        var selectedCount = selectedRows.length;
 
-    // Update the delete modal message with the selected count
-    document.getElementById('deleteMessage').textContent = "Are you sure you want to delete " + selectedCount + " records?";
-  }
+        if (selectedCount > 1) {
+            deleteButton.style.display = 'block'; // Show delete button if more than one row is selected
+        } else {
+            deleteButton.style.display = 'none'; // Hide delete button if only one row or none is selected
+        }
 
-  // Event listener for checkbox change
-  document.querySelectorAll('.row-checkbox').forEach(function (checkbox) {
-    checkbox.addEventListener('change', function () {
-      updateSelectedRowsList();
-      updateSelectAllCheckbox();
-    });
-  });
+        var selectedIds = [];
+        selectedRows.forEach(function (row) {
+            var courseId = row.dataset.courseId;
+            selectedIds.push(courseId);
+        });
 
-  // Event listener for select all checkbox change
-  document.getElementById('selectAll').addEventListener('change', function () {
-    var isChecked = this.checked;
+        // Set the value of the hidden input field to the selected IDs
+        selectedIdsInput.value = selectedIds.join(',');
+
+        // Update the delete modal message with the selected count
+        document.getElementById('deleteMessage').textContent = "Are you sure you want to delete " + selectedCount + " records?";
+    }
+
+    // Event listener for checkbox change
     document.querySelectorAll('.row-checkbox').forEach(function (checkbox) {
-      checkbox.checked = isChecked;
+        checkbox.addEventListener('change', function () {
+            updateSelectedRowsList();
+            updateSelectAllCheckbox();
+        });
     });
+
+    // Event listener for select all checkbox change
+    document.getElementById('selectAll').addEventListener('change', function () {
+        var isChecked = this.checked;
+        document.querySelectorAll('.row-checkbox').forEach(function (checkbox) {
+            checkbox.checked = isChecked;
+        });
+        updateSelectedRowsList();
+    });
+
+    // Initially update delete button visibility
     updateSelectedRowsList();
-  });
 
-  // Initially update delete button visibility
-  updateSelectedRowsList();
-
-  // Event listener for delete button click
-  document.getElementById('confirmDelete').addEventListener('click', function () {
-    // Perform delete action here
-    // For now, let's just close the modal
-    $('#deleteModal').modal('hide');
-  });
+    // Event listener for delete button click
+    document.getElementById('confirmDelete').addEventListener('click', function () {
+        // Perform delete action here
+        // For now, let's just close the modal
+        $('#deleteModal').modal('hide');
+    });
 </script>
 
 
@@ -1941,11 +2367,11 @@
         const capturedImageEdit = element.closest('.col-sm-12').querySelector('.capturedImageEdit');
         capturedImageEdit.src = ''; // Remove the image source
         capturedImageEdit.style.display = 'none'; // Hide the image preview
-    
+
         // Reset the value of the input file to remove the selected file
         const profileImageEditInput = element.closest('.col-sm-12').querySelector('.profileImageEdit');
         profileImageEditInput.value = ''; // Clear the input field
-    
+
         // Reset the imageCaptured flag to false
         editImageCaptured = false;
     }
@@ -2010,38 +2436,38 @@
     };
 
     var cityData = {
-        'Andhra Pradesh':['Adoni', 'Anantapur', 'Chittoor', 'Kadapa', 'Kakinada', 'Kurnool', 'Nellore', 'Rajahmundry', 'Tirupati', 'Vijayawada', 'Visakhapatnam', 'Guntur','Machilipatnam','Narsipatnam','Srikakulam','Vizianagaram','Eluru','Tirupati','Yemmiganur'],
-        'Telengana':['Adilabad','Hyderabad','Karimnagar','Khammam','Mahbubnagar','Nizamabad','Warangal','Ranga Reddy'],
-        'Kerala':['Alappuzha','Ernakulam','Idukki','Kannur','Kasaragod','Kollam','Kottayam','Kozhikode','Malappuram','Palakkad','Pathanamthitta','Thiruvananthapuram','Thrissur','Wayanad'],
-        'Tamil Nadu':['Chennai','Madurai','Tiruchirappalli','Vellore','Viluppuram','Virudhunagar','Dindigul','Erode','Kanchipuram','Kanniyakumari','Krishnagiri','Namakkal','Salem','Thoothukkudi','Tirunelveli','Tiruppur','Tiruvannamalai','Vellore','Viluppuram','Virudhunagar'],
-        'Pondicherry':['karaikal','Mahe','puducherry','Yanam'],
-        'Punjab':['Amritsar','Batala','Firozpur','Hoshiarpur','Jalandhar','Kapurthala','Ludhiana','Patiala','Rupnagar','Sangrur','SAS Nagar','Srinagar','Tarn Taran'],
-        'Andaman and Nicobar Islands':['Port Blair'],
-        'Chandigarh':['Chandigarh'],
-        'Chhattisgarh':['Ambikapur','Bhilai','Bilaspur','Durg','Raigarh','Raipur','Rajnandgaon','Surguja'],
-        'Himachal Pradesh':['Bilaspur','Chamba','Hamirpur','Kangra','Kullu','Mandi','Shimla','Sirmaur','Solan','Una'],
-        'Uttarakhand':['Dehradun','Haridwar','Nainital','Pauri Garhwal','Pithoragarh','Rudraprayag','Tehri Garhwal','Udham Singh Nagar','Uttarkashi'],
-        'Delhi':['Delhi','New Delhi'],
-        'Jharkhand':['Dhanbad','Jamshedpur','Ranchi','Wasseypur'],
-        'Rajasthan':['Ajmer','Bikaner','Bharatpur','Jaipur','Jodhpur','Kota','Udaipur'],
-        'Madhya Pradesh':['Bhopal','Indore','Jabalpur','Satna'],
-        'Goa':['Panaji'],
-        'Haryana':['Ambala','Chandigarh','Faridabad','Gurgaon','Hisar','Jhajjar','Karnal','Kurukshetra','Panipat','Rohtak','Sirsa','Sonipat','Yamunanagar'],
-        'Manipur':['Bishnupur','Chandel','Churachandpur','Imphal','Senapati','Tamenglong','Thoubal','Ukhrul'],
-        'Nagaland':['Dimapur','Kohima','Mokokchung','Mon','Noklak','Peren','Phek','Tuensang','Wokha','Zunheboto'],
-        'Meghalaya':['East Garo Hills','East Khasi Hills','North Garo Hills','Ri Bhoi','South Garo Hills','South West Garo Hills','South West Khasi Hills','West Garo Hills','West Khasi Hills'],
-        'Tripura':['Dhalai','Gomati','Khowai','North Tripura','Sepahijala','South Tripura','Unokoti','West Tripura'],
-        'Sikkim':['Gangtok','Gyalshing','Lachung','Mangan','Namchi','Pasangtok','Rangpo'],
-        'Mizoram':['Aizawl','Champhai','Kolasib','Lawngtlai','Lunglei','Mamit','Saiha','Saitual','Serchhip'],
-        'Arunachal Pradesh':['Itanagar'],
-        'West Bengal':['Bardhaman','Darjiling','Hugli','Kharagpur','Kolkata','Nadia','North 24 Parganas','Paschim Medinipur','Purba Medinipur','Purulia','South 24 Parganas','Uttar Dinajpur'],
-        'Lakshadweep':['Lakshadweep'],
-        'Rajasthan':['Ajmer','Bikaner','Bharatpur','Jaipur','Jodhpur','Kota','Udaipur'],
-        'Odisha':['Bhubaneswar','Cuttack','Dhenkanal','Gangtok','Gopalpur','Jharsuguda','Nabarangpur','Nayagarh','Puri','Raurkela','Sambalpur','Sundargarh'],
-        'Maharashtra':['Ahmednagar','Aurangabad','Beed','Chandrapur','Dhule','Jalgaon','Kolhapur','Latur','Nanded','Nagpur','Nashik','Pune','Sangli','Satara','Sindhudurg','Solapur','Thane','Wardha','Washim','Yavatmal'],
-        'Gujarat':['Ahmedabad','surat','Amreli','Anand','Bharuch','Bhavnagar','Dahod','Gandhinagar','Jamnagar','Kutch','Narmada','Navsari','Patan','Porbandar','Rajkot','Sabarkantha','Surat','Surendranagar','Tapi','Vadodara','Valsad'],
-        'Daman and Diu':['Daman','Diu'],
-        'Telangana':['Adilabad','Hyderabad','Karimnagar','Khammam','Mahabubnagar','Medak','Nalgonda','Nizamabad','Warangal'],
+        'Andhra Pradesh': ['Adoni', 'Anantapur', 'Chittoor', 'Kadapa', 'Kakinada', 'Kurnool', 'Nellore', 'Rajahmundry', 'Tirupati', 'Vijayawada', 'Visakhapatnam', 'Guntur', 'Machilipatnam', 'Narsipatnam', 'Srikakulam', 'Vizianagaram', 'Eluru', 'Tirupati', 'Yemmiganur'],
+        'Telengana': ['Adilabad', 'Hyderabad', 'Karimnagar', 'Khammam', 'Mahbubnagar', 'Nizamabad', 'Warangal', 'Ranga Reddy'],
+        'Kerala': ['Alappuzha', 'Ernakulam', 'Idukki', 'Kannur', 'Kasaragod', 'Kollam', 'Kottayam', 'Kozhikode', 'Malappuram', 'Palakkad', 'Pathanamthitta', 'Thiruvananthapuram', 'Thrissur', 'Wayanad'],
+        'Tamil Nadu': ['Chennai', 'Madurai', 'Tiruchirappalli', 'Vellore', 'Viluppuram', 'Virudhunagar', 'Dindigul', 'Erode', 'Kanchipuram', 'Kanniyakumari', 'Krishnagiri', 'Namakkal', 'Salem', 'Thoothukkudi', 'Tirunelveli', 'Tiruppur', 'Tiruvannamalai', 'Vellore', 'Viluppuram', 'Virudhunagar'],
+        'Pondicherry': ['karaikal', 'Mahe', 'puducherry', 'Yanam'],
+        'Punjab': ['Amritsar', 'Batala', 'Firozpur', 'Hoshiarpur', 'Jalandhar', 'Kapurthala', 'Ludhiana', 'Patiala', 'Rupnagar', 'Sangrur', 'SAS Nagar', 'Srinagar', 'Tarn Taran'],
+        'Andaman and Nicobar Islands': ['Port Blair'],
+        'Chandigarh': ['Chandigarh'],
+        'Chhattisgarh': ['Ambikapur', 'Bhilai', 'Bilaspur', 'Durg', 'Raigarh', 'Raipur', 'Rajnandgaon', 'Surguja'],
+        'Himachal Pradesh': ['Bilaspur', 'Chamba', 'Hamirpur', 'Kangra', 'Kullu', 'Mandi', 'Shimla', 'Sirmaur', 'Solan', 'Una'],
+        'Uttarakhand': ['Dehradun', 'Haridwar', 'Nainital', 'Pauri Garhwal', 'Pithoragarh', 'Rudraprayag', 'Tehri Garhwal', 'Udham Singh Nagar', 'Uttarkashi'],
+        'Delhi': ['Delhi', 'New Delhi'],
+        'Jharkhand': ['Dhanbad', 'Jamshedpur', 'Ranchi', 'Wasseypur'],
+        'Rajasthan': ['Ajmer', 'Bikaner', 'Bharatpur', 'Jaipur', 'Jodhpur', 'Kota', 'Udaipur'],
+        'Madhya Pradesh': ['Bhopal', 'Indore', 'Jabalpur', 'Satna'],
+        'Goa': ['Panaji'],
+        'Haryana': ['Ambala', 'Chandigarh', 'Faridabad', 'Gurgaon', 'Hisar', 'Jhajjar', 'Karnal', 'Kurukshetra', 'Panipat', 'Rohtak', 'Sirsa', 'Sonipat', 'Yamunanagar'],
+        'Manipur': ['Bishnupur', 'Chandel', 'Churachandpur', 'Imphal', 'Senapati', 'Tamenglong', 'Thoubal', 'Ukhrul'],
+        'Nagaland': ['Dimapur', 'Kohima', 'Mokokchung', 'Mon', 'Noklak', 'Peren', 'Phek', 'Tuensang', 'Wokha', 'Zunheboto'],
+        'Meghalaya': ['East Garo Hills', 'East Khasi Hills', 'North Garo Hills', 'Ri Bhoi', 'South Garo Hills', 'South West Garo Hills', 'South West Khasi Hills', 'West Garo Hills', 'West Khasi Hills'],
+        'Tripura': ['Dhalai', 'Gomati', 'Khowai', 'North Tripura', 'Sepahijala', 'South Tripura', 'Unokoti', 'West Tripura'],
+        'Sikkim': ['Gangtok', 'Gyalshing', 'Lachung', 'Mangan', 'Namchi', 'Pasangtok', 'Rangpo'],
+        'Mizoram': ['Aizawl', 'Champhai', 'Kolasib', 'Lawngtlai', 'Lunglei', 'Mamit', 'Saiha', 'Saitual', 'Serchhip'],
+        'Arunachal Pradesh': ['Itanagar'],
+        'West Bengal': ['Bardhaman', 'Darjiling', 'Hugli', 'Kharagpur', 'Kolkata', 'Nadia', 'North 24 Parganas', 'Paschim Medinipur', 'Purba Medinipur', 'Purulia', 'South 24 Parganas', 'Uttar Dinajpur'],
+        'Lakshadweep': ['Lakshadweep'],
+        'Rajasthan': ['Ajmer', 'Bikaner', 'Bharatpur', 'Jaipur', 'Jodhpur', 'Kota', 'Udaipur'],
+        'Odisha': ['Bhubaneswar', 'Cuttack', 'Dhenkanal', 'Gangtok', 'Gopalpur', 'Jharsuguda', 'Nabarangpur', 'Nayagarh', 'Puri', 'Raurkela', 'Sambalpur', 'Sundargarh'],
+        'Maharashtra': ['Ahmednagar', 'Aurangabad', 'Beed', 'Chandrapur', 'Dhule', 'Jalgaon', 'Kolhapur', 'Latur', 'Nanded', 'Nagpur', 'Nashik', 'Pune', 'Sangli', 'Satara', 'Sindhudurg', 'Solapur', 'Thane', 'Wardha', 'Washim', 'Yavatmal'],
+        'Gujarat': ['Ahmedabad', 'surat', 'Amreli', 'Anand', 'Bharuch', 'Bhavnagar', 'Dahod', 'Gandhinagar', 'Jamnagar', 'Kutch', 'Narmada', 'Navsari', 'Patan', 'Porbandar', 'Rajkot', 'Sabarkantha', 'Surat', 'Surendranagar', 'Tapi', 'Vadodara', 'Valsad'],
+        'Daman and Diu': ['Daman', 'Diu'],
+        'Telangana': ['Adilabad', 'Hyderabad', 'Karimnagar', 'Khammam', 'Mahabubnagar', 'Medak', 'Nalgonda', 'Nizamabad', 'Warangal'],
 
 
         // Add more city data as needed...
@@ -2106,38 +2532,38 @@
     };
 
     var cityData = {
-        'Andhra Pradesh':['Adoni', 'Anantapur', 'Chittoor', 'Kadapa', 'Kakinada', 'Kurnool', 'Nellore', 'Rajahmundry', 'Tirupati', 'Vijayawada', 'Visakhapatnam', 'Guntur','Machilipatnam','Narsipatnam','Srikakulam','Vizianagaram','Eluru','Tirupati','Yemmiganur'],
-        'Telengana':['Adilabad','Hyderabad','Karimnagar','Khammam','Mahbubnagar','Nizamabad','Warangal','Ranga Reddy'],
-        'Kerala':['Alappuzha','Ernakulam','Idukki','Kannur','Kasaragod','Kollam','Kottayam','Kozhikode','Malappuram','Palakkad','Pathanamthitta','Thiruvananthapuram','Thrissur','Wayanad'],
-        'Tamil Nadu':['Chennai','Madurai','Tiruchirappalli','Vellore','Viluppuram','Virudhunagar','Dindigul','Erode','Kanchipuram','Kanniyakumari','Krishnagiri','Namakkal','Salem','Thoothukkudi','Tirunelveli','Tiruppur','Tiruvannamalai','Vellore','Viluppuram','Virudhunagar'],
-        'Pondicherry':['karaikal','Mahe','puducherry','Yanam'],
-        'Punjab':['Amritsar','Batala','Firozpur','Hoshiarpur','Jalandhar','Kapurthala','Ludhiana','Patiala','Rupnagar','Sangrur','SAS Nagar','Srinagar','Tarn Taran'],
-        'Andaman and Nicobar Islands':['Port Blair'],
-        'Chandigarh':['Chandigarh'],
-        'Chhattisgarh':['Ambikapur','Bhilai','Bilaspur','Durg','Raigarh','Raipur','Rajnandgaon','Surguja'],
-        'Himachal Pradesh':['Bilaspur','Chamba','Hamirpur','Kangra','Kullu','Mandi','Shimla','Sirmaur','Solan','Una'],
-        'Uttarakhand':['Dehradun','Haridwar','Nainital','Pauri Garhwal','Pithoragarh','Rudraprayag','Tehri Garhwal','Udham Singh Nagar','Uttarkashi'],
-        'Delhi':['Delhi','New Delhi'],
-        'Jharkhand':['Dhanbad','Jamshedpur','Ranchi','Wasseypur'],
-        'Rajasthan':['Ajmer','Bikaner','Bharatpur','Jaipur','Jodhpur','Kota','Udaipur'],
-        'Madhya Pradesh':['Bhopal','Indore','Jabalpur','Satna'],
-        'Goa':['Panaji'],
-        'Haryana':['Ambala','Chandigarh','Faridabad','Gurgaon','Hisar','Jhajjar','Karnal','Kurukshetra','Panipat','Rohtak','Sirsa','Sonipat','Yamunanagar'],
-        'Manipur':['Bishnupur','Chandel','Churachandpur','Imphal','Senapati','Tamenglong','Thoubal','Ukhrul'],
-        'Nagaland':['Dimapur','Kohima','Mokokchung','Mon','Noklak','Peren','Phek','Tuensang','Wokha','Zunheboto'],
-        'Meghalaya':['East Garo Hills','East Khasi Hills','North Garo Hills','Ri Bhoi','South Garo Hills','South West Garo Hills','South West Khasi Hills','West Garo Hills','West Khasi Hills'],
-        'Tripura':['Dhalai','Gomati','Khowai','North Tripura','Sepahijala','South Tripura','Unokoti','West Tripura'],
-        'Sikkim':['Gangtok','Gyalshing','Lachung','Mangan','Namchi','Pasangtok','Rangpo'],
-        'Mizoram':['Aizawl','Champhai','Kolasib','Lawngtlai','Lunglei','Mamit','Saiha','Saitual','Serchhip'],
-        'Arunachal Pradesh':['Itanagar'],
-        'West Bengal':['Bardhaman','Darjiling','Hugli','Kharagpur','Kolkata','Nadia','North 24 Parganas','Paschim Medinipur','Purba Medinipur','Purulia','South 24 Parganas','Uttar Dinajpur'],
-        'Lakshadweep':['Lakshadweep'],
-        'Rajasthan':['Ajmer','Bikaner','Bharatpur','Jaipur','Jodhpur','Kota','Udaipur'],
-        'Odisha':['Bhubaneswar','Cuttack','Dhenkanal','Gangtok','Gopalpur','Jharsuguda','Nabarangpur','Nayagarh','Puri','Raurkela','Sambalpur','Sundargarh'],
-        'Maharashtra':['Ahmednagar','Aurangabad','Beed','Chandrapur','Dhule','Jalgaon','Kolhapur','Latur','Nanded','Nagpur','Nashik','Pune','Sangli','Satara','Sindhudurg','Solapur','Thane','Wardha','Washim','Yavatmal'],
-        'Gujarat':['Ahmedabad','surat','Amreli','Anand','Bharuch','Bhavnagar','Dahod','Gandhinagar','Jamnagar','Kutch','Narmada','Navsari','Patan','Porbandar','Rajkot','Sabarkantha','Surat','Surendranagar','Tapi','Vadodara','Valsad'],
-        'Daman and Diu':['Daman','Diu'],
-        'Telangana':['Adilabad','Hyderabad','Karimnagar','Khammam','Mahabubnagar','Medak','Nalgonda','Nizamabad','Warangal'],
+        'Andhra Pradesh': ['Adoni', 'Anantapur', 'Chittoor', 'Kadapa', 'Kakinada', 'Kurnool', 'Nellore', 'Rajahmundry', 'Tirupati', 'Vijayawada', 'Visakhapatnam', 'Guntur', 'Machilipatnam', 'Narsipatnam', 'Srikakulam', 'Vizianagaram', 'Eluru', 'Tirupati', 'Yemmiganur'],
+        'Telengana': ['Adilabad', 'Hyderabad', 'Karimnagar', 'Khammam', 'Mahbubnagar', 'Nizamabad', 'Warangal', 'Ranga Reddy'],
+        'Kerala': ['Alappuzha', 'Ernakulam', 'Idukki', 'Kannur', 'Kasaragod', 'Kollam', 'Kottayam', 'Kozhikode', 'Malappuram', 'Palakkad', 'Pathanamthitta', 'Thiruvananthapuram', 'Thrissur', 'Wayanad'],
+        'Tamil Nadu': ['Chennai', 'Madurai', 'Tiruchirappalli', 'Vellore', 'Viluppuram', 'Virudhunagar', 'Dindigul', 'Erode', 'Kanchipuram', 'Kanniyakumari', 'Krishnagiri', 'Namakkal', 'Salem', 'Thoothukkudi', 'Tirunelveli', 'Tiruppur', 'Tiruvannamalai', 'Vellore', 'Viluppuram', 'Virudhunagar'],
+        'Pondicherry': ['karaikal', 'Mahe', 'puducherry', 'Yanam'],
+        'Punjab': ['Amritsar', 'Batala', 'Firozpur', 'Hoshiarpur', 'Jalandhar', 'Kapurthala', 'Ludhiana', 'Patiala', 'Rupnagar', 'Sangrur', 'SAS Nagar', 'Srinagar', 'Tarn Taran'],
+        'Andaman and Nicobar Islands': ['Port Blair'],
+        'Chandigarh': ['Chandigarh'],
+        'Chhattisgarh': ['Ambikapur', 'Bhilai', 'Bilaspur', 'Durg', 'Raigarh', 'Raipur', 'Rajnandgaon', 'Surguja'],
+        'Himachal Pradesh': ['Bilaspur', 'Chamba', 'Hamirpur', 'Kangra', 'Kullu', 'Mandi', 'Shimla', 'Sirmaur', 'Solan', 'Una'],
+        'Uttarakhand': ['Dehradun', 'Haridwar', 'Nainital', 'Pauri Garhwal', 'Pithoragarh', 'Rudraprayag', 'Tehri Garhwal', 'Udham Singh Nagar', 'Uttarkashi'],
+        'Delhi': ['Delhi', 'New Delhi'],
+        'Jharkhand': ['Dhanbad', 'Jamshedpur', 'Ranchi', 'Wasseypur'],
+        'Rajasthan': ['Ajmer', 'Bikaner', 'Bharatpur', 'Jaipur', 'Jodhpur', 'Kota', 'Udaipur'],
+        'Madhya Pradesh': ['Bhopal', 'Indore', 'Jabalpur', 'Satna'],
+        'Goa': ['Panaji'],
+        'Haryana': ['Ambala', 'Chandigarh', 'Faridabad', 'Gurgaon', 'Hisar', 'Jhajjar', 'Karnal', 'Kurukshetra', 'Panipat', 'Rohtak', 'Sirsa', 'Sonipat', 'Yamunanagar'],
+        'Manipur': ['Bishnupur', 'Chandel', 'Churachandpur', 'Imphal', 'Senapati', 'Tamenglong', 'Thoubal', 'Ukhrul'],
+        'Nagaland': ['Dimapur', 'Kohima', 'Mokokchung', 'Mon', 'Noklak', 'Peren', 'Phek', 'Tuensang', 'Wokha', 'Zunheboto'],
+        'Meghalaya': ['East Garo Hills', 'East Khasi Hills', 'North Garo Hills', 'Ri Bhoi', 'South Garo Hills', 'South West Garo Hills', 'South West Khasi Hills', 'West Garo Hills', 'West Khasi Hills'],
+        'Tripura': ['Dhalai', 'Gomati', 'Khowai', 'North Tripura', 'Sepahijala', 'South Tripura', 'Unokoti', 'West Tripura'],
+        'Sikkim': ['Gangtok', 'Gyalshing', 'Lachung', 'Mangan', 'Namchi', 'Pasangtok', 'Rangpo'],
+        'Mizoram': ['Aizawl', 'Champhai', 'Kolasib', 'Lawngtlai', 'Lunglei', 'Mamit', 'Saiha', 'Saitual', 'Serchhip'],
+        'Arunachal Pradesh': ['Itanagar'],
+        'West Bengal': ['Bardhaman', 'Darjiling', 'Hugli', 'Kharagpur', 'Kolkata', 'Nadia', 'North 24 Parganas', 'Paschim Medinipur', 'Purba Medinipur', 'Purulia', 'South 24 Parganas', 'Uttar Dinajpur'],
+        'Lakshadweep': ['Lakshadweep'],
+        'Rajasthan': ['Ajmer', 'Bikaner', 'Bharatpur', 'Jaipur', 'Jodhpur', 'Kota', 'Udaipur'],
+        'Odisha': ['Bhubaneswar', 'Cuttack', 'Dhenkanal', 'Gangtok', 'Gopalpur', 'Jharsuguda', 'Nabarangpur', 'Nayagarh', 'Puri', 'Raurkela', 'Sambalpur', 'Sundargarh'],
+        'Maharashtra': ['Ahmednagar', 'Aurangabad', 'Beed', 'Chandrapur', 'Dhule', 'Jalgaon', 'Kolhapur', 'Latur', 'Nanded', 'Nagpur', 'Nashik', 'Pune', 'Sangli', 'Satara', 'Sindhudurg', 'Solapur', 'Thane', 'Wardha', 'Washim', 'Yavatmal'],
+        'Gujarat': ['Ahmedabad', 'surat', 'Amreli', 'Anand', 'Bharuch', 'Bhavnagar', 'Dahod', 'Gandhinagar', 'Jamnagar', 'Kutch', 'Narmada', 'Navsari', 'Patan', 'Porbandar', 'Rajkot', 'Sabarkantha', 'Surat', 'Surendranagar', 'Tapi', 'Vadodara', 'Valsad'],
+        'Daman and Diu': ['Daman', 'Diu'],
+        'Telangana': ['Adilabad', 'Hyderabad', 'Karimnagar', 'Khammam', 'Mahabubnagar', 'Medak', 'Nalgonda', 'Nizamabad', 'Warangal'],
         // Add more city data as needed...
     };
 

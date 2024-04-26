@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Recipt</title>
+    <style>
+        table > tbody > tr > td,
+        table > tbody > tr > th {
+          text-align: start;
+          font-size: 20px;
+        }
+  
+        table {
+          border: 1px solid gray;
+        }
+
+    </style>
+</head>
+<body>
+    <div>
+        
+        <table style="width:100%;">
+         <tbody>
+            <tr>
+                <th style="padding: 5px;">ID number</th>
+                <td style="padding: 5px;">{{finance.leadstage.token_id}} </td>
+            </tr>
+            <tr>
+                <th style="padding: 5px;">Full Name</th>
+                <td style="padding: 5px;">{{finance.leadstage.first_name}} {{finance.leadstage.last_name}} </td>
+            </tr>
+            <tr>
+                <th style="padding: 5px;">Mobile Number</th>
+                <td style="padding: 5px;">{{finance.leadstage.mobile_number}}</td>
+            </tr>
+            <tr>
+                <th style="padding: 5px;">Email</th>
+                <td style="padding: 5px;">{{finance.leadstage.email}}</td></th>
+            </tr>
+            <tr>
+                <th style="padding: 5px;">Course</th>
+                <td style="padding: 5px;">{{finance.leadstage.course_name}}</td>
+            </tr>
+            <tr>
+                <th style="padding: 5px;">Specialization</th>
+                <td style="padding: 5px;">{{finance.leadstage.course_name.specialization.specilalization_name}}</td>
+            </tr>
+            <tr>
+                <th style="padding: 5px;">Amount</th>
+                <td style="padding: 5px;">RS. {{finance.leadstage.course_name.final_price}}</td>
+            </tr>
+            
+         </tbody>
+ 
+        </table>
+         
+                    
+         
+     </div>
+</body>
+</html>
