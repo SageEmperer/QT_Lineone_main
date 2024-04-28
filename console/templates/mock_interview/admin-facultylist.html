@@ -9,16 +9,17 @@
   <h4 class="hk-pg-title m-3">Today Interviews</h4>
   <nav aria-label="breadcrumb">
     <nav aria-label="breadcrumb">
-    <ol class="breadcrumb bg-transparent mb-0">
-      <li class="breadcrumb-item"><a href="{% url 'mock_dashboard' %}">Dashboard</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Admin Interviews</li>
-    </ol>
+      <ol class="breadcrumb bg-transparent mb-0">
+        <li class="breadcrumb-item"><a href="{% url 'mock_dashboard' %}">Dashboard</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Admin Interviews</li>
+      </ol>
     </nav>
   </nav>
 </div>
 <!-- /Breadcrumb -->
 
 {% endblock %}
+
 {% block content %}
 
 
@@ -27,7 +28,7 @@
   <div class="row">
     <div class="col-sm">
       <div class="table-wrap">
-        <table id="datable_1" class="table table-hover w-100  pb-30 table-bordered" >
+        <table id="datable_1" class="table table-hover w-100  pb-30 table-bordered">
           <thead class="bg-dark">
             <tr>
               <th class="text-white text-center">S.No</th>
@@ -43,42 +44,26 @@
             </tr>
           </thead>
           <tbody>
+            {% for i in today_interviews %}
             <tr>
-              <td class="text-center">1</td>
-              <td class="text-center">Aadil</td>
-              <td class="text-center">33</td>
-              <td class="text-center">23</td>
-              <td class="text-center">9654725478</td>
-              <td class="text-center">aadil33@gmail.com</td>
-              <td class="text-center">Python</td>
-              <td class="text-center">Mar.04,2024,10:30 am</td>
-              <td class="text-center"><a href="" title="Image from freeiconspng.com"><img
+              <td class="text-center">{{i.id}}</td>
+              <td class="text-center">{{i.student_name.first_name}} {{i.student_name.last_name}}</td>
+              <td class="text-center">{{i.student_name.token_id}}</td>
+              <td class="text-center">{{i.student_name.batch_number.batch_number}}</td>
+              <td class="text-center">{{i.student_name.mobile_number}}</td>
+              <td class="text-center">{{i.student_name.email}}</td>
+              <td class="text-center">{{i.student_name.course_name}}</td>
+              <td class="text-center">{{i.available_slot.available_slot}}</td>
+              <td class="text-center"><a href="{% url 'open_pdf' feedback.id %} title="Image from freeiconspng.com"><img
                     src="https://www.freeiconspng.com/uploads/pdf-icon-png-pdf-zum-download-2.png" width="35"
                     alt="Student resume" /></a></td>
               <td class="text-center"><button class="btn btn-icon btn-success   " data-toggle="modal"
-                  data-target="#FeedbackForm">
+                  data-target="#todayfeedback{{forloop.counter}}">
                   <span class="btn-icon-wrap"><i class="fa fa-rocket"></i></span>
                 </button>
               </td>
             </tr>
-
-            <tr>
-              <td class="text-center">2</td>
-              <td class="text-center">Aadil</td>
-              <td class="text-center">33</td>
-              <td class="text-center">23</td>
-              <td class="text-center">9654725478</td>
-              <td class="text-center">aadil33@gmail.com</td>
-              <td class="text-center">Python</td>
-              <td class="text-center">Mar.04,2024,10:30 am</td>
-              <td class="text-center"><a href="" title="Image from freeiconspng.com"><img
-                    src="https://www.freeiconspng.com/uploads/pdf-icon-png-pdf-zum-download-2.png" width="35"
-                    alt="Student resume" /></a></td>
-              <td class="text-center"><button class="btn btn-icon btn-success" data-toggle="modal"
-                  data-target="#FeedbackForm">
-                  <span class="btn-icon-wrap"><i class="fa fa-rocket"></i></span>
-                </button></td>
-            </tr>
+            {% endfor %}
           </tbody>
         </table>
       </div>
@@ -86,142 +71,9 @@
   </div>
 </section>
 
-
-<div class="hk-pg-header d-flex justify-content-between mb-0">
-  <h4 class="hk-pg-title m-3">Tomorrow Interviews</h4>
-</div>
-
-<section class="hk-sec-wrapper">
-  <div class="row">
-    <div class="col-sm">
-      <div class="table-wrap">
-        <table id="example_1" class="table table-hover w-100  pb-30 table-bordered" >
-          <thead class="bg-dark">
-            <tr>
-              <th class="text-white text-center">S.No</th>
-              <th class="text-white text-center">Student</th>
-              <th class="text-white text-center">Roll Number</th>
-              <th class="text-white text-center">Batch Number</th>
-              <th class="text-white text-center">Mobile No</th>
-              <th class="text-white text-center">Student Email id</th>
-              <th class="text-white text-center">Course</th>
-              <th class="text-white text-center">Date Of Interview</th>
-              <th class="text-white text-center">Resume</th>
-              <th class="text-white text-center">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="text-center">1</td>
-              <td class="text-center">Aadil</td>
-              <td class="text-center">33</td>
-              <td class="text-center">23</td>
-              <td class="text-center">9654725478</td>
-              <td class="text-center">aadil33@gmail.com</td>
-              <td class="text-center">Python</td>
-              <td class="text-center">Mar.04,2024,10:30 am</td>
-              <td class="text-center"><a href="" title="Image from freeiconspng.com"><img
-                    src="https://www.freeiconspng.com/uploads/pdf-icon-png-pdf-zum-download-2.png" width="35"
-                    alt="Student resume" /></a></td>
-              <td class="text-center"><button class="btn btn-icon btn-success   " data-toggle="modal"
-                  data-target="#FeedbackForm">
-                  <span class="btn-icon-wrap"><i class="fa fa-rocket"></i></span>
-                </button>
-              </td>
-            </tr>
-
-            <tr>
-              <td class="text-center">2</td>
-              <td class="text-center">Aadil</td>
-              <td class="text-center">33</td>
-              <td class="text-center">23</td>
-              <td class="text-center">9654725478</td>
-              <td class="text-center">aadil33@gmail.com</td>
-              <td class="text-center">Python</td>
-              <td class="text-center">Mar.04,2024,10:30 am</td>
-              <td class="text-center"><a href="" title="Image from freeiconspng.com"><img
-                    src="https://www.freeiconspng.com/uploads/pdf-icon-png-pdf-zum-download-2.png" width="35"
-                    alt="Student resume" /></a></td>
-              <td class="text-center"><button class="btn btn-icon btn-success" data-toggle="modal"
-                  data-target="#FeedbackForm">
-                  <span class="btn-icon-wrap"><i class="fa fa-rocket"></i></span>
-                </button></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="hk-pg-header d-flex justify-content-between mb-0">
-  <h4 class="hk-pg-title m-3">Upcoming Interviews</h4>
-</div>
-
-<section class="hk-sec-wrapper">
-  <div class="row">
-    <div class="col-sm">
-      <div class="table-wrap">
-        <table id="example_2" class="table table-hover w-100  pb-30 table-bordered" >
-          <thead class="bg-dark">
-            <tr>
-              <th class="text-white text-center">S.No</th>
-              <th class="text-white text-center">Student</th>
-              <th class="text-white text-center">Roll Number</th>
-              <th class="text-white text-center">Batch Number</th>
-              <th class="text-white text-center">Mobile No</th>
-              <th class="text-white text-center">Student Email id</th>
-              <th class="text-white text-center">Course</th>
-              <th class="text-white text-center">Date Of Interview</th>
-              <th class="text-white text-center">Resume</th>
-              <th class="text-white text-center">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="text-center">1</td>
-              <td class="text-center">Aadil</td>
-              <td class="text-center">33</td>
-              <td class="text-center">23</td>
-              <td class="text-center">9654725478</td>
-              <td class="text-center">aadil33@gmail.com</td>
-              <td class="text-center">Python</td>
-              <td class="text-center">Mar.04,2024,10:30 am</td>
-              <td class="text-center"><a href="" title="Image from freeiconspng.com"><img
-                    src="https://www.freeiconspng.com/uploads/pdf-icon-png-pdf-zum-download-2.png" width="35"
-                    alt="Student resume" /></a></td>
-              <td class="text-center"><button class="btn btn-icon btn-success   " data-toggle="modal"
-                  data-target="#FeedbackForm">
-                  <span class="btn-icon-wrap"><i class="fa fa-rocket"></i></span>
-                </button>
-              </td>
-            </tr>
-
-            <tr>
-              <td class="text-center">2</td>
-              <td class="text-center">Vijaya</td>
-              <td class="text-center">33</td>
-              <td class="text-center">23</td>
-              <td class="text-center">9654725478</td>
-              <td class="text-center">aadil33@gmail.com</td>
-              <td class="text-center">Python</td>
-              <td class="text-center">Mar.04,2024,10:30 am</td>
-              <td class="text-center"><a href="" title="Image from freeiconspng.com"><img
-                    src="https://www.freeiconspng.com/uploads/pdf-icon-png-pdf-zum-download-2.png" width="35"
-                    alt="Student resume" /></a></td>
-              <td class="text-center"><button class="btn btn-icon btn-success" data-toggle="modal"
-                  data-target="#FeedbackForm">
-                  <span class="btn-icon-wrap"><i class="fa fa-rocket"></i></span>
-                </button></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="modal fade" id="FeedbackForm" tabindex="-1" role="dialog" aria-labelledby="FeedbackForm" aria-hidden="true">
+{% for i in today_interviews %}
+<div class="modal fade" id="todayfeedback{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="FeedbackForm"
+  aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header bg-dark">
@@ -230,7 +82,9 @@
           <span aria-hidden="true" class="text-white">&times;</span>
         </button>
       </div>
-      <form action="" method="post" id="createFeed">
+
+    
+      <form action="{% url 'FeedbackForm' i.id %}" method="post" id="createFeed">
         {% csrf_token %}
         <div class="modal-body">
           <div class="container-fluid">
@@ -238,38 +92,40 @@
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
                   <label for="" class="form-label">Full Name </label>
-                  <input  value="Aadil" name="batchtype_name" class="form-control" readonly>
+                  <input value="{{i.student_name.first_name}} {{i.student_name.last_name}}" name="batchtype_name" class="form-control" readonly>
+                  <input type="hidden" name="studend_id" value="{{i.student_name.id}}">
+                  <input type="hidden" name="faculty_id" value="{{i.faculty_name.id}}">
                 </div>
               </div>
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
                   <label for="" class="form-label">Roll Number </label>
-                  <input  value="23" name="batchtype_name" class="form-control" readonly>
+                  <input value="{{i.student_name.token_id}}" name="batchtype_name" class="form-control" readonly>
                 </div>
               </div>
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
                   <label for="" class="form-label">Batch Number </label>
-                  <input  value="20" name="batchtype_name" class="form-control" readonly>
+                  <input value="{{i.student_name.batch_number.batch_number}}" name="batchtype_name" class="form-control" readonly>
                 </div>
               </div>
 
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
                   <label for="" class="form-label">Email Id </label>
-                  <input  value="aadil33@gmail.com" name="batchtype_name" class="form-control" readonly>
+                  <input value="{{i.student_name.email}}" name="batchtype_name" class="form-control" readonly>
                 </div>
               </div>
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
                   <label for="" class="form-label">Mobile Number </label>
-                  <input  value="9647521854" name="batchtype_name" class="form-control" readonly>
+                  <input value="{{i.student_name.mobile_number}}" name="batchtype_name" class="form-control" readonly>
                 </div>
               </div>
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
                   <label for="" class="form-label">Date of Interview </label>
-                  <input  value="Mar.04,2024,10:30 am" name="batchtype_name" class="form-control" readonly>
+                  <input value="{{i.available_slot.available_slot}}" name="batchtype_name" class="form-control" readonly>
                 </div>
               </div>
 
@@ -277,7 +133,7 @@
                 <div class="form-group">
                   <label for="" class="form-label">Attendance <span class="text-danger">*</span></label>
 
-                  <select class="form-control select2" name="Attendance">
+                  <select class="form-control select2" name="attendance_status" id="attendanceStatus">
                     <option value="" disabled selected>Please Select</option>
                     <option value="1">Present</option>
                     <option value="2">Absent</option>
@@ -288,7 +144,7 @@
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
                   <label for="" class="form-label">Communication Skills <span class="text-danger">*</span></label>
-                  <select class="form-control select2" name="Communication">
+                  <select class="form-control select2" name="communication_skills" id="communication">
                     <option value="" disabled selected>Please Select</option>
                     <option value="1">0</option>
                     <option value="2">1</option>
@@ -304,7 +160,7 @@
                 <div class="form-group">
                   <label for="" class="form-label">Body Language <span class="text-danger">*</span></label>
 
-                  <select  class="form-control select2" name="Body Language">
+                  <select class="form-control select2" name="body_language" id="bodyLanguage">
                     <option value="" disabled selected>Please Select</option>
                     <option value="1">0</option>
                     <option value="2">1</option>
@@ -321,7 +177,7 @@
                 <div class="form-group">
                   <label for="" class="form-label">Technical Skills <span class="text-danger">*</span></label>
 
-                  <select  class="form-control select2" name="Technical Performance">
+                  <select class="form-control select2" name="technical_skills" id="technicalSkills">
                     <option value="" disabled selected>Please Select</option>
                     <option value="1">0</option>
                     <option value="2">1</option>
@@ -337,7 +193,7 @@
                 <div class="form-group">
                   <label for="" class="form-label">Logical Thinking<span class="text-danger">*</span></label>
 
-                  <select  class="form-control select2" name="Logical Thinking">
+                  <select class="form-control select2" name="logical_thinking" id="logicalThinking">
                     <option value="" disabled selected>Please Select</option>
                     <option value="1">0</option>
                     <option value="2">1</option>
@@ -348,7 +204,6 @@
                   </select>
                 </div>
               </div>
-
 
               <div class="col-md-6 col-sm-12 col-lg-6 ">
                 <div class="form-group">
@@ -363,7 +218,7 @@
                     <span class="input-group-append">
                       <span class=" btn btn-primary btn-file"><span class="fileinput-new">Select file</span><span
                           class="fileinput-exists">Change</span>
-                        <input type="file" name="...">
+                        <input type="file" name="send_attachment" id="sendAttachment" disabled>
                       </span>
                     </span>
                   </div>
@@ -373,8 +228,8 @@
               <div class="col-md-12 ">
                 <div class="form-group">
                   <label for="">Suggestions </label>
-                  <textarea class="form-control" id="" name="Suggestions"
-                    placeholder="What Would you like to say?" rows="3"></textarea>
+                  <textarea class="form-control" id="suggestions" name="suggestion"
+                    placeholder="What Would you like to say?" rows="3" disabled></textarea>
                 </div>
               </div>
             </div>
@@ -391,6 +246,463 @@
     </div>
   </div>
 </div>
+{% endfor %}
+
+<div class="hk-pg-header d-flex justify-content-between mb-0">
+  <h4 class="hk-pg-title m-3">Tomorrow Interviews</h4>
+</div>
+
+<section class="hk-sec-wrapper">
+  <div class="row">
+    <div class="col-sm">
+      <div class="table-wrap">
+        <table id="example_1" class="table table-hover w-100  pb-30 table-bordered">
+          <thead class="bg-dark">
+            <tr>
+              <th class="text-white text-center">S.No</th>
+              <th class="text-white text-center">Student</th>
+              <th class="text-white text-center">Roll Number</th>
+              <th class="text-white text-center">Batch Number</th>
+              <th class="text-white text-center">Mobile No</th>
+              <th class="text-white text-center">Student Email id</th>
+              <th class="text-white text-center">Course</th>
+              <th class="text-white text-center">Date Of Interview</th>
+              <th class="text-white text-center">Resume</th>
+              <th class="text-white text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in tomorrow_interviews %}
+            <tr>
+              <td class="text-center">{{i.id}}</td>
+              <td class="text-center">{{i.student_name.first_name}} {{i.student_name.last_name}}</td>
+              <td class="text-center">{{i.student_name.token_id}}</td>
+              <td class="text-center">{{i.student_name.batch_number.batch_number}}</td>
+              <td class="text-center">{{i.student_name.mobile_number}}</td>
+              <td class="text-center">{{i.student_name.email}}</td>
+              <td class="text-center">{{i.student_name.course_name}}</td>
+              <td class="text-center">{{i.available_slot.available_slot}}</td>
+              <td class="text-center"><a href="{% url 'open_pdf' feedback.id %} title="Image from freeiconspng.com"><img
+                    src="https://www.freeiconspng.com/uploads/pdf-icon-png-pdf-zum-download-2.png" width="35"
+                    alt="Student resume" /></a></td>
+              <td class="text-center"><button class="btn btn-icon btn-success   " data-toggle="modal"
+                  data-target="#tomorrowfeedback{{forloop.counter}}">
+                  <span class="btn-icon-wrap"><i class="fa fa-rocket"></i></span>
+                </button>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% for i in tomorrow_interviews %}
+<div class="modal fade" id="tomorrowfeedback{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="FeedbackForm"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-dark">
+        <h5 class="modal-title text-white">Feedback Form</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" class="text-white">&times;</span>
+        </button>
+      </div>
+
+    
+      <form action="{% url 'FeedbackForm' i.id %}" method="post" id="createFeed">
+        {% csrf_token %}
+        <div class="modal-body">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Full Name </label>
+                  <input value="{{i.student_name.first_name}} {{i.student_name.last_name}}" name="batchtype_name" class="form-control" readonly>
+                  <input type="hidden" name="studend_id" value="{{i.student_name.id}}">
+                  <input type="hidden" name="faculty_id" value="{{i.faculty_name.id}}">
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Roll Number </label>
+                  <input value="{{i.student_name.token_id}}" name="batchtype_name" class="form-control" readonly>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Batch Number </label>
+                  <input value="{{i.student_name.batch_number.batch_number}}" name="batchtype_name" class="form-control" readonly>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Email Id </label>
+                  <input value="{{i.student_name.email}}" name="batchtype_name" class="form-control" readonly>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Mobile Number </label>
+                  <input value="{{i.student_name.mobile_number}}" name="batchtype_name" class="form-control" readonly>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Date of Interview </label>
+                  <input value="{{i.available_slot.available_slot}}" name="batchtype_name" class="form-control" readonly>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Attendance <span class="text-danger">*</span></label>
+
+                  <select class="form-control select2" name="attendance_status" id="attendanceStatus">
+                    <option value="" disabled selected>Please Select</option>
+                    <option value="1">Present</option>
+                    <option value="2">Absent</option>
+                  </select>
+
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Communication Skills <span class="text-danger">*</span></label>
+                  <select class="form-control select2" name="communication_skills" id="communication">
+                    <option value="" disabled selected>Please Select</option>
+                    <option value="1">0</option>
+                    <option value="2">1</option>
+                    <option value="3">2</option>
+                    <option value="4">3</option>
+                    <option value="5">4</option>
+                    <option value="6">5</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Body Language <span class="text-danger">*</span></label>
+
+                  <select class="form-control select2" name="body_language" id="bodyLanguage">
+                    <option value="" disabled selected>Please Select</option>
+                    <option value="1">0</option>
+                    <option value="2">1</option>
+                    <option value="3">2</option>
+                    <option value="4">3</option>
+                    <option value="5">4</option>
+                    <option value="6">5</option>
+                  </select>
+
+                </div>
+              </div>
+
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Technical Skills <span class="text-danger">*</span></label>
+
+                  <select class="form-control select2" name="technical_skills" id="technicalSkills">
+                    <option value="" disabled selected>Please Select</option>
+                    <option value="1">0</option>
+                    <option value="2">1</option>
+                    <option value="3">2</option>
+                    <option value="4">3</option>
+                    <option value="5">4</option>
+                    <option value="6">5</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Logical Thinking<span class="text-danger">*</span></label>
+
+                  <select class="form-control select2" name="logical_thinking" id="logicalThinking">
+                    <option value="" disabled selected>Please Select</option>
+                    <option value="1">0</option>
+                    <option value="2">1</option>
+                    <option value="3">2</option>
+                    <option value="4">3</option>
+                    <option value="5">4</option>
+                    <option value="6">5</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-sm-12 col-lg-6 ">
+                <div class="form-group">
+                  <label for="" class="form-label">Send Attachment </label>
+                  <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Upload</span>
+                    </div>
+                    <div class="form-control text-truncate" data-trigger="fileinput"><i
+                        class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span>
+                    </div>
+                    <span class="input-group-append">
+                      <span class=" btn btn-primary btn-file"><span class="fileinput-new">Select file</span><span
+                          class="fileinput-exists">Change</span>
+                        <input type="file" name="send_attachment" id="sendAttachment" disabled>
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-12 ">
+                <div class="form-group">
+                  <label for="">Suggestions </label>
+                  <textarea class="form-control" id="suggestions" name="suggestion"
+                    placeholder="What Would you like to say?" rows="3" disabled></textarea>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="modal-footer d-flex justify-content-center">
+              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="reset" class="btn btn-secondary">Reset</button>
+            </div>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+<div class="hk-pg-header d-flex justify-content-between mb-0">
+  <h4 class="hk-pg-title m-3">Upcoming Interviews</h4>
+</div>
+
+<section class="hk-sec-wrapper">
+  <div class="row">
+    <div class="col-sm">
+      <div class="table-wrap">
+        <table id="example_2" class="table table-hover w-100  pb-30 table-bordered">
+          <thead class="bg-dark">
+            <tr>
+              <th class="text-white text-center">S.No</th>
+              <th class="text-white text-center">Student</th>
+              <th class="text-white text-center">Roll Number</th>
+              <th class="text-white text-center">Batch Number</th>
+              <th class="text-white text-center">Mobile No</th>
+              <th class="text-white text-center">Student Email id</th>
+              <th class="text-white text-center">Course</th>
+              <th class="text-white text-center">Date Of Interview</th>
+              <th class="text-white text-center">Resume</th>
+              <th class="text-white text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in upcoming_interviews %}
+            <tr>
+              <td class="text-center">{{i.id}}</td>
+              <td class="text-center">{{i.student_name.first_name}} {{i.student_name.last_name}}</td>
+              <td class="text-center">{{i.student_name.token_id}}</td>
+              <td class="text-center">{{i.student_name.batch_number.batch_number}}</td>
+              <td class="text-center">{{i.student_name.mobile_number}}</td>
+              <td class="text-center">{{i.student_name.email}}</td>
+              <td class="text-center">{{i.student_name.course_name}}</td>
+              <td class="text-center">{{i.available_slot.available_slot}}</td>
+              <td class="text-center"><a href="{% url 'open_pdf' feedback.id %} title="Image from freeiconspng.com"><img
+                    src="https://www.freeiconspng.com/uploads/pdf-icon-png-pdf-zum-download-2.png" width="35"
+                    alt="Student resume" /></a></td>
+              <td class="text-center"><button class="btn btn-icon btn-success   " data-toggle="modal"
+                  data-target="#upcomingfeedback{{forloop.counter}}">
+                  <span class="btn-icon-wrap"><i class="fa fa-rocket"></i></span>
+                </button>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% for i in upcoming_interviews %}
+<div class="modal fade" id="upcomingfeedback{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="FeedbackForm"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-dark">
+        <h5 class="modal-title text-white">Feedback Form</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" class="text-white">&times;</span>
+        </button>
+      </div>
+
+    
+      <form action="{% url 'FeedbackForm' i.id %}" method="post" id="createFeed">
+        {% csrf_token %}
+        <div class="modal-body">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Full Name </label>
+                  <input value="{{i.student_name.first_name}} {{i.student_name.last_name}}" name="batchtype_name" class="form-control" readonly>
+                  <input type="hidden" name="studend_id" value="{{i.student_name.id}}">
+                  <input type="hidden" name="faculty_id" value="{{i.faculty_name.id}}">
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Roll Number </label>
+                  <input value="{{i.student_name.token_id}}" name="batchtype_name" class="form-control" readonly>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Batch Number </label>
+                  <input value="{{i.student_name.batch_number.batch_number}}" name="batchtype_name" class="form-control" readonly>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Email Id </label>
+                  <input value="{{i.student_name.email}}" name="batchtype_name" class="form-control" readonly>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Mobile Number </label>
+                  <input value="{{i.student_name.mobile_number}}" name="batchtype_name" class="form-control" readonly>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Date of Interview </label>
+                  <input value="{{i.available_slot.available_slot}}" name="batchtype_name" class="form-control" readonly>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Attendance <span class="text-danger">*</span></label>
+
+                  <select class="form-control select2" name="attendance_status" id="attendanceStatus">
+                    <option value="" disabled selected>Please Select</option>
+                    <option value="1">Present</option>
+                    <option value="2">Absent</option>
+                  </select>
+
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Communication Skills <span class="text-danger">*</span></label>
+                  <select class="form-control select2" name="communication_skills" id="communication">
+                    <option value="" disabled selected>Please Select</option>
+                    <option value="1">0</option>
+                    <option value="2">1</option>
+                    <option value="3">2</option>
+                    <option value="4">3</option>
+                    <option value="5">4</option>
+                    <option value="6">5</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Body Language <span class="text-danger">*</span></label>
+
+                  <select class="form-control select2" name="body_language" id="bodyLanguage">
+                    <option value="" disabled selected>Please Select</option>
+                    <option value="1">0</option>
+                    <option value="2">1</option>
+                    <option value="3">2</option>
+                    <option value="4">3</option>
+                    <option value="5">4</option>
+                    <option value="6">5</option>
+                  </select>
+
+                </div>
+              </div>
+
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Technical Skills <span class="text-danger">*</span></label>
+
+                  <select class="form-control select2" name="technical_skills" id="technicalSkills">
+                    <option value="" disabled selected>Please Select</option>
+                    <option value="1">0</option>
+                    <option value="2">1</option>
+                    <option value="3">2</option>
+                    <option value="4">3</option>
+                    <option value="5">4</option>
+                    <option value="6">5</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Logical Thinking<span class="text-danger">*</span></label>
+
+                  <select class="form-control select2" name="logical_thinking" id="logicalThinking">
+                    <option value="" disabled selected>Please Select</option>
+                    <option value="1">0</option>
+                    <option value="2">1</option>
+                    <option value="3">2</option>
+                    <option value="4">3</option>
+                    <option value="5">4</option>
+                    <option value="6">5</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-sm-12 col-lg-6 ">
+                <div class="form-group">
+                  <label for="" class="form-label">Send Attachment </label>
+                  <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Upload</span>
+                    </div>
+                    <div class="form-control text-truncate" data-trigger="fileinput"><i
+                        class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span>
+                    </div>
+                    <span class="input-group-append">
+                      <span class=" btn btn-primary btn-file"><span class="fileinput-new">Select file</span><span
+                          class="fileinput-exists">Change</span>
+                        <input type="file" name="send_attachment" id="sendAttachment" disabled>
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-12 ">
+                <div class="form-group">
+                  <label for="">Suggestions </label>
+                  <textarea class="form-control" id="suggestions" name="suggestion"
+                    placeholder="What Would you like to say?" rows="3" disabled></textarea>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="modal-footer d-flex justify-content-center">
+              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="reset" class="btn btn-secondary">Reset</button>
+            </div>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+{% endfor %}
 
 <!-- create model ends here -->
 
@@ -437,7 +749,7 @@
     });
   });
 </script>
-{% endblock %}
+
 
 {% block scripts %}
 
@@ -466,18 +778,18 @@
     );
     // Resume upload Validation
     $.validator.setDefaults({
-      errorPlacement: function(error,element){
-        if (element.attr('name') === 'resume'){
+      errorPlacement: function (error, element) {
+        if (element.attr('name') === 'resume') {
           error.appendTo("#resume_upload");
         }
-        else{ error.insertAfter(element);}
+        else { error.insertAfter(element); }
       }
     })
 
 
     $("#createFeed").validate({
       rules: {
-        Attendance : {
+        Attendance: {
 
           required: true,
         },
@@ -494,25 +806,25 @@
           selectRequired: true,
         },
 
-        resume:{
-          required:true,
-          accept:'pdf',
+        resume: {
+          required: true,
+          accept: 'pdf',
         }
 
 
       },
       messages: {
-        Attendance : {
+        Attendance: {
           required: "Please Select an option",
         },
         Communication: {
           selectRequired: "Please Select an option",
         },
         'Body Language': {
-          selectRequired:" Please Select an option"
+          selectRequired: " Please Select an option"
         },
-        'Technical Performance':{
-          selectRequired:'Please Select an option'
+        'Technical Performance': {
+          selectRequired: 'Please Select an option'
         },
         'Logical Thinking': {
           selectRequired: "Please Select an option",
@@ -520,9 +832,9 @@
         Suggestions: {
           selectRequired: "Text here",
         },
-        resume:{
-          required:" please upload your Resume",
-          accept:"only PDF are allowed"
+        resume: {
+          required: " please upload your Resume",
+          accept: "only PDF are allowed"
         }
 
       },
@@ -535,9 +847,10 @@
   });
 
   $.validator.addMethod("pdfOnly", function (value, element) {
-      // Check if the file extension is pdf
-      return this.optional(element) || /\.(pdf)$/i.test(value);
-    }, "Please select a PDF file.");
+    // Check if the file extension is pdf
+    return this.optional(element) || /\.(pdf)$/i.test(value);
+  }, "Please select a PDF file.");
 </script>
+{% endblock %}
 
 {% endblock %}

@@ -2,13 +2,13 @@ from django.urls import path
 from . import views
 urlpatterns = [
     path('',views.student_login,name="student_login"),
+    path('student_logout/',views.student_logout,name="student_logout"),
     path('dash/',views.dash,name='dash'),
     path('student_profile/',views.student_profile,name='student_profile'),
     path('student_id/',views.student_id,name='student_id'),
     path('my_job/',views.my_job,name='my_job'),
     path('profile_project/',views.project,name='profile_project'),
     path('profile_certification/',views.certification,name='profile_certification'),
-    path('',views.student_login,name='login_student'),
     path('reset/',views.reset_paasword,name='reset'),
     path('internship/', views.internship, name='internship'),
     path('mocks/', views.mocks, name='mocks'),

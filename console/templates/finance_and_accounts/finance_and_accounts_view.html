@@ -20,41 +20,56 @@
 <body>
     <div>
         
-        <table style="width:100%;">
-         <tbody>
+        <table>
             <tr>
-                <th style="padding: 5px;">ID number</th>
-                <td style="padding: 5px;">{{finance.leadstage.token_id}} </td>
+                <th style="padding: 5px">Admission Id</th>
+                <td style="padding: 5px">{{payment.studend_id.token_id}}</td>
             </tr>
             <tr>
-                <th style="padding: 5px;">Full Name</th>
-                <td style="padding: 5px;">{{finance.leadstage.first_name}} {{finance.leadstage.last_name}} </td>
+                <th style="padding: 5px">Student Name</th>
+                <td style="padding: 5px">{{payment.studend_id.first_name}} {{payment.studend_id.last_name}}</td>
             </tr>
             <tr>
-                <th style="padding: 5px;">Mobile Number</th>
-                <td style="padding: 5px;">{{finance.leadstage.mobile_number}}</td>
+                <th style="padding: 5px">Mobile No</th>
+                <td style="padding: 5px">{{payment.studend_id.mobile_number}}</td>
             </tr>
             <tr>
-                <th style="padding: 5px;">Email</th>
-                <td style="padding: 5px;">{{finance.leadstage.email}}</td></th>
+                <th style="padding: 5px">Email</th>
+                <td style="padding: 5px">{{payment.studend_id.email}} </td>
             </tr>
             <tr>
-                <th style="padding: 5px;">Course</th>
-                <td style="padding: 5px;">{{finance.leadstage.course_name}}</td>
+                <th style="padding: 5px">Course</th>
+                <td style="padding: 5px"> {{payment.studend_id.course_name}} </td>
             </tr>
             <tr>
-                <th style="padding: 5px;">Specialization</th>
-                <td style="padding: 5px;">{{finance.leadstage.course_name.specialization.specilalization_name}}</td>
+                <th style="padding: 5px">Specialization</th>
+                <td style="padding: 5px"> {{payment.studend_id.course_name.specialization.specilalization_name}} </td>
             </tr>
             <tr>
-                <th style="padding: 5px;">Amount</th>
-                <td style="padding: 5px;">RS. {{finance.leadstage.course_name.final_price}}</td>
+                <th style="padding: 5px">Branch</th>
+                <td style="padding: 5px"> {{payment.studend_id.branch_name}} </td>
             </tr>
-            
-         </tbody>
- 
+            <tr>
+                <th style="padding: 5px">Batch Number</th>
+                <td style="padding: 5px"> {{payment.studend_id.batch_number.batch_number}} </td>
+            </tr>
+            <tr>
+                <th style="padding: 5px">Mode of Payment</th>
+                <td style="padding: 5px"> {{payment.mode_of_payment}} </td>
+            </tr>
+            <tr>
+                <th style="padding: 5px">Amount</th>
+                <td style="padding: 5px"> {{payment.payment_amount}} </td>
+            </tr>
+            <tr>
+                <th style="padding: 5px">Payment Status</th>
+                <td style="padding: 5px"> {{payment.payment_status}} </td>
+            </tr>
+            <tr>
+                <th style="padding: 5px">Payment Date</th>
+                <td style="padding: 5px"> {{payment.payment_date}} </td>
+            </tr>
         </table>
-         
                     
          
      </div>

@@ -54,7 +54,7 @@
           <div class="bg-overlay bg-trans-dark-60"></div>
           <div class="container profile-cover-content py-50">
               <div class="hk-row"> 
-                  <div class="col-lg-4">
+                  <div class="col-lg-5">
                       <div class="media align-items-center">
                           <div class="media-img-wrap  d-flex">
                               <div class="avatar">
@@ -62,26 +62,29 @@
                               </div>
                           </div>
                           <div class="media-body">
-                              <div class="text-white text-capitalize display-6 mb-5 font-weight-400">{{request.session.admin_user.full_name}}</div>
+                              <div class="text-white text-capitalize display-6 mb-5 font-weight-400 ">{{request.session.admin_user.full_name}}</div>
                               <div class="font-14 text-white">
                                   <span class="mr-5">
                                       <span class="font-weight-bold pr-5">JOINING DATE:</span>
                                       <span class="mr-5">12/03/24</span>
                                   </span>
+                                </div>
+                                <div class="font-14 text-white" >
+
                                   <span>
-                                      <span class="font-weight-bold pr-5">Department:</span>
-                                      <span>Python Department</span>
+                                    <span class="font-weight-bold pr-5">Department:</span>
+                                    <span>Python Department</span>
                                   </span>
+                                </div>
                                   
-                              </div>
                           </div>
                       </div>
                   </div>
                  
                   <div class="col-lg-8">
-                      <div class="container mt-3 ml-md-100">
+                      <!-- <div class="container mt-3 ml-md-100">
                                                           <div class="row">
-                                                              <!-- Enquiries Card -->
+                                                          
                       <div class="col-md-3">
                           <div class="stats-card p-2 mb-3 text-white" style="border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); background-color: rgba(23, 163, 184, 0.479);">
                               <h5 class="stats-title  text-white"><i class="fa fa-microphone text-dark" aria-hidden="true"></i> Enquiries</h5>
@@ -89,7 +92,7 @@
                           </div>
                       </div>
 
-                      <!-- Follow-ups Card -->
+                
                       <div class="col-md-3">
                           <div class="stats-card p-2 mb-3 text-dark" style="border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); background-color: rgba(107, 111, 231, 0.458);">
                               <h5 class="stats-title  text-white"><i class="fa fa-retweet text-dark" aria-hidden="true"></i> Follow-ups</h5>
@@ -97,7 +100,7 @@
                           </div>
                       </div>
 
-                      <!-- Admissions Card -->
+             
                       <div class="col-md-3">
                           <div class="stats-card p-2 mb-3 text-white" style="border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); background-color: rgba(235, 115, 137, 0.468);">
                               <h5 class="stats-title  text-white"><i class="fa fa-user text-dark" aria-hidden="true"></i> Admissions</h5>
@@ -110,11 +113,11 @@
                           </div>
                       </div>
                       <div >
-                          <!-- Dynamically filled with latest enquiries -->
+                      
                       </div>
                       
                           </div>
-                      </div>
+                      </div> -->
                   </div>
                   
                   
@@ -126,28 +129,71 @@
           <div class="container">
               <ul class="nav nav-light nav-tabs" role="tablist">
                   <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'lead_prospects' %}active{% endif %}" href="{% url 'lead_prospects' %}">Prospects</a>
+                      <a class="d-flex h-60p align-items-center nav-link {% if request.resolver_match.url_name == 'lead_prospects' %}active{% endif %}" href="{% url 'lead_prospects' %}">Prospects &nbsp;&nbsp;<span class="badge badge-primary badge-pill d-block"> 
+                        {% if prospect_count %}
+                        {{prospect_count}}
+
+                          {% else %}
+                          0
+                          {% endif %}
+
+                      </span></a>
                   </li>
                   <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link active" href="{% url 'leads' %}">Leads</a>
+                      <a class="d-flex h-60p align-items-center nav-link active" href="{% url 'leads' %}">Leads &nbsp;&nbsp;<span class="badge badge-warning badge-pill d-block"> {% if lead_count %}
+                        {{lead_count}}
+
+                          {% else %}
+                          0
+                          {% endif %}</span></a>
                   </li>
                   <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'mql' %}active{% endif %}" href="{% url 'mql' %}">MQL</a>
+                      <a class="d-flex h-60p align-items-center nav-link " href="{% url 'mql' %}">MQL &nbsp;&nbsp;<span class="badge badge-secondary badge-pill d-block"> {% if mql_count %}
+                        {{mql_count}}
+
+                          {% else %}
+                          0
+                          {% endif %}</span></a>
                   </li>
                   <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'sql' %}active{% endif %}" href="{% url 'sql' %}">SQL</a>
+                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'sql' %}active{% endif %}" href="{% url 'sql' %}">SQL &nbsp;&nbsp;<span class="badge badge-light badge-pill d-block"> {% if sql_count %}
+                        {{sql_count}}
+
+                          {% else %}
+                          0
+                          {% endif %}</span></a>
                   </li>
                   <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'request_discounts' %}active{% endif %}" href="{% url 'request_discounts' %}">Request Discounts</a>
-                  </li>
+                    <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'opportunity' %}active{% endif %}" href="{% url 'opportunity' %}">Opportunity &nbsp;&nbsp;<span class="badge badge-info badge-pill d-block"> {% if opportunity_count %}
+                      {{opportunity_count}}
+                      
+                      {% else %}
+                      0
+                      {% endif %}</span></a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'admission' %}active{% endif %}" href="{% url 'admissions' %}">Admissions &nbsp;&nbsp;<span class="badge badge-success badge-pill d-block"> {% if admission_count %}
+                        {{admission_count}}
+                        
+                        {% else %}
+                        0
+                        {% endif %}</span></a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'request_discounts' %}active{% endif %}" href="{% url 'request_discounts' %}">Request Discounts &nbsp;&nbsp;<span class="badge badge-dark badge-pill d-block"> {% if request_discount_count %}
+                            {{request_discount_count}}
+    
+                              {% else %}
+                              0
+                              {% endif %}</span></a>
+                            </li>
                   <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'opportunity' %}active{% endif %}" href="{% url 'opportunity' %}">Opportunity</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'admission' %}active{% endif %}" href="{% url 'admissions' %}">Admissions</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'spam' %}active{% endif %}" href="{% url 'spam' %}">Spam List</a>
+                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'spam' %}active{% endif %}" href="{% url 'spam' %}">Spam List &nbsp;&nbsp;<span class="badge badge-danger badge-pill d-block"> {% if spam_count %}
+                        {{spam_count}}
+
+                          {% else %}
+                          0
+                          {% endif %}</span></a>
                   </li>
                   
 
@@ -588,7 +634,7 @@
                 <input type="text" class="form-control  bg-light text-secondary" id="courseFee" value="{{i.course_name.course_fee}}" disabled>
               </div>
               <div class="col-md-4 mb-3">
-                <label for="discount" class="form-label">Discount Fee <span class="text-danger">*</span></label>
+                <label for="discount" class="form-label">Discount Fee up to  <span class="text-danger">*</span></label>
                 <input type="text" class="form-control bg-light text-secondary" id="discount" placeholder="Discount Fee (%)" value="{{i.course_name.discount}}%" disabled>
               </div>
               <div class="col-md-4 mb-3">
@@ -614,6 +660,7 @@
                 <label for="admissionFee" class="form-label">Admission Fee <span class="text-danger" >*</span></label>
                 <input type="text" class="form-control text-secondary" id="admissionFee" name="admissionFee" placeholder="0.00">
               </div>
+              
               <div class="col-md-6 mb-3">
                 <label for="remainingfee" class="form-label">Remainingfee Fee <span class="text-danger">*</span></label>
                 <input type="text" class="form-control text-secondary" id="remainingfee" name="remainingfee" placeholder="0.00" readonly>
@@ -688,31 +735,6 @@
     
     
 
-                
-            
-            <!-- Paytm Details -->
-            <div class="col-md-6 mb-3 payment-details{{i.id}}" id="Paytm{{i.id}}" style="display: none;">
-                <label for="paytmNumber" class="form-label">Paytm Number <span class="text-danger">*</span></label>
-                <input type="text" class="form-control text-secondary" id="paytmNumber" name="paytmNumber" placeholder="Paytm Number">
-                <div>
-                  <label for="paytmTransactionId" class="form-label">Transaction Id <span class="text-danger">*</span></label>
-                  <input type="text" class="form-control text-secondary" id="paytmTransactionId" name="paytmTransactionId" placeholder="TransactionId">
-                </div>
-            </div>
-            
-            <!-- Bank Transfer Details -->
-            <div class="col-md-6 mb-3 payment-details{{i.id}}" id="BankTransfer{{i.id}}" style="display: none;">
-                <div>
-                  <label for="bankAccount" class="form-label">Bank Account Number <span class="text-danger">*</span></label>
-                  <input type="text" class="form-control text-secondary" id="bankAccount" name="bankAccount" placeholder="Bank Account Number">
-                </div>
-                <div>
-                  <label for="bankTransactionId" class="form-label">Transaction Id <span class="text-danger">*</span></label>
-                  <input type="text" class="form-control text-secondary" id="bankTransactionId" name="bankTransactionId" placeholder="TransactionId">
-                </div>
-                
-            </div>
-            
               
               <div class="modal-footer d-flex justify-content-center col-md-12 mb-3">
                 <button type="submit" class="btn btn-primary">Submit</button>
@@ -1031,7 +1053,19 @@ $('.modal').on('input', '#admissionFee', function() {
 <!-- fileds validations -->
 <script>
   $(document).ready(function() {
-    // Add validation rules to your form
+      // Add validation rules to your form
+
+      // Add custom validation method to compare admission fee and course fee
+      $.validator.addMethod("maxCourseFee", function(value, element) {
+        var admissionFee = parseFloat(value);
+        var courseFee = parseFloat($("#courseFee").val());
+        return admissionFee <= courseFee;
+      }, "Admission fee cannot exceed the course fee");
+
+
+
+
+
     $(".admissionValid").validate({
       rules: {
         admissionFee: {
@@ -1044,9 +1078,23 @@ $('.modal').on('input', '#admissionFee', function() {
         batchno:{
           required:true
         },
+        admissionFee: {
+          required: true,
+          number: true,
+          min: 500,
+          maxCourseFee: true
+        },
+        upi_id_id:{
+          required:true
+        },
+        net_banking_id:{
+          required:true
+        }
+        ,
         paymenttype: {
           required: true
         },
+
         transactionId: {
           required: function(element) {
             return $("#paymenttype").val() !== "Cash";
@@ -1088,6 +1136,12 @@ $('.modal').on('input', '#admissionFee', function() {
         paymenttype: {
           required: "Please select a payment type"
         },
+        upi_id_id:{
+          required:"Please select your UPI ID"
+        },
+        net_banking_id:{
+          required:"Please select you net banking"
+        },
         transactionId: {
           required: "Please enter the transaction ID"
         },
@@ -1099,6 +1153,12 @@ $('.modal').on('input', '#admissionFee', function() {
         },
         bankAccount: {
           required: "Please enter the bank account number"
+        },
+        admissionFee: {
+          required: "Please enter the admission fee",
+          number: "Please enter a valid number",
+          min: "Admission fee must be at least 500",
+          maxCourseFee: "Admission fee cannot exceed the course fee"
         },
         bankTransactionId: {
           required: "Please enter the bank transaction ID"
@@ -1195,49 +1255,54 @@ $('.modal').on('input', '#admissionFee', function() {
   
 <script>
   $(document).ready(function() {
+    // Initialize visibility of elements
+    var upiDropdown = $('.upi_dropdown');
+    var netBankingDiv = $('.net_banking_div');
+    var transactionIdDiv = $('.transaction-id');
+    upiDropdown.hide();
+    netBankingDiv.hide();
+    transactionIdDiv.hide();
+
     $('.payment_type').change(function() {
         var paymentType = $(this).val();
-        var upiDropdown = $('.upi_dropdown');
-        var netBankingDiv = $('.net_banking_div');
-        var transactionIdDiv = $('.transaction-id'); // Select the transaction-id div
 
         if (paymentType === 'UPI') {
-            upiDropdown.show(); // Show UPI dropdown
-            netBankingDiv.hide(); // Hide net banking dropdown
-            $('.net_banking_select').val(''); // Reset net banking dropdown selection
-            $('.net-baking_all').hide(); // Hide all net banking related divs
-            transactionIdDiv.show(); // Show the transaction-id div for UPI payment
+            upiDropdown.show();
+            netBankingDiv.hide();
+            $('.net_banking_select').val('');
+            $('.net-baking_all').hide();
+            transactionIdDiv.show();
         } else if (paymentType === 'netbanking') {
-            upiDropdown.hide(); // Hide UPI dropdown
-            netBankingDiv.show(); // Show net banking dropdown
-            $('.upi_drop_select').val(''); // Reset UPI dropdown selection
-            $('.upi_id, .upi_id_img').hide(); // Hide all UPI ID and image elements
-            transactionIdDiv.show(); // Show the transaction-id div for net banking payment
+            upiDropdown.hide();
+            netBankingDiv.show();
+            $('.upi_drop_select').val('');
+            $('.upi_id, .upi_id_img').hide();
+            transactionIdDiv.show();
         } else {
-            // If payment type is not UPI or net banking, hide all related elements
             upiDropdown.hide();
             netBankingDiv.hide();
-            transactionIdDiv.hide(); // Hide the transaction-id div for other payment types
+            transactionIdDiv.hide();
         }
     });
 
     $('.upi_drop_select').change(function() {
         var selectedUpiId = $(this).val();
-        $('.upi_id, .upi_id_img').hide(); // Hide all UPI ID and image elements
-        if (selectedUpiId !== '') { // Check if a UPI is selected
-            $('#upi_id' + selectedUpiId).show(); // Show UPI ID element based on selected UPI ID
-            $('#upi_id_img' + selectedUpiId).show(); // Show UPI image element based on selected UPI ID
+        $('.upi_id, .upi_id_img').hide();
+        if (selectedUpiId !== '') {
+            $('#upi_id' + selectedUpiId).show();
+            $('#upi_id_img' + selectedUpiId).show();
         }
     });
 
     $('.net_banking_select').change(function() {
         var selectedNetBankingId = $(this).val();
-        $('.net-baking_all').hide(); // Hide all net banking related divs
-        if (selectedNetBankingId !== '') { // Check if a net banking option is selected
-            $('.net-baking_all' + selectedNetBankingId).show(); // Show net banking related div based on selected ID
+        $('.net-baking_all').hide();
+        if (selectedNetBankingId !== '') {
+            $('.net-baking_all' + selectedNetBankingId).show();
         }
     });
 });
+
 
 
 
@@ -1287,7 +1352,24 @@ $('.modal').on('input', '#admissionFee', function() {
     })
   })
 </script>
+<script>
+  function validateAdmissionFee() {
+    var admissionFee = parseFloat(document.getElementById("admissionFee").value);
+    var courseFee = parseFloat(document.getElementById("courseFee").value);
 
+    if (admissionFee < 500 || isNaN(admissionFee)) {
+        alert("Admission fee must be a minimum of 500.");
+        return false;
+    }
+
+    if (admissionFee > courseFee) {
+        alert("Admission fee cannot be higher than the course fee.");
+        return false;
+    }
+
+    return true;
+}
+</script>
 
 
 {% endblock %}

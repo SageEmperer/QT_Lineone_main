@@ -21,17 +21,17 @@
 {% endblock %}
 {% block content %}
 
- {% if messages %}
- {% for message in messages %}
-   {% if message.tags == "error" %}
-     <div class="h-25 alert alert-danger alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
-   {% elif message.tags == "success" %}
-     <div class="h-25 alert alert-success alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
-     {% else %}
-    <div class="h-25 alert alert-info alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
-    {% endif %}
-   {% endfor %}
- {% endif %}
+{% if messages %}
+{% for message in messages %}
+{% if message.tags == "error" %}
+<div class="h-25 alert alert-danger alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
+{% elif message.tags == "success" %}
+<div class="h-25 alert alert-success alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
+{% else %}
+<div class="h-25 alert alert-info alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
+{% endif %}
+{% endfor %}
+{% endif %}
 
 
 
@@ -46,7 +46,11 @@
             <tr>
               <th class="text-white text-center">S.no</th>
               <th class="text-white text-center">Name</th>
+              <th class="text-white text-center">Roll Number</th>
+              <th class="text-white text-center">Batch Number</th>
+              <th class="text-white text-center">Mobile No</th>
               <th class="text-white text-center">Email ID</th>
+              <th class="text-white text-center">Course</th>
               <th class="text-white text-center">Date Of Interview</th>
               <th class="text-white text-center">Resume</th>
               <th class="text-white text-center">Action</th>
@@ -54,26 +58,30 @@
           </thead>
           <tbody>
 
-          <tr>
-              <td class="text-center">1</td>
-              <td class="text-center">Chidrup</td>
-              <td class="text-center">chidrup2@gmail.com</td>
-              <td class="text-center">April 02,04,2024,10.30 a.m.</td>
+            {% for Student_Book_Interview_modal in today_interviews %}
+            <tr>
+              <td class="text-center">{{Student_Book_Interview_modal.id}}</td>
+              <td class="text-center">{{Student_Book_Interview_modal.student_name.first_name}}
+                {{Student_Book_Interview_modal.student_name.last_name}}</td>
+              <td class="text-center">{{Student_Book_Interview_modal.student_name.token_id}}</td>
+              <td class="text-center">{{Student_Book_Interview_modal.student_name.batch_number.batch_number}}</td>
+              <td class="text-center">{{Student_Book_Interview_modal.student_name.mobile_number}}</td>
+              <td class="text-center">{{Student_Book_Interview_modal.student_name.email}}</td>
+              <td class="text-center">{{Student_Book_Interview_modal.course_name}}</td>
+              <td class="text-center">{{Student_Book_Interview_modal.available_slot.available_slot}}</td>
               <td class="text-center">
-              <a href="" title="Image from freeiconspng.com"><img src="https://www.freeiconspng.com/uploads/pdf-icon-png-pdf-zum-download-2.png" width="35" alt="Student resume" /></a>
+                <a href="{% url 'open_pdf' Student_Book_Interview_modal.id %}" title="Image from freeiconspng.com"><img
+                    src="https://www.freeiconspng.com/uploads/pdf-icon-png-pdf-zum-download-2.png" width="35"
+                    alt="Student resume" /></a>
               </td>
               <td class="text-center">
-               <button
-                    type="button"
-                    class="btn btn-icon btn-success"
-                    data-toggle="modal"
-                    data-target="#BookInterview"
-                  >
+                <button type="button" class="btn btn-icon btn-success" data-toggle="modal" data-target="#todayinterviewfeedback{{forloop.counter}}">
                   <span class="btn-icon-wrap"><i class="fa fa-rocket"></i></span>
 
-                  </button>
+                </button>
               </td>
-          </tr>
+            </tr>
+            {% endfor %}
           </tbody>
         </table>
       </div>
@@ -84,8 +92,9 @@
 <!-- Today interviews ends here -->
 
 <!-- create model start here -->
-
-<div class="modal fade" id="BookInterview" tabindex="-1" role="dialog" aria-labelledby="FeedbackForm" aria-hidden="true">
+{% for i in today_interviews %}
+<div class="modal fade" id="todayinterviewfeedback{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="FeedbackForm"
+  aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header bg-dark">
@@ -94,7 +103,9 @@
           <span aria-hidden="true" class="text-white">&times;</span>
         </button>
       </div>
-      <form action="" method="post" id="createFeed">
+
+    
+      <form action="{% url 'FeedbackForm' i.id %}" method="post" id="createFeed">
         {% csrf_token %}
         <div class="modal-body">
           <div class="container-fluid">
@@ -102,38 +113,40 @@
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
                   <label for="" class="form-label">Full Name </label>
-                  <input  value="Chinmai" name="batchtype_name" class="form-control" readonly>
+                  <input value="{{i.student_name.first_name}} {{i.student_name.last_name}}" name="batchtype_name" class="form-control" readonly>
+                  <input type="hidden" name="studend_id" value="{{i.student_name.id}}">
+                  <input type="hidden" name="faculty_id" value="{{i.faculty_name.id}}">
                 </div>
               </div>
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
                   <label for="" class="form-label">Roll Number </label>
-                  <input  value="23" name="batchtype_name" class="form-control" readonly>
+                  <input value="{{i.student_name.token_id}}" name="batchtype_name" class="form-control" readonly>
                 </div>
               </div>
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
                   <label for="" class="form-label">Batch Number </label>
-                  <input  value="22" name="batchtype_name" class="form-control" readonly>
+                  <input value="{{i.student_name.batch_number.batch_number}}" name="batchtype_name" class="form-control" readonly>
                 </div>
               </div>
 
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
                   <label for="" class="form-label">Email Id </label>
-                  <input  value="chinmai5@gmail.com" name="batchtype_name" class="form-control" readonly>
+                  <input value="{{i.student_name.email}}" name="batchtype_name" class="form-control" readonly>
                 </div>
               </div>
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
                   <label for="" class="form-label">Mobile Number </label>
-                  <input  value="9647521854" name="batchtype_name" class="form-control" readonly>
+                  <input value="{{i.student_name.mobile_number}}" name="batchtype_name" class="form-control" readonly>
                 </div>
               </div>
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
                   <label for="" class="form-label">Date of Interview </label>
-                  <input  value="Mar.04,2024,10:30 am" name="batchtype_name" class="form-control" readonly>
+                  <input value="{{i.available_slot.available_slot}}" name="batchtype_name" class="form-control" readonly>
                 </div>
               </div>
 
@@ -141,7 +154,7 @@
                 <div class="form-group">
                   <label for="" class="form-label">Attendance <span class="text-danger">*</span></label>
 
-                  <select class="form-control select2" name="Attendance">
+                  <select class="form-control select2" name="attendance_status" id="attendanceStatus">
                     <option value="" disabled selected>Please Select</option>
                     <option value="1">Present</option>
                     <option value="2">Absent</option>
@@ -152,7 +165,7 @@
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
                   <label for="" class="form-label">Communication Skills <span class="text-danger">*</span></label>
-                  <select class="form-control select2" name="Communication">
+                  <select class="form-control select2" name="communication_skills" id="communication">
                     <option value="" disabled selected>Please Select</option>
                     <option value="1">0</option>
                     <option value="2">1</option>
@@ -168,7 +181,7 @@
                 <div class="form-group">
                   <label for="" class="form-label">Body Language <span class="text-danger">*</span></label>
 
-                  <select  class="form-control select2" name="Body Language">
+                  <select class="form-control select2" name="body_language" id="bodyLanguage">
                     <option value="" disabled selected>Please Select</option>
                     <option value="1">0</option>
                     <option value="2">1</option>
@@ -185,7 +198,7 @@
                 <div class="form-group">
                   <label for="" class="form-label">Technical Skills <span class="text-danger">*</span></label>
 
-                  <select  class="form-control select2" name="Technical Performance">
+                  <select class="form-control select2" name="technical_skills" id="technicalSkills">
                     <option value="" disabled selected>Please Select</option>
                     <option value="1">0</option>
                     <option value="2">1</option>
@@ -201,7 +214,7 @@
                 <div class="form-group">
                   <label for="" class="form-label">Logical Thinking<span class="text-danger">*</span></label>
 
-                  <select  class="form-control select2" name="Logical Thinking">
+                  <select class="form-control select2" name="logical_thinking" id="logicalThinking">
                     <option value="" disabled selected>Please Select</option>
                     <option value="1">0</option>
                     <option value="2">1</option>
@@ -226,7 +239,7 @@
                     <span class="input-group-append">
                       <span class=" btn btn-primary btn-file"><span class="fileinput-new">Select file</span><span
                           class="fileinput-exists">Change</span>
-                        <input type="file" name="...">
+                        <input type="file" name="send_attachment" id="sendAttachment" disabled>
                       </span>
                     </span>
                   </div>
@@ -236,8 +249,8 @@
               <div class="col-md-12 ">
                 <div class="form-group">
                   <label for="">Suggestions </label>
-                  <textarea class="form-control" id="" name="Suggestions"
-                    placeholder="What Would you like to say?" rows="3"></textarea>
+                  <textarea class="form-control" id="suggestions" name="suggestion"
+                    placeholder="What Would you like to say?" rows="3" disabled></textarea>
                 </div>
               </div>
             </div>
@@ -254,6 +267,7 @@
     </div>
   </div>
 </div>
+{% endfor %}
 
 <!-- create model ends here -->
 
@@ -277,28 +291,42 @@
             <tr>
               <th class="text-white text-center">S.no</th>
               <th class="text-white text-center">Name</th>
+              <th class="text-white text-center">Roll Number</th>
+              <th class="text-white text-center">Batch Number</th>
+              <th class="text-white text-center">Mobile No</th>
               <th class="text-white text-center">Email ID</th>
+              <th class="text-white text-center">Course</th>
               <th class="text-white text-center">Date Of Interview</th>
               <th class="text-white text-center">Resume</th>
               <th class="text-white text-center">Action</th>
-
             </tr>
           </thead>
           <tbody>
 
-          <tr>
-                <td class="text-center">1</td>
-                <td class="text-center">Chidrup</td>
-                <td class="text-center">chidrup2@gmail.com</td>
-                  <td class="text-center">April 02,04,2024,10.30 a.m.</td>
-                <td class="text-center">
-                <a href="" title="Image from freeiconspng.com"><img src="https://www.freeiconspng.com/uploads/pdf-icon-png-pdf-zum-download-2.png" width="35" alt="Student resume" /></a>
-                </td>
-                <td class="text-center"> <button type="button" class="btn btn-icon btn-success" data-toggle="modal" data-target="#Edit">
+            {% for Student_Book_Interview_modal in tomorrow_interviews %}
+            <tr>
+              <td class="text-center">{{Student_Book_Interview_modal.id}}</td>
+              <td class="text-center">{{Student_Book_Interview_modal.student_name.first_name}}
+                {{Student_Book_Interview_modal.student_name.last_name}}</td>
+              <td class="text-center">{{Student_Book_Interview_modal.student_name.token_id}}</td>
+              <td class="text-center">{{Student_Book_Interview_modal.student_name.batch_number}}</td>
+              <td class="text-center">{{Student_Book_Interview_modal.student_name.mobile_number}}</td>
+              <td class="text-center">{{Student_Book_Interview_modal.student_name.email}}</td>
+              <td class="text-center">{{Student_Book_Interview_modal.course_name}}</td>
+              <td class="text-center">{{Student_Book_Interview_modal.available_slot.available_slot}}</td>
+              <td>
+                <a href="{% url 'open_pdf' Student_Book_Interview_modal.id %}" title="Image from freeiconspng.com"><img
+                    src="https://www.freeiconspng.com/uploads/pdf-icon-png-pdf-zum-download-2.png" width="35"
+                    alt="Student resume" /></a>
+              </td>
+              <td class="text-center">
+                <button type="button" class="btn btn-icon btn-success btn-action" data-toggle="modal"
+                  data-target="#tomorrowinterviewfeedback{{forloop.counter}}">
                   <span class="btn-icon-wrap"><i class="fa fa-rocket"></i></span>
-
-                  </button>
-          </tr>
+                </button>
+              </td>
+            </tr>
+            {% endfor %}
           </tbody>
         </table>
       </div>
@@ -308,64 +336,182 @@
 
 <!-- Tomorrow interviews Ends here -->
 
-<!-- create model starts here -->
-<div class="modal fade" id="Edit" tabindex="-1" role="dialog" aria-labelledby="Edit" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
+{% for i in tomorrow_interviews %}
+<div class="modal fade" id="tomorrowinterviewfeedback{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="FeedbackForm"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header bg-dark">
-        <h5 class="modal-title text-white">Reschedule Slot</h5>
+        <h5 class="modal-title text-white">Feedback Form</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true" class="text-white">&times;</span>
         </button>
       </div>
-      <form action="" method="post" id="Edit_slot">
+
+    
+      <form action="{% url 'FeedbackForm' i.id %}" method="post" id="createFeed">
         {% csrf_token %}
         <div class="modal-body">
           <div class="container-fluid">
             <div class="row">
-              <div class="col-sm">
-                <div class="row mb-20">
-                  <div class="col-md-6 mt-15">
-                    <div class="custom-control custom-radio">
-                      <input type="radio" id="customRadio1" name="customRadio" value="Reschedule Slot" class="custom-control-input" onchange="handleOptionChange()">
-                      <label class="custom-control-label" for="customRadio1">Reschedule Slot</label>
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Full Name </label>
+                  <input value="{{i.student_name.first_name}} {{i.student_name.last_name}}" name="batchtype_name" class="form-control" readonly>
+                  <input type="hidden" name="studend_id" value="{{i.student_name.id}}">
+                  <input type="hidden" name="faculty_id" value="{{i.faculty_name.id}}">
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Roll Number </label>
+                  <input value="{{i.student_name.token_id}}" name="batchtype_name" class="form-control" readonly>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Batch Number </label>
+                  <input value="{{i.student_name.batch_number.batch_number}}" name="batchtype_name" class="form-control" readonly>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Email Id </label>
+                  <input value="{{i.student_name.email}}" name="batchtype_name" class="form-control" readonly>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Mobile Number </label>
+                  <input value="{{i.student_name.mobile_number}}" name="batchtype_name" class="form-control" readonly>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Date of Interview </label>
+                  <input value="{{i.available_slot.available_slot}}" name="batchtype_name" class="form-control" readonly>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Attendance <span class="text-danger">*</span></label>
+
+                  <select class="form-control select2" name="attendance_status" id="attendanceStatus">
+                    <option value="" disabled selected>Please Select</option>
+                    <option value="1">Present</option>
+                    <option value="2">Absent</option>
+                  </select>
+
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Communication Skills <span class="text-danger">*</span></label>
+                  <select class="form-control select2" name="communication_skills" id="communication">
+                    <option value="" disabled selected>Please Select</option>
+                    <option value="1">0</option>
+                    <option value="2">1</option>
+                    <option value="3">2</option>
+                    <option value="4">3</option>
+                    <option value="5">4</option>
+                    <option value="6">5</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Body Language <span class="text-danger">*</span></label>
+
+                  <select class="form-control select2" name="body_language" id="bodyLanguage">
+                    <option value="" disabled selected>Please Select</option>
+                    <option value="1">0</option>
+                    <option value="2">1</option>
+                    <option value="3">2</option>
+                    <option value="4">3</option>
+                    <option value="5">4</option>
+                    <option value="6">5</option>
+                  </select>
+
+                </div>
+              </div>
+
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Technical Skills <span class="text-danger">*</span></label>
+
+                  <select class="form-control select2" name="technical_skills" id="technicalSkills">
+                    <option value="" disabled selected>Please Select</option>
+                    <option value="1">0</option>
+                    <option value="2">1</option>
+                    <option value="3">2</option>
+                    <option value="4">3</option>
+                    <option value="5">4</option>
+                    <option value="6">5</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Logical Thinking<span class="text-danger">*</span></label>
+
+                  <select class="form-control select2" name="logical_thinking" id="logicalThinking">
+                    <option value="" disabled selected>Please Select</option>
+                    <option value="1">0</option>
+                    <option value="2">1</option>
+                    <option value="3">2</option>
+                    <option value="4">3</option>
+                    <option value="5">4</option>
+                    <option value="6">5</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-sm-12 col-lg-6 ">
+                <div class="form-group">
+                  <label for="" class="form-label">Send Attachment </label>
+                  <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Upload</span>
                     </div>
-                  </div>
-                  <div class="col-md-6 mt-15">
-                    <div class="custom-control custom-radio">
-                      <input type="radio" id="customRadio2" name="customRadio" value="Cancel Slot" class="custom-control-input" onchange="handleOptionChange()">
-                      <label class="custom-control-label" for="customRadio2">Cancel Slot</label>
+                    <div class="form-control text-truncate" data-trigger="fileinput"><i
+                        class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span>
                     </div>
+                    <span class="input-group-append">
+                      <span class=" btn btn-primary btn-file"><span class="fileinput-new">Select file</span><span
+                          class="fileinput-exists">Change</span>
+                        <input type="file" name="send_attachment" id="sendAttachment" disabled>
+                      </span>
+                    </span>
                   </div>
-                    <div class="col-md-6 mt-15" id="radioError"></div>
                 </div>
-                <div class="mb-3">
-                  <label for="" class="form-label">Available Slot <span class="text-danger">*</span></label>
-                  <input class="form-control" type="datetime-local" id="dateTime" name="dateTime" >
-                </div>
-                <div class="mb-3">
-                  <label for="" class="form-label">Mock Link<span class="text-danger"> *</span></label>
-                  <textarea class="form-control" name="link" id="mockLink" placeholder="Enter mock link here." ></textarea>
-                </div>
-                <div class="mb-3">
-                  <label for="">Reason for Cancel Slot <span class="text-danger">*</span></label>
-                  <textarea id="reasonField" class="form-control" name="feedback" placeholder="What Would you like to say?" rows="5" ></textarea>
+              </div>
+
+              <div class="col-md-12 ">
+                <div class="form-group">
+                  <label for="">Suggestions </label>
+                  <textarea class="form-control" id="suggestions" name="suggestion"
+                    placeholder="What Would you like to say?" rows="3" disabled></textarea>
                 </div>
               </div>
             </div>
+
+
+            <div class="modal-footer d-flex justify-content-center">
+              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="reset" class="btn btn-secondary">Reset</button>
+            </div>
           </div>
         </div>
-        <div class="modal-footer d-flex justify-content-center">
-          <button type="submit" class="btn btn-primary" id="confirmAction">Confirm</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
+
       </form>
     </div>
   </div>
 </div>
-
-<!-- create model ends here -->
-
+{% endfor %}
 
 <!-- Upcoming interviews starts here -->
 
@@ -385,7 +531,11 @@
             <tr>
               <th class="text-white text-center">S.no</th>
               <th class="text-white text-center">Name</th>
+              <th class="text-white text-center">Roll Number</th>
+              <th class="text-white text-center">Batch Number</th>
+              <th class="text-white text-center">Mobile No</th>
               <th class="text-white text-center">Email ID</th>
+              <th class="text-white text-center">Course</th>
               <th class="text-white text-center">Date Of Interview</th>
               <th class="text-white text-center">Resume</th>
               <th class="text-white text-center">Action</th>
@@ -393,23 +543,30 @@
           </thead>
           <tbody>
 
-          <tr>
-                <td class="text-center">1</td>
-                <td class="text-center">Chidrup</td>
-                <td class="text-center">chidrup2@gmail.com</td>
-                 <td class="text-center">April 02,04,2024,10.30 a.m.</td>
-                <td class="text-center">
-                <a href="" title="Image from freeiconspng.com"><img src="https://www.freeiconspng.com/uploads/pdf-icon-png-pdf-zum-download-2.png" width="35" alt="Student resume" /></a>
-                </td>
-                <td class="text-center"> <button
-                    type="button"
-                    class="btn btn-icon btn-success"
-                    data-toggle="modal"
-                    data-target="#Edit"
-                  >
+            {% for Student_Book_Interview_modal in upcoming_interviews %}
+            <tr>
+              <td class="text-center">{{Student_Book_Interview_modal.id}}</td>
+              <td class="text-center">{{Student_Book_Interview_modal.student_name.first_name}}
+                {{Student_Book_Interview_modal.student_name.last_name}}</td>
+              <td class="text-center">{{Student_Book_Interview_modal.student_name.token_id}}</td>
+              <td class="text-center">{{Student_Book_Interview_modal.student_name.batch_number}}</td>
+              <td class="text-center">{{Student_Book_Interview_modal.student_name.mobile_number}}</td>
+              <td class="text-center">{{Student_Book_Interview_modal.student_name.email}}</td>
+              <td class="text-center">{{Student_Book_Interview_modal.course_name}}</td>
+              <td class="text-center">{{Student_Book_Interview_modal.available_slot.available_slot}}</td>
+              <td class="text-center">
+                <a href="{% url 'open_pdf' Student_Book_Interview_modal.id %}" title="Image from freeiconspng.com"><img
+                    src="https://www.freeiconspng.com/uploads/pdf-icon-png-pdf-zum-download-2.png" width="35"
+                    alt="Student resume" /></a>
+              </td>
+              <td class="text-center">
+                <button type="button" class="btn btn-icon btn-success" data-toggle="modal" data-target="#upcominginterviewfeedback">
                   <span class="btn-icon-wrap"><i class="fa fa-rocket"></i></span>
-                  </button>
-          </tr>
+
+                </button>
+              </td>
+            </tr>
+            {% endfor %}
           </tbody>
         </table>
       </div>
@@ -419,9 +576,9 @@
 
 <!-- Upcoming interviews Ends here -->
 
-<!-- create model starts here -->
-
-<div class="modal fade" id="BookInterview"  tabindex="-1" role="dialog" aria-labelledby="BookInterview" aria-hidden="true">
+{% for i in upcoming_interviews %}
+<div class="modal fade" id="upcominginterviewfeedback{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="FeedbackForm"
+  aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header bg-dark">
@@ -430,152 +587,171 @@
           <span aria-hidden="true" class="text-white">&times;</span>
         </button>
       </div>
-<div class="modal-body">
-        <form action="" method="post" enctype="multipart/form-data" id="createfeed">
-          {% csrf_token %}
-          <section class="">
 
-            <div class="heading" style="padding-bottom:10px;">
-            </div>
+    
+      <form action="{% url 'FeedbackForm' i.id %}" method="post" id="createFeed">
+        {% csrf_token %}
+        <div class="modal-body">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Full Name </label>
+                  <input value="{{i.student_name.first_name}} {{i.student_name.last_name}}" name="batchtype_name" class="form-control" readonly>
+                  <input type="hidden" name="studend_id" value="{{i.student_name.id}}">
+                  <input type="hidden" name="faculty_id" value="{{i.faculty_name.id}}">
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Roll Number </label>
+                  <input value="{{i.student_name.token_id}}" name="batchtype_name" class="form-control" readonly>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Batch Number </label>
+                  <input value="{{i.student_name.batch_number.batch_number}}" name="batchtype_name" class="form-control" readonly>
+                </div>
+              </div>
 
-              {% csrf_token %}
-              <div class="modal-body">
-                <div class="container-fluid">
-                  <div class="row">
-                    <div class="col-md-6 col-sm-12 col-lg-6">
-                      <div class="form-group">
-                        <label for="" class="form-label">Full Name</label>
-                        <input value="Chinmai"  name="fullname" placeholder="" class="form-control "  readonly/>
-                      </div>
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Email Id </label>
+                  <input value="{{i.student_name.email}}" name="batchtype_name" class="form-control" readonly>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Mobile Number </label>
+                  <input value="{{i.student_name.mobile_number}}" name="batchtype_name" class="form-control" readonly>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Date of Interview </label>
+                  <input value="{{i.available_slot.available_slot}}" name="batchtype_name" class="form-control" readonly>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Attendance <span class="text-danger">*</span></label>
+
+                  <select class="form-control select2" name="attendance_status" id="attendanceStatus">
+                    <option value="" disabled selected>Please Select</option>
+                    <option value="1">Present</option>
+                    <option value="2">Absent</option>
+                  </select>
+
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Communication Skills <span class="text-danger">*</span></label>
+                  <select class="form-control select2" name="communication_skills" id="communication">
+                    <option value="" disabled selected>Please Select</option>
+                    <option value="1">0</option>
+                    <option value="2">1</option>
+                    <option value="3">2</option>
+                    <option value="4">3</option>
+                    <option value="5">4</option>
+                    <option value="6">5</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Body Language <span class="text-danger">*</span></label>
+
+                  <select class="form-control select2" name="body_language" id="bodyLanguage">
+                    <option value="" disabled selected>Please Select</option>
+                    <option value="1">0</option>
+                    <option value="2">1</option>
+                    <option value="3">2</option>
+                    <option value="4">3</option>
+                    <option value="5">4</option>
+                    <option value="6">5</option>
+                  </select>
+
+                </div>
+              </div>
+
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Technical Skills <span class="text-danger">*</span></label>
+
+                  <select class="form-control select2" name="technical_skills" id="technicalSkills">
+                    <option value="" disabled selected>Please Select</option>
+                    <option value="1">0</option>
+                    <option value="2">1</option>
+                    <option value="3">2</option>
+                    <option value="4">3</option>
+                    <option value="5">4</option>
+                    <option value="6">5</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-sm-12 col-lg-6">
+                <div class="form-group">
+                  <label for="" class="form-label">Logical Thinking<span class="text-danger">*</span></label>
+
+                  <select class="form-control select2" name="logical_thinking" id="logicalThinking">
+                    <option value="" disabled selected>Please Select</option>
+                    <option value="1">0</option>
+                    <option value="2">1</option>
+                    <option value="3">2</option>
+                    <option value="4">3</option>
+                    <option value="5">4</option>
+                    <option value="6">5</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-sm-12 col-lg-6 ">
+                <div class="form-group">
+                  <label for="" class="form-label">Send Attachment </label>
+                  <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Upload</span>
                     </div>
-
-                    <div class="col-md-6 col-sm-12 col-lg-6">
-                      <div class="form-group">
-                        <label for="" class="form-label">Email Id</label>
-                        <input value="chinmai5@gmail.com" name="email_id"  class="form-control" readonly/>
-                      </div>
+                    <div class="form-control text-truncate" data-trigger="fileinput"><i
+                        class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span>
                     </div>
-
-                    <div class="col-md-6 col-sm-12 col-lg-6">
-                      <div class="form-group">
-                        <label for="" class="form-label">Date of Interview</label>
-                        <input value="April 02,2024, 11 a.m." type="text"  class="form-control" readonly/>
-                      </div>
-                    </div>
-
-                    <div class="col-md-6 col-sm-12 col-lg-6">
-                      <div class="form-group">
-                        <label for="" class="form-label">Attendance <span class="text-danger">*</span></label>
-                        <select class="form-control select2" name="Attendance">
-                          <option value="" disabled selected>Please Select</option>
-                          <option value="1">Present</option>
-                          <option value="2">Absent</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div class="col-md-6 col-sm-12 col-lg-6">
-                      <div class="form-group">
-                        <label for="" class="form-label">Communication skills<span class="text-danger">*</span></label>
-                        <select class="form-control select2" name="Communication">
-                          <option value="" disabled selected>Please Select</option>
-                          <option value="1">0</option>
-                          <option value="2">1</option>
-                          <option value="3">2</option>
-                          <option value="4">3</option>
-                          <option value="5">4</option>
-                          <option value="6">5</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div class="col-md-6 col-sm-12 col-lg-6">
-                      <div class="form-group">
-                        <label for="" class="form-label">Body Language <span class="text-danger">*</span></label>
-                        <select class="form-control select2" name="Body Language">
-                          <option value="" disabled selected>Please Select</option>
-                          <option value="1">0</option>
-                          <option value="2">1</option>
-                          <option value="3">2</option>
-                          <option value="4">3</option>
-                          <option value="5">4</option>
-                          <option value="6">5</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div class="col-md-6 col-sm-12 col-lg-6">
-                      <div class="form-group">
-                        <label for="" class="form-label">Technical Performance <span class="text-danger">*</span></label>
-                        <select  class="form-control select2" name="Technical Performance">
-                          <option value="" disabled selected>Please Select</option>
-                          <option value="1">0</option>
-                          <option value="2">1</option>
-                          <option value="3">2</option>
-                          <option value="4">3</option>
-                          <option value="5">4</option>
-                          <option value="6">5</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div class="col-md-6 col-sm-12 col-lg-6">
-                      <div class="form-group">
-                        <label for="" class="form-label">Status <span class="text-danger">*</span></label>
-                        <select id="" class="form-control select2" name="Status">
-                          <option value="" disabled selected>Please Select</option>
-                          <option value="1">Pass</option>
-                          <option value="2">Fail</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div class="col-md-6 col-sm-12 col-lg-6 ">
-                      <div class="form-group">
-                        <label for="" class="form-label">Send Attachment</label>
-                        <div class="fileinput fileinput-new input-group" data-provides="fileinput">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text">Upload</span>
-                          </div>
-                          <div class="form-control text-truncate" data-trigger="fileinput"><i
-                              class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span>
-                          </div>
-                          <span class="input-group-append">
-                            <span class=" btn btn-primary btn-file"><span class="fileinput-new">Select file</span><span
-                                class="fileinput-exists">Change</span>
-                              <input type="file" name="...">
-                            </span>
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col-md-12 ">
-                      <div class="form-group">
-                        <label for="">Suggestions</label>
-                        <textarea class="form-control"  name="Suggestions"
-                          placeholder="What Would you like to say?" rows="3"></textarea>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="modal-footer d-flex justify-content-center">
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                    <button type="reset" class="btn btn-secondary">Reset</button>
+                    <span class="input-group-append">
+                      <span class=" btn btn-primary btn-file"><span class="fileinput-new">Select file</span><span
+                          class="fileinput-exists">Change</span>
+                        <input type="file" name="send_attachment" id="sendAttachment" disabled>
+                      </span>
+                    </span>
                   </div>
                 </div>
               </div>
 
+              <div class="col-md-12 ">
+                <div class="form-group">
+                  <label for="">Suggestions </label>
+                  <textarea class="form-control" id="suggestions" name="suggestion"
+                    placeholder="What Would you like to say?" rows="3" disabled></textarea>
+                </div>
+              </div>
+            </div>
 
 
-          </section>
+            <div class="modal-footer d-flex justify-content-center">
+              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="reset" class="btn btn-secondary">Reset</button>
+            </div>
+          </div>
+        </div>
 
-        </form>
-      </div>
+      </form>
     </div>
   </div>
 </div>
-
-<!-- create model ends here -->
+{% endfor %}
 
 
 <!-- completed interviews starts here -->
@@ -587,81 +763,97 @@
 </div>
 
 <section class="hk-sec-wrapper">
-    <div class="row">
-      <div class="col-sm">
-        <div class="table-wrap">
-          <table id="example_4" class="table table-hover w-100  pb-30 table-bordered">
-            <thead class="bg-dark">
-              <tr>
-                <th class="text-white text-center">S.No</th>
-                <th class="text-white text-center">Name</th>
-                <th class="text-white text-center">Email ID</th>
-                <th class="text-white text-center">Attendance</th>
-                <th class="text-white text-center">Logical Thinking</th>
-                <th class="text-white text-center">Technical</th>
-                <th class="text-white text-center">Communication</th>
-                <th class="text-white text-center">Body Language</th>
-                <th class="text-white text-center">Overall Rating</th>
-                <th class="text-white text-center">Status</th>
-                <th class="text-white text-center">Attachment</th>
-                <th class="text-white text-center">Action</th>
+  <div class="row">
+    <div class="col-sm">
+      <div class="table-wrap">
+        <table id="example_4" class="table table-hover w-100  pb-30 table-bordered">
+          <thead class="bg-dark">
+            <tr>
+              <th class="text-white">S.no</th>
+              <th class="text-white">Name</th>
+              <th class="text-white text-center">Email ID</th>
+              <th class="text-white text-center">Attendance</th>
+              <th class="text-white text-center">Logical Thinking</th>
+              <th class="text-white text-center">Technical skills</th>
+              <th class="text-white text-center">Communication skills</th>
+              <th class="text-white text-center">Body Language</th>
+              <th class="text-white text-center">Overall Rating</th>
+              <th class="text-white text-center">Status</th>
+              <th class="text-white text-center">Attachment</th>
 
-              </tr>
-            </thead>
-            <tbody>
+            </tr>
+          </thead>
+          <tbody>
 
-              <tr>
-                <td>1</td>
-                <td>Rahul</td>
-                <td>Rahul5@gmailcom</td>
-                <td class="text-info text-center" style="font-weight:bold;">Present</td>
-                <td class="text-center">2</td>
-                <td class="text-center">2</td>
-                <td class="text-center">2</td>
-                <td class="text-center">1</td>
-                <td class="text-center">1</td>
-                <td class="text-success text-center" style="font-weight:bold;">Pass</td>
-                <td class="text-center">
-                <a href="" title=""><img src="/static/media/pdf.png" width="35" alt="Student resume" /></a> </td>
-                <td>
-                  <button type="button" class="btn btn-icon btn-success" data-toggle="modal" data-target="#BookInterview">
-                  <span class="btn-icon-wrap"><i class="fa fa-rocket"></i></span>
+            <tr>
+              {% for feedback in completed_interviews %}
+              <td>{{feedback.id}}</td>
+              <td>{{feedback.interview.student_name.first_name}} {{feedback.interview.student_name.last_name}}</td>
+              <td>{{feedback.interview.student_name.email}}</td>
+              <td class="text-center text-info" style="font-weight:bold;">{{feedback.attendance_status}}</td>
+              <td class="text-center">{{feedback.logical_thinking}}</td>
+              <td class="text-center">{{feedback.technical_skills}}</td>
+              <td class="text-center">{{feedback.communication_skills}}</td>
+              <td class="text-center">{{feedback.body_language}}</td>
+              <td class="text-center">{{feedback.overall_rating}}</td>
+              <td class="text-center text-success" style="font-weight:bold;">{{feedback.status}}</td>
+              <td class="text-center">
+                <a href="{% url 'open_pdf' feedback.id %}" title=""><img
+                    src="https://www.freeiconspng.com/uploads/pdf-icon-png-pdf-zum-download-2.png" width="35"
+                    alt="Student resume" /></a>
+              </td>
+            </tr>
+            {% endfor %}
 
-                  </button>
-                </td>
-              </tr>
-
-              <tr>
-                <td>2</td>
-                <td>Chidrup</td>
-                <td>chidrup2@gmail.com</td>
-                <td class="text-danger text-center" style="font-weight:bold;">Absent</td>
-                <td class="text-center">0</td>
-                <td class="text-center">0</td>
-                <td class="text-center">0</td>
-                <td class="text-center">0</td>
-                <td class="text-center" >0</td>
-                <td class="text-danger text-center" style="font-weight:bold;">Fail</td>
-                <td class="text-center">
-<!--               <a href="" title=""><img src="/static/media/pdf.png" width="35" alt="Student resume" /></a> </td>-->
-                 No Attachments</td>
-                <td>
-                  <button type="button" class="btn btn-icon btn-success" data-toggle="modal" data-target="#BookInterview">
-                  <span class="btn-icon-wrap"><i class="fa fa-rocket"></i></span>
-
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+          </tbody>
+        </table>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
 <!-- completed interviews Ends here -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+
+
+
+
+
+
+<script>
+  $(document).ready(function () {
+    // Function to enable/disable fields based on attendance status
+    function toggleFields() {
+      var attendanceStatus = $('#attendanceStatus').val();
+      if (attendanceStatus === '2') { // '2' corresponds to the value of 'Absent' option
+        $('#communication').prop('disabled', true);
+        $('#bodyLanguage').prop('disabled', true);
+        $('#technicalSkills').prop('disabled', true);
+        $('#logicalThinking').prop('disabled', true);
+        $('#sendAttachment').prop('disabled', true);
+        $('#suggestions').prop('disabled', true);
+      } else {
+        $('#communication').prop('disabled', false);
+        $('#bodyLanguage').prop('disabled', false);
+        $('#technicalSkills').prop('disabled', false);
+        $('#logicalThinking').prop('disabled', false);
+        $('#sendAttachment').prop('disabled', false);
+        $('#suggestions').prop('disabled', false);
+      }
+    }
+
+    // Call the function on page load
+    toggleFields();
+
+    // Call the function whenever attendance status selection changes
+    $('#attendanceStatus').change(function () {
+      toggleFields();
+    });
+  });
+</script>
+
+
 
 <script>
   $(document).ready(function () {
@@ -763,56 +955,56 @@
   // Validate form using jQuery Validation Plugin
   $(document).ready(function () {
     $.validator.addMethod("overspecialization", function (value, element) {
-        return !/\d/.test(value);
+      return !/\d/.test(value);
     }, "Please enter a valid value.");
 
     $.validator.addMethod("radioRequired", function (value, element) {
-        return $('input[name="customRadio"]:checked').length > 0;
+      return $('input[name="customRadio"]:checked').length > 0;
     }, "Please select an option.");
 
     $("#Edit_slot").validate({
-        rules: {
-            dateTime: {
-                required: true,
-                overspecialization: false
-            },
-            link: {
-                required: true,
-                overspecialization: true
-            },
-            feedback: {
-                required:true,
-            },
-            customRadio: {
-                radioRequired: true
-            }
+      rules: {
+        dateTime: {
+          required: true,
+          overspecialization: false
+        },
+        link: {
+          required: true,
+          overspecialization: true
+        },
+        feedback: {
+          required: true,
+        },
+        customRadio: {
+          radioRequired: true
+        }
 
+      },
+      messages: {
+        dateTime: {
+          required: "Please Select Slot."
         },
-        messages: {
-            dateTime: {
-                required: "Please Select Slot."
-            },
-            link: {
-                required: "Please provide link."
-            },
-            feedback: {
-                required:" Please enter a reason",
-            },
-            customRadio: {
-                radioRequired: "Please select an option."
-            }
+        link: {
+          required: "Please provide link."
+        },
+        feedback: {
+          required: " Please enter a reason",
+        },
+        customRadio: {
+          radioRequired: "Please select an option."
+        }
 
-        },
-        errorPlacement: function(error, element) {
-            if (element.attr("name") == "customRadio") {
-                error.appendTo("#radioError");
-            } else {
-                error.insertAfter(element);
-            }
-        },
-        submitHandler: function (form) {
-            form.submit();
-        },
+      },
+      errorPlacement: function (error, element) {
+        if (element.attr("name") == "customRadio") {
+          error.appendTo("#radioError");
+        } else {
+          error.insertAfter(element);
+        }
+      },
+      submitHandler: function (form) {
+        form.submit();
+      },
     });
   });
 </script>
@@ -820,7 +1012,7 @@
 <!-- radio buttons -->
 <script>
   // JavaScript to handle radio button selection and modal display
-  document.getElementById("confirmAction").addEventListener("click", function() {
+  document.getElementById("confirmAction").addEventListener("click", function () {
     var selectedAction = document.querySelector('input[name="customRadio"]:checked').value;
     if (selectedAction === "Reschedule Slot") {
       $('#rescheduleModal').modal('show');
@@ -847,18 +1039,18 @@
     );
     // Resume upload Validation
     $.validator.setDefaults({
-      errorPlacement: function(error,element){
-        if (element.attr('name') === 'resume'){
+      errorPlacement: function (error, element) {
+        if (element.attr('name') === 'resume') {
           error.appendTo("#resume_upload");
         }
-        else{ error.insertAfter(element);}
+        else { error.insertAfter(element); }
       }
     })
 
 
     $("#createFeed").validate({
       rules: {
-        Attendance : {
+        Attendance: {
 
           required: true,
         },
@@ -874,26 +1066,29 @@
         'Logical Thinking': {
           selectRequired: true,
         },
+        Suggestions: {
+          selectRequired: true,
+        },
 
-        resume:{
-          required:true,
-          accept:'pdf',
+        resume: {
+          required: true,
+          accept: 'pdf',
         }
 
 
       },
       messages: {
-        Attendance : {
+        Attendance: {
           required: "Please Select an option",
         },
         Communication: {
           selectRequired: "Please Select an option",
         },
         'Body Language': {
-          selectRequired:" Please Select an option"
+          selectRequired: " Please Select an option"
         },
-        'Technical Performance':{
-          selectRequired:'Please Select an option'
+        'Technical Performance': {
+          selectRequired: 'Please Select an option'
         },
         'Logical Thinking': {
           selectRequired: "Please Select an option",
@@ -901,9 +1096,9 @@
         Suggestions: {
           selectRequired: "Text here",
         },
-        resume:{
-          required:" please upload your Resume",
-          accept:"only PDF are allowed"
+        resume: {
+          required: " please upload your Resume",
+          accept: "only PDF are allowed"
         }
 
       },
@@ -916,9 +1111,9 @@
   });
 
   $.validator.addMethod("pdfOnly", function (value, element) {
-      // Check if the file extension is pdf
-      return this.optional(element) || /\.(pdf)$/i.test(value);
-    }, "Please select a PDF file.");
+    // Check if the file extension is pdf
+    return this.optional(element) || /\.(pdf)$/i.test(value);
+  }, "Please select a PDF file.");
 </script>
 
 {% endblock %}

@@ -1,6 +1,7 @@
+
 from django.shortcuts import render,redirect
 from .models import *
-
+from django.contrib import messages
 
 def student_required(view_func):
     def wrapper(request, *args, **kwargs):
@@ -14,20 +15,42 @@ def student_required(view_func):
 
 
 def student_login(request):
+    if request.session.get('student'):
+        return redirect('dash')
+    
     if request.method == 'POST':
+
         email = request.POST.get('email_id')
         password = request.POST.get('password')
+        
+        print("credential")
         print(email, password)
         if Studen_credentials.objects.filter(email=email, password=password, is_active=True).exists():
             student = Studen_credentials.objects.get(email=email, password=password, is_active=True)
-            student_id = student.student_id
-            request.session['student'] = {'email': email, 'password': password, 'student_id': student_id}
+            student_id = student
+            request.session['student'] = {'email': email, 'password': password, 'student_id': student_id.id}
             print('success')
+
             return redirect('dash')
         else:
+            messages.error(request,'Invalid credential')
             return redirect('student_login')
-
+        
     return render(request, 'student_login.html')
+
+
+
+
+@student_required
+def student_logout(request):
+    if request.method == "POST":
+        del request.session['student']
+        return redirect('student_login')
+    else:
+        return redirect('student_login')
+
+
+    
 
 
 
@@ -38,58 +61,133 @@ def base(request):
 @student_required
 def dash(request):
     return render(request,'dashbord.html')
+
+
+@student_required
 def student_profile(request):
     return render(request,'student_profile.html')
+
+
+@student_required
 def student_id(request):
     return render(request,'id.html')
+
+
+@student_required
 def my_job(request):
     return render(request,'Myjob.html')
+
+@student_required
 def project(request):
     return render(request,'profile_project.html')
+
+@student_required    
 def certification(request):
     return render(request,'profile_certification.html')
-def student_login(request):
-    return render(request,'student_login.html')
+
+
+
+@student_required
 def reset_paasword(request):
     return render(request,'reset_password.html')
+
+
+@student_required    
 def internship(request):
     return render(request, 'internship.html')
+
+
+
+@student_required    
 def mocks(request):
     return render(request, 'mocks.html')
 
+
+
+@student_required
 def mycourse1(request):
     return render(request,"my_course1.html")
+
+
+
+@student_required    
 def mycourses(request):
     return render(request,"my_courses.html")
+
+
+
+@student_required    
 def my_course_As1(request):
     return render(request,"my_course_As1.html")
+
+
+
+@student_required    
 def my_course_As2(request):
     return render(request,"my_course_As2.html")
+
+
+@student_required    
 def my_course_video1(request):
     return render(request,"my_course_video1.html")
+
+
+
+@student_required    
 def Test_card(request):
     return render(request,"Test_card.html")
+
+
+@student_required    
 def matched_jobs(request):
     return render(request,'matched_jobs.html')
 
+
+
+@student_required
 def applied_jobs(request):
     return render(request,'applied_jobs.html')
 
+
+
+@student_required
 def qualified_jobs(s):
     return render(s,'qualified_jobs.html')
 
+
+
+
+@student_required
 def job_details(s):
     return render(s,'job_details.html')
 # Create your views here.
+
+
+
+@student_required
 def student_attendance(request):
     return render(request,'student_attendance.html')
 
+
+@student_required
 def calendar(request):
     return render(request,'calendar.html')
+
+
+
+
+@student_required    
 def CERTIFICATE(request):
     pass
     return render(request, 'certificates.html')
+
+
+
+@student_required    
 def payments(request):
     return render(request,'payments.html')
+
+
+@student_required    
 def Invoice(request):
     return render(request,'invoice.html')

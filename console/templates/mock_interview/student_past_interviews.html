@@ -9,7 +9,7 @@
     <ol class="breadcrumb bg-transparent mb-0">
       <li class="breadcrumb-item"><a href="{% url 'mock_dashboard' %}">Dashboard</a></li>
       <li class="breadcrumb-item"><a href="{% url 'settings' %}">Settings</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Courses</li>
+      <li class="breadcrumb-item active" aria-current="page">Past Interviews</li>
     </ol>
   </nav>
 </div>
@@ -49,8 +49,8 @@
               <th class="text-white text-center">Date of Interview</th>
               <th class="text-white text-center" >Attendance</th>
               <th class="text-white text-center" >Logical Thinking</th>
-              <th class="text-white text-center" >Technical Performance</th>
-              <th class="text-white text-center" >Communication</th>
+              <th class="text-white text-center" >Technical skills</th>
+              <th class="text-white text-center" >Communication skills</th>
               <th class="text-white text-center" >Body Language</th>
               <th class="text-white text-center" >Overall Rating</th>
                 <th class="text-white text-center" >Status</th>
@@ -60,44 +60,26 @@
             </tr>
           </thead>
           <tbody>
-
+            {% for feedback in feedbacks %}
             <tr>
-              <td>1</td>
-              <td class="text-center">vijaya</td>
-                <td class="text-center">March 22,2024</td>
+              <td>{{feedback.id}}</td>
+              <td class="">{{ feedback.interview.faculty_name }}</td>
+              <td>{{ feedback.interview.available_slot.available_slot }}</td>
 
-               <td class="text-center text-info" style="font-weight:bold;">Present</td>
-               <td class="text-center">4</td>
-              <td class="text-center">4</td>
-              <td class="text-center">3</td>
-              <td class="text-center">4</td>
-              <td class="text-center">4</td>
-              <td class="text-center text-success" style="font-weight:bold;">Qualified</td>
-              <td class=" text-center" >Improve Communication</td>
+               <td class="text-center text-info" style="font-weight:bold;">{{feedback.attendance_status}}</td>
+               <td class="text-center">{{feedback.logical_thinking}}</td>
+              <td class="text-center">{{feedback.technical_skills}}</td>
+              <td class="text-center">{{feedback.communication_skills}}</td>
+              <td class="text-center">{{feedback.body_language}}</td>
+              <td class="text-center">{{feedback.overall_rating}}</td>
+              <td class="text-center text-success" style="font-weight:bold;">{{feedback.status}}</td>
+              <td class=" text-center" >{{feedback.suggestion}}</td>
               <td class="text-center">
-                    <a href="" title=""><img src="/static/media/pdf.png" width="35" alt="Student resume" /></a>
-                    </td>
+                <a href="{% url 'open_pdf' feedback.id %}" title=""><img src="https://www.freeiconspng.com/uploads/pdf-icon-png-pdf-zum-download-2.png" width="35" alt="Student resume" /></a>
+              </td>
 
             </tr>
-          <tr>
-              <td>2</td>
-              <td class="text-center">vijaya</td>
-                <td class="text-center">March 22,2024</td>
-
-               <td class="text-center text-danger" style="font-weight:bold;">Absent</td>
-               <td class="text-center">0</td>
-               <td class="text-center">0</td>
-              <td class="text-center">0</td>
-              <td class="text-center">0</td>
-              <td class="text-center">0</td>
-              <td class="text-center text-danger" style="font-weight:bold;">Not Qualified</td>
-              <td class=" text-center" >No Feedback</td>
-            <td class="text-center">
-<!--                <a href="" title="Image from freeiconspng.com"><img src="https://www.freeiconspng.com/uploads/pdf-icon-png-pdf-zum-download-2.png" width="35" alt="Student resume" /></a>-->
-                  No Attachments
-                </td>
-
-            </tr>
+            {% endfor %}
 
           </tbody>
         </table>

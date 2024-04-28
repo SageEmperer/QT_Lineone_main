@@ -22,129 +22,116 @@
 
 
 <section class="hk-sec-wrapper">
-    <div class="row">
-      <div class="col-sm">
-        <div class="table-wrap">
-          <table id="datable_1" class="table table-hover w-100 pb-30 table-bordered">
-            <thead class="bg-dark">
-              <tr>
-                <th class="text-white text-center">S.No</th>
-                <th class="text-white text-center">Faculty</th>
-                <th class="text-white text-center">Student</th>
-                <th class="text-white text-center">Student Email id</th>
-                <th class="text-white text-center">Course</th>
-                <th class="text-white text-center">Date Of Interview</th>
-                <th class="text-white text-center">Resume</th>
-                <th class="text-white text-center">Feedback</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td class="text-center">Raj</td>
-                <td class="text-center"><a class="nav-link" href="{% url 'student_feedback' %}">Vijaya</a></td>
-                <td class="text-center">aadil33@gmail.com</td>
-                <td class="text-center">Python</td>
-                <td class="text-center">Mar.04,2024,10:30 am</td>
-                <td class="text-center"><a href="" title="Image from freeiconspng.com"><img
-                  src="https://www.freeiconspng.com/uploads/pdf-icon-png-pdf-zum-download-2.png" width="35"
-                  alt="Student resume" /></a></td>
-                <td class="text-center text-success" style="font-weight:bold;">
-                    Qualified
-                </td>
-              </tr>
-
-              <tr>
-                <td>2</td>
-                <td class="text-center">Raj</td>
-                <td class="text-center"><a class="nav-link" href="{% url 'student_feedback' %}">Vijaya</a></td>
-                <td class="text-center">aadil33@gmail.com</td>
-                <td class="text-center">Python</td>
-                <td class="text-center">Mar.04,2024,10:30 am</td>
-                <td class="text-center"><a href="" title="Image from freeiconspng.com"><img
-                  src="https://www.freeiconspng.com/uploads/pdf-icon-png-pdf-zum-download-2.png" width="35"
-                  alt="Student resume" /></a></td>
-                <td class="text-center text-danger" style="font-weight:bold;">
-                    Not Qualified
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <div class="modal fade" id="reschedule" tabindex="-1" role="dialog" aria-labelledby="FeedbackFormLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header bg-dark">
-          <h5 class="modal-title text-white">Reschedule Slot</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true" class="text-white">&times;</span>
-          </button>
-        </div>
-        <form action="" method="post" id="">
-          {% csrf_token %}
-          <div class="modal-body">
-            <div class="mb-3">
-              <label for="">Student<span class="text-danger">*</span></label>
-              <input type="text" class="form-control" id="fullname" name="fullname" placeholder="chinmai" value=""  />
-            </div>
-
-
-            <div class="mb-3">
-              <label for="">Student Email<span class="text-danger">*</span></label>
-              <input type="text" class="form-control" id="Email" name="Email" placeholder="chinmai5@gmail.com" value=""  />
-            </div>
-
-
-
-            <div class="mb-3">
-                <label for="">Course<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="Email" name="Email" placeholder="Python" value=""  />
-            </div>
-
-            <div class="mb-3">
-                <label for="">Specialization<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="Email" name="Email" placeholder="Full Stack Python" value=""  />
-            </div>
-
-            <div class="mb-3">
-                <label for="">Slot<span class="text-danger">*</span></label>
-                <input  class="form-control" type="datetime-local" id="datetime" name="datetime" required>
-            </div>
-
-          </div>
-
-          <div class="modal-footer d-flex justify-content-center">
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <button type="reset" class="btn btn-secondary">Reset</button>
-          </div>
-        </form>
+  <div class="row">
+    <div class="col-sm">
+      <div class="table-wrap">
+        <table id="datable_1" class="table table-hover w-100 pb-30 table-bordered">
+          <thead class="bg-dark">
+            <tr>
+              <th class="text-white text-center">S.No</th>
+              <th class="text-white text-center">Faculty</th>
+              <th class="text-white text-center">Student</th>
+              <th class="text-white text-center">Student Email id</th>
+              <th class="text-white text-center">Course</th>
+              <th class="text-white text-center">Date Of Interview</th>
+              <th class="text-white text-center">Resume</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in feedbacks %}
+            <tr>
+              <td>{{i.id}}</td>
+              <td class="text-center">{{i.interview.faculty_name.first_name}} {{i.interview.faculty_name.last_name}}
+              </td>
+              <td class="text-center"><a class="nav-link"
+                  href="{% url 'student_feedback' %}">{{i.interview.student_name.first_name}}
+                  {{i.interview.student_name.last_name}}</a></td>
+              <td class="text-center">{{i.interview.student_name.email}}</td>
+              <td class="text-center">{{i.interview.student_name.course_name}}</td>
+              <td class="text-center">{{i.interview.available_slot.available_slot}}</td>
+              <td class="text-center"><a href="{% url 'open_pdf' i.id %} title=" Image from freeiconspng.com"><img
+                    src="https://www.freeiconspng.com/uploads/pdf-icon-png-pdf-zum-download-2.png" width="35"
+                    alt="Student resume" /></a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
+</section>
 
-  <!-- Create model end here -->
+
+<div class="modal fade" id="reschedule" tabindex="-1" role="dialog" aria-labelledby="FeedbackFormLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-dark">
+        <h5 class="modal-title text-white">Reschedule Slot</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" class="text-white">&times;</span>
+        </button>
+      </div>
+      <form action="" method="post" id="">
+        {% csrf_token %}
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="">Student<span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="fullname" name="fullname" placeholder="chinmai" value="" />
+          </div>
 
 
-  <!-- Ensure jQuery and Bootstrap are included -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="path/to/bootstrap.min.js"></script>
+          <div class="mb-3">
+            <label for="">Student Email<span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="Email" name="Email" placeholder="chinmai5@gmail.com" value="" />
+          </div>
 
-  <script>
-  document.addEventListener("DOMContentLoaded", function() {
-      // Select the button
-      const openFeedbackFormButton = document.querySelector('.open-feedback-form');
 
-      // Add click event listener
-      openFeedbackFormButton.addEventListener('click', function() {
-          // Show the modal by directly setting its display style
-          document.getElementById('reschedule').style.display = 'block';
-      });
+
+          <div class="mb-3">
+            <label for="">Course<span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="Email" name="Email" placeholder="Python" value="" />
+          </div>
+
+          <div class="mb-3">
+            <label for="">Specialization<span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="Email" name="Email" placeholder="Full Stack Python" value="" />
+          </div>
+
+          <div class="mb-3">
+            <label for="">Slot<span class="text-danger">*</span></label>
+            <input class="form-control" type="datetime-local" id="datetime" name="datetime" required>
+          </div>
+
+        </div>
+
+        <div class="modal-footer d-flex justify-content-center">
+          <button type="submit" class="btn btn-primary">Submit</button>
+          <button type="reset" class="btn btn-secondary">Reset</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Create model end here -->
+
+
+<!-- Ensure jQuery and Bootstrap are included -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="path/to/bootstrap.min.js"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Select the button
+    const openFeedbackFormButton = document.querySelector('.open-feedback-form');
+
+    // Add click event listener
+    openFeedbackFormButton.addEventListener('click', function () {
+      // Show the modal by directly setting its display style
+      document.getElementById('reschedule').style.display = 'block';
+    });
   });
-  </script>
+</script>
 
 {% endblock %}

@@ -1,7 +1,10 @@
 import csv
-import io
+from django.http import FileResponse
+from datetime import date, timedelta
 
-from django.http import Http404, HttpResponse, HttpResponseRedirect, JsonResponse
+import io
+from team_panel.models import *
+from django.http import FileResponse, Http404, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render,redirect,reverse
 from .models import *
 from django.contrib import messages
@@ -26,6 +29,7 @@ from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django.db.models.functions import TruncMonth
 from django.core.exceptions import ObjectDoesNotExist
+from student_panel.models import *
 # decorator for admin login
 def admin_required(view_func):
     @wraps(view_func)
@@ -5681,8 +5685,8 @@ def course_manage_import(request):
           software=row[16]
           short_description=row[17]
           long_description=row[18]
-          if not course_title or not course_plan_instance or not course_name_instance or not specialization_instance or not teaching_instance or not batch_type_instance or not duration or not course_fee or not discount or not final_price or not curriculum or not course_image or not course_banner or not branch_instance or not hardware or not software or not short_description or not long_description:
-            continue
+          if not course_title or not course_plan_instance or not course_name_instance or not specialization_instance or not teaching_instance or not batch_type_instance or not duration or not course_fee or not discount or not final_price or not curriculum or not course_image or not course_banner or not branch_instance or not hardware or not software:
+             continue
           if not re.match(r"^[a-zA-Z\s]{3,50}$", course_title):
             continue
           course_title.strip().title()
@@ -5851,7 +5855,7 @@ def employee_list(request):
    
    
    else:
-     Employee_model.objects.create(
+      emp = Employee_model.objects.create(
       first_name=first_name,
       last_name=last_name,
       personal_number=personal_number,
@@ -5881,8 +5885,14 @@ def employee_list(request):
       aadhar_card_pdf=aadhar_card_pdf,
       pan_card_pdf=pan_card_pdf,
       crn_number=register_user)
-     messages.success(request,'Employee has been successfully created')
-     return redirect('employees')
+      Employee_credentials.objects.create(
+      crn = register_user,
+      email = personal_email,
+      password = "A#aruddin@834",
+      employee = emp
+      )  
+      messages.success(request,'Employee has been successfully created')
+      return redirect('employees')
   employee=register_user.employee.all().order_by('-id')
   branch=register_user.branches.all().order_by('-id')
   employee_type=register_user.employee_types.all().order_by('-id')
@@ -7090,7 +7100,9 @@ def lead_prospects(request):
   mql_count = register_user.leads.filter(lead_position = 'MQL').count()
   sql_count = register_user.leads.filter(lead_position = 'SQL').count()
   request_discount_count = register_user.leads.filter(lead_position = 'REQUEST_DISCOUNT').count()
+  opportunity_count = register_user.leads.filter(lead_position = 'OPPORTUNITY').count()
   admission_count = register_user.leads.filter(lead_position = 'ADMITTED').count()
+  spam_count = register_user.leads.filter(lead_position = 'SPAM').count()
 
   
   context={
@@ -7105,7 +7117,9 @@ def lead_prospects(request):
      'mql_count':mql_count,
      'sql_count':sql_count,
      'request_discount_count':request_discount_count,
-     'admission_count':admission_count
+     'opportunity_count':opportunity_count,
+     'admission_count':admission_count,
+     'spam_count':spam_count
      
   }
   return render(request,'Leads/prospects.html', context)
@@ -7165,6 +7179,15 @@ def leads(request):
     batches = register_user.regulations.all()
     upi = register_user.upi.filter(status = "Active")
     net_banking = register_user.net_banking.filter(status="Active")
+    prospect_count = register_user.leads.filter(lead_position = "PROSPECT").count()
+    lead_count = register_user.leads.filter(lead_position = "LEAD").count()
+    mql_count = register_user.leads.filter(lead_position = 'MQL').count()
+    sql_count = register_user.leads.filter(lead_position = 'SQL').count()
+    request_discount_count = register_user.leads.filter(lead_position = 'REQUEST_DISCOUNT').count()
+    opportunity_count = register_user.leads.filter(lead_position = 'OPPORTUNITY').count()
+    admission_count = register_user.leads.filter(lead_position = 'ADMITTED').count()
+    spam_count = register_user.leads.filter(lead_position = 'SPAM').count()
+
 
 
 
@@ -7176,7 +7199,15 @@ def leads(request):
         'demo':demo,
         'batches':batches,
         'upi':upi,
-        'net_banking':net_banking
+        'net_banking':net_banking,
+        'prospect_count':prospect_count,
+     'lead_count':lead_count,
+     'mql_count':mql_count,
+     'sql_count':sql_count,
+     'request_discount_count':request_discount_count,
+     'opportunity_count':opportunity_count,
+     'admission_count':admission_count,
+     'spam_count':spam_count
     }
     return render(request, 'Leads/lead.html', context)
 
@@ -7444,6 +7475,14 @@ def mql(request):
   faculty = register_user.employee.all()
   upi = register_user.upi.filter(status = "Active")
   net_banking = register_user.net_banking.filter(status="Active")
+  prospect_count = register_user.leads.filter(lead_position = "PROSPECT").count()
+  lead_count = register_user.leads.filter(lead_position = "LEAD").count()
+  mql_count = register_user.leads.filter(lead_position = 'MQL').count()
+  sql_count = register_user.leads.filter(lead_position = 'SQL').count()
+  request_discount_count = register_user.leads.filter(lead_position = 'REQUEST_DISCOUNT').count()
+  opportunity_count = register_user.leads.filter(lead_position = 'OPPORTUNITY').count()
+  admission_count = register_user.leads.filter(lead_position = 'ADMITTED').count()
+  spam_count = register_user.leads.filter(lead_position = 'SPAM').count()  
 
   context={
      "leads":leads,
@@ -7451,7 +7490,15 @@ def mql(request):
      'batches':batches,
      'faculty':faculty,
      'upi':upi,
-     'net_banking':net_banking
+     'net_banking':net_banking,
+     'prospect_count':prospect_count,
+     'lead_count':lead_count,
+     'mql_count':mql_count,
+     'sql_count':sql_count,
+     'request_discount_count':request_discount_count,
+     'opportunity_count':opportunity_count,
+     'admission_count':admission_count,
+     'spam_count':spam_count
     
   }
   return render(request,'Leads/mql.html', context)
@@ -7524,6 +7571,14 @@ def sql(request):
   faculty = register_user.employee.all()
   upi = register_user.upi.filter(status = "Active")
   net_banking = register_user.net_banking.filter(status="Active")  
+  prospect_count = register_user.leads.filter(lead_position = "PROSPECT").count()
+  lead_count = register_user.leads.filter(lead_position = "LEAD").count()
+  mql_count = register_user.leads.filter(lead_position = 'MQL').count()
+  sql_count = register_user.leads.filter(lead_position = 'SQL').count()
+  request_discount_count = register_user.leads.filter(lead_position = 'REQUEST_DISCOUNT').count()
+  opportunity_count = register_user.leads.filter(lead_position = 'OPPORTUNITY').count()
+  admission_count = register_user.leads.filter(lead_position = 'ADMITTED').count()
+  spam_count = register_user.leads.filter(lead_position = 'SPAM').count()    
   
   context={
      "leads":leads,
@@ -7531,7 +7586,15 @@ def sql(request):
      'batches':batches,
      'faculty':faculty,
      'upi':upi,
-     'net_banking':net_banking
+     'net_banking':net_banking,
+     'prospect_count':prospect_count,
+     'lead_count':lead_count,
+     'mql_count':mql_count,
+     'sql_count':sql_count,
+     'request_discount_count':request_discount_count,
+     'opportunity_count':opportunity_count,
+     'admission_count':admission_count,
+     'spam_count':spam_count
      
   }
   return render(request,'Leads/sql.html', context) 
@@ -7574,6 +7637,14 @@ def opportunity(request):
   faculty = register_user.employee.all()
   upi = register_user.upi.filter(status = "Active")
   net_banking = register_user.net_banking.filter(status="Active")   
+  prospect_count = register_user.leads.filter(lead_position = "PROSPECT").count()
+  lead_count = register_user.leads.filter(lead_position = "LEAD").count()
+  mql_count = register_user.leads.filter(lead_position = 'MQL').count()
+  sql_count = register_user.leads.filter(lead_position = 'SQL').count()
+  request_discount_count = register_user.leads.filter(lead_position = 'REQUEST_DISCOUNT').count()
+  opportunity_count = register_user.leads.filter(lead_position = 'OPPORTUNITY').count()
+  admission_count = register_user.leads.filter(lead_position = 'ADMITTED').count()
+  spam_count = register_user.leads.filter(lead_position = 'SPAM').count() 
 
 
   context={
@@ -7581,7 +7652,15 @@ def opportunity(request):
      'batches':batches,
      'faculty':faculty,
      'upi':upi,
-     'net_banking':net_banking
+     'net_banking':net_banking,
+     'prospect_count':prospect_count,
+     'lead_count':lead_count,
+     'mql_count':mql_count,
+     'sql_count':sql_count,
+     'request_discount_count':request_discount_count,
+     'opportunity_count':opportunity_count,
+     'admission_count':admission_count,
+     'spam_count':spam_count
   }
 
   return render(request,'Leads/opportunity.html', context) 
@@ -7590,48 +7669,151 @@ def opportunity(request):
 def move_to_admission(request, id):
     crn = request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
-
+    
     if request.method == "POST":
         opportunity_lead = register_user.leads.filter(id=id).first()
         
         if opportunity_lead:
-            student = opportunity_lead
-            data = {
-                'lead_position': 'ADMITTED',
-                'batch_number': register_user.regulations.get(pk=request.POST.get("batchno")),
-                'admission_date': datetime.now()
-            }
-            
-            if request.POST.get("courseFaculty"):
-                data['faculty'] = register_user.employee.get(pk=request.POST.get("courseFaculty"))
-            
-            register_user.leads.filter(id=id).update(**data)
-            
-            payment_data = {
-                'studend_id': register_user.leads.get(pk=id),
-                'payment_amount': request.POST.get('admissionFee'),
-                'mode_of_payment': request.POST.get('paymenttype'),
-                'transaction_id': request.POST.get('transactionId'),
-                'course_id': student.course_name,
-                'crn_number': register_user
-            }
-            
-            if request.POST.get('upi_id_id'):
-                payment_data['upi_id'] = register_user.upi.get(pk=request.POST.get('upi_id_id'))
-            elif request.POST.get('net_banking_id'):
-                payment_data['net_banking'] = register_user.net_banking.get(pk=request.POST.get('net_banking_id'))
-            elif request.POST.get('Cash'):
-                pass
-            else:
-                messages.error(request, "Please select a payment method")
+            if request.POST.get('paymenttype') == 'Cash':
+                opportunity_lead.lead_position = 'ADMITTED'
+                opportunity_lead.faculty = register_user.employee.get(pk=request.POST.get('courseFaculty'))
+                opportunity_lead.batch_number = register_user.regulations.get(pk=request.POST.get("batchno"))
+                opportunity_lead.admission_date = datetime.now()
+                opportunity_lead.save()
+
+                Student_payment.objects.create(
+                    crn_number=register_user,
+                    payment_amount=request.POST.get('admissionFee'),
+                    studend_id=opportunity_lead,
+                    mode_of_payment=request.POST.get('paymenttype'),
+                    transaction_id=request.POST.get('transactionId'),
+                    course_id=opportunity_lead.course_name,
+                    date_of_payment=datetime.now()
+                )
+                Studen_credentials.objects.create(
+                  crn = register_user,
+                  studend_id = opportunity_lead,
+                  email = opportunity_lead.email,
+                  password = 'A#aruddin@834'
+                )  
+
+                messages.success(request, 'Lead moved to Admission')
                 return redirect('admissions')
-            
-            Student_payment.objects.create(**payment_data)
-            messages.success(request, 'OPPORTUNITY Lead moved to ADMITTED')
-            return redirect('admissions')
+            elif request.POST.get('paymenttype') == 'UPI':
+                opportunity_lead.lead_position = 'ADMITTED'
+                opportunity_lead.faculty = register_user.employee.get(pk=request.POST.get('courseFaculty'))
+                opportunity_lead.batch_number = register_user.regulations.get(pk=request.POST.get("batchno"))
+                opportunity_lead.admission_date = datetime.now()
+                opportunity_lead.save()
+
+                Student_payment.objects.create(
+                    crn_number=register_user,
+                    payment_amount=request.POST.get('admissionFee'),
+                    studend_id=opportunity_lead,
+                    mode_of_payment=request.POST.get('paymenttype'),
+                    transaction_id=request.POST.get('transactionId'),
+                    course_id=opportunity_lead.course_name,
+                    date_of_payment=datetime.now(),
+                    upi_id=register_user.upi.get(pk=request.POST.get('upi_id_id'))
+                )
+                Studen_credentials.objects.create(
+                  crn = register_user,
+                  studend_id = opportunity_lead,
+                  email = opportunity_lead.email,
+                  password = 'A#aruddin@834'
+                )                  
+
+                messages.success(request, 'Lead moved to Admission')
+                return redirect('admissions')
+            elif request.POST.get('paymenttype') == 'netbanking':
+                opportunity_lead.lead_position = 'ADMITTED'
+                opportunity_lead.faculty = register_user.employee.get(pk=request.POST.get('courseFaculty'))
+                opportunity_lead.batch_number = register_user.regulations.get(pk=request.POST.get("batchno"))
+                
+                opportunity_lead.admission_date = datetime.now()
+                opportunity_lead.save()
+
+                Student_payment.objects.create(
+                    crn_number=register_user,
+                    payment_amount=request.POST.get('admissionFee'),
+                    studend_id=opportunity_lead,
+                    mode_of_payment=request.POST.get('paymenttype'),
+                    transaction_id=request.POST.get('transactionId'),
+                    course_id=opportunity_lead.course_name,
+                    date_of_payment=datetime.now(),
+                    net_banking=register_user.net_banking.get(pk=request.POST.get('net_banking_id'))
+                )
+                Studen_credentials.objects.create(
+                  crn = register_user,
+                  studend_id = opportunity_lead,
+                  email = opportunity_lead.email,
+                  password = 'A#aruddin@834'
+                )                  
+
+                messages.success(request, 'Lead moved to Admission')
+                return redirect('admissions')
+            else:
+                messages.error(request, 'Invalid payment type')
+                return redirect('admissions')
         else:
-            messages.error(request, 'OPPORTUNITY Lead not found')
+            messages.error(request, 'Lead not found')
             return redirect('admissions')
+    else:
+        messages.error(request, 'Invalid request')
+        return redirect('admissions')    
+
+          
+          
+            
+
+    # if request.method == "POST":
+    #     opportunity_lead = register_user.leads.filter(id=id).first()
+        
+    #     if opportunity_lead:
+    #         student = opportunity_lead
+    #         data = {
+    #             'lead_position': 'ADMITTED',
+    #             'batch_number': register_user.regulations.get(pk=request.POST.get("batchno")),
+    #             'admission_date': datetime.now()
+    #         }
+            
+    #         if request.POST.get("courseFaculty"):
+    #             data['faculty'] = register_user.employee.get(pk=request.POST.get("courseFaculty"))
+            
+    #         register_user.leads.filter(id=id).update(**data)
+            
+    #         payment_data = {
+    #             'studend_id': student,
+    #             'payment_amount': request.POST.get('admissionFee'),
+    #             'mode_of_payment': request.POST.get('paymenttype'),
+    #             'transaction_id': request.POST.get('transactionId'),
+    #             'course_id': student.course_name,
+    #             'crn_number': register_user,
+    #             'date_of_payment': datetime.now()
+    #         }
+            
+    #         if request.POST.get('paymenttype') == 'Cash':
+    #             # If the mode of payment is cash, update the student payment and lead model
+    #             Student_payment.objects.create(**payment_data)
+    #             student.admission_date = datetime.now()
+    #             student.amount_paid = request.POST.get('admissionFee')
+    #             student.save()
+    #             messages.success(request, 'OPPORTUNITY Lead moved to ADMITTED')
+    #             return redirect('admissions')
+    #         elif request.POST.get('upi_id_id'):
+    #             payment_data['upi_id'] = register_user.upi.get(pk=request.POST.get('upi_id_id'))
+    #         elif request.POST.get('net_banking_id'):
+    #             payment_data['net_banking'] = register_user.net_banking.get(pk=request.POST.get('net_banking_id'))
+    #         else:
+    #             messages.error(request, "Please select a payment method")
+    #             return redirect('admissions')
+            
+    #         Student_payment.objects.create(**payment_data)
+    #         messages.success(request, 'OPPORTUNITY Lead moved to ADMITTED')
+    #         return redirect('admissions')
+    #     else:
+    #         messages.error(request, 'OPPORTUNITY Lead not found')
+    #         return redirect('admissions')
 
 
 
@@ -7661,10 +7843,26 @@ def request_discounts(request):
   crn = request.session.get('admin_user').get('crn')
   register_user = Register_model.objects.get(crn=crn)
   leads = register_user.leads.filter(lead_position='REQUEST_DISCOUNT').order_by("-id")
+  prospect_count = register_user.leads.filter(lead_position = "PROSPECT").count()
+  lead_count = register_user.leads.filter(lead_position = "LEAD").count()
+  mql_count = register_user.leads.filter(lead_position = 'MQL').count()
+  sql_count = register_user.leads.filter(lead_position = 'SQL').count()
+  request_discount_count = register_user.leads.filter(lead_position = 'REQUEST_DISCOUNT').count()
+  opportunity_count = register_user.leads.filter(lead_position = 'OPPORTUNITY').count()
+  admission_count = register_user.leads.filter(lead_position = 'ADMITTED').count()
+  spam_count = register_user.leads.filter(lead_position = 'SPAM').count()  
   
   
   context={
      "leads":leads,
+     'prospect_count':prospect_count,
+     'lead_count':lead_count,
+     'mql_count':mql_count,
+     'sql_count':sql_count,
+     'request_discount_count':request_discount_count,
+     'opportunity_count':opportunity_count,
+     'admission_count':admission_count,
+     'spam_count':spam_count
   }
   return render(request,'Leads/request_discounts.html', context) 
 
@@ -7686,9 +7884,26 @@ def admissions(request):
   crn = request.session.get('admin_user', {}).get('crn')
   register_user = Register_model.objects.get(crn=crn)
   leads = register_user.leads.filter(lead_position='ADMITTED').order_by("-id")
+  prospect_count = register_user.leads.filter(lead_position = "PROSPECT").count()
+  lead_count = register_user.leads.filter(lead_position = "LEAD").count()
+  mql_count = register_user.leads.filter(lead_position = 'MQL').count()
+  sql_count = register_user.leads.filter(lead_position = 'SQL').count()
+  request_discount_count = register_user.leads.filter(lead_position = 'REQUEST_DISCOUNT').count()
+  opportunity_count = register_user.leads.filter(lead_position = 'OPPORTUNITY').count()
+  admission_count = register_user.leads.filter(lead_position = 'ADMITTED').count()
+  spam_count = register_user.leads.filter(lead_position = 'SPAM').count() 
+
 
   context={
      "leads":leads,
+     'prospect_count':prospect_count,
+     'lead_count':lead_count,
+     'mql_count':mql_count,
+     'sql_count':sql_count,
+     'request_discount_count':request_discount_count,
+     'opportunity_count':opportunity_count,
+     'admission_count':admission_count,
+     'spam_count':spam_count
   }
 
   return render(request,'Leads/admission.html', context)
@@ -7760,10 +7975,26 @@ def admission(request):
      crn1 = admin_user_info.get('id')
      leads = Lead_generation.objects.filter(lead_position='ADMITTED',crn_number=register_user)
     #  leads = Lead_generation.objects.filter(lead_postion="ADMITTED").order_by('-token_generated_date')
+     prospect_count = register_user.leads.filter(lead_position = "PROSPECT").count()
+     lead_count = register_user.leads.filter(lead_position = "LEAD").count()
+     mql_count = register_user.leads.filter(lead_position = 'MQL').count()
+     sql_count = register_user.leads.filter(lead_position = 'SQL').count()
+     request_discount_count = register_user.leads.filter(lead_position = 'REQUEST_DISCOUNT').count()
+     opportunity_count = register_user.leads.filter(lead_position = 'OPPORTUNITY').count()
+     admission_count = register_user.leads.filter(lead_position = 'ADMITTED').count()
+     spam_count = register_user.leads.filter(lead_position = 'SPAM').count()      
   
      context={
      "leads":leads,
-     'active_tab': 'admission'
+     'active_tab': 'admission',
+     'prospect_count':prospect_count,
+     'lead_count':lead_count,
+     'mql_count':mql_count,
+     'sql_count':sql_count,
+     'request_discount_count':request_discount_count,
+     'opportunity_count':opportunity_count,
+     'admission_count':admission_count,
+     'spam_count':spam_count
     }
   except:
      messages.error(request,'data was not found')
@@ -7776,6 +8007,18 @@ def spam(request):
     register_user = Register_model.objects.get(crn=crn)
     leads = register_user.leads.filter(lead_position="SPAM").order_by("-id")
     #  leads = Lead_generation.objects.filter(lead_postion="SPAM").order_by('-token_generated_date')
+    batches = register_user.regulations.filter(status = 'Active').all().order_by('-id')
+    faculty = register_user.employee.all()
+    upi = register_user.upi.filter(status = "Active")
+    net_banking = register_user.net_banking.filter(status="Active")      
+    prospect_count = register_user.leads.filter(lead_position = "PROSPECT").count()
+    lead_count = register_user.leads.filter(lead_position = "LEAD").count()
+    mql_count = register_user.leads.filter(lead_position = 'MQL').count()
+    sql_count = register_user.leads.filter(lead_position = 'SQL').count()
+    request_discount_count = register_user.leads.filter(lead_position = 'REQUEST_DISCOUNT').count()
+    opportunity_count = register_user.leads.filter(lead_position = 'OPPORTUNITY').count()
+    admission_count = register_user.leads.filter(lead_position = 'ADMITTED').count()
+    spam_count = register_user.leads.filter(lead_position = 'SPAM').count()     
     
   except Exception as e:
      messages.error(request,'data was not found')
@@ -7783,6 +8026,19 @@ def spam(request):
      
   context={
         "leads":leads,
+        "batches":batches,
+        "faculty":faculty,
+        "upi":upi,
+        "net_banking":net_banking,
+
+        'prospect_count':prospect_count,
+     'lead_count':lead_count,
+     'mql_count':mql_count,
+     'sql_count':sql_count,
+     'request_discount_count':request_discount_count,
+     'opportunity_count':opportunity_count,
+     'admission_count':admission_count,
+     'spam_count':spam_count
         
       }
      
@@ -8072,109 +8328,116 @@ def student_card(request):
 
 # finance start here
 @admin_required
-def finance_view(request):
-    crn = request.session.get('admin_user').get('crn')
-    register_user = Register_model.objects.get(crn=crn)
-    
-    students=register_user.leads.filter(lead_position="ADMITTED").order_by("-id")
-    finance=register_user.finance_and_accounts.all().order_by("-id")
-    context = {
-        'finance':finance,
-        'students': students
-    }
-    return render(request, 'finance_and_accounts/finance_and_accounts.html', context)
+def student_payment_verification(request):
+  crn=request.session.get('admin_user').get('crn')
+  register_user=Register_model.objects.get(crn=crn)
+  students=register_user.leads.filter(lead_position="ADMITTED").order_by("-id")
+  payment=register_user.student_payment.all().order_by("-id") 
+  context={
+    'payment':payment,
+    'students':students
+  }
+  return render(request,'finance_and_accounts/finance_and_accounts.html',context)
 
-      
 @admin_required
-def finance_and_accounts_update(request):
+def student_payment_update(request):
   crn=request.session.get('admin_user').get('crn')
   register_user=Register_model.objects.get(crn=crn)
   if request.method == 'POST':
     verify_id=request.POST.get('verify_id')
-    payment_status = request.POST.get('payment_status')
-    remarks = request.POST.get('remarks')
-    verify_id_list=verify_id.split(',')
-    register_user.finance_and_accounts.filter(id__in=verify_id_list).update(payment_status=payment_status,remarks=remarks)
-    
-    if payment_status == 'Received':
+    payment_verification=request.POST.get('payment_verification')
+    remarks=request.POST.get('remarks')
+    register_user.student_payment.filter(id=verify_id).update(payment_verification=payment_verification,remarks=remarks)
+    if payment_verification =='Received':
       password=random_password()
-      register_user.finance_and_accounts.filter(id__in=verify_id_list).update(fince_password=password)
-      
-      for obj in register_user.finance_and_accounts.filter(id__in=verify_id_list):
-        
-                subject = f'{request.session.get("admin_user").get("company_name")} - Welcome and New Password'
-                message = (
-                    f'Hi {obj.leadstage.first_name} {obj.leadstage.last_name},\n\n'
-                    f'Thank you for joining {request.session.get("admin_user").get("company_name")}. We are thrilled to have you onboard!'
-                    f'Your token ID is: {obj.leadstage.token_id}. You have enrolled in the course "{obj.leadstage.course_name}" in batch number {obj.leadstage.batch_number}.\n\n'
-                    f'Login to your account using your email and password.\n'
-                    f'Your username is: {obj.leadstage.email}.\n'
-                    f'Your new password is: {password}.\n\n'
-                    f'URL: http://192.168.1.56:8080/\n\n'
-                    f'If you have any questions or need further assistance, feel free to contact us.\n {obj.leadstage.faculty.first_name} {obj.leadstage.faculty.last_name}\n {obj.leadstage.faculty.personal_email}\n\n'
-                    f'Thank you,\n{request.session.get("admin_user").get("company_name")}\n'
-                )
-                
-                # Send email to the student
-                email_from = settings.EMAIL_HOST_USER
-                to_email = [obj.leadstage.email]
-                send_mail(subject, message, email_from, to_email)
-    elif payment_status =='Not Received':
-            # Send complaint email for other payment statuses
-            for obj in register_user.finance_and_accounts.filter(id__in=verify_id_list):
-                subject = f'{request.session.get("admin_user").get("company_name")} - Payment Status Update'
-                message = (
-                  f'Dear {obj.leadstage.faculty.first_name} {obj.leadstage.faculty.last_name},\n\n'
-                  f'We hope this email finds you well\n\n'
-                  f'it is with a sense of duty that we inform you of an issue regarding the payment status of {obj.leadstage.first_name} {obj.leadstage.last_name} ({obj.leadstage.token_id}), for the course "{obj.leadstage.course_name}" in batch number {obj.leadstage.batch_number}.We request you to please update the payment status of this student. Student currently has {obj.leadstage.course_name.final_price}. Your attention to this matter is greatly appreciated, as it is crucial for maintaining the integrity of our enrollment process\n\n'
-                  f'Thank you for your cooperation and support.\n\n'
-                  f'Your Sincerely,\n{request.session.get("admin_user").get("company_name")}\n'
-                )
-                
-                # Send email to the student
-                email_from = settings.EMAIL_HOST_USER
-                to_email = [obj.leadstage.faculty.personal_email]
-                
-                send_mail(subject, message, email_from, to_email)
-                
+      register_user.student_payment.filter(id=verify_id).update(student_password=password)
+      for obj in register_user.student_payment.filter(id=verify_id):
+        subject=f'{request.session.get("admin_user").get("company_name")}'
+        message=(
+          f'Hi {obj.studend_id.first_name} {obj.studend_id.last_name},\n\n'
+          f'Thank You for joining {request.session.get("admin_user").get("company_name")}. we are happy to have you onboard. \n\n'
+          f'Your Token Id is: {obj.studend_id.token_id}. You have successfully completed your registration, for course {obj.studend_id.course_name}. and specialization {obj.studend_id.course_name.specialization}.Your Batch Number is {obj.studend_id.batch_number.batch_number}.  \n\n'
+          f'Your username is {obj.studend_id.email} and password is {password} \n\n'
+          f'To Login Click here URL: http://192.168.1.87:8080/\n\n'
+          f'In case of any query, please contact us at {request.session.get("admin_user").get("name")}.\n\n'
+          f'Thank you for using {request.session.get("admin_user").get("company_name")}.'
+        )
+        #send email to the student
+        email_form=settings.EMAIL_HOST_USER
+        to_email=[obj.studend_id.email]
+        send_mail(subject,message,email_form,to_email)
+      return redirect('payment_verification')
+    elif payment_verification =='Not Received':
+      for obj in register_user.student_payment.filter(id=verify_id):
+        subject=f'{request.session.get("admin_user").get("company_name")}'
+        message=(
+          f"Dear {obj.studend_id.faculty.first_name} {obj.studend_id.faculty.last_name},\n\n"
+          f'We hope this email finds you well\n\n'
+          f'It is with a sense of duty that we inform you of an issue regarding the payment status of {obj.studend_id.first_name} {obj.studend_id.last_name} ({obj.studend_id.token_id}), for the course "{obj.studend_id.course_name}" in batch number {obj.studend_id.batch_number.batch_number}. We request you to please update the payment status of this student. Student currently has {obj.payment_amount}. Your attention to this matter is greatly appreciated, as it is crucial for maintaining the integrity of our enrollment process.\n\n'
+          f'Thank you for your cooperation and support.\n\n'
+          f'Your Sincerely,\n{request.session.get("admin_user").get("company_name")}\n'
+          )
+        #send email to the BD
+        email_form=settings.EMAIL_HOST_USER
+        to_email=[obj.studend_id.faculty.personal_email]
+        send_mail(subject,message,email_form,to_email)
+      return redirect('payment_verification')
+    elif payment_verification =='Pending':
+      for obj in register_user.student_payment.filter(id=verify_id):
+        subject=f'{request.session.get("admin_user").get("company_name")}'
+        message=(
+          f"Hi {obj.studend_id.first_name} {obj.studend_id.last_name},\n\n"
+          f'We hope this email finds you well\n\n'
+          f'This is gentel reminder that payment for {obj.payment_amount} for the course "{obj.studend_id.course_name}" in batch number {obj.studend_id.batch_number.batch_number} is {obj.payment_status}.\n\n'
+          f'Thank you for your cooperation and support.\n\n'
+          f'Your Sincerely,\n{request.session.get("admin_user").get("company_name")}\n'
+          
+        )
+        message2=(
+          f'Dear {obj.studend_id.faculty.first_name} {obj.studend_id.faculty.last_name},\n\n'
+          f'We hope this email finds you well\n\n'
+          f'This to inform that {obj.studend_id.first_name} {obj.studend_id.last_name} ({obj.studend_id.token_id}) payment is pending  currently has {obj.payment_amount} for the course "{obj.studend_id.course_name}" in batch number {obj.studend_id.batch_number.batch_number}. \n\n'
+          f'Thank you for your cooperation and support.\n\n'
+          f'Your Sincerely,\n{request.session.get("admin_user").get("company_name")}\n'
+          
+        )
+        email_form=settings.EMAIL_HOST_USER
+        to_email=[obj.studend_id.faculty.personal_email]
+        to_student=[obj.studend_id.email]
+        send_mail(subject,message,email_form,to_student)
+        send_mail(subject,message2,email_form,to_email)
+      return redirect('payment_verification')
     else:
-        for obj in register_user.finance_and_accounts.filter(id__in=verify_id_list):
-            subject = f'{request.session.get("admin_user").get("company_name")} - Payment Status Update'
-            message = (
-            f'Dear {obj.leadstage.faculty.first_name} {obj.leadstage.faculty.last_name},\n\n'
-            f'We hope this email finds you well.\n\n'
-            f'It has come to our attention that there is a discrepancy or suspicious activity '
-            f'in the payment status of {obj.leadstage.token_id} ({obj.leadstage.first_name} {obj.leadstage.last_name}), '
-            f'for the course "{obj.leadstage.course_name}" in batch number {obj.leadstage.batch_number}.\n\n'
-            f'We kindly request your immediate attention and further investigation into this matter. '
-            f'Your cooperation in resolving this issue is greatly appreciated.\n\n'
-            f'Thank you for your prompt action and support.\n\n'
-            f'Yours sincerely,\n'
-            f'{request.session.get("admin_user").get("company_name")}')
-            
-            email_from = settings.EMAIL_HOST_USER
-            to_email = [obj.leadstage.faculty.personal_email]
-            send_mail(subject, message, email_from, to_email)
-      
-    messages.success(request,'Payment status updated successfully')
-   
-    return redirect('finance')
+      for obj in register_user.student_payment.filter(id=verify_id):
+        subject=f'{request.session.get("admin_user").get("company_name")}'
+        message=(
+          f'Dear {obj.studend_id.faculty.first_name} {obj.studend_id.faculty.last_name},\n\n'
+          f'We hope this email finds you well\n\n'
+          f'It has come to our attention that there is a discrepancy or suspicious activity. The student {obj.studend_id.first_name} {obj.studend_id.last_name} ({obj.studend_id.token_id}) payment status is {obj.payment_status}. We kindly request your immediate attention and further investigation into this matter. Your cooperation in resolving this issue is greatly appreciated.\n\n'
+          f'Thank you for your cooperation and support.\n\n'
+          f'Your Sincerely,\n{request.session.get("admin_user").get("company_name")}\n'
+        )
+        email_form=settings.EMAIL_HOST_USER
+        to_email=[obj.studend_id.faculty.personal_email]
+        send_mail(subject,message,email_form,to_email)
+     
+    messages.success(request,'Payment verification updated successfully')
+    return redirect('payment_verification')
 @admin_required
-def finance_and_accounts_view(request,id):
+def payment_view(request,id):
   crn=request.session.get('admin_user').get('crn')
   register_user=Register_model.objects.get(crn=crn)
-  finance=register_user.finance_and_accounts.get(id=id)
-  context = {
-    'finance':finance
+  payment=register_user.student_payment.get(id=id)
+  context={
+    'payment':payment
   }
-  html_template=render_to_string('finance_and_accounts/finance_and_accounts_view.html',context)
-  response=HttpResponse(content_type='application/pdf')
-  response['Content-Disposition'] = 'attachment; filename="finance_and_accounts_view.pdf"'
-  pisa_status = pisa.CreatePDF(html_template,dest=response)
+  html_template = render_to_string('finance_and_accounts/finance_and_accounts_view.html',context)
+  response = HttpResponse(content_type ='application/pdf')
+  response['Content-Disposition'] = 'filename="payment.pdf"'
+  pisa_status = pisa.CreatePDF(html_template, dest=response)
   if pisa_status.err:
-    messages.error(request,'Error Rendering PDF')
+    messages.error(request,f'Error Rendering PDF')
   return response
-
 
 
 
@@ -8435,7 +8698,7 @@ def level3(request):
 def createvendor(request):
   crn = request.session.get('admin_user').get('crn')
   register_user = Register_model.objects.get(crn=crn)
-  job_category = register_user.job_category.all().order_by('-id')
+  job_category = register_user.job_category.filter(status='Active').order_by('-id')
   company_vendors = register_user.company_vendor.all().order_by('-id')
 
   
@@ -8615,18 +8878,171 @@ def mock_dashboard(request):
 # Student booking slots
 def student(request):
     return render(request,'mock_interview/student.html')
+# student book an interview view start here
+def student_Book_an_interview(request):
+    return render(request, 'faculty/student.html', context)
+
+
+from django.http import JsonResponse
+
+def get_specializations(request,id):
+    if request.is_ajax() and request.method == 'GET':
+        course_id = request.GET.get(id)
+        if course_id:
+            specializations = Specialization.objects.filter(course_name_id=course_id)
+            data = [{'id': spec.id, 'name': spec.specilalization_name} for spec in specializations]
+            return JsonResponse(data, safe=False)
+    return JsonResponse([], safe=False)
+
+# PDF_view start here
+def open_pdf(request, document_id):
+    document = Student_Book_Interview_modal.objects.get(id=document_id)
+    pdf_file = document.attach_Resume
+    response = FileResponse(pdf_file, content_type='application/pdf')
+    return response
+
+
+def submit_feedback(request, interview_id):
+    if request.method == 'POST':
+        form = Feedback(request.POST)
+        if form.is_valid():
+            feedback = form.save(commit=False)
+            feedback.interview_id = interview_id
+            feedback.save()
+            return redirect('interview_list')
+    else:
+        form = Feedback()
+    return render(request, 'feedback_form.html', {'form': form})
+
 
 # Faculty slot availbility
 def faculty_slot(request):
     return render(request,'mock_interview/slot_management.html')
 
-# Total Interview
+def FeedbackForm(request, id):
+    crn = request.session.get('admin_user').get('crn')
+    register_user = Register_model.objects.get(crn=crn)
+    
+    if request.method == 'POST':
+      attendance_status=request.POST.get('attendance_status')
+      communication_skills=int(request.POST.get('communication_skills'))
+      body_language=int(request.POST.get('body_language'))
+      logical_thinking=int(request.POST.get('logical_thinking'))
+      technical_skills=int(request.POST.get('technical_skills'))
+      suggestion=request.POST.get('suggestion')
+      send_attachment=request.FILES.get('send_attachment')
+      status=request.POST.get('status')
+
+      # Calculate the overall rating
+      overall_rating = (communication_skills + body_language + logical_thinking + technical_skills) / 4
+
+        # Set status based on overall_rating
+      if overall_rating > 3.5:
+          status = 'qualified'
+      else:
+          status = 'not qualified'
+
+      feedback=Feedback.objects.create(
+         crn_number=register_user,
+         interview = Student_Book_Interview_modal.objects.get(pk=id),
+         attendance_status=attendance_status,
+         communication_skills=int(communication_skills),
+         technical_skills=int(technical_skills),
+         body_language=int(body_language),
+         logical_thinking=int(logical_thinking),
+         suggestion=suggestion,
+         send_attachment=send_attachment,
+         overall_rating=int(overall_rating),
+         status=status
+
+      )
+
+      
+      feedback.interview.interview_status = 'Completed'
+      feedback.interview.save()
+
+      subject = 'Feedback Submitted'
+      message = "hello"
+      from_email = settings.EMAIL_HOST_USER
+      to_email = [feedback.interview.student_name.email] 
+      try:
+          send_mail(subject, message, from_email, to_email, fail_silently=True)
+      except Exception as e:
+            # Handle email sending failure gracefully
+          pass
+      
+      return redirect('total_interviews')
+    
+
+@admin_required
+
 def total_interviews(request):
-    return render(request,'mock_interview/interview_list.html')
+    crn = request.session.get('admin_user').get('crn')
+    register_user = Register_model.objects.get(crn=crn)
+    faculty_id = register_user.employee.all().order_by("-id")
+    
+    today = datetime.now().date()
+    print("Today:", today)
+
+    tomorrow = today + timedelta(days=1)
+    print("Tomorrow:", tomorrow)
+
+    upcoming=date.today() + timedelta(days=2)
+    print("Upcoming:",upcoming)
+
+    # Filter interviews for today, tomorrow, and upcoming days
+    today_interviews = Student_Book_Interview_modal.objects.filter(
+        crn_number=register_user, available_slot__available_slot__date=today
+    ).exclude(interview_status__in=['completed', 'pending'])
+    print("Today Interviews:", today_interviews)
+    
+    tomorrow_interviews = Student_Book_Interview_modal.objects.filter(
+        crn_number=register_user, available_slot__available_slot__date=tomorrow
+    ).exclude(interview_status__in=['completed', 'pending'])
+    print("Tomorrow Interviews:", tomorrow_interviews)
+    
+    upcoming_interviews = Student_Book_Interview_modal.objects.filter(
+        crn_number=register_user, available_slot__available_slot__date__gte=upcoming
+    ).exclude(interview_status__in=['completed', 'pending'])
+    print("Upcoming Interviews:", upcoming_interviews)
+
+  
+    completed_interviews = Feedback.objects.filter(crn_number=register_user)
+    document = Student_Book_Interview_modal.objects.get(id=1)
+    pdf_file = document.attach_Resume
+    
+    context = {
+        'faculty_id': faculty_id,
+        'today_interviews': today_interviews,
+        'pdf_file': pdf_file,
+        'tomorrow_interviews': tomorrow_interviews,
+        'upcoming_interviews': upcoming_interviews,
+        'completed_interviews': completed_interviews,
+    }
+    return render(request, 'mock_interview/interview_list.html', context)
+
+
 
 # Student Past Interviews with feedback details
 def student_feedback(request):
-    return render(request,'mock_interview/student_past_interviews.html')
+  crn = request.session.get('admin_user').get('crn')
+  register_user = Register_model.objects.get(crn=crn)
+  student_id=register_user.leads.filter(lead_position="ADMITTED").order_by("-id")
+  document = Feedback.objects.get(id=1)
+  pdf_file = document.send_attachment
+  feedbacks = Feedback.objects.filter(crn_number=register_user, interview__interview_status='completed')
+  context = {
+    'feedbacks': feedbacks,
+    'student_id': student_id,
+    'pdf_file': pdf_file,
+  }
+  return render(request,'mock_interview/student_past_interviews.html', context)
+
+def open_pdf(request, document_id):
+    document = Feedback.objects.get(id=document_id)
+    pdf_file = document.send_attachment
+    response = FileResponse(pdf_file, content_type='application/pdf')
+    return response
 
 # Admin mock slot scheduling
 def admin_mock(request):
@@ -8638,19 +9054,112 @@ def reschedule(request):
 
 #  admin interview list
 def admin_interview_list(request):
-    return render(request,'mock_interview/admin_interview_list.html')
+    crn = request.session.get('admin_user').get('crn')
+    register_user = Register_model.objects.get(crn=crn)
+    
+    today = datetime.now().date()
+    print("Today:", today)
+
+    tomorrow = today + timedelta(days=1)
+    print("Tomorrow:", tomorrow)
+
+    upcoming=date.today() + timedelta(days=2)
+    print("Upcoming:",upcoming)
+
+    # Filter interviews for today, tomorrow, and upcoming days
+    today_interviews = Student_Book_Interview_modal.objects.filter(
+        crn_number=register_user, available_slot__available_slot__date=today
+    ).exclude(interview_status__in=['completed', 'pending'])
+    print("Today Interviews:", today_interviews)
+    
+    tomorrow_interviews = Student_Book_Interview_modal.objects.filter(
+        crn_number=register_user, available_slot__available_slot__date=tomorrow
+    ).exclude(interview_status__in=['completed', 'pending'])
+    print("Tomorrow Interviews:", tomorrow_interviews)
+    
+    upcoming_interviews = Student_Book_Interview_modal.objects.filter(
+        crn_number=register_user, available_slot__available_slot__date__gte=upcoming
+    ).exclude(interview_status__in=['completed', 'pending'])
+    print("Upcoming Interviews:", upcoming_interviews)
+
+    Faculty=Employee_model.objects.all()
+
+  
+    completed_interviews = Feedback.objects.filter(crn_number=register_user)
+    document = Student_Book_Interview_modal.objects.get(id=1)
+    pdf_file = document.attach_Resume
+    
+    context = {
+        'today_interviews': today_interviews,
+        'pdf_file': pdf_file,
+        'tomorrow_interviews': tomorrow_interviews,
+        'upcoming_interviews': upcoming_interviews,
+        'completed_interviews': completed_interviews,
+        'Faculty':Faculty,
+    }
+    return render(request,'mock_interview/admin_interview_list.html', context)
 
 #  faculty dashboard
 def faculty_dashboard(request):
     return render(request,'mock_interview/faculty_dashboard.html')
 
 # admin to watch separate faculty slots by clicking faculty name
-def separate_faculty_list(request):
-    return render(request,'mock_interview/admin-facultylist.html')
+def separate_faculty_list(request,faculty_id):
+    # Filter students associated with the selected faculty
+    students = Student_Book_Interview_modal.objects.filter(faculty_name=faculty_id)
+
+    
+    today = datetime.now().date()
+    print("Today:", today)
+
+    tomorrow = today + timedelta(days=1)
+    print("Tomorrow:", tomorrow)
+
+    upcoming=date.today() + timedelta(days=2)
+    print("Upcoming:",upcoming)
+
+    # Filter interviews for today, tomorrow, and upcoming days
+    today_interviews = Student_Book_Interview_modal.objects.filter(
+        crn_number=students, available_slot__available_slot__date=today
+    ).exclude(interview_status__in=['completed', 'pending'])
+    print("Today Interviews:", today_interviews)
+    
+    tomorrow_interviews = Student_Book_Interview_modal.objects.filter(
+        crn_number=students, available_slot__available_slot__date=tomorrow
+    ).exclude(interview_status__in=['completed', 'pending'])
+    print("Tomorrow Interviews:", tomorrow_interviews)
+    
+    upcoming_interviews = Student_Book_Interview_modal.objects.filter(
+        crn_number=students, available_slot__available_slot__date__gte=upcoming
+    ).exclude(interview_status__in=['completed', 'pending'])
+    print("Upcoming Interviews:", upcoming_interviews)
+
+    document = Student_Book_Interview_modal.objects.get(id=1)
+    pdf_file = document.attach_Resume
+
+    # Pass the filtered students to the template
+    context = {
+        'students': students,
+        'today_interviews': today_interviews,
+        'pdf_file': pdf_file,
+        'tomorrow_interviews': tomorrow_interviews,
+        'upcoming_interviews': upcoming_interviews,
+    }
+    return render(request,'mock_interview/admin-facultylist.html',context)
 
 # admin can watch all completed mocks
 def completed_mock(request):
-    return render(request,'mock_interview/admin_completed_interviews.html')
+  crn = request.session.get('admin_user').get('crn')
+  register_user = Register_model.objects.get(crn=crn)
+  document = Feedback.objects.get(id=1)
+  pdf_file = document.send_attachment
+  feedbacks = Feedback.objects.filter(crn_number=register_user, interview__interview_status='completed')
+  context = {
+    'feedbacks': feedbacks,
+    'pdf_file': pdf_file,
+  }
+    
+  return render(request,'mock_interview/admin_completed_interviews.html', context)
 
 # faculty scheduled  total interviews
 def faculty_schedule_list(request):

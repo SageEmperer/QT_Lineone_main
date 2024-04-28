@@ -262,8 +262,6 @@
                     <div class="dropdown-menu dropdown-menu-right" data-dropdown-in="flipInX" data-dropdown-out="flipOutX">
                         <a class="dropdown-item" href="#"><i class="dropdown-icon zmdi zmdi-pin-account"></i><span>Pin : {{request.session.admin_user.pin}}</span></a>
                         <a class="dropdown-item" href="#"><i class="dropdown-icon zmdi zmdi-account"></i><span>Profile</span></a>
-                        <a class="dropdown-item" href="{% url 'student_login' %}"><i class="dropdown-icon zmdi zmdi-account"></i><span>Stuent Login</span></a>
-                        <a class="dropdown-item" href="{% url 'parentLogin' %}"><i class="dropdown-icon zmdi zmdi-card"></i><span>Parent Login</span></a>
                         <a class="dropdown-item" href="#"><i class="dropdown-icon zmdi zmdi-card"></i><span>My balance</span></a>
                         <a class="dropdown-item" href="inbox.html"><i class="dropdown-icon zmdi zmdi-email"></i><span>Inbox</span></a>
                         <a class="dropdown-item" href="#"><i class="dropdown-icon zmdi zmdi-settings"></i><span>Settings</span></a>
@@ -695,7 +693,7 @@
 
                         <!-- finance and hrm star there -->
 
-                        <li class="nav-item {% if request.resolver_match.url_name in "['payment_verification']" %} active {% endif %}">
+                        <li class="nav-item {% if request.resolver_match.url_name in "['finance_view']" %} active {% endif %}">
                             <a class="nav-link" href="javascript:void(0);" data-toggle="collapse" data-target="#user_drp">
                                 <i class="ion ion-ios-cash"></i>
                                 <span class="nav-link-text">Finance and Accounts</span>
@@ -704,8 +702,8 @@
                                 <li class="nav-item">
                                     <ul class="nav flex-column">
                                         <!-- employee start here -->
-                                        <li class="nav-item {% if request.resolver_match.url_name == 'payment_verification' %} active {% endif %}">
-                                            <a class="nav-link" href="{% url 'payment_verification' %}">Latest Transactions</a>
+                                        <li class="nav-item {% if request.resolver_match.url_name == 'employees' %} active {% endif %}">
+                                            <a class="nav-link" href="{% url 'finance_view' %}">Latest Transactions</a>
                                         </li>
                                        
                                     </ul>

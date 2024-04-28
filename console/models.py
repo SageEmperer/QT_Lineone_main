@@ -882,6 +882,8 @@ class LeadModel(models.Model):
     requested_amount = models.DecimalField(max_digits=9,decimal_places=2,null=True)
     messages_for_discount = models.TextField(null=True)
     amount_paid = models.DecimalField(max_digits=9,decimal_places=2,null=True)
+    discount_request_accepted = models.BooleanField(default=False)
+    agreed_amount = models.DecimalField(max_digits=9,decimal_places=2,null=True)
     # transaction_id = models.CharField(max_length=100,null=True)
     # mode_of_payment = models.CharField(max_length=100,null=True)
     # upi_payment = models.ForeignKey(upipayments,on_delete=models.SET_NULL,null=True)
@@ -908,6 +910,14 @@ class LeadModel(models.Model):
 
 
 class Student_payment(models.Model):
+    verification=(('Received','Received'),
+                    ('Not Received','Not Received'),
+                    ('Mis Matched','Mis Matched'),
+                    ('Suspicious','Suspicious'),
+                    ('Pending','Pending'))
+    choice_status=(('Paid','Paid'),
+                    ('Not Paid','Not Paid'))
+    
     crn_number = models.ForeignKey(Register_model, on_delete=models.CASCADE, related_name='student_payment')
     payment_amount = models.DecimalField(max_digits=9,decimal_places=2)
     studend_id = models.ForeignKey(LeadModel,on_delete=models.CASCADE)
@@ -917,9 +927,25 @@ class Student_payment(models.Model):
     upi_id = models.ForeignKey(upipayments,on_delete=models.SET_NULL,null=True)
     net_banking = models.ForeignKey(netbanking,on_delete=models.SET_NULL,null=True)
     course_id = models.ForeignKey(CourseManage, on_delete=models.SET_NULL,null=True)
+    payment_verification = models.CharField(max_length=100, choices=verification,blank=True,null=True)
+    remarks = models.TextField(null=True, blank=True)
+    student_password=models.CharField(max_length=225,null=True,blank=True)
+    payment_status=models.BooleanField(default=False,choices=choice_status)
+    
+    def save(self, *args, **kwargs):
+       if self.payment_amount:
+           
+               self.payment_status = 'Paid'
+       else:
+               self.payment_status = 'Not Paid'
+       super().save(*args, **kwargs)
+        
+        
+    
+    
+
     def __str__(self):
         return str(self.crn_number.first_name)
-    
 
 
 
@@ -943,7 +969,39 @@ class Finance_and_Accounts(models.Model):
     leadstage=models.ForeignKey(LeadModel,on_delete=models.CASCADE,null=True)
 
 
-# job placement
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# HRM
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # company vendor
 class Company_vendor(models.Model):
@@ -958,6 +1016,7 @@ class Company_vendor(models.Model):
     website = models.CharField(max_length=100)
     pocname = models.CharField(max_length=100)
     pocmobile = models.CharField(max_length=100)
+
 
 
 
@@ -979,6 +1038,24 @@ class Job_post(models.Model):
 
     def __str__(self):
         return str(self.job_title)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# certification
 
 
 
@@ -1042,3 +1119,96 @@ class Certification(models.Model):
     description = models.TextField()
    
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# mock start 
+
+
+
+
+
+
+
+
+
+
+
+
+class Scheduling_mock_model(models.Model):
+    choice_status = (
+        ('Active', 'Active'),
+        ('Cancel', 'Cancel'),
+        ('Reschedule', 'Reschedule'))
+    crn= models.ForeignKey(Register_model, on_delete=models.CASCADE,related_name="schedule",null=True)
+    faculty_name = models.ForeignKey(Employee_model, on_delete=models.CASCADE,related_name="schedule")
+    available_slot = models.DateTimeField(null=True)
+    mock_link = models.CharField(max_length=30,null=True)
+    status = models.CharField(max_length=10,choices=choice_status, default="Active")
+    reason = models.CharField(max_length=50,null=True)
+
+# Student book an interview modals
+
+class Student_Book_Interview_modal(models.Model):
+    interview_status = [
+        ('completed', 'Completed'),
+        ('pending', 'Pending')
+    ]
+    crn_number = models.ForeignKey(Register_model, on_delete=models.CASCADE, related_name='Student_Book_Interview_modal',null=True)
+    student_name=models.ForeignKey(LeadModel, on_delete=models.CASCADE)
+    course_name=models.ForeignKey(Course,on_delete=models.CASCADE,null=True)
+    specilalization_name=models.ForeignKey(Specialization,on_delete=models.CASCADE,null=True)
+    faculty_name = models.ForeignKey(Employee_model,on_delete=models.CASCADE,null=True)
+    available_slot = models.ForeignKey(Scheduling_mock_model, on_delete=models.CASCADE,null=True)
+    attach_Resume = models.FileField(upload_to='resumes/')  
+    interview_status = models.CharField(choices=interview_status, max_length=10)
+
+    
+    
+
+# Feedback models
+
+class Feedback(models.Model):
+    attendance = [
+        ('present', 'Present'),
+        ('absent', 'Absent')
+    ]
+
+
+    marks = [
+        (0, '0'),
+        (1, '1'),
+        (2, '2'),
+        (3, '3'),
+        (4, '4'),
+        (5, '5')
+    ]
+
+    Status = [
+         ('qualified', 'Qualified'),
+         ('not qualified', 'Not Qualified')
+
+    ]    
+    crn_number = models.ForeignKey(Register_model, on_delete=models.CASCADE, related_name='feedback',null=True)
+    interview= models.ForeignKey(Student_Book_Interview_modal, on_delete=models.CASCADE)
+    attendance_status = models.CharField(choices=attendance, max_length=10)
+    communication_skills=models.IntegerField(choices=marks, default=0)
+    body_language=models.IntegerField(choices=marks, default=0)
+    technical_skills=models.IntegerField(choices=marks, default=0)
+    logical_thinking=models.IntegerField(choices=marks, default=0)
+    send_attachment=models.FileField(upload_to='feedback/')
+    suggestion=models.TextField()
+    status = models.CharField(choices=Status, max_length=20)
+    overall_rating = models.IntegerField(choices=marks, default=0)
+   

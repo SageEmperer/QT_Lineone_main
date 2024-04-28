@@ -60,7 +60,7 @@
             <tr>
               <th class="text-white text-center"><input type="checkbox" id="selectAll"> All</th>
               <th class="text-white">S.No</th>
-              <th class="text-white">Subject</th>
+              <th class="text-white">Course Title</th>
               <th class="text-white">Course Name</th>
               <th class="text-white">Specialization</th>
               <th class="text-white">Course Duration</th>
@@ -79,7 +79,7 @@
               <td>{{i.course_name.course_name}}</td>
               <td>{{i.specialization.specilalization_name}}</td>
               <td>{{i.duration}} Days</td>
-              <td> ₹{{i.course_fee}} / ₹{{i.final_price}}</td>
+              <td><s>₹{{i.course_fee}}</s> / ₹{{i.final_price}}</td>
               <td>{{i.course_plan}}</td>
               <td class="text-center">
                 <button class="btn btn-secondary m-1" data-toggle="modal" data-target="#ViewCourse{{forloop.counter}}">
@@ -117,7 +117,7 @@
         <div class="modal-body">
           <div class="row">
             <div class="col-sm-12 mb-3">
-              <label for="" class="form-label">Subject <span class="text-danger">*</span></label>
+              <label for="" class="form-label">Course Title <span class="text-danger">*</span></label>
               <input type="text" class="form-control" name="course_title" placeholder="Ex: Python Programming">
             </div>
           </div>
@@ -206,7 +206,7 @@
             </div>
             <div class="col-sm-12 col-md-6 mb-3">
               <label for="" class="form-label">Selling Price <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" placeholder="Ex:10000" id="price" name="price" readonly>
+              <input type="text" class="form-control" placeholder="Ex:10000" id="price" name="price">
             </div>
           </div>
           <div class="row">
@@ -272,12 +272,12 @@
             <div class="col-sm-12 col-md-6 mb-3">
               <label for="" class="form-label">Prerequisite(Software Required) <span
                   class="text-danger">*</span></label>
-              <input type="text" class="form-control" name="soft">
+              <textarea class="form-control" name="soft" rows="2"></textarea>
             </div>
             <div class="col-sm-12 col-md-6 mb-3">
               <label for="" class="form-label">Prerequisite(Hardware Required) <span
                   class="text-danger">*</span></label>
-              <input type="text" class="form-control" name="hard">
+              <textarea class="form-control" name="hard" rows="2"></textarea>
             </div>
             <div class="col-sm-12 col-md-6 mb-3">
               <label for="" class="form-label">Course Short Description</label>
@@ -318,7 +318,7 @@
           <table class="table-bordered" style="width: 100%;">
             <tbody class="text-16 text-dark">
               <tr>
-                <th class="p-2"><strong>Subject</strong></th>
+                <th class="p-2"><strong>Course Title</strong></th>
                 <td class="p-2">{{v.course_title}}</td>
               </tr>
               <tr>
@@ -430,7 +430,7 @@
         <div class="modal-body">
           <div class="row">
             <div class="col-sm-12 mb-3">
-              <label for="" class="form-label">Subject <span class="text-danger">*</span></label>
+              <label for="" class="form-label">Course Title <span class="text-danger">*</span></label>
               <input type="text" class="form-control" value="{{i.course_title}}" name="editcourse_title">
             </div>
           </div>
@@ -520,7 +520,7 @@
             </div>
             <div class="col-sm-12 col-md-6 mb-3">
               <label for="" class="form-label">Selling Price <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" value="{{i.final_price}}" id="editprice" name="editprice" readonly>
+              <input type="text" class="form-control" value="{{i.final_price}}" id="editprice" name="editprice">
             </div>
           </div>
           <div class="row">
@@ -587,12 +587,12 @@
             <div class="col-sm-12 col-md-6 mb-3">
               <label for="" class="form-label">Prerequisite(Software Required) <span
                   class="text-danger">*</span></label>
-              <input type="text" class="form-control" value="{{i.software}}" name="editsoft">
+              <textarea class="form-control" name="editsoft" rows="2">{{i.software}}</textarea>
             </div>
             <div class="col-sm-12 col-md-6 mb-3">
               <label for="" class="form-label">Prerequisite(Hardware Required) <span
                   class="text-danger">*</span></label>
-              <input type="text" class="form-control" value="{{i.hardware}}" name="edithard">
+              <textarea class="form-control" name="edithard" rows="2">{{i.hardware}}</textarea>
             </div>
             <div class="col-sm-12 col-md-6 mb-3">
               <label for="" class="form-label">Course Short Description</label>
@@ -830,6 +830,7 @@
         fee: {
           required: true,
           nodigits: true,
+          pattern:/^\d+\.\d{2}/,
 
         },
         discount: {
@@ -898,6 +899,7 @@
         },
         fee: {
           required: "Please Enter Course Fee",
+          pattern:"Only Decimal Numbers are allowed",
         },
         discount: {
           required: "Please Enter Discount",
@@ -1033,6 +1035,7 @@
           editfee: {
             required: true,
             nodigits: true,
+            pattern:/^\d+\.\d{2}/,
           },
           editdiscount: {
             required: true,
@@ -1099,6 +1102,7 @@
           },
           editfee: {
             required: "Please Enter Course Fee",
+            pattern:"Only Decimal Numbers are allowed",
           },
           editdiscount: {
             required: "Please Enter Discount",

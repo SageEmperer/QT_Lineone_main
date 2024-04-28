@@ -41,44 +41,34 @@
             </tr>
           </thead>
           <tbody>
+            
+
+            {% for Student_Book_Interview_modal in today_interviews %}
             <tr>
-              <td class="text-center">1</td>
-              <td class="text-center">raj</td>
-              <td class="text-center">Aadil</td>
-              <td class="text-center">33</td>
-              <td class="text-center">23</td>
-              <td class="text-center">9654725478</td>
-              <td class="text-center">aadil33@gmail.com</td>
-              <td class="text-center">Python</td>
-              <td class="text-center">Mar.04,2024,10:30 am</td>
-              <td class="text-center"><a href="" title="Image from freeiconspng.com"><img
+              <td class="text-center">{{Student_Book_Interview_modal.id}}</td>
+              <td class="text-center">{{Student_Book_Interview_modal.faculty_name.first_name}}
+                {{Student_Book_Interview_modal.faculty_name.last_name}}</td>
+              <td class="text-center">{{Student_Book_Interview_modal.student_name.first_name}}
+                {{Student_Book_Interview_modal.student_name.last_name}}</td>
+              <td class="text-center">{{Student_Book_Interview_modal.student_name.token_id}}</td>
+              <td class="text-center">{{Student_Book_Interview_modal.student_name.batch_number.batch_number}}</td>
+              <td class="text-center">{{Student_Book_Interview_modal.student_name.mobile_number}}</td>
+              <td class="text-center">{{Student_Book_Interview_modal.student_name.email}}</td>
+              <td class="text-center">{{Student_Book_Interview_modal.course_name}}</td>
+              <td class="text-center">{{Student_Book_Interview_modal.available_slot.available_slot}}</td>
+              <td class="text-center">
+                <a href="{% url 'open_pdf' Student_Book_Interview_modal.id %}" title="Image from freeiconspng.com"><img
                     src="https://www.freeiconspng.com/uploads/pdf-icon-png-pdf-zum-download-2.png" width="35"
-                    alt="Student resume" /></a></td>
-              <td class="text-center"><button class="btn btn-icon btn-success   " data-toggle="modal"
-                  data-target="#FeedbackForm">
+                    alt="Student resume" /></a>
+              </td>
+              <td class="text-center">
+                <button type="button" class="btn btn-icon btn-success" data-toggle="modal" data-target="#todayfeedback{{forloop.counter}}">
                   <span class="btn-icon-wrap"><i class="fa fa-rocket"></i></span>
+
                 </button>
               </td>
             </tr>
-
-            <tr>
-              <td class="text-center">2</td>
-              <td class="text-center">raj</td>
-              <td class="text-center">Aadil</td>
-              <td class="text-center">33</td>
-              <td class="text-center">23</td>
-              <td class="text-center">9654725478</td>
-              <td class="text-center">aadil33@gmail.com</td>
-              <td class="text-center">Python</td>
-              <td class="text-center">Mar.04,2024,10:30 am</td>
-              <td class="text-center"><a href="" title="Image from freeiconspng.com"><img
-                    src="https://www.freeiconspng.com/uploads/pdf-icon-png-pdf-zum-download-2.png" width="35"
-                    alt="Student resume" /></a></td>
-              <td class="text-center"><button class="btn btn-icon btn-success" data-toggle="modal"
-                  data-target="#FeedbackForm">
-                  <span class="btn-icon-wrap"><i class="fa fa-rocket"></i></span>
-                </button></td>
-            </tr>
+            {% endfor %}
           </tbody>
         </table>
       </div>
@@ -102,32 +92,21 @@
               <th class="text-white text-center">Name</th>
               <th class="text-white text-center">Email Id</th>
               <th class="text-white text-center">Mobile No</th>
-              <th class="text-white text-center">Course</th>
-              <th class="text-white text-center">Specialization</th>
-              <th class="text-white text-center">Number of Interviews</th>
+              <th class="text-white text-center">Department</th>
+              <th class="text-white text-center">Designation</th>
             </tr>
           </thead>
           <tbody>
-
+            {% for i in Faculty %}
             <tr>
-              <td class="text-center">1</td>
-              <td class="text-center"><a class="nav-link" href="{% url 'separate_faculty_list' %}">raj</a></td>
-              <td class="text-center">raj22@gmail.com</td>
-              <td class="text-center">7852796325</td>
-              <td class="text-center">Python</td>
-              <td class="text-center">Full Stack</td>
-              <td class="text-center">20</td>
+              <td class="text-center">{{i.id}}</td>
+              <td class="text-center"><a class="nav-link" href="{% url 'separate_faculty_list' i.id %}">{{i.first_name}} {{i.last_name}}</a></td>
+              <td class="text-center">{{i.personal_email}}</td>
+              <td class="text-center">{{i.personal_number}}</td>
+              <td class="text-center">{{i.department_name}}</td>
+              <td class="text-center">{{i.designation_name}}</td>
             </tr>
-
-            <tr>
-              <td class="text-center">2</td>
-              <td class="text-center"><a class="nav-link" href="{% url 'separate_faculty_list' %}">aadil</a></td>
-              <td class="text-center">aadil33@gmail.com</td>
-              <td class="text-center">9254279625</td>
-              <td class="text-center">Python</td>
-              <td class="text-center">Full Stack</td>
-              <td class="text-center">30</td>
-            </tr>
+            {% endfor %}
           </tbody>
         </table>
       </div>
@@ -195,7 +174,9 @@
 
 <!-- create model start here -->
 
-<div class="modal fade" id="FeedbackForm" tabindex="-1" role="dialog" aria-labelledby="FeedbackForm" aria-hidden="true">
+{% for i in today_interviews %}
+<div class="modal fade" id="todayfeedback{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="FeedbackForm"
+  aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header bg-dark">
@@ -204,7 +185,9 @@
           <span aria-hidden="true" class="text-white">&times;</span>
         </button>
       </div>
-      <form action="" method="post" id="createFeed">
+
+    
+      <form action="{% url 'FeedbackForm' i.id %}" method="post" id="createFeed">
         {% csrf_token %}
         <div class="modal-body">
           <div class="container-fluid">
@@ -212,40 +195,40 @@
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
                   <label for="" class="form-label">Full Name </label>
-                  <input  value="Aadil" name="batchtype_name" class="form-control" readonly>
+                  <input value="{{i.student_name.first_name}} {{i.student_name.last_name}}" name="batchtype_name" class="form-control" readonly>
+                  <input type="hidden" name="studend_id" value="{{i.student_name.id}}">
+                  <input type="hidden" name="faculty_id" value="{{i.faculty_name.id}}">
                 </div>
               </div>
-
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
                   <label for="" class="form-label">Roll Number </label>
-                  <input  value="23" name="batchtype_name" class="form-control" readonly>
+                  <input value="{{i.student_name.token_id}}" name="batchtype_name" class="form-control" readonly>
                 </div>
               </div>
-
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
                   <label for="" class="form-label">Batch Number </label>
-                  <input  value="20" name="batchtype_name" class="form-control" readonly>
+                  <input value="{{i.student_name.batch_number.batch_number}}" name="batchtype_name" class="form-control" readonly>
                 </div>
               </div>
 
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
                   <label for="" class="form-label">Email Id </label>
-                  <input  value="aadil33@gmail.com" name="batchtype_name" class="form-control" readonly>
+                  <input value="{{i.student_name.email}}" name="batchtype_name" class="form-control" readonly>
                 </div>
               </div>
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
                   <label for="" class="form-label">Mobile Number </label>
-                  <input  value="9647521854" name="batchtype_name" class="form-control" readonly>
+                  <input value="{{i.student_name.mobile_number}}" name="batchtype_name" class="form-control" readonly>
                 </div>
               </div>
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
                   <label for="" class="form-label">Date of Interview </label>
-                  <input  value="Mar.04,2024,10:30 am" name="batchtype_name" class="form-control" readonly>
+                  <input value="{{i.available_slot.available_slot}}" name="batchtype_name" class="form-control" readonly>
                 </div>
               </div>
 
@@ -253,18 +236,18 @@
                 <div class="form-group">
                   <label for="" class="form-label">Attendance <span class="text-danger">*</span></label>
 
-                  <select class="form-control select2" name="Attendance">
+                  <select class="form-control select2" name="attendance_status" id="attendanceStatus">
                     <option value="" disabled selected>Please Select</option>
                     <option value="1">Present</option>
                     <option value="2">Absent</option>
                   </select>
+
                 </div>
               </div>
-
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
                   <label for="" class="form-label">Communication Skills <span class="text-danger">*</span></label>
-                  <select class="form-control select2" name="Communication">
+                  <select class="form-control select2" name="communication_skills" id="communication">
                     <option value="" disabled selected>Please Select</option>
                     <option value="1">0</option>
                     <option value="2">1</option>
@@ -280,7 +263,7 @@
                 <div class="form-group">
                   <label for="" class="form-label">Body Language <span class="text-danger">*</span></label>
 
-                  <select  class="form-control select2" name="Body Language">
+                  <select class="form-control select2" name="body_language" id="bodyLanguage">
                     <option value="" disabled selected>Please Select</option>
                     <option value="1">0</option>
                     <option value="2">1</option>
@@ -289,6 +272,7 @@
                     <option value="5">4</option>
                     <option value="6">5</option>
                   </select>
+
                 </div>
               </div>
 
@@ -296,7 +280,7 @@
                 <div class="form-group">
                   <label for="" class="form-label">Technical Skills <span class="text-danger">*</span></label>
 
-                  <select  class="form-control select2" name="Technical Performance">
+                  <select class="form-control select2" name="technical_skills" id="technicalSkills">
                     <option value="" disabled selected>Please Select</option>
                     <option value="1">0</option>
                     <option value="2">1</option>
@@ -312,7 +296,7 @@
                 <div class="form-group">
                   <label for="" class="form-label">Logical Thinking<span class="text-danger">*</span></label>
 
-                  <select  class="form-control select2" name="Logical Thinking">
+                  <select class="form-control select2" name="logical_thinking" id="logicalThinking">
                     <option value="" disabled selected>Please Select</option>
                     <option value="1">0</option>
                     <option value="2">1</option>
@@ -323,7 +307,6 @@
                   </select>
                 </div>
               </div>
-
 
               <div class="col-md-6 col-sm-12 col-lg-6 ">
                 <div class="form-group">
@@ -338,7 +321,7 @@
                     <span class="input-group-append">
                       <span class=" btn btn-primary btn-file"><span class="fileinput-new">Select file</span><span
                           class="fileinput-exists">Change</span>
-                        <input type="file" name="...">
+                        <input type="file" name="send_attachment" id="sendAttachment" disabled>
                       </span>
                     </span>
                   </div>
@@ -348,11 +331,12 @@
               <div class="col-md-12 ">
                 <div class="form-group">
                   <label for="">Suggestions </label>
-                  <textarea class="form-control" id="" name="Suggestions"
-                    placeholder="What Would you like to say?" rows="3"></textarea>
+                  <textarea class="form-control" id="suggestions" name="suggestion"
+                    placeholder="What Would you like to say?" rows="3" disabled></textarea>
                 </div>
               </div>
             </div>
+
 
             <div class="modal-footer d-flex justify-content-center">
               <button type="submit" class="btn btn-primary">Submit</button>
@@ -365,6 +349,7 @@
     </div>
   </div>
 </div>
+{% endfor %}
 
 
 

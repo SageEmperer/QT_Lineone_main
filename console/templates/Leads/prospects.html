@@ -95,7 +95,7 @@
           <div class="container">
               <ul class="nav nav-light nav-tabs" role="tablist">
                   <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if request.resolver_match.url_name == 'lead_prospects' %}active{% endif %}" href="{% url 'lead_prospects' %}">Prospects &nbsp;&nbsp;<span class="badge badge-primary badge-pill d-block"> 
+                      <a class="d-flex h-60p align-items-center nav-link active" href="{% url 'lead_prospects' %}">Prospects &nbsp;&nbsp;<span class="badge badge-primary badge-pill d-block"> 
                         {% if prospect_count %}
                         {{prospect_count}}
 
@@ -122,40 +122,40 @@
                           {% endif %}</span></a>
                   </li>
                   <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'sql' %}active{% endif %}" href="{% url 'sql' %}">SQL &nbsp;&nbsp;<span class="badge badge-light badge-pill d-block"> {% if prospect_count %}
-                        {{prospect_count}}
+                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'sql' %}active{% endif %}" href="{% url 'sql' %}">SQL &nbsp;&nbsp;<span class="badge badge-light badge-pill d-block"> {% if sql_count %}
+                        {{sql_count}}
 
                           {% else %}
                           0
                           {% endif %}</span></a>
                   </li>
                   <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'request_discounts' %}active{% endif %}" href="{% url 'request_discounts' %}">Request Discounts &nbsp;&nbsp;<span class="badge badge-dark badge-pill d-block"> {% if prospect_count %}
-                        {{prospect_count}}
-
-                          {% else %}
-                          0
-                          {% endif %}</span></a>
-                  </li>
+                    <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'opportunity' %}active{% endif %}" href="{% url 'opportunity' %}">Opportunity &nbsp;&nbsp;<span class="badge badge-info badge-pill d-block"> {% if opportunity_count %}
+                      {{opportunity_count}}
+                      
+                      {% else %}
+                      0
+                      {% endif %}</span></a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'admission' %}active{% endif %}" href="{% url 'admissions' %}">Admissions &nbsp;&nbsp;<span class="badge badge-success badge-pill d-block"> {% if admission_count %}
+                        {{admission_count}}
+                        
+                        {% else %}
+                        0
+                        {% endif %}</span></a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'request_discounts' %}active{% endif %}" href="{% url 'request_discounts' %}">Request Discounts &nbsp;&nbsp;<span class="badge badge-dark badge-pill d-block"> {% if request_discount_count %}
+                            {{request_discount_count}}
+    
+                              {% else %}
+                              0
+                              {% endif %}</span></a>
+                            </li>
                   <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'opportunity' %}active{% endif %}" href="{% url 'opportunity' %}">Opportunity &nbsp;&nbsp;<span class="badge badge-info badge-pill d-block"> {% if prospect_count %}
-                        {{prospect_count}}
-
-                          {% else %}
-                          0
-                          {% endif %}</span></a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'admission' %}active{% endif %}" href="{% url 'admissions' %}">Admissions &nbsp;&nbsp;<span class="badge badge-success badge-pill d-block"> {% if prospect_count %}
-                        {{prospect_count}}
-
-                          {% else %}
-                          0
-                          {% endif %}</span></a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'spam' %}active{% endif %}" href="{% url 'spam' %}">Spam List &nbsp;&nbsp;<span class="badge badge-danger badge-pill d-block"> {% if prospect_count %}
-                        {{prospect_count}}
+                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'spam' %}active{% endif %}" href="{% url 'spam' %}">Spam List &nbsp;&nbsp;<span class="badge badge-danger badge-pill d-block"> {% if spam_count %}
+                        {{spam_count}}
 
                           {% else %}
                           0
@@ -1334,6 +1334,25 @@ $(document).ready(function() {
       }
     });
   });
+</script>
+
+<script>
+  function validateAdmissionFee() {
+    var admissionFee = parseFloat(document.getElementById("admissionFee").value);
+    var courseFee = parseFloat(document.getElementById("courseFee").value);
+
+    if (admissionFee < 500 || isNaN(admissionFee)) {
+        alert("Admission fee must be a minimum of 500.");
+        return false;
+    }
+
+    if (admissionFee > courseFee) {
+        alert("Admission fee cannot be higher than the course fee.");
+        return false;
+    }
+
+    return true;
+}
 </script>
 
 {% endblock %}

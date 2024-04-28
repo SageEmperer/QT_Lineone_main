@@ -30,7 +30,7 @@
         <table class="w-full">
             <tbody class="">
                 <tr>
-                    <th style="padding: 5px">Subject</th>
+                    <th style="padding: 5px">Course Title</th>
                     <td style="padding: 5px">{{recipt.course_title}} </td>
 
                 </tr>
@@ -70,28 +70,11 @@
                 </tr>
                 <tr>
                     <th style="padding: 5px">Discount</th>
-                    <td style="padding: 5px">{{recipt.discount}}%</td>
+                    <td style="padding: 5px">{{recipt.discount}} %</td>
                 </tr>
                 <tr>
                     <th style="padding: 5px">Selling Price</th>
                     <td style="padding: 5px">Rs.{{recipt.final_price}}</td>
-                </tr>
-                
-                <tr>
-                    <th style="padding: 5px">Course Image</th>
-                    <td style="padding: 5px">
-                        {% if recipt.course_image %}
-                        <img src="{{recipt.course_image.path}}" width="100" class="rounded-circle" height="100px">
-                        {% endif %}
-                    </td>
-                </tr>
-                <tr>
-                    <th style="padding: 5px">Course Banner</th>
-                    <td style="padding: 5px">
-                        {% if recipt.course_banner %}
-                        <img src="{{recipt.course_banner.path}}" width="100" class="rounded-circle" height="100px">
-                        {% endif %}
-                    </td>
                 </tr>
                 <tr>
                     <th style="padding: 5px">Prerequisite (Software Required)</th>
@@ -101,14 +84,18 @@
                     <th style="padding: 5px">Prerequisite (Hardware Required)</th>
                     <td style="padding: 5px">{{recipt.hardware}} </td>
                 </tr>
-                <tr>
-                    <th style="padding: 5px">Course Short Description</th>
-                    <td style="padding: 5px">{{recipt.short_description}} </td>
-                </tr>
-                <tr>
-                    <th style="padding: 5px">Course Long Description</th>
-                    <td style="padding: 5px">{{recipt.long_description}} </td>
-                </tr>
+                {% if recipt.short_description %}
+              <tr>
+                <th class="p-2"><strong>Course Short Description</strong></th>
+                <td class="p-2">{{recipt.short_description}}</td>
+              </tr>
+              {% endif %}
+              {% if recipt.long_description %}
+              <tr>
+                <th class="p-2"><strong>Course Long Description</strong></th>
+                <th class="p-2">{{recipt.long_description}}</td>
+              </tr>
+              {% endif %}
             </tbody>
         </table>
 

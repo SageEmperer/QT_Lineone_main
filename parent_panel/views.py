@@ -10,23 +10,26 @@ from xhtml2pdf import pisa
 
 def parentLogin(request):  
     if request.method == 'POST':
-        try:
-            mobileNumber = request.POST.get('mobile')
+        # try:
+        #     mobileNumber = request.POST.get('mobile')
            
-            Moble_Number = LeadModel.objects.filter(mobile_number=mobileNumber).exists()
+        #     Moble_Number = LeadModel.objects.filter(mobile_number=mobileNumber).exists()
                        
-            if Moble_Number:
-                students = LeadModel.objects.get(mobile_number=mobileNumber)
-                return redirect(reverse('parentHome', kwargs={"id": students.id}))
-            else:
-                return redirect('parentLogin')
+        #     if Moble_Number:
+        #         students = LeadModel.objects.get(mobile_number=mobileNumber)
+        #         return redirect(reverse('parentHome', kwargs={"id": students.id}))
+        #     else:
+        #         return redirect('parentLogin')
        
-        except ObjectDoesNotExist:            
-            return render(request, 'error.html', {'message': 'LeadModel object not found'})
+        # except ObjectDoesNotExist:            
+        #     return render(request, 'error.html', {'message': 'LeadModel object not found'})
        
-        except Exception as e:            
-            return render(request, 'error.html', {'message': 'An unexpected error occurred'})
-   
+        # except Exception as e:            
+        #     return render(request, 'error.html', {'message': 'An unexpected error occurred'})
+        mobile = request.POST.get('mobile')
+        if LeadModel.objects.filter(mobile_number=mobile).exists():
+            students = LeadModel.objects.get(mobile_number=mobile)
+            return redirect(reverse('parentHome', kwargs={"id": students.id}))
     return render(request, 'parentLogin.html')
 
 

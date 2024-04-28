@@ -349,8 +349,13 @@ License: You must have a valid license purchased only from templatemonster to le
 
                         <div class="dropdown-divider"></div>
                         <div class="sub-dropdown-menu show-on-hover">
-                            <a class="dropdown-item" href="{% url 'login' %}"><i
-                                    class="dropdown-icon zmdi zmdi-power"></i><span>Log out</span></a>
+                            <a class="dropdown-item" href="#" onclick="document.getElementById('logout-form').submit(); return false;">
+                                <i class="dropdown-icon zmdi zmdi-power"></i>
+                                <span>Log out</span>
+                            </a>
+                            <form id="logout-form" method="post" action="{% url 'student_logout' %}" style="display: none;">
+                                {% csrf_token %}
+                            </form>
                         </div>
                     </div>
                 </li>
@@ -510,10 +515,13 @@ License: You must have a valid license purchased only from templatemonster to le
                         </li>
                         <hr class="nav-separator" />
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="{% url 'login' %}">
+                            <a class="nav-link text-white" href="#" onclick="document.getElementById('logout-form').submit(); return false;">
                                 <i class="ion ion-ios-power"></i>
                                 <span class="nav-link-text">Logout</span>
                             </a>
+                            <form id="logout-form" method="post" action="{% url 'student_logout' %}" style="display: none;">
+                                {% csrf_token %}
+                            </form>
                         </li>
                     </ul>
                 </div>

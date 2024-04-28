@@ -76,27 +76,29 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for i in finance %}
+                        {% for i in payment %}
                         <tr>
                             <td class="text-center"><input type="checkbox" name="selectedRow" data-id="{{ i.id }}"></td>
-                            <td>{{i.leadstage.token_id}}</td>
-                            <td>{{i.leadstage.first_name}} {{i.leadstage.last_name}}</td>
-                            <td>{{i.leadstage.mobile_number}}</td>
-                            <td>{{i.leadstage.email}}</td>
-                            <td>{{i.leadstage.course_name}}</td>
-                            <td>{{i.leadstage.course_name.specialization.specilalization_name}}  </td>
-                            <td> {{i.leadstage.batch_number.batch_number}} </td>
-                            <td>₹ {{i.leadstage.course_name.final_price}}</td>
+                            <td>{{i.studend_id.token_id}}</td>
+                            <td>{{i.studend_id.first_name}} {{i.studend_id.last_name}}</td>
+                            <td>{{i.studend_id.mobile_number}}</td>
+                            <td>{{i.studend_id.email}}</td>
+                            <td>{{i.studend_id.course_name}}</td>
+                            <td>{{i.studend_id.course_name.specialization.specilalization_name}}  </td>
+                            <td> {{i.studend_id.batch_number.batch_number}} </td>
+                            <td>₹ {{i.payment_amount}}</td>
                             <td class="text-center">
                               
-                                {% if i.payment_status == "Received" %}
+                                {% if i.payment_verification == "Received" %}
                                 <p class="text-success">Recived</p>
-                                {% elif i.payment_status == "Not Received" %}
+                                {% elif i.payment_verification == "Not Received" %}
                                  <p class="text-danger">Not Recived</p></p>
-                                {% elif i.payment_status == "Mis Matched" %}
+                                {% elif i.payment_verification == "Mis Matched" %}
                                  <p class="text-secondary">Mis Matched</p>
-                                {% elif i.payment_status == "Suspicious" %}
+                                {% elif i.payment_verification == "Suspicious" %}
                                  <p class="text-warning">suspicious </p>
+                                {% else %}
+                                <p class="text-info">Pending</p>
                                 {% endif %}
                                 <!-- <span class="bg-success"> <span class="badge badge-soft-success">{{i.change_status}}</span></span>
                                 
@@ -109,10 +111,10 @@
                             </td>
                             
                             <td class="text-center">
-                                {% if i.status %}
-                                <span class="badge badge-soft-success">Success</span>
+                                {% if i.payment_status %}
+                                <span class="bg-success"> <span class="badge badge-soft-success">Paid</span></span>
                                 {% else %}
-                                <span class="badge badge-soft-danger">Failed</span>
+                                <span class="bg-danger"> <span class="badge badge-soft-danger">Not Paid</span></span>
                                 {% endif %}
                             </td>
                             <td class="text-center">
@@ -148,16 +150,17 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{% url 'finance_and_accounts_update'     %}" method="post" id="financeform">
+                <form action="{% url 'student_payment_update'     %}" method="post" id="financeform">
                     {% csrf_token %}
                     <div class="mb-3">
                         <label for="" class="form-label"><b>Verifcation</b></label>
-                        <select name="payment_status" id="payment_status" class="form-control custom-select">
+                        <select name="payment_verification" id="payment_status" class="form-control custom-select">
                             <option value="" selected>Select Status</option>
                             <option value="Received">Received</option>
                             <option value="Not Received">Not Received</option>
                             <option value="Mis Matched">Mis Matched</option>
                             <option value="Suspicious">Suspicious</option>
+                            <option value="Pending">Pending</option>
                         </select>
                     </div>
 
@@ -221,7 +224,7 @@
 </div> -->
 
 <!--view modal-->
-{% for i in finance %}
+{% for i in payment %}
 <div class="modal fade" id="exampleModalCenter2{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter2{{forloop.counter}}" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
@@ -236,49 +239,55 @@
                     <tbody class="center">
                         <tr>
                             <th class="p-2 w-50"><b>Admission Id</b></th>
-                            <td class="p-2 w-50">{{i.leadstage.token_id}}</td>
+                            <td class="p-2 w-50">{{i.studend_id.token_id}}</td>
                         </tr>
                         <tr>
                             <th class="p-2 "><b>Student Name</b></th>
-                            <td class="p-2 ">{{i.leadstage.first_name}} {{i.leadstage.last_name}}</td>
+                            <td class="p-2 ">{{i.studend_id.first_name}} {{i.studend_id.last_name}}</td>
                         </tr>
                         <tr>
                             <th class="p-2 "><b>Mobile No</b></th>
-                            <td class="p-2 ">{{i.leadstage.mobile_number}}</td>
+                            <td class="p-2 ">{{i.studend_id.mobile_number}}</td>
                         </tr>
                         <tr>
                             <th class="p-2 "><b>Email</b></th>
-                            <td class="p-2 ">{{i.leadstage.email}} </td>
+                            <td class="p-2 ">{{i.studend_id.email}} </td>
                         </tr>
                         <tr>
                             <th class="p-2 "><b>Course</b></th>
-                            <td class="p-2 "> {{i.leadstage.course_name}} </td>
+                            <td class="p-2 "> {{i.studend_id.course_name}} </td>
                         </tr>
                         <tr>
                             <th class="p-2 "><b>Specialization</b></th>
-                            <td class="p-2 "> {{i.leadstage.course_name.specialization.specilalization_name}} </td>
+                            <td class="p-2 "> {{i.studend_id.course_name.specialization.specilalization_name}} </td>
                         </tr>
                         <tr>
                             <th class="p-2"><b>Batch No</b></th>
-                            <td class="p-2">{{i.leadstage.batch_number.batch_number}} </td>
+                            <td class="p-2">{{i.studend_id.batch_number.batch_number}} </td>
                         </tr>
                         <tr>
-                            <th class="p-2 "><b>Amount</b></th>
-                            <td class="p-2 "> ₹{{i.leadstage.course_name.final_price}}</td>
+                            <th class="p-2 "><b>Course Fee</b></th>
+                            <td class="p-2 ">₹{{i.studend_id.course_name.final_price}}</td>
+                        </tr>
+                        <tr>
+                            <th class="p-2 "><b>Admission Fee</b></th>
+                            <td class="p-2 "> ₹{{i.payment_amount}}</td>
                         </tr>
                         <tr>
                             <th class="p-2 "><b>verification</b></th>
                             
                             <td class="p-2">
                                 
-                               {% if i.payment_status == "Received"  %}
+                               {% if i.payment_verification == "Received"  %}
                                <p class="text-success">Recived</p>
-                               {% elif i.payment_status == "Not Received" %}
+                               {% elif i.payment_verification == "Not Received" %}
                                 <p class="text-danger">Not Received</p>
-                                {% elif i.payment_status == "Mis Matched" %}
-                                <p class="text-secondary">Mis Matched</p>
-                                {% elif i.payment_status == "Suspicious" %}
+                                {% elif i.payment_verification == "Mis Matched" %}
+                                <p class="text-payment_verification">Mis Matched</p>
+                                {% elif i.payment_verification == "Suspicious" %}
                                 <p class="text-warning">suspicious </p>
+                                {% else %}
+                                <p class="text-info">Pending</p>
                                 {% endif %}
                            
                             </td>
@@ -287,28 +296,31 @@
                         </tr>
                         <tr>
                             <th class="p-2 "><b>Recived By</b></th>
-                            <td class="p-2 "> {{i.leadstage.course_name.teaching_faculty.first_name}} {{i.leadstage.course_name.teaching_faculty.last_name}}  </td>
+                            <td class="p-2 "> {{i.studend_id.faculty.first_name}} {{i.studend_id.faculty.last_name}}  </td>
                         </tr>
 
                         <tr>
                             <th class="p-2 "><b>Payment Type</b></th>
-                            <td class="p-2 ">PhonePay</td>
+                            <td class="p-2 ">{{i.mode_of_payment}} </td>
                         </tr>
+                       
+                        
                         <tr>
                             <th class="p-2 "><b>Recived on</b></th>
-                            <td class="p-2 ">01-01-2021:12:12 AM</td>
+                            <td class="p-2 ">{{i.payment_date}}</td>
                         </tr>
                     </tbody>
                 </table>
                 <div class="d-flex justify-content-center">
-                    <a href="{% url 'finance_and_accounts_view' i.id %}" class="btn btn-success"> <i class="fa fa-print"></i> Print</a>
+                    <a href="{% url 'payment_view' i.id %}" class="btn btn-success"> <i class="fa fa-print"></i> Print</a>
                 </div>
             </div>
             
         </div>
     </div>
-</div>
+</div> 
 {% endfor %}
+
 
 {% endblock %}
 

@@ -44,7 +44,6 @@ urlpatterns = [
     path('topics/',views.topics,name='topics'),
     path('video_player',views.video_player,name='video_player'),
     path('language/',views.language,name="language"),
-    path('finance_view/',views.finance_view,name="finance_view"),
 
     #Questoning path
     path('quiz',views.quiz,name='quiz'),
@@ -90,8 +89,9 @@ urlpatterns = [
 
 
    #  fiance 
-   path('finance_and_accounts_update/',views.finance_and_accounts_update,name="finance_and_accounts_update"),
-    
+    path('student_payment_verification',views.student_payment_verification,name="payment_verification"),
+   path('student_payment_update',views.student_payment_update,name="student_payment_update"),
+   path('payment_view/<int:id>',views.payment_view,name="payment_view"),
 
 
 
@@ -185,22 +185,23 @@ urlpatterns = [
 
 
    #  mock start here
-    path('faculty_login/',views.faculty_login,name="faculty_login"),
+  path('faculty_login/',views.faculty_login,name="faculty_login"),
     path('mock_dashboard/',views.mock_dashboard,name="mock_dashboard"),
-    path('student_mock/',views.student,name="student"),
+    path('student/',views.student,name="student"),
     path('faculty/',views.faculty_slot,name="faculty_slot"),
     path('facultymocks/', views.total_interviews, name="total_interviews"),
+    path('FeedbackForm/<int:id>',views.FeedbackForm,name="FeedbackForm"),
     path('past/', views.student_feedback, name="student_feedback"),
+    path('open_pdf/<int:document_id>/', views.open_pdf, name='open_pdf'),
     path('admin/', views.admin_mock, name="admin_mock"),
     path('reschedule/', views.reschedule, name="reschedule"),
     path('adinterview/', views.admin_interview_list, name="admin_interview_list"),
     path('facultydashboard/', views.faculty_dashboard, name="faculty_dashboard"),
-    path('facultydetails/', views.separate_faculty_list, name="separate_faculty_list"),
+    path('facultydetails/<int:faculty_id>/', views.separate_faculty_list, name="separate_faculty_list"),
     path('adcomplete/', views.completed_mock, name="completed_mock"),
     path('facultyschedule/', views.faculty_schedule_list, name="faculty_schedule_list"),
     path('faculty_completed/', views.faculty_completed_mocklist, name="faculty_completed_mocklist"),
     path('facultypending/', views.faculty_pending_mocks, name="faculty_pending_mocks"),
-
 
 
 

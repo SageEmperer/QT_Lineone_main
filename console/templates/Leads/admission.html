@@ -1,5 +1,5 @@
 {% extends 'base/base.html' %} 
-{% block title %}QTLineone | Prospects{% endblock %}
+{% block title %}QTLineone | Admissions{% endblock %}
 {% block style %}
 
 
@@ -18,7 +18,7 @@
           <div class="bg-overlay bg-trans-dark-60"></div>
           <div class="container profile-cover-content py-50">
               <div class="hk-row"> 
-                  <div class="col-lg-4">
+                  <div class="col-lg-5">
                       <div class="media align-items-center">
                           <div class="media-img-wrap  d-flex">
                               <div class="avatar">
@@ -26,26 +26,29 @@
                               </div>
                           </div>
                           <div class="media-body">
-                              <div class="text-white text-capitalize display-6 mb-5 font-weight-400">{{request.session.admin_user.full_name}}</div>
+                              <div class="text-white text-capitalize display-6 mb-5 font-weight-400 ">{{request.session.admin_user.full_name}}</div>
                               <div class="font-14 text-white">
                                   <span class="mr-5">
                                       <span class="font-weight-bold pr-5">JOINING DATE:</span>
                                       <span class="mr-5">12/03/24</span>
                                   </span>
+                                </div>
+                                <div class="font-14 text-white" >
+
                                   <span>
-                                      <span class="font-weight-bold pr-5">Department:</span>
-                                      <span>Python Department</span>
+                                    <span class="font-weight-bold pr-5">Department:</span>
+                                    <span>Python Department</span>
                                   </span>
+                                </div>
                                   
-                              </div>
                           </div>
                       </div>
                   </div>
                  
                   <div class="col-lg-8">
-                      <div class="container mt-3 ml-md-100">
+                      <!-- <div class="container mt-3 ml-md-100">
                                                           <div class="row">
-                                                              <!-- Enquiries Card -->
+                                                          
                       <div class="col-md-3">
                           <div class="stats-card p-2 mb-3 text-white" style="border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); background-color: rgba(23, 163, 184, 0.479);">
                               <h5 class="stats-title  text-white"><i class="fa fa-microphone text-dark" aria-hidden="true"></i> Enquiries</h5>
@@ -53,7 +56,7 @@
                           </div>
                       </div>
 
-                      <!-- Follow-ups Card -->
+                
                       <div class="col-md-3">
                           <div class="stats-card p-2 mb-3 text-dark" style="border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); background-color: rgba(107, 111, 231, 0.458);">
                               <h5 class="stats-title  text-white"><i class="fa fa-retweet text-dark" aria-hidden="true"></i> Follow-ups</h5>
@@ -61,7 +64,7 @@
                           </div>
                       </div>
 
-                      <!-- Admissions Card -->
+             
                       <div class="col-md-3">
                           <div class="stats-card p-2 mb-3 text-white" style="border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); background-color: rgba(235, 115, 137, 0.468);">
                               <h5 class="stats-title  text-white"><i class="fa fa-user text-dark" aria-hidden="true"></i> Admissions</h5>
@@ -74,11 +77,11 @@
                           </div>
                       </div>
                       <div >
-                          <!-- Dynamically filled with latest enquiries -->
+                      
                       </div>
                       
                           </div>
-                      </div>
+                      </div> -->
                   </div>
                   
                   
@@ -90,28 +93,71 @@
           <div class="container">
               <ul class="nav nav-light nav-tabs" role="tablist">
                   <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'lead_prospects' %}active{% endif %}" href="{% url 'lead_prospects' %}">Prospects</a>
+                      <a class="d-flex h-60p align-items-center nav-link {% if request.resolver_match.url_name == 'lead_prospects' %}active{% endif %}" href="{% url 'lead_prospects' %}">Prospects &nbsp;&nbsp;<span class="badge badge-primary badge-pill d-block"> 
+                        {% if prospect_count %}
+                        {{prospect_count}}
+
+                          {% else %}
+                          0
+                          {% endif %}
+
+                      </span></a>
                   </li>
                   <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'leads' %}active{% endif %}" href="{% url 'leads' %}">Leads</a>
+                      <a class="d-flex h-60p align-items-center nav-link {% if request.resolver_match.url_name == 'leads' %}active{% endif %}" href="{% url 'leads' %}">Leads &nbsp;&nbsp;<span class="badge badge-warning badge-pill d-block"> {% if lead_count %}
+                        {{lead_count}}
+
+                          {% else %}
+                          0
+                          {% endif %}</span></a>
                   </li>
                   <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'mql' %}active{% endif %}" href="{% url 'mql' %}">MQL</a>
+                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'mql' %}active{% endif %}" href="{% url 'mql' %}">MQL &nbsp;&nbsp;<span class="badge badge-secondary badge-pill d-block"> {% if mql_count %}
+                        {{mql_count}}
+
+                          {% else %}
+                          0
+                          {% endif %}</span></a>
                   </li>
                   <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'sql' %}active{% endif %}" href="{% url 'sql' %}">SQL</a>
+                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'sql' %}active{% endif %}" href="{% url 'sql' %}">SQL &nbsp;&nbsp;<span class="badge badge-light badge-pill d-block"> {% if sql_count %}
+                        {{sql_count}}
+
+                          {% else %}
+                          0
+                          {% endif %}</span></a>
                   </li>
                   <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'request_discounts' %}active{% endif %}" href="{% url 'request_discounts' %}">Request Discounts</a>
-                  </li>
+                    <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'opportunity' %}active{% endif %}" href="{% url 'opportunity' %}">Opportunity &nbsp;&nbsp;<span class="badge badge-info badge-pill d-block"> {% if opportunity_count %}
+                      {{opportunity_count}}
+                      
+                      {% else %}
+                      0
+                      {% endif %}</span></a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="d-flex h-60p align-items-center nav-link active" href="{% url 'admissions' %}">Admissions &nbsp;&nbsp;<span class="badge badge-success badge-pill d-block"> {% if admission_count %}
+                        {{admission_count}}
+                        
+                        {% else %}
+                        0
+                        {% endif %}</span></a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'request_discounts' %}active{% endif %}" href="{% url 'request_discounts' %}">Request Discounts &nbsp;&nbsp;<span class="badge badge-dark badge-pill d-block"> {% if request_discount_count %}
+                            {{request_discount_count}}
+    
+                              {% else %}
+                              0
+                              {% endif %}</span></a>
+                            </li>
                   <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'opportunity' %}active{% endif %}" href="{% url 'opportunity' %}">Opportunity</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link active" href="{% url 'admissions' %}">Admissions</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'spam' %}active{% endif %}" href="{% url 'spam' %}">Spam List</a>
+                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'spam' %}active{% endif %}" href="{% url 'spam' %}">Spam List &nbsp;&nbsp;<span class="badge badge-danger badge-pill d-block"> {% if spam_count %}
+                        {{spam_count}}
+
+                          {% else %}
+                          0
+                          {% endif %}</span></a>
                   </li>
                   
 
@@ -425,12 +471,12 @@
                         </tr>
                             <tr>
                                 <th class="p-2"><strong>Student Name</strong></th>
-                                <td class="p-2">{{i.firstname}} {{i.lastname}}</td>
+                                <td class="p-2">{{i.first_name}} {{i.last_name}}</td>
                             </tr>
                            
                             <tr>
                                 <th class="p-2"><strong>Mobile Number</strong></th>
-                                <td class="p-2">{{i.phone}}</td>
+                                <td class="p-2">{{i.mobile_number}}</td>
                             </tr>
                             <tr>
                                 <th class="p-2"><strong>Email</strong></th>
@@ -438,35 +484,35 @@
                             </tr>
                             <tr>
                                 <th class="p-2"><strong>Course</strong></th>
-                                <td class="p-2">{{i.course_interested_in}}</td>
+                                <td class="p-2">{{i.course_name.course_name}}</td>
                             </tr>
                             <tr>
                                 <th class="p-2"><strong>Course Faculty</strong></th>
-                                <td class="p-2">{{i.course_faculty}}</td>
+                                <td class="p-2">{{i.faculty.first_name}}</td>
                             </tr>
                             <tr>
                                 <th class="p-2"><strong>Plan</strong></th>
-                                <td class="p-2">{{i.plan}}</td>
+                                <td class="p-2">{{i.course_name.plan_name}}</td>
                             </tr>
                             <tr>
                                 <th class="p-2"><strong>Batch No</strong></th>
-                                <td class="p-2">{{i.batch_no}}</td>
+                                <td class="p-2">{{i.batch_number.batch_number}}</td>
                             </tr>
                             <tr>
                                 <th class="p-2"><strong>Joining Date</strong></th>
-                                <td class="p-2">{{i.joining_date}}</td>
+                                <td class="p-2">{{i.admission_date}}</td>
                             </tr>
                             <tr>
                                 <th class="p-2"><strong>Course Fee</strong></th>
-                                <td class="p-2">{{i.course_fee}}</td>
+                                <td class="p-2">{{i.course_name.course_fee}}</td>
                             </tr>
                             <tr>
                                 <th class="p-2"><strong>Discount Fee</strong></th>
-                                <td class="p-2">{{i.discount_fee}} %</td>
+                                <td class="p-2">{{i.course_name.discount}} %</td>
                             </tr>
                             <tr>
                                 <th class="p-2"><strong>Final Fee</strong></th>
-                                <td class="p-2">{{i.Final_fee}}</td>
+                                <td class="p-2">{{i.course_name.final_price}}</td>
                             </tr>
                             <tr>
                                 <th class="p-2"><strong>Admission Fee</strong></th>
@@ -475,7 +521,7 @@
                             </tr>
                             <tr>
                                 <th class="p-2"><strong>Remaining Fee</strong></th>
-                                <td class="p-2">{{i.remaining_fee}}</td>
+                                <td class="p-2"></td>
                             </tr>
                         </tbody>
                     </table>

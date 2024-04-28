@@ -12,7 +12,6 @@
 
 
 {% block profile %}
-
 <div class="row">
   <div class="col-xl-12 pa-0">
       <div class="profile-cover-wrap overlay-wrap">
@@ -20,7 +19,7 @@
           <div class="bg-overlay bg-trans-dark-60"></div>
           <div class="container profile-cover-content py-50">
               <div class="hk-row"> 
-                  <div class="col-lg-4">
+                  <div class="col-lg-5">
                       <div class="media align-items-center">
                           <div class="media-img-wrap  d-flex">
                               <div class="avatar">
@@ -28,26 +27,29 @@
                               </div>
                           </div>
                           <div class="media-body">
-                              <div class="text-white text-capitalize display-6 mb-5 font-weight-400">{{request.session.admin_user.full_name}}</div>
+                              <div class="text-white text-capitalize display-6 mb-5 font-weight-400 ">{{request.session.admin_user.full_name}}</div>
                               <div class="font-14 text-white">
                                   <span class="mr-5">
                                       <span class="font-weight-bold pr-5">JOINING DATE:</span>
                                       <span class="mr-5">12/03/24</span>
                                   </span>
+                                </div>
+                                <div class="font-14 text-white" >
+
                                   <span>
-                                      <span class="font-weight-bold pr-5">Department:</span>
-                                      <span>Python Department</span>
+                                    <span class="font-weight-bold pr-5">Department:</span>
+                                    <span>Python Department</span>
                                   </span>
+                                </div>
                                   
-                              </div>
                           </div>
                       </div>
                   </div>
                  
                   <div class="col-lg-8">
-                      <div class="container mt-3 ml-md-100">
+                      <!-- <div class="container mt-3 ml-md-100">
                                                           <div class="row">
-                                                              <!-- Enquiries Card -->
+                                                          
                       <div class="col-md-3">
                           <div class="stats-card p-2 mb-3 text-white" style="border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); background-color: rgba(23, 163, 184, 0.479);">
                               <h5 class="stats-title  text-white"><i class="fa fa-microphone text-dark" aria-hidden="true"></i> Enquiries</h5>
@@ -55,7 +57,7 @@
                           </div>
                       </div>
 
-                      <!-- Follow-ups Card -->
+                
                       <div class="col-md-3">
                           <div class="stats-card p-2 mb-3 text-dark" style="border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); background-color: rgba(107, 111, 231, 0.458);">
                               <h5 class="stats-title  text-white"><i class="fa fa-retweet text-dark" aria-hidden="true"></i> Follow-ups</h5>
@@ -63,7 +65,7 @@
                           </div>
                       </div>
 
-                      <!-- Admissions Card -->
+             
                       <div class="col-md-3">
                           <div class="stats-card p-2 mb-3 text-white" style="border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); background-color: rgba(235, 115, 137, 0.468);">
                               <h5 class="stats-title  text-white"><i class="fa fa-user text-dark" aria-hidden="true"></i> Admissions</h5>
@@ -76,11 +78,11 @@
                           </div>
                       </div>
                       <div >
-                          <!-- Dynamically filled with latest enquiries -->
+                      
                       </div>
                       
                           </div>
-                      </div>
+                      </div> -->
                   </div>
                   
                   
@@ -92,28 +94,71 @@
           <div class="container">
               <ul class="nav nav-light nav-tabs" role="tablist">
                   <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'lead_prospects' %}active{% endif %}" href="{% url 'lead_prospects' %}">Prospects</a>
+                      <a class="d-flex h-60p align-items-center nav-link {% if request.resolver_match.url_name == 'lead_prospects' %}active{% endif %}" href="{% url 'lead_prospects' %}">Prospects &nbsp;&nbsp;<span class="badge badge-primary badge-pill d-block"> 
+                        {% if prospect_count %}
+                        {{prospect_count}}
+
+                          {% else %}
+                          0
+                          {% endif %}
+
+                      </span></a>
                   </li>
                   <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'leads' %}active{% endif %}" href="{% url 'leads' %}">Leads</a>
+                      <a class="d-flex h-60p align-items-center nav-link {% if request.resolver_match.url_name == 'leads' %}active{% endif %}" href="{% url 'leads' %}">Leads &nbsp;&nbsp;<span class="badge badge-warning badge-pill d-block"> {% if lead_count %}
+                        {{lead_count}}
+
+                          {% else %}
+                          0
+                          {% endif %}</span></a>
                   </li>
                   <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'mql' %}active{% endif %}" href="{% url 'mql' %}">MQL</a>
+                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'mql' %}active{% endif %}" href="{% url 'mql' %}">MQL &nbsp;&nbsp;<span class="badge badge-secondary badge-pill d-block"> {% if mql_count %}
+                        {{mql_count}}
+
+                          {% else %}
+                          0
+                          {% endif %}</span></a>
                   </li>
                   <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'sql' %}active{% endif %}" href="{% url 'sql' %}">SQL</a>
+                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'sql' %}active{% endif %}" href="{% url 'sql' %}">SQL &nbsp;&nbsp;<span class="badge badge-light badge-pill d-block"> {% if sql_count %}
+                        {{sql_count}}
+
+                          {% else %}
+                          0
+                          {% endif %}</span></a>
                   </li>
                   <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'request_discounts' %}active{% endif %}" href="{% url 'request_discounts' %}">Request Discounts</a>
-                  </li>
+                    <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'opportunity' %}active{% endif %}" href="{% url 'opportunity' %}">Opportunity &nbsp;&nbsp;<span class="badge badge-info badge-pill d-block"> {% if opportunity_count %}
+                      {{opportunity_count}}
+                      
+                      {% else %}
+                      0
+                      {% endif %}</span></a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'admission' %}active{% endif %}" href="{% url 'admissions' %}">Admissions &nbsp;&nbsp;<span class="badge badge-success badge-pill d-block"> {% if admission_count %}
+                        {{admission_count}}
+                        
+                        {% else %}
+                        0
+                        {% endif %}</span></a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'request_discounts' %}active{% endif %}" href="{% url 'request_discounts' %}">Request Discounts &nbsp;&nbsp;<span class="badge badge-dark badge-pill d-block"> {% if request_discount_count %}
+                            {{request_discount_count}}
+    
+                              {% else %}
+                              0
+                              {% endif %}</span></a>
+                            </li>
                   <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'opportunity' %}active{% endif %}" href="{% url 'opportunity' %}">Opportunity</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link {% if active_tab == 'admission' %}active{% endif %}" href="{% url 'admissions' %}">Admissions</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="d-flex h-60p align-items-center nav-link active" href="{% url 'spam' %}">Spam List</a>
+                      <a class="d-flex h-60p align-items-center nav-link active" href="{% url 'spam' %}">Spam List &nbsp;&nbsp;<span class="badge badge-danger badge-pill d-block"> {% if spam_count %}
+                        {{spam_count}}
+
+                          {% else %}
+                          0
+                          {% endif %}</span></a>
                   </li>
                   
 
@@ -211,6 +256,237 @@
     </div>
   </div>
 </section>
+
+<!--  -->
+
+
+{% for i in leads %}
+<div class="modal fade" id="sumbit_admissoinmodal{{i.id}}" tabindex="-1" role="dialog" aria-labelledby="sumbit_admissoinmodal{{i.id}}" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+      <div class="modal-content">
+          <div class="modal-header bg-dark">
+              <h5 class="modal-title text-white">Admission Form</h5>
+              <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          
+          <div class="modal-body ">
+            <form action="{% url 'move_to_admission' i.id %}" class="row g-3 admissionValid" method="post">
+              {% csrf_token %}
+            
+              <div class="col-md-6 mb-3">
+                <label for="Tokenid" class="form-label">Token Id <span class="text-danger">*</span></label>
+                <input type="text" class="form-control  bg-light text-secondary" id="Tokenid" value="{{i.token_id}}" disabled>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="studentname" class="form-label">Student Name <span class="text-danger">*</span></label>
+                <input type="text" class="form-control  bg-light text-secondary" id="studentname" value="{{i.first_name}} {{i.last_name}}" disabled>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="mblno" class="form-label">Mobile No <span class="text-danger">*</span></label>
+                <input type="tel" class="form-control  bg-light text-secondary" id="mblno" value="{{i.mobile_number}}" disabled>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                <input type="email" class="form-control  bg-light text-secondary" id="email" value="{{i.email}}" disabled>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="courseinput" class="form-label">Course <span class="text-danger">*</span></label>
+                <input type="text" class="form-control  bg-light text-secondary" id="courseinput" value="{{i.course_name.course_name}}" disabled>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="courseFaculty" class="form-label">Course Faculty <span class="text-danger">*</span></label>
+      
+<select class="form-select form-control" name="courseFaculty" >
+<option value="" selected>Select your Faculty</option>
+  {% for emp in faculty %}
+      {% if emp.branch == i.branch_name %}
+      <option value="{{emp.id}}">{{emp.first_name}}</option>
+      {% endif %}
+      {% endfor %}
+</select>
+
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="plan" class="form-label">Plan <span class="text-danger" >*</span></label>
+                <input type="text" class="form-control  bg-light text-secondary" id="plan" value="{{i.course_name.course_plan.plan_name}}" disabled>
+                
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="demodate" class="form-label">Attended Demo On <span class="text-danger">*</span></label>
+               
+                <input type="text" class="form-control  bg-light text-secondary" id="demodate" value="{{i.demo.datestartat |default:'Not Attend'}}" disabled>
+               
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="batchno" class="form-label">Batch Number <span class="text-danger">*</span></label>
+                <select id="batchno" class="form-select form-control" name="batchno">
+                  <option selected disabled>Select the Batch Number</option>
+                  {% for batch in batches %}
+                  {% if i.course_name.course_name == batch.course_id and i.course_name.specialization == batch.spec_id %}
+                  <option value="{{batch.id}}">{{batch.batch_number}}</option>
+                  {% endif %}
+                  {% endfor %}
+
+                </select>
+                
+              </div>
+              <!--  -->
+              <div class="col-md-4 mb-3">
+                <label for="courseFee" class="form-label">Course Fee <span class="text-danger">*</span></label>
+                <input type="text" class="form-control  bg-light text-secondary" id="courseFee" value="{{i.course_name.course_fee}}" disabled>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="discount" class="form-label">Discount Fee <span class="text-danger">*</span></label>
+                <input type="text" class="form-control bg-light text-secondary" id="discount" placeholder="Discount Fee (%)" value="{{i.course_name.discount}}%" disabled>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="finalFee" class="form-label">Final Fee <span class="text-danger">*</span></label>
+                <input type="text" class="form-control bg-light text-secondary" id="finalFee" placeholder="Final Fee" value="{{i.course_name.final_price}}" disabled>
+              </div>
+              
+              <!--  -->
+
+              <div class="col-md-4 mb-3">
+                <label for="trainingType" class="form-label">Training Type <span class="text-danger">*</span></label>
+                <input type="text" class="form-control  bg-light text-secondary" id="trainingType" value="{{i.training_type.TrainingTypeName}}" disabled>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="branch" class="form-label">Branch <span class="text-danger">*</span></label>
+                <input type="email" class="form-control  bg-light text-secondary" id="branch" value="{{i.branch_name}}" disabled>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="Leadsource" class="form-label">Lead Source <span class="text-danger">*</span></label>
+                <input type="text" class="form-control  bg-light text-secondary" id="Leadsource" value="{{i.lead_sourse.prospect_type}}" disabled>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="admissionFee" class="form-label">Admission Fee <span class="text-danger" >*</span></label>
+                <input type="text" class="form-control text-secondary" id="admissionFee" name="admissionFee" placeholder="0.00">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="remainingfee" class="form-label">Remainingfee Fee <span class="text-danger">*</span></label>
+                <input type="text" class="form-control text-secondary" id="remainingfee" name="remainingfee" placeholder="0.00" readonly>
+              </div>
+              <!-- payment details -->
+              <div class="col-md-6 mb-3">
+                <label for="paymenttype" class="form-label">Mode of Payment <span class="text-danger">*</span></label>
+                <select id="paymenttype" class="form-select form-control payment_type" name="paymenttype">
+                    <option selected disabled>Select Mode of Payment</option>
+                    <option value="UPI">UPI</option>
+                    <option value="Cash">Cash</option>
+                    <option value="netbanking">Bank Transfer</option>
+                </select>
+            </div>
+            
+            <!-- UPI Details -->
+            <div class="col-md-6 mb-3 upi_dropdown" id="UPI" style="display: none;">
+                <label for="" class="form-label">UPI Payment</label>
+                <select name="upi_id_id" class="form-select form-control upi_drop_select" id="">
+                    <option value="" selected>Select your UPI</option>
+                    {% for i in upi %}
+                    <option value="{{i.id}}">{{i.upipayments_name}} {{i.upiid}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            {% for i in upi %}
+            <div class="col-md-6 mb-3 upi_id" id="upi_id{{i.id}}" style="display: none;">
+                <input type="text" readonly  value="{{i.upiid}}" class="form-control upi_id_input">
+            </div>
+            {% endfor %}
+            
+            {% for i in upi %}
+            <div class="col-md-6 mb-3 upi_id_img" id="upi_id_img{{i.id}}" style="display: none;">
+              <span data-toggle="modal" data-target="#qrcode{{i.id}}">  <img src="../../../static/media/{{i.upi_qr_code}}"  alt="hello" width="100%" height="100%">
+              </span>
+            </div>
+            {% endfor %}
+            
+            <div class="col-md-6 mb-3 net_banking_div" style="display: none;">
+                <label for="" class="form-label">Net Banking</label>
+                <select name="net_banking_id" class="form-select form-control net_banking_select" id="">
+                    <option value="" selected>Select your netbanking"</option>
+                    {% for net in net_banking %}
+                    <option value="{{net.id}}">{{net.netbanking_name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            {% for net in net_banking %}
+            <div class="col-md-6 mb-3 net-baking_all net-baking_all{{net.id}}" style="display: none;">
+                <div class="">
+                    <input type="text" readonly value="{{net.netbanking_name}}" class="form-control">
+                </div>
+            </div>
+            
+            <div class="col-md-6 mb-3 net-baking_all net-baking_all{{net.id}}" style="display: none;">
+                <div class="">
+                    <input type="text" readonly value="{{net.ifscode}}" class="form-control">
+                </div>
+            </div>
+            {% endfor %}
+          <div class="col-md-6 mb-3 transaction-id" style="display: none;">
+            <label for="" class="form-label">Transaction Id </label>
+            <input type="text" class="form-control text-secondary" id="transactionId" name="transactionId">
+        </div>
+        
+    
+
+              
+    
+    
+    
+
+                
+            
+            <!-- Paytm Details -->
+            <div class="col-md-6 mb-3 payment-details{{i.id}}" id="Paytm{{i.id}}" style="display: none;">
+                <label for="paytmNumber" class="form-label">Paytm Number <span class="text-danger">*</span></label>
+                <input type="text" class="form-control text-secondary" id="paytmNumber" name="paytmNumber" placeholder="Paytm Number">
+                <div>
+                  <label for="paytmTransactionId" class="form-label">Transaction Id <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control text-secondary" id="paytmTransactionId" name="paytmTransactionId" placeholder="TransactionId">
+                </div>
+            </div>
+            
+            <!-- Bank Transfer Details -->
+            <div class="col-md-6 mb-3 payment-details{{i.id}}" id="BankTransfer{{i.id}}" style="display: none;">
+                <div>
+                  <label for="bankAccount" class="form-label">Bank Account Number <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control text-secondary" id="bankAccount" name="bankAccount" placeholder="Bank Account Number">
+                </div>
+                <div>
+                  <label for="bankTransactionId" class="form-label">Transaction Id <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control text-secondary" id="bankTransactionId" name="bankTransactionId" placeholder="TransactionId">
+                </div>
+                
+            </div>
+            
+              
+              <div class="modal-footer d-flex justify-content-center col-md-12 mb-3">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="reset" class="btn btn-secondary" >Reset</button>
+              </div>
+            </form>
+
+          </div>
+          
+      </div>
+  </div>
+</div>
+{% endfor %}
+
+
+
+
+
+<!--  -->
+
+
+
+
+
 
 <!-- create model start here -->
 
@@ -416,47 +692,196 @@
 
   <script>
     $(document).ready(function() {
-        // Function to update button operations
-        function updateButtonOperations() {
-            var selectedCount = $('.row-checkbox:checked').length;
-            var buttonsHtml = '';
+      // Function to update button operations
+      function updateButtonOperations() {
+        var selectedCount = $('.row-checkbox:checked').length;
+        var buttonsHtml = '';
+        if (selectedCount === 1) {
+          // When exactly one checkbox is selected
+          var prospectId = $('.row-checkbox:checked').data('id');
+          buttonsHtml = `<button class="btn btn-primary mr-2 view-admission" data-target="#sumbit_admissoinmodal${prospectId}" data-id="${prospectId}"><i class="fa fa-user"></i> Admission</button>
+                         `;
+        } else if (selectedCount > 1) {
+          // When multiple checkboxes are selected
+          buttonsHtml = `<button class="btn btn-success mr-2">WhatsApp</button>
+                         <button class="btn btn-dark mr-2">SMS</button>
+                         <button class="btn btn-danger mr-2">Delete</button>`;
+        }
+        $('#button_operations').html(buttonsHtml);
+      }
+
+      $('#button_operations').on('click', '.view-admission', function() {
+        var prospectId = $(this).data('id');
+        var targetModal = $(this).data('target');
+        $(targetModal).modal('show');
+      });
+
+      //
+      //
+      //
+      //
+      //
+      //
+      //
+      //
+  
+      // Attach change event listener to checkboxes for row selection
+      $(document).on('change', '.row-checkbox', function() {
+          // Check if all checkboxes are selected
+          var allChecked = $('.row-checkbox').length === $('.row-checkbox:checked').length;
+          $('#checkAll').prop('checked', allChecked);
+          updateButtonOperations();
+      });
+  
+      // "Check All" functionality
+      $('#checkAll').change(function() {
+          $('.row-checkbox').prop('checked', this.checked);
+          updateButtonOperations();
+      });
+  
+      $('#button_operations').on('click', '.view-admission', function() {
+          var targetModal = $(this).data('target');
+          $(targetModal).modal('show');
+      });
+  });
+  
+  
+    </script>
+
+    <script>
+      $(document).ready(function() {
+          // Add validation rules to your form
     
-            if (selectedCount >= 1) {
-                // When at least one checkbox is selected
-                buttonsHtml = `
-                    <button class="btn btn-primary mr-2"><i class="fa fa-user"></i> Admission</button>
-                    <button class="btn btn-danger mr-2"><i class="fa fa-trash-o"></i> Delete</button>
-                    
-                `;
-                if(selectedCount > 1) {
-                    // When multiple checkboxes are selected, adjust the buttons accordingly
-                    buttonsHtml = `
-                        <button class="btn btn-success mr-2">WhatsApp</button>
-                        <button class="btn btn-dark mr-2">SMS</button>
-                        <button class="btn btn-danger mr-2">Delete</button>
-                    `;
-                }
+          // Add custom validation method to compare admission fee and course fee
+          $.validator.addMethod("maxCourseFee", function(value, element) {
+            var admissionFee = parseFloat(value);
+            var courseFee = parseFloat($("#courseFee").val());
+            return admissionFee <= courseFee;
+          }, "Admission fee cannot exceed the course fee");
+    
+    
+    
+    
+    
+        $(".admissionValid").validate({
+          rules: {
+            admissionFee: {
+              required: true,
+              number: true
+            },
+            courseFaculty:{
+              required:true
+            },
+            batchno:{
+              required:true
+            },
+            admissionFee: {
+              required: true,
+              number: true,
+              min: 500,
+              maxCourseFee: true
+            },
+            upi_id_id:{
+              required:true
+            },
+            net_banking_id:{
+              required:true
             }
+            ,
+            paymenttype: {
+              required: true
+            },
     
-            $('#button_operations').html(buttonsHtml);
+            transactionId: {
+              required: function(element) {
+                return $("#paymenttype").val() !== "Cash";
+              }
+            },
+            paytmNumber: {
+              required: function(element) {
+                return $("#paymenttype").val() === "UPI";
+              }
+            },
+            paytmTransactionId: {
+              required: function(element) {
+                return $("#paymenttype").val() === "UPI";
+              }
+            },
+            bankAccount: {
+              required: function(element) {
+                return $("#paymenttype").val() === "netbanking";
+              }
+            },
+            bankTransactionId: {
+              required: function(element) {
+                return $("#paymenttype").val() === "netbanking";
+              }
+            }
+          },
+          messages: {
+            // Define custom error messages for each field
+            admissionFee: {
+              required: "Please enter the admission fee",
+              number: "Please enter a valid number"
+            },
+            courseFaculty:{
+              required:"Please select a faculty"
+            },
+            batchno:{
+              required:"Please select a batch no."
+            },
+            paymenttype: {
+              required: "Please select a payment type"
+            },
+            upi_id_id:{
+              required:"Please select your UPI ID"
+            },
+            net_banking_id:{
+              required:"Please select you net banking"
+            },
+            transactionId: {
+              required: "Please enter the transaction ID"
+            },
+            paytmNumber: {
+              required: "Please enter the Paytm number"
+            },
+            paytmTransactionId: {
+              required: "Please enter the Paytm transaction ID"
+            },
+            bankAccount: {
+              required: "Please enter the bank account number"
+            },
+            admissionFee: {
+              required: "Please enter the admission fee",
+              number: "Please enter a valid number",
+              min: "Admission fee must be at least 500",
+              maxCourseFee: "Admission fee cannot exceed the course fee"
+            },
+            bankTransactionId: {
+              required: "Please enter the bank transaction ID"
+            }
+          }
+        });
+      });
+    </script>
+    <script>
+      function validateAdmissionFee() {
+        var admissionFee = parseFloat(document.getElementById("admissionFee").value);
+        var courseFee = parseFloat(document.getElementById("courseFee").value);
+    
+        if (admissionFee < 500 || isNaN(admissionFee)) {
+            alert("Admission fee must be a minimum of 500.");
+            return false;
         }
     
-        // Attach change event listener to checkboxes for row selection
-        $(document).on('change', '.row-checkbox', function() {
-            // Check if all checkboxes are selected
-            var allChecked = $('.row-checkbox').length === $('.row-checkbox:checked').length;
-            $('#checkAll').prop('checked', allChecked);
-            updateButtonOperations();
-        });
+        if (admissionFee > courseFee) {
+            alert("Admission fee cannot be higher than the course fee.");
+            return false;
+        }
     
-        // "Check All" functionality
-        $('#checkAll').change(function() {
-            $('.row-checkbox').prop('checked', this.checked);
-            updateButtonOperations();
-        });
-    });
+        return true;
+    }
     </script>
-    
 
 
   
