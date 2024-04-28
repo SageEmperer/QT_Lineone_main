@@ -1,149 +1,155 @@
-{% extends 'base.html' %} {% load static %} {% block content %}
-<div class="col-lg-3 col-md-6">
-  <div class="card card-sm">
-    <div class="card-body">
-      <div class="d-flex justify-content-between mb-3">
-        <div>
-          <span class="d-block font-15 text-dark font-weight-500"
-            >MY ASSESMENTS</span
-          >
-        </div>
-        <div>
-          <span class="text-success font-14 font-weight-500">
-            <i class="fa fa-book"></i>
-          </span>
-        </div>
-      </div>
-      <div class="d-flex justify-content-between">
-        <div>
-          <span class="d-block font-15 text-dark font-weight-500 mb-0">9</span>
-        </div>
-        <div>
-          <span class="text-success font-14 font-weight-500">Result</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="col-lg-3 col-md-6">
-  <div class="card card-sm">
-    <div class="card-body">
-      <div class="d-flex justify-content-between mb-3">
-        <div>
-          <span class="d-block font-15 text-dark font-weight-500"
-            >MY WORKSHEETS</span
-          >
-        </div>
-        <div>
-          <span class="text-success font-14 font-weight-500">
-            <i class="glyphicon glyphicon-file"></i>
-          </span>
-        </div>
-      </div>
-      <div class="d-flex justify-content-between">
-        <div>
-          <span class="d-block font-15 text-dark font-weight-500 mb-0">39</span>
-        </div>
-        <div>
-          <span class="text-success font-14 font-weight-500">Result</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="col-lg-3 col-md-6">
-  <div class="card card-sm">
-    <div class="card-body">
-      <div class="d-flex justify-content-between mb-3">
-        <div>
-          <span class="d-block font-15 text-dark font-weight-500"
-            >MY QUIZES</span
-          >
-        </div>
-        <div>
-          <span class="text-success font-14 font-weight-500"
-            ><i class="fa fa-question-circle"></i
-          ></span>
-        </div>
-      </div>
-      <div class="d-flex justify-content-between">
-        <div>
-          <span class="d-block font-15 text-dark font-weight-500 mb-0">13</span>
-        </div>
-        <div>
-          <span class="text-success font-14 font-weight-500">Result</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="col-lg-3 col-md-6">
-  <div class="card card-sm">
-    <div class="card-body">
-      <div class="d-flex justify-content-between mb-3">
-        <div>
-          <span class="d-block font-15 text-dark font-weight-500">MY JOBS</span>
-        </div>
-        <div>
-          <span class="text-success font-14 font-weight-500"
-            ><i class="fa fa-briefcase"></i>
-          </span>
-        </div>
-      </div>
-      <div class="d-flex justify-content-between">
-        <div>
-          <span class="d-block font-15 text-dark font-weight-500 mb-0">1</span>
-        </div>
-        <div>
-          <span class="text-success font-14 font-weight-500">Result</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+{% extends 'base.html' %} {% load static %}
 
-<h6 class="fw-bold text-lg-start col-12 mb-3">MY COURSES</h6>
-<div class="col-lg-4 col-md-6">
-  <div class="card shadow bg-body rounded" style="width: 19rem">
-    <img
-      class="img-top"
-      src="{% static 'img/3.jpg' %}"
-      alt="Card image cap"
-    />
-    <div class="card-body position-relative">
-      <h5 class="card-title">Python For Beginners</h5>
-      <div class="horizontal-line"></div>
-      <!-- Horizontal line -->
-      <p class="card-text offset-8 text-info">2 days left</p>
-      <a
-        href=""
-        class="ml-0 text-primary float-start"
-        style="text-decoration: none"
-        >Continue Watching &nbsp;
-      </a>
+{% block content %}
+<style>
+    .mybody p {
+        height: 30px;
+    }
+
+    .mybody h5 {
+        height: 55px;
+    }
+   
+</style>
+
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-lg-3 col-md-6">
+            <div class="card cards card-sm shadow" style="border-radius: 5px;">
+                <div class="card-body ">
+                    <div class="d-flex justify-content-between mb-3">
+                        <div>
+                            <span class="d-block font-15 text-dark font-weight-500">MY ASSESMENTS</span>
+                        </div>
+                        <div>
+                            <span class="text-success font-21 font-weight-500">
+                                <i class="material-icons" style="color: #132649;">assignment</i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <span class="d-block font-15 text-dark font-weight-500 mb-0">9 / 12</span>
+                        </div>
+                        <div>
+                            <button class="font-14 font-weight-500 btn btn-sm" style="background-color: #132649; color: white;">Result</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card cards card-sm shadow">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-3">
+                        <div>
+                            <span class="d-block font-15 text-dark font-weight-500">MY WORKSHEETS</span>
+                        </div>
+                        <div>
+                            <span class="text-success font-21 font-weight-500">
+                                <i class="glyphicon glyphicon-file " style="color: #132649;"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <span class="d-block font-15 text-dark font-weight-500 mb-0">39 / 50</span>
+                        </div>
+                        <div>
+                            <button class="font-14 font-weight-500 btn btn-sm" style="background-color: #132649; color: white;">Result</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 ">
+            <div class="card cards card-sm shadow">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-3">
+                        <div>
+                            <span class="d-block font-15 text-dark font-weight-500">MY QUIZES</span>
+                        </div>
+                        <div>
+                            <span class="text-success font-21 font-weight-500"><i class="fa fa-question-circle " style="color: #132649;"></i></span>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <span class="d-block font-15 text-dark font-weight-500 mb-0">13 / 20</span>
+                        </div>
+                        <div>
+                            <button class="font-14 font-weight-500 btn btn-sm " style="background-color: #132649; color: white;">Result</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card cards card-sm shadow">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-3">
+                        <div>
+                            <span class="d-block font-15 text-dark font-weight-500">MY JOBS</span>
+                        </div>
+                        <div>
+                            <span class="text-success font-21 font-weight-500"><i class="fa fa-briefcase" style="color: #132649;"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <span class="d-block font-15 text-dark font-weight-500 mb-0">1</span>
+                        </div>
+                        <div>
+                            <button class="font-14 font-weight-500 btn btn-sm " style="background-color: #132649; color: white;">Result</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="container-fluid m-0">
+            <div class="hk-pg-header mt-2 mb-2">
+                <h4 class="hk-pg-title"><i class="fa fa-book"></i> &nbsp;My Courses</h4>
+            </div>
+            <section class="hk-sec-wrapper">
+                <div class="row mb-3 ">
+        
+                    <div class="col-lg-3 col-sm-6 col-xs-12">
+                        <div class="card cards m-3 shadow ">
+                            <img class="img-top" src="{% static 'img/3.jpg' %}" alt="Card image cap" />
+                            <div class="card-body mybody">
+                                <h5 class="card-title">Python For Beginners</h5>
+                                <p class="card-text text-info">2 days left</p>
+                            </div>
+                            <hr class="p-0 w-75 m-auto">
+                            <div class="card-footer" style="border: none;">
+                                <a href="" class="p-0 mt-2 text-primary float-start" style="text-decoration: none">Continue Watching
+                                    &nbsp;
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="col-lg-3 col-sm-6 col-xs-12">
+                        <div class="card cards m-3 shadow">
+                            <img class="img-top" src="{% static 'img/3.jpg' %}" alt="Card image cap" />
+                            <div class="card-body mybody">
+                                <h5 class="card-title">Web Development For Beginners</h5>
+                                <p class="card-text text-danger">Expired</p>
+                            </div>
+                            <hr class="p-0 w-75 m-auto">
+                            <div class="card-footer" style="border: none;">
+                                <a href="" class="p-0 mt-2 text-primary float-start" style="text-decoration: none">Purchase Again
+                                    &nbsp;
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
     </div>
-  </div>
-</div>
-<div class="col-lg-4 col-md-6 mb-4">
-  <div class="card shadow bg-body rounded" style="width: 19rem">
-    <img
-      class="img-top"
-      src="{% static 'img/3.jpg' %}"
-      alt="Card image cap"
-    />
-    <div class="card-body position-relative">
-      <h5 class="card-title line">Web Development For Beginners</h5>
-      <div class="horizontal-line"></div>
-      <!-- Horizontal line -->
-      <p class="card-text offset-9 text-danger">Expired</p>
-      <a
-        href=""
-        class="ml-0 text-primary float-start"
-        style="text-decoration: none"
-        >Purchase Again &nbsp;
-      </a>
-    </div>
-  </div>
 </div>
 
 {% endblock %}

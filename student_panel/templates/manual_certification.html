@@ -1,0 +1,873 @@
+{% extends 'base/base.html' %}
+
+{% block breadCrum %}
+<!-- Breadcrumb -->
+<div class="hk-pg-header d-flex justify-content-between mb-0">
+    <h4 class="hk-pg-title m-3">Manual Certification Center</h4>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-transparent mb-0">
+            <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Manual Certification Center</li>
+        </ol>
+    </nav>
+</div>
+<!-- /Breadcrumb -->
+{% endblock %} {% block content %}
+<!-- message here -->
+
+{% if messages %}
+{% for message in messages %}
+{% if message.tags == "error" %}
+<div class="h-25 alert alert-danger alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
+{% elif message.tags == "success" %}
+<div class="h-25 alert alert-success alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
+{% else %}
+<div class="h-25 alert alert-info alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
+{% endif %}
+{% endfor %}
+{% endif %}
+
+<!-- message end here -->
+
+<section class="hk-sec-wrapper">
+    <div class="d-flex justify-content-between">
+
+        <div class="">
+            <button type="button" class="btn btn-primary mr-2 mb-3" data-toggle="modal" data-target="#Createstudent">
+                <i class="glyphicon glyphicon-plus"></i> Add Student
+            </button>
+            <a href="{% url 'create_student_export' %}" class="btn btn-success mr-2 mb-3"><i
+                    class="glyphicon glyphicon-export"></i> Export</a>
+            <button type="button" class="btn btn-secondary mr-2 mb-3" data-toggle="modal" data-target="#Uploadstudent">
+                <i class="glyphicon glyphicon-import"></i> Import
+            </button>
+        </div>
+        <div class="">
+            <button type="button" class="btn btn-danger mr-2 mb-3" id="deleteButton" data-toggle="modal"
+                data-target="#sendModal" style="display: none; position: relative; top: 0px; ">
+                <i class="glyphicon glyphicon-envelope"></i> Sent Certification Mail
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm">
+            <div class="hk-pg-header d-flex justify-content-between align-items-center">
+            </div>
+            <div class="table-wrap">
+                <div class="button_1 d-flex justify-content pb-2">
+
+                </div>
+                <table id="example_4" class="table table-hover w-100 display pb-30 table-bordered">
+                    <thead class="bg-dark">
+                        <tr>
+                            <th class="text-white text-center"><input type="checkbox" id="selectAll"> All
+                            </th>
+                            <th class="text-white">S.No</th>
+                            <th class="text-white">Full Name</th>
+                            <th class="text-white">Email</th>
+                            <th class="text-white">Mobile Number</th>
+                            <th class="text-white">Course Name</th>
+                            <th class="text-white">Specialization</th>
+                            <th class="text-white">Start Date</th>
+                            <th class="text-white">End date</th>
+                            <th class="text-white">Certification Id </th>
+                            <th class="text-white text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in student %}
+                        {% if i.cerficate_sent == False %}
+                        <tr>
+                            <td class="text-center"><input type="checkbox" class="row-checkbox"
+                                    data-course-id="{{i.id}}" data-course-name="{{i.fullname}}"></td>
+                            </td>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{i.fullname}}</td>
+                            <td class="">{{i.email}}</td>
+                            <td class="">{{i.mobilenumber}}</td>
+                            <td class="">{{i.course}}</td>
+                            <td class="">{{i.specialization}}</td>
+                            <td class="">{{i.startdate}}</td>
+                            <td class="">{{i.enddate}}</td>
+                            <td class="">{{i.certifictateid}}</td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-primary m-1" data-toggle="modal"
+                                    data-target="#Editstudent{{forloop.counter}}">
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                                <button type="button" class="btn btn-success" id="downloadButton">
+                                    <i class="fa fa-download"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Manual end here -->
+
+<!--Create student modal start here-->
+<div class="modal fade" id="Createstudent" tabindex="-1" role="dialog" aria-labelledby="Createstudent"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title text-white">Create Student</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="text-white">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'create_student' %}" method="post" id="Student" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6 mb-3">
+                            <label for="" class="form-label">Full Name <span class="text-danger">*</span></label>
+                            <input name="fullname" type="text" placeholder="Enter Full Name" class="form-control" />
+                        </div>
+                        <div class="col-sm-12 col-md-6 mb-3">
+                            <label for="" class="form-label">Email</label> <span class="text-danger">*</span></label>
+                            <input name="email" type="text" placeholder="Enter Email Id" class="form-control" />
+                        </div>
+                        <div class="col-sm-12 col-md-6 mb-3">
+                            <label for="" class="form-label">Mobile Number <span class="text-danger">*</span></label>
+                            <input name="mobilenumber" type="text" placeholder="Enter Mobile Number"
+                                class="form-control" />
+                        </div>
+                        <div class="col-sm-12 col-md-6 mb-3">
+                            <label class="form-label">Course Name <span class="text-danger">*</span></label>
+                            <select class="form-control custom-select id_course" name="course_name">
+                                <option selected value="">Select Course</option>
+                                {% for i in coursename %}
+                                {% if i.status == "Active" %}
+                                <option value="{{i.id}}">{{ i.course_name }}</option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-sm-12 col-md-6 mb-3">
+                            <label class="form-label">Specialization Name <span class="text-danger">*</span></label>
+                            <select class="form-control custom-select id_specialization" name="specialization">
+                            </select>
+                        </div>
+
+
+                        <div class="col-sm-12 col-md-6 mb-3">
+                            <label for="" class="form-label">Start Date<span class="text-danger">*</span></label>
+                            <input name="startdate" type="date" id="start-date-input" placeholder=""
+                                class="form-control" />
+                        </div>
+                        <div class="col-sm-12 col-md-6 mb-3">
+                            <label for="" class="form-label">End Date<span class="text-danger">*</span></label>
+                            <input name="enddate" type="date" id="end-date-input" placeholder="" class="form-control" />
+                        </div>
+                        <div class="col-sm-12 col-md-6 mb-3">
+                            <label for="" class="form-label">Certifictate Id<span class="text-danger">*</span></label>
+                            <input name="certifictateid" type="text" placeholder="Enter Certificate Id"
+                                class="form-control" />
+                        </div>
+                    </div>
+                    <div class="mb-3 d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary m-1">Submit</button>
+                        <button type="reset" class="btn btn-secondary m-1">Reset</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Add student modal end here-->
+<!--Edit student modal start here-->
+{% for i in student %}
+
+<div class="modal fade" id="Editstudent{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="Editstudent"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title text-white"> Edit Student</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="text-white">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'create_student_edit' i.id %}" method="post" id="Edit_Student"
+                    enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6 mb-3">
+                            <label for="" class="form-label">Full Name <span class="text-danger">*</span></label>
+                            <input name="editfullname" value="{{i.fullname}}" type="text" placeholder="Enter Full Name"
+                                class="form-control" />
+                        </div>
+                        <div class="col-sm-12 col-md-6 mb-3">
+                            <label for="" class="form-label">Email</label> <span class="text-danger">*</span></label>
+                            <input name="editemail" value="{{i.email}}" type="text" placeholder="Enter Email Id"
+                                class="form-control" />
+                        </div>
+                        <div class="col-sm-12 col-md-6 mb-3">
+                            <label for="" class="form-label">Mobile Number <span class="text-danger">*</span></label>
+                            <input name="editmobilenumber" value="{{i.mobilenumber}}" type="text"
+                                placeholder="Enter Mobile Number" class="form-control" />
+                        </div>
+                        <div class="col-sm-12 col-md-6 mb-3">
+                            <label class="form-label">Course Name <span class="text-danger">*</span></label>
+                            <select class="form-control custom-select id_course" name="editcourse_name">
+                                <option selected value="">Select Course</option>
+                                {% for i in coursename %}
+                                {% if i.status == "Active" %}
+                                <option value="{{i.id}}">{{ i.course_name }}</option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-sm-12 col-md-6 mb-3">
+                            <label class="form-label">Specialization Name <span class="text-danger">*</span></label>
+                            <select class="form-control custom-select id_specialization" name="editspecialization">
+                            </select>
+                        </div>
+
+
+                        <div class="col-sm-12 col-md-6 mb-3">
+                            <label for="" class="form-label">Start Date<span class="text-danger">*</span></label>
+                            <input name="editstartdate" value="{{i.startdate}}" type="date" id="start-date-edit"
+                                placeholder="" class="form-control" />
+                        </div>
+                        <div class="col-sm-12 col-md-6 mb-3">
+                            <label for="" class="form-label">End Date<span class="text-danger">*</span></label>
+                            <input name="editenddate" value="{{i.enddate}}" type="date" id="end-date-edit"
+                                placeholder="" class="form-control" />
+                        </div>
+                        <div class="col-sm-12 col-md-6 mb-3">
+                            <label for="" class="form-label">Certifictate Id<span class="text-danger">*</span></label>
+                            <input name="editcertifictateid" value="{{i.certifictateid}}" type="text"
+                                placeholder="Enter Certificate Id" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="mb-3 d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary m-1">Submit</button>
+                        <button type="reset" class="btn btn-secondary m-1">Reset</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<!--Edit student modal end here-->
+<!-- Upload model start here-->
+
+<div class="modal fade" id="Uploadstudent" tabindex="-1" role="dialog" aria-labelledby="Uploadstudent"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title text-white">Upload File</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="text-whte">&times;</span>
+                </button>
+            </div>
+            <form action="{% url 'create_student_import' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <input type="file" name="createstudent_file" id="input-file-now" class="dropify" />
+                    <div id="csvPreview"></div>
+                </div>
+                <div class="mb-3 d-flex justify-content-center">
+                    <button type="Submit" class="btn btn-primary m-1">Submit</button>
+                    <button type="button" class="btn btn-secondary m-1" data-dismiss="modal" aria-label="Close">
+                        Close
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Upload model end here -->
+<!---send mail start here -->
+
+<div class="modal fade" id="sendModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title text-white " id="">Send Mail</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3 text-center">
+                    <form action="{% url 'create_student_sent' %}" method="post">
+                        {% csrf_token %}
+                        <p id="sentmailMessage">Are you sure you want to sent <strong><span
+                                    id="selectedCount"></span></strong>
+                            manual certification?</p>
+                        <input type="hidden" id="selected_ids_input" name="selected_ids">
+                </div>
+                <div class="d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary m-1">Yes</button>
+                    <button type="button" class="btn btn-secondary m-1" data-dismiss="modal">No</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!---send mail end here -->
+<!---SENT MAILS-->
+
+<h4 class="hk-pg-title m-3">Sent Mails</h4>
+<section class="hk-sec-wrapper">
+    <div class="d-flex justify-content-end">
+        <div class="">
+            <button type="button" class="btn btn-info  mr-2 mb-3" id="printButton"><i class="fa fa-print"></i>
+                Print</button>
+        </div>
+        <div class="">
+            <button type="button" class="btn btn-danger mr-2 mb-3" id="deleteButton" data-toggle="modal"
+                data-target="sendModal" style="display: none; position: relative; top: 0px; ">
+                <i class="glyphicon glyphicon-envelope"></i> Sent Certification Mail
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm">
+            <div class="hk-pg-header d-flex justify-content-between align-items-center">
+            </div>
+            <div class="table-wrap">
+                <div class="d-flex justify-content-between">
+                    <div class="ml-auto mr-2">
+
+                    </div>
+                </div>
+                <table id="datable_1" class="table table-hover w-100 display pb-30 table-bordered">
+                    <thead class="bg-dark">
+                        <tr>
+                            <th class="text-white text-center"><input type="checkbox" id="selectAll"> All
+                            </th>
+                            <th class="text-white">S.No</th>
+                            <th class="text-white">Full Name</th>
+                            <th class="text-white">Email</th>
+                            <th class="text-white">Mobile Number</th>
+                            <th class="text-white">Course Name</th>
+                            <th class="text-white">Specialization</th>
+                            <th class="text-white">Start Date</th>
+                            <th class="text-white">End date</th>
+                            <th class="text-white">Certificate issued On</th>
+                            <th class="text-white">Action</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in student %}
+                        {% if i.cerficate_sent %}
+                        <tr>
+                            <td><label class="checkbox-container"> <input type="checkbox" class="single-checkbox">
+                                </label>
+                            </td>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{i.fullname}}</td>
+                            <td class="">{{i.email}}</td>
+                            <td class="">{{i.mobilenumber}}</td>
+                            <td class="">{{i.course}}</td>
+                            <td class="">{{i.specialization}}</td>
+                            <td class="">{{i.startdate}}</td>
+                            <td class="">{{i.enddate}}</td>
+                            <td class="">{{i.certifictateid}}</td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-success" id="downloadButton">
+                                    <i class="fa fa-download"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+<!--Sent mail-->
+
+<div class="modal fade" id="sendModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary">
+        <h5 class="modal-title text-white " id=""> Resend Mail</h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3 text-center">
+          <form action="{% url 'create_student_sent' %}" method="post">
+            {% csrf_token %}
+            <p id="sentmailMessage">Are you sure you want to resend <strong><span id="selectedCount"></span></strong>
+              auto certification?</p>
+            <input type="hidden" id="selected_ids_input" name="selected_ids">
+        </div>
+        <div class="d-flex justify-content-center">
+          <button type="submit" class="btn btn-primary m-1">Yes</button>
+          <button type="button" class="btn btn-secondary m-1" data-dismiss="modal">No</button>
+        </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!---sent mail end here -->
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script>
+    $(document).ready(function () {
+        // Initialize DataTables for each table
+        $('#example_4').DataTable({
+            "paging": true,
+            "searching": true,
+            "responsive": true,
+            "lengthChange": true,
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            // Customize search box appearance
+            "dom": '<"row"<"col-sm-6"l><"col-sm-6"f>>tip',
+            // Customize search field placeholder and remove search label
+            "language": {
+                "search": "",
+                "searchPlaceholder": "Search..."
+            }
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        var today = new Date().toISOString().split('T')[0];
+        $("#start-date-input").attr("min", today);
+
+
+        $('#start-date-input').on('change', function () {
+            var startDate = $(this).val();
+            if (startDate) {
+                $('#end-date-input').prop('disabled', false);
+                $('#end-date-input').attr('min', startDate);
+            }
+            else {
+                $('#end-date-input').prop('disabled', true)
+            }
+        });
+    })
+</script>
+<script>
+    $(document).ready(function () {
+        //validationf for special charector 
+        $.validator.addMethod("noSpecialChars", function (value, element) {
+            return /^[a-zA-Z0-9\s]*$/.test(value);
+        }, "Special characters are not allowed.");
+        //no numbers
+        $.validator.addMethod("noNumbers", function (value, element) {
+            return !/\d/.test(value);
+        }, "Numbers are not allowed.");
+        $.validator.addMethod("noSpace", function (value, element) {
+            return !(/^\s|\s$|\s{2,}/.test(value));
+        }, "No excessive or leading/trailing spaces");
+        $.validator.addMethod("validMobile", function (value, element) {
+            return /^[6-9]\d{9}$/.test(value)
+        }, "Please Enter Valid Mobile Number")
+        $.validator.addMethod("noSpace", function (value, element) {
+            return !(/^\s|\s$|\s{2,}/.test(value));
+        }, "No excessive or leading/trailing spaces");
+
+        $("#Student").validate({
+            rules: {
+                fullname: {
+                    required: true,
+                    noNumbers: true,
+                    minlength: 3,
+                    noSpace: true,
+                    noSpecialChars: true,
+
+                },
+                email: {
+                    required: true,
+                },
+                mobilenumber: {
+                    required: true,
+                    validMobile: true,
+                    noSpace: true,
+                    noSpecialChars: true
+                },
+                course_name: {
+                    required: true,
+                },
+                specialization: {
+                    required: true,
+                },
+
+                startdate: {
+                    required: true,
+                },
+                enddate: {
+                    required: true,
+                },
+                certifictateid: {
+                    required: true,
+                }
+            },
+            messages: {
+                fullname: {
+                    required: "Please Enter Full Name",
+                    minlength: "Minimum of 3 characters",
+                },
+                email: {
+                    required: "Please Enter Email Id",
+                },
+                mobilenumber: {
+                    required: 'Please Enter mobile number',
+                },
+                course_name: {
+                    required: "Please Select Course Name",
+                },
+                specialization: {
+                    required: "Please Select Specialization Name",
+                },
+
+                startdate: {
+                    required: "Please Enter Start Date",
+                },
+                enddate: {
+                    required: "Please Enter End Date",
+                },
+                certifictateid: {
+                    required: "Please Enter Certifictate Id"
+                }
+            },
+            submitHandler: function (form) {
+                form.submit();
+            },
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        var today = new Date().toISOString().split('T')[0];
+        $("#start-date-edit").attr("min", today);
+
+
+        $('#start-date-edit').on('change', function () {
+            var startDate = $(this).val();
+            if (startDate) {
+                $('#end-date-edit').prop('disabled', false);
+                $('#end-date-edit').attr('min', startDate);
+            }
+            else {
+                $('#end-date-edit').prop('disabled', true)
+            }
+        });
+    })
+</script>
+<script>
+    $(document).ready(function () {
+        //validationf for special charector 
+        $.validator.addMethod("noSpecialChars", function (value, element) {
+            return /^[a-zA-Z0-9\s]*$/.test(value);
+        }, "Special characters are not allowed.");
+        //no numbers
+        $.validator.addMethod("noNumbers", function (value, element) {
+            return !/\d/.test(value);
+        }, "Numbers are not allowed.");
+        $.validator.addMethod("noSpace", function (value, element) {
+            return !(/^\s|\s$|\s{2,}/.test(value));
+        }, "No excessive or leading/trailing spaces");
+        $.validator.addMethod("validMobile", function (value, element) {
+            return /^[6-9]\d{9}$/.test(value)
+        }, "Please Enter Valid Mobile Number")
+        $.validator.addMethod("noSpace", function (value, element) {
+            return !(/^\s|\s$|\s{2,}/.test(value));
+        }, "No excessive or leading/trailing spaces");
+
+        $("#Edit_Student").validate({
+            rules: {
+                editfullname: {
+                    required: true,
+                    noNumbers: true,
+                    minlength: 3,
+                    maxlength: 20,
+                    noSpace: true,
+                    noSpecialChars: true,
+                },
+                editemail: {
+                    required: true,
+                },
+                editmobilenumber: {
+                    required: true,
+                    validMobile: true,
+                    noSpace: true,
+                    noSpecialChars: true
+                },
+                editcourse_name: {
+                    required: true,
+                },
+                editspecialization: {
+                    required: true,
+                },
+
+                editstartdate: {
+                    required: true,
+                },
+                editenddate: {
+                    required: true,
+                },
+                editcertifictateid: {
+                    required: true,
+                }
+            },
+            messages: {
+                editfullname: {
+                    required: "Please Enter Full Name",
+                    minlength: "Minimum of 3 characters",
+                },
+                editemail: {
+                    required: "Please Enter Email Id",
+                },
+                editmobilenumber: {
+                    required: 'Please Enter mobile number',
+                },
+                editcourse_name: {
+                    required: "Please Select Course Name",
+                },
+                editspecialization: {
+                    required: "Please Select Specialization Name",
+                },
+
+                editstartdate: {
+                    required: "Please Enter Start Date",
+                },
+                editenddate: {
+                    required: "Please Enter End Date",
+                },
+                editcertifictateid: {
+                    required: "Please Enter Certifictate Id"
+                }
+            },
+            submitHandler: function (form) {
+                form.submit();
+            },
+        });
+    });
+</script>
+<script>
+    function validateUploadForm(form) {
+        $(form).find('#input-file-now').on('change', function () {
+            var file = this.files[0];
+            var fileExt = file.name.split('.').pop().toLowerCase();
+
+            if (fileExt === 'csv') {
+                $(form).find('button[type="submit"]').prop('disabled', false);
+                $(form).find('#input-file-now').html('');
+            } else {
+                $(form).find('button[type="submit"]').prop('disabled', true);
+                $(form).find('#csvPreview').html('<span style="color: red;">Only CSV files are allowed.</span>');
+            }
+        });
+
+        $(form).on('submit', function (e) {
+            var file = $(form).find('#input-file-now')[0].files[0];
+
+            if (!file) {
+                e.preventDefault();
+                $(form).find('#csvPreview').html('<span style="color: red;">Please select a csv file.</span>');
+            }
+        });
+    }
+
+    $('#Uploadstudent').on('shown.bs.modal', function () {
+        validateUploadForm($(this).find('form'));
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('.id_course').change(function () {
+            var specializationId = $(this).val();
+            console.warn(specializationId)
+            var url = '/depnd_specilization/' + specializationId;
+            console.warn(url)
+            $.ajax({
+                url: url,
+                success: function (data) {
+                    var specialization_list = data.specialization_list;
+                    console.log(specialization_list)
+                    var options = '<option value="">Select Specialization</option>';
+                    for (var i = 0; i < specialization_list.length; i++) {
+                        options += '<option value="' + specialization_list[i].id + '">' + specialization_list[i].name + '</option>';
+                    }
+                    $('.id_specialization').html(options);
+                }
+            });
+        });
+    });
+
+</script>
+<script>
+    // Function to update the "Select All" checkbox status
+    function updateSelectAllCheckbox() {
+        var selectAllCheckbox = document.getElementById('selectAll');
+        var rowCheckboxes = document.querySelectorAll('.row-checkbox');
+        var allChecked = true;
+
+        rowCheckboxes.forEach(function (checkbox) {
+            if (!checkbox.checked) {
+                allChecked = false;
+            }
+        });
+
+        selectAllCheckbox.checked = allChecked;
+        updateSelectedRowsList(); // Update selected rows list when "Select All" checkbox is clicked
+    }
+
+    // Function to update the selected rows list and toggle delete button visibility
+    function updateSelectedRowsList() {
+        var selectedRowsList = document.getElementById('selectedRowsList');
+        var selectedIdsInput = document.getElementById('selected_ids_input');
+        var deleteButton = document.getElementById('deleteButton');
+
+        var selectedRows = document.querySelectorAll('.row-checkbox:checked');
+        var selectedCount = selectedRows.length;
+
+        if (selectedCount > 0) {
+            deleteButton.style.display = 'block'; // Show delete button if more than one row is selected
+        } else {
+            deleteButton.style.display = 'none'; // Hide delete button if only one row or none is selected
+        }
+
+        var selectedIds = [];
+        selectedRows.forEach(function (row) {
+            var courseId = row.dataset.courseId;
+            selectedIds.push(courseId);
+        });
+
+        // Set the value of the hidden input field to the selected IDs
+        selectedIdsInput.value = selectedIds.join(',');
+
+        // Update the delete modal message with the selected count
+        document.getElementById('deleteMessage').textContent = "Are you sure you want to delete " + selectedCount + " records?";
+    }
+
+    // Event listener for checkbox change
+    document.querySelectorAll('.row-checkbox').forEach(function (checkbox) {
+        checkbox.addEventListener('change', function () {
+            updateSelectedRowsList();
+            updateSelectAllCheckbox();
+        });
+    });
+
+    // Event listener for select all checkbox change
+    document.getElementById('selectAll').addEventListener('change', function () {
+        var isChecked = this.checked;
+        document.querySelectorAll('.row-checkbox').forEach(function (checkbox) {
+            checkbox.checked = isChecked;
+        });
+        updateSelectedRowsList();
+    });
+
+    // Initially update delete button visibility
+    updateSelectedRowsList();
+
+    // Event listener for delete button click
+    document.getElementById('confirmDelete').addEventListener('click', function () {
+        // Perform delete action here
+        // For now, let's just close the modal
+        $('#deleteModal').modal('hide');
+    });
+</script>
+<script>
+    // Function to update the "Select All" checkbox status
+    function updateSelectAllCheckbox() {
+        var selectAllCheckbox = document.getElementById('selectAll');
+        var rowCheckboxes = document.querySelectorAll('.row-checkbox');
+        var allChecked = true;
+
+        rowCheckboxes.forEach(function (checkbox) {
+            if (!checkbox.checked) {
+                allChecked = false;
+            }
+        });
+
+        selectAllCheckbox.checked = allChecked;
+        updateSelectedRowsList(); // Update selected rows list when "Select All" checkbox is clicked
+    }
+
+    // Function to update the selected rows list and toggle delete button visibility
+    function updateSelectedRowsList() {
+        var selectedRowsList = document.getElementById('selectedRowsList');
+        var selectedIdsInput = document.getElementById('selected_ids_input');
+        var deleteButton = document.getElementById('deleteButton');
+
+        var selectedRows = document.querySelectorAll('.row-checkbox:checked');
+        var selectedCount = selectedRows.length;
+
+        if (selectedCount > 0) {
+            deleteButton.style.display = 'block'; // Show delete button if more than one row is selected
+        } else {
+            deleteButton.style.display = 'none'; // Hide delete button if only one row or none is selected
+        }
+
+        var selectedIds = [];
+        selectedRows.forEach(function (row) {
+            var courseId = row.dataset.courseId;
+            selectedIds.push(courseId);
+        });
+
+        // Set the value of the hidden input field to the selected IDs
+        selectedIdsInput.value = selectedIds.join(',');
+
+        // Update the delete modal message with the selected count
+        document.getElementById('deleteMessage').textContent = "Are you sure you want to delete " + selectedCount + " records?";
+    }
+
+    // Event listener for checkbox change
+    document.querySelectorAll('.row-checkbox').forEach(function (checkbox) {
+        checkbox.addEventListener('change', function () {
+            updateSelectedRowsList();
+            updateSelectAllCheckbox();
+        });
+    });
+
+    // Event listener for select all checkbox change
+    document.getElementById('selectAll').addEventListener('change', function () {
+        var isChecked = this.checked;
+        document.querySelectorAll('.row-checkbox').forEach(function (checkbox) {
+            checkbox.checked = isChecked;
+        });
+        updateSelectedRowsList();
+    });
+
+    // Initially update delete button visibility
+    updateSelectedRowsList();
+
+    // Event listener for delete button click
+    document.getElementById('confirmDelete').addEventListener('click', function () {
+        // Perform delete action here
+        // For now, let's just close the modal
+        $('#deleteModal').modal('hide');
+    });
+</script>
+
+
+{% endblock %}

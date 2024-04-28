@@ -881,6 +881,7 @@ class LeadModel(models.Model):
     request_for_discount = models.BooleanField(default=False)
     requested_amount = models.DecimalField(max_digits=9,decimal_places=2,null=True)
     messages_for_discount = models.TextField(null=True)
+    amount_paid = models.DecimalField(max_digits=9,decimal_places=2,null=True)
     # transaction_id = models.CharField(max_length=100,null=True)
     # mode_of_payment = models.CharField(max_length=100,null=True)
     # upi_payment = models.ForeignKey(upipayments,on_delete=models.SET_NULL,null=True)
@@ -918,6 +919,11 @@ class Student_payment(models.Model):
     course_id = models.ForeignKey(CourseManage, on_delete=models.SET_NULL,null=True)
     def __str__(self):
         return str(self.crn_number.first_name)
+    
+
+
+
+
 
 
 
@@ -937,9 +943,9 @@ class Finance_and_Accounts(models.Model):
     leadstage=models.ForeignKey(LeadModel,on_delete=models.CASCADE,null=True)
 
 
+# job placement
 
-
-
+# company vendor
 class Company_vendor(models.Model):
     crn_number = models.ForeignKey(Register_model, on_delete=models.CASCADE, related_name='company_vendor')
     companyname = models.CharField(max_length=100) 
@@ -955,4 +961,84 @@ class Company_vendor(models.Model):
 
 
 
+# job post
+
+class Job_post(models.Model):
+    crn_number = models.ForeignKey(Register_model, on_delete=models.CASCADE, related_name='job_post')
+    companyname = models.ForeignKey(Company_vendor,on_delete=models.CASCADE) 
+    job_title = models.CharField(max_length=100)
+    experience = models.CharField(max_length=100)
+    qualification = models.ForeignKey(Qualification,on_delete=models.SET_NULL,null=True)
+    skills = models.CharField(max_length=100)
+    role = models.ForeignKey(Jobrole,on_delete=models.CASCADE)
+    salary = models.DecimalField(max_digits=9,decimal_places=2)
+    post_date = models.DateField(default=datetime.today())
+    last_date_to_apply = models.DateField()
+    job_description = models.TextField()
+
+
+    def __str__(self):
+        return str(self.job_title)
+
+
+
+
+
+
+
  
+
+
+ #Manual
+class creatstudents(models.Model):
+    crn_number = models.ForeignKey(Register_model, on_delete=models.CASCADE, related_name='CreateStudent')
+
+    fullname= models.CharField(max_length=100)
+    email=models.CharField(max_length=100)
+    mobilenumber=models.CharField(max_length=100)
+    organization=models.CharField(max_length=100)
+    course=models.ForeignKey(Course,on_delete=models.CASCADE)
+    specialization=models.ForeignKey(Specialization,on_delete=models.CASCADE,null=True)
+    startdate=models.CharField(max_length=100)
+    enddate=models.CharField(max_length=100)
+    certifictateid = models.CharField(max_length=100,null=True)
+    cerficate_sent = models.BooleanField(default=False)
+
+# bounced
+class Bouncedstudents(models.Model):
+    crn_number = models.ForeignKey(Register_model, on_delete=models.CASCADE, related_name='BouncedStudent')
+
+    fullname= models.CharField(max_length=100)
+    email=models.CharField(max_length=100)
+    mobilenumber=models.CharField(max_length=100)
+    organization=models.CharField(max_length=100)
+    course=models.ForeignKey(Course,on_delete=models.CASCADE)
+    specialization=models.ForeignKey(Specialization,on_delete=models.CASCADE,null=True)
+    startdate=models.CharField(max_length=100)
+    enddate=models.CharField(max_length=100)
+    certifictateid = models.CharField(max_length=100,null=True) 
+
+
+
+# dashboard
+class Student(models.Model):
+    name = models.CharField(max_length=100)
+
+class Mail(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('sent', 'Sent'),
+    ]
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
+    # Add more fields as needed
+
+
+# CERTIFICATION 
+class Certification(models.Model):
+    crn_number = models.ForeignKey(Register_model, on_delete=models.CASCADE, related_name='certifications')
+    course=models.ForeignKey(Course,on_delete=models.CASCADE)
+    specialization=models.ForeignKey(Specialization,on_delete=models.CASCADE,null=True)
+    course_title = models.CharField(max_length=100)
+    description = models.TextField()
+   
+

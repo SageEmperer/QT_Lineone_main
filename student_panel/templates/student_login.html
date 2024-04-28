@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title> {% block title %}QTLineone | Login{% endblock %} </title>
+	<title> {% block title %}QTLineone | Student Login{% endblock %} </title>
 	 <!-- bootstrap css -->
 	 <link rel="stylesheet" href="../../static/css/bootstrap.min.css" type="text/css">
 	 <link rel="icon" href="../../static/images/logo/qt_instance.png" type="image/x-icon">
@@ -68,8 +68,14 @@
 						<img class="brand-img d-inline-block mr-5" src="../../static/images/logo/qt_logo.png" height="100px" alt="brand" />
 
 					</div>
+					<div class="d-flex justify-content-between">
+						<div>
+							<h4>Student Login</h4>
 
-					<form method="post" action="{% url 'login' %}" id="loginvalid">
+						</div>
+					</div>
+
+					<form method="post" action="{% url 'student_login' %}" id="loginvalid">
 						{% csrf_token %}
 						<!--<h1 class="display-4 text-center mb-10">Welcome Back :)</h1>
 						<p class="text-center mb-30">Sign in to your account and enjoy unlimited perks.</p> -->
@@ -87,14 +93,14 @@
 								<span class="toggle-password" onclick="togglePasswordVisibility()" >
 									<i class="fa fa-eye-slash"></i>
 								</span>
-								<a href="{% url 'reset' %}" class="offset-md-8">Reset Password</a>
+								<!-- <a href="{% url 'reset' %}" class="offset-md-8">Reset Password</a> -->
 
 							</div>
 
 						</div>
 						<div class="custom-control custom-checkbox m-2">
-							<input class="custom-control-input" id="same-address" type="checkbox" >
-							<label class="custom-control-label font-14" for="same-address">Keep me logged in</label>
+							<!-- <input class="custom-control-input" id="same-address" type="checkbox" >
+							<label class="custom-control-label font-14" for="same-address">Keep me logged in</label> -->
 						</div>
 						<a href="{% url 'dash'%}" class="btn btn-primary btn-block" type="submit">Login</a>
 						&nbsp;

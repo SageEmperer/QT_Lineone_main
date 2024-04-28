@@ -5,189 +5,229 @@
 {% block content %}
 <div>
 
-<nav class="navbar">
-        <ul class=" nav justify-content-end">
+    <nav class="navbar mt-3 mb-2 ">
+        <h4><i class="fa fa-bookmark"></i>&nbsp;Placements</h4>
+        <ul class=" nav justify-content-end float-right">
             <li class="breadcrumb-item">
-              <a class="" aria-current="page" href="">Home</a>
+                <a class="" aria-current="page" href="">Home</a>
             </li>
             <li class="breadcrumb-item">
-              <a class="" href="{% url 'jobs' %}">Placements</a>
+                <a class="" href="{% url 'jobs' %}">Placements</a>
             </li>
-            
+
             <li class="breadcrumb-item active">
-              Matched Jobs
+                Matched Jobs
             </li>
-          </ul>
-  </nav>
+        </ul>
+    </nav>
 </div>
 
 
-            <div class="col-xl-12 pa-0">
-                <div class="profile-cover-wrap overlay-wrap">
-                    <div class="profile-cover-img" style="background-image:url('../../static/dist/img/bg1.jpg')"></div>
-                    <div class="bg-overlay bg-trans-dark-60"></div>
-                    <div class="container profile-cover-content py-50">
-                        <div class="hk-row"> 
-                            <div class="col-lg-6">
-                                <div class="media align-items-center">
-                                    <div class="media-img-wrap  d-flex">
-                                        <div class="avatar">
-                                            <img src="../../static/dist/img/avatar1.jpg" alt="user" class="avatar-img rounded-circle">
-                                        </div>
-                                    </div>
-                                    <div class="media-body">
-                                        <div class="text-white text-capitalize display-6 mb-1 font-weight-400">Cecilia Rios
-
-                                             <i class=" fa fa-check-circle-o text-primary"></i>
-                                            
-
-                                        </div>
-                                        <p class="text-white  font-weight-200">
-                                            Full Stack Python Developer
-                                            <br>
-                                            Date of joining: April 8th 2024
-                                         </p>
-                                        
-                                    </div>
-                                </div>
+<div class="col-xl-12 pa-0 mt-1">
+    <div class="profile-cover-wrap overlay-wrap m-3">
+        <div class="profile-cover-img" style="background-image:url('../../static/dist/img/bg1.jpg')"></div>
+        <div class="bg-overlay bg-trans-dark-60"></div>
+        <div class="container profile-cover-content py-50">
+            <div class="hk-row">
+                <div class="col-lg-6">
+                    <div class="media align-items-center">
+                        <div class="media-img-wrap  d-flex">
+                            <div class="avatar">
+                                <img src="../../static/dist/img/avatar1.jpg" alt="user"
+                                    class="avatar-img rounded-circle">
                             </div>
-                            <div class="col-lg-12">
-                                <div class="button-list">
-                                    <a href="{% url 'jobs' %}" class="btn btn-light btn-wth-icon icon-wthot-bg btn-rounded"><span class="btn-text">Matched Jobs</span><span class="icon-label"><i class="icon ion-md-mail"></i> </span></a>
-                                    <a href="{% url 'applied_jobs' %}" class="btn btn-light btn-wth-icon icon-wthot-bg btn-rounded"><span class="btn-text">Applied Jobs</span><span class="icon-label"><i class="icon ion-md-mail"></i> </span></a>
-                                    <a href="{% url 'qualified_jobs' %}" class="btn btn-light btn-wth-icon icon-wthot-bg btn-rounded"><span class="btn-text">Qualified Jobs</span><span class="icon-label"><i class="icon ion-md-mail"></i> </span></a>
-                                    <!-- <a href="#" class="btn btn-icon btn-icon-circle btn-indigo btn-icon-style-2"><span class="btn-icon-wrap"><i class="fa fa-facebook"></i></span></a>
+                        </div>
+                        <div class="media-body">
+                            <div class="text-white text-capitalize display-6 mb-1 font-weight-400">Cecilia Rios
+
+                                <i class=" fa fa-check-circle-o text-primary"></i>
+
+
+                            </div>
+                            <p class="text-white  font-weight-200">
+                                Full Stack Python Developer
+                                <br>
+                                Date of joining: April 8th 2024
+                            </p>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="button-list">
+                        <a href="{% url 'jobs' %}" class="btn btn-light btn-wth-icon icon-wthot-bg btn-rounded"><span
+                                class="btn-text">Matched Jobs</span><span class="icon-label"><i
+                                    class="icon ion-md-mail"></i> </span></a>
+                        <a href="{% url 'applied_jobs' %}"
+                            class="btn btn-light btn-wth-icon icon-wthot-bg btn-rounded"><span class="btn-text">Applied
+                                Jobs</span><span class="icon-label"><i class="icon ion-md-mail"></i> </span></a>
+                        <a href="{% url 'qualified_jobs' %}"
+                            class="btn btn-light btn-wth-icon icon-wthot-bg btn-rounded"><span
+                                class="btn-text">Qualified Jobs</span><span class="icon-label"><i
+                                    class="icon ion-md-mail"></i> </span></a>
+                        <!-- <a href="#" class="btn btn-icon btn-icon-circle btn-indigo btn-icon-style-2"><span class="btn-icon-wrap"><i class="fa fa-facebook"></i></span></a>
                                     <a href="#" class="btn btn-icon btn-icon-circle btn-sky btn-icon-style-2"><span class="btn-icon-wrap"><i class="fa fa-twitter"></i></span></a>
                                     <a href="#" class="btn btn-icon btn-icon-circle btn-purple btn-icon-style-2"><span class="btn-icon-wrap"><i class="fa fa-instagram"></i></span></a> -->
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
-
-
-<section class="hk-sec-wrapper">
-   
-<br>
-    <!-- available_jobs --> 
-    <h6 class="hk-sec-title" id="available_jobs">Matched Jobs</h6>
-    <p class="mb-25"> Suggested Jobs are based on your profile and assessments completed </p>
-    <hr>
-    <div class="row">
-        <div class="col-sm ">
-            <div class="row">
-                <div class="col-lg-4 col-md-6 col-sm-12 mb-30">
-                    <div class="card border rounded-30">
-                        <div class="card-header row ">
-                            <a class="" href="{% url 'job_details' %}">
-                            <img class="align-self-start ml -2 mr-2 circle d-66 border border-light border-2" src="../../static/images/logo/qt_instance.png" alt="Generic placeholder image">
-    
-                            <div class="col-sm-20">
-                                <h4>SDE-1</a></h4>
-                                <h6 class="card-title">QT lines, &nbsp;<i class="fa fa-map-marker"></i>&nbsp;Hyderabad</h6> </h6>
-                             </div>
-                            </div>
-                        <div class="card-body">
-                            <!-- <h6 class="card-title" style="max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"> -->
-                               
-                            
-                            <p style="max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                <span class="">₹2-3 LPA</span>
-                                <br>
-                                <span class="text-smoke">Django Python  Bootstrap HTML  CSS JavaScript</span>
-                            </p>  
-       
-                            
-                        </div>
-                        <div class="card-footer text-muted">
-                            <!-- <a href="#" class="btn btn-primary">Apply</a> -->
-                            <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLarge01" >Apply</button>
-                            &nbsp;&nbsp;&nbsp;
-                            &nbsp;&nbsp;&nbsp;
-                            &nbsp;&nbsp;&nbsp;
-                            &nbsp;&nbsp;&nbsp;
-                            <p class="text-red mt-2">Last date : 14-04-2024</p>
-                        </div>
-                    </div>
-
-                    
-                </div>
-                <div class="col-lg-4 col-md-6 col-sm-12 mb-30">
-                    <div class="card border rounded-30">
-                        <div class="card-header row ">
-                            <a class="" href="{% url 'job_details' %}">
-                            <img class="align-self-start ml -2 mr-2 circle d-66 border border-light border-2" src="../../static/images/logo/qt_instance.png" alt="Generic placeholder image">
-    
-                            <div class="col-sm-20">
-                                <h4>SDE-1</a></h4>
-                                <h6 class="card-title">QT lines, &nbsp;<i class="fa fa-map-marker"></i>&nbsp;Hyderabad</h6> </h6>
-                             </div>
-                            </div>
-                        <div class="card-body">
-                            <!-- <h6 class="card-title">QT lines, &nbsp;<i class="fa fa-map-marker"></i>&nbsp;Hyderabad</h6> </h6> -->
-                            
-                            <p style="max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                <span class="">₹2-3 LPA</span>
-                                <br>
-                                <span class="text-smoke">Django Python  Bootstrap HTML  CSS JavaScript</span>
-                            </p>  
-       
-                            
-                        </div>
-                        <div class="card-footer text-muted">
-                            <!-- <a href="#" class="btn btn-primary">Apply</a> -->
-                            <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLarge01" >Apply</button>
-                            &nbsp;&nbsp;&nbsp;
-                            &nbsp;&nbsp;&nbsp;
-                            &nbsp;&nbsp;&nbsp;
-                            &nbsp;&nbsp;&nbsp;
-                            <p class="text-red mt-2">Last date : 14-04-2024</p>
-                        </div>
-                    </div>
-
-                    
-                </div>
-                <div class="col-lg-4 col-md-6 col-sm-12 mb-10">
-                    <div class="card border rounded-30">
-                        <div class="card-header row " >
-                            <a class="" href="{% url 'job_details' %}">
-                            <img class="align-self-start ml -2 mr-2 circle d-66 border border-light border-2" src="../../static/images/logo/qt_instance.png" alt="Generic placeholder image">
-                            <div class="col-sm-20">
-                               <h4>SDE-1</a></h4>
-                               <h6 class="card-title">QT lines, &nbsp;<i class="fa fa-map-marker"></i>&nbsp;Hyderabad</h6> </h6>
-                            </div>
-                            </div>
-                           
-                        <div class="card-body">
-
-                            <p style="max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                <span class="">₹2-3 LPA</span>
-                                <br>
-                                <span class="text-smoke">Django Python  Bootstrap HTML  CSS JavaScript</span>
-                            </p>  
-       
-                       
-                        </div>
-                        <div class="card-footer text-muted">
-                            <!-- <a href="#" class="btn btn-primary">Apply</a> -->
-                            <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLarge01" >Apply</button>
-                            &nbsp;&nbsp;&nbsp;
-                            &nbsp;&nbsp;&nbsp;
-                            &nbsp;&nbsp;&nbsp;
-                            &nbsp;&nbsp;&nbsp;
-                            <p class="text-red mt-2">Last date : 14-04-2024</p>
-                        </div>
-                    </div>
-
-                    
-                </div>
-                
-               
             </div>
         </div>
     </div>
+</div>
 
-    <!-- <div class="row">
+<div class="container-fluid m-0">
+    <div class="hk-pg-header mt-4 mb-2">
+        <h4 class="hk-pg-title"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-anchor"><circle cx="12" cy="5" r="3"></circle><line x1="12" y1="22" x2="12" y2="8"></line><path d="M5 12H2a10 10 0 0 0 20 0h-3"></path></svg>&nbsp;Matched Jobs</h4>
+    </div>
+    <section class="hk-sec-wrapper">
+        <div class="row">
+            <div class="col-sm ">
+                <div class="row mt-2">
+                    <div class="col-lg-4 col-md-6 col-sm-12 mb-30">
+                        <div class="card shadow cards border rounded-7">
+                            <div class="card-header row ">
+                                <a style="color: #132649;" class="" href="{% url 'job_details' %}">
+                                    <img class="align-self-start ml -2 mr-2 circle d-66 border border-light border-2"
+                                        src="../../static/images/logo/qt_instance.png" alt="Generic placeholder image">
+
+                                    <div class="col-sm-20">
+                                        <h4>SDE-1
+                                </a></h4>
+                                <h6 class="card-title">QT lines, &nbsp;<i class="fa fa-map-marker"></i>&nbsp;Hyderabad
+                                </h6>
+                                </h6>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <!-- <h6 class="card-title">QT lines, &nbsp;<i class="fa fa-map-marker"></i>&nbsp;Hyderabad</h6> </h6> -->
+
+                            <p style="max-width: 100%;">
+                                <span class="">₹2-3 LPA</span>
+                                <br>
+                                <span class="text-smoke">Django Python Bootstrap HTML CSS JavaScript</span>
+                            </p>
+
+
+                        </div>
+                        <div class="card-footer text-muted">
+                            <!-- <a href="#" class="btn btn-primary">Apply</a> -->
+                            <button class="btn " style="background-color: #132649; color: white;" data-toggle="modal"
+                                data-target="#exampleModalLarge01">Apply</button>
+                            &nbsp;&nbsp;&nbsp;
+                            &nbsp;&nbsp;&nbsp;
+                            &nbsp;&nbsp;&nbsp;
+                            &nbsp;&nbsp;&nbsp;
+                            <p class="text-red mt-2"><b>Last date : 14-04-2024</b></p>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-12 mb-30">
+                    <div class="card cards shadow border rounded-7">
+                        <div class="card-header row ">
+                            <a style="color: #132649;" class="" href="{% url 'job_details' %}">
+                                <img class="align-self-start ml -2 mr-2 circle d-66 border border-light border-2"
+                                    src="../../static/images/logo/qt_instance.png" alt="Generic placeholder image">
+
+                                <div class="col-sm-20">
+                                    <h4>SDE-1
+                            </a></h4>
+                            <h6 class="card-title">QT lines, &nbsp;<i class="fa fa-map-marker"></i>&nbsp;Hyderabad</h6>
+                            </h6>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!-- <h6 class="card-title">QT lines, &nbsp;<i class="fa fa-map-marker"></i>&nbsp;Hyderabad</h6> </h6> -->
+
+                        <p style="max-width: 100%; ">
+                            <span class="">₹2-3 LPA</span>
+                            <br>
+                            <span class="text-smoke">Django Python Bootstrap HTML CSS JavaScript</span>
+                        </p>
+
+
+                    </div>
+                    <div class="card-footer text-muted">
+                        <!-- <a href="#" class="btn btn-primary">Apply</a> -->
+                        <button class="btn " style="background-color: #132649; color: white;" data-toggle="modal"
+                            data-target="#exampleModalLarge01">Apply</button>
+                        &nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;
+                        <p class="text-red mt-2"><b>Last date : 14-04-2024</b></p>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-30">
+                <div class="card cards shadow border rounded-7">
+                    <div class="card-header row ">
+                        <a style="color: #132649;" class="" href="{% url 'job_details' %}">
+                            <img class="align-self-start ml -2 mr-2 circle d-66 border border-light border-2"
+                                src="../../static/images/logo/qt_instance.png" alt="Generic placeholder image">
+
+                            <div class="col-sm-20">
+                                <h4>SDE-1
+                        </a></h4>
+                        <h6 class="card-title">QT lines, &nbsp;<i class="fa fa-map-marker"></i>&nbsp;Hyderabad</h6>
+                        </h6>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- <h6 class="card-title">QT lines, &nbsp;<i class="fa fa-map-marker"></i>&nbsp;Hyderabad</h6> </h6> -->
+
+                    <p style="max-width: 100%;">
+                        <span class="">₹2-3 LPA</span>
+                        <br>
+                        <span class="text-smoke">Django Python Bootstrap HTML CSS JavaScript</span>
+                    </p>
+
+
+                </div>
+                <div class="card-footer text-muted">
+                    <!-- <a href="#" class="btn btn-primary">Apply</a> -->
+                    <button class="btn " style="background-color: #132649; color: white;" data-toggle="modal"
+                        data-target="#exampleModalLarge01">Apply</button>
+                    &nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;
+                    <p class="text-red mt-2"><b>Last date : 14-04-2024</b></p>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="offset-4">
+            <nav class="pagination-wrap d-inline-block  mr-40 mt-15" aria-label="...">
+                <ul class="pagination">
+                    <li class="page-item disabled">
+                        <span class="page-link">Previous</span>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item active">
+                        <span class="page-link">
+                    2
+                    <span class="sr-only">(current)</span>
+                        </span>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </section>
+
+</div>
+
+
+
+<!-- <div class="row">
         <div class="col border-0">
             <div class="media pa-20 border  border-2  rounded-30 mb-20 ">
                 <img class="align-self-start mr-5 circle d-66" src="../../static/images/logo/qt_instance.png" alt="Generic placeholder image">
@@ -212,32 +252,17 @@
            
         </div>
     </div> -->
-    <section class="hk-sec-wrapper" >
-        <div class="row">
-            <div class="col-sm">
-                <nav class="pagination-wrap d-inline-block" aria-label="Page navigation example" style="float: right;">
-                    <ul class="pagination custom-pagination">
-                        <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#">...</a></li>
-                        <li class="page-item"><a class="page-link" href="#">8</a></li>
-                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-    </section>
-</section>
-</div>
+
+
+
 
 <!-- Apply form modal -->
-<div class="modal fade" id="exampleModalLarge01" tabindex="-1" role="dialog" aria-labelledby="exampleModalLarge01" aria-hidden="true">
+<div class="modal fade" id="exampleModalLarge01" tabindex="-1" role="dialog" aria-labelledby="exampleModalLarge01"
+    aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content  pr-6 pl-6 pd-12  pt-12" style="font-size: 16px;">
-            <div class="modal-header">
-                <h6 class="modal-title text-center">Python Developer</h6>
+            <div class="modal-header" style="background-color: #132649;">
+                <h6 class="modal-title text-center text-white">Python Developer</h6>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -254,60 +279,66 @@
                                         <div class="row">
                                             <div class="col-md-6 form-group">
                                                 <label for="firstName">Job ID</label>
-                                                <label class="form-control filled-input" id=""  value="{}" type="text">984</label>
+                                                <input class="form-control" id=""
+                                                    type="text" placeholder="984">
                                             </div>
                                             <div class="col-md-6 form-group">
                                                 <label for="lastName">Company name</label>
-                                                <label class="form-control filled-input" id=""  value="{}" type="text">QT Lines</label>                                                                    </div>
+                                                <input class="form-control " id="" type="text" placeholder="QT Lines">
+                                            </div>
                                         </div>
 
                                         <div class="row">
                                             <div class="col-md-6 form-group">
                                                 <label for="firstName">Experience</label>
-                                                <label class="form-control filled-input" id="" placeholder="" value="{}" type="text">0-1 Year</label>
+                                                <input class="form-control" id="" type="text" placeholder="0-1 Year">
                                             </div>
                                             <div class="col-md-6 form-group">
                                                 <label for="lastName">Location</label>
-                                                <label class="form-control filled-input" id=""  value="{}" type="text">Hyderabad</label>                                                                    </div>
+                                                <input class="form-control " id="" placeholder="Hyderabad"  type="text">
+                                            </div>
                                         </div>
 
                                         <div class="row">
                                             <div class="col-md-6 form-group">
                                                 <label for="firstName">First name</label>
-                                                <label class="form-control filled-input" id="firstName" placeholder="" value="{}" type="text">Madelyn</label>
+                                                <input class="form-control " id="firstName" placeholder="First Name" type="text">
                                             </div>
                                             <div class="col-md-6 form-group">
                                                 <label for="lastName">Last name</label>
-                                                <label class="form-control filled-input" id=""  value="{}" type="text">Shane</label>                                                                    </div>
+                                                <input class="form-control " id="" placeholder="Shane" type="text">
+                                            </div>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="email">Email</label>
-                                            <label class="form-control filled-input" id=""  value="{}" type="text">madelyns991@gmail.com</label>                                                                 </div>
-                                           
-                                         <div class="form-group">
-                                                <label for="phone_number">Phone Number</label>
-                                                <label class="form-control filled-input" id=""  value="{}" type="text">9090909090</label>                                                                 </div>
-    
-                                    
+                                            <input type="email" class="form-control" placeholder="example@gmail.com" id="" name="">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="phone_number">Phone Number</label>
+                                            <input type="number" class="form-control" placeholder="9876543210" id="phone_number" name="phone_number">
+                                        </div>
+
+
                                         <div class="form-group">
                                             <label for="address">Address</label>
-                                            <label class="form-control filled-input" id=""  value="{}" type="text">256 2nd st. </label>                                                                 </div>
+                                            <textarea name="" class="form-control" id="" cols="30" rows="2" placeholder="H No 7-1-618/NG/302, Flat No 302, Aditya Enclave, Ameerpet, Hyderabad, Telangana, 500016 Land Mark: Beside Ameerpet Metro Station"></textarea>
+                                        </div>
+                                        <div class="modal-footer" style="border: none;">
+                                            <button type="button" class="btn" style="background-color: #132649; color: white;">Submit</button>
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Close</button>
 
-                                        
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-primary">Submit</button>
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                
-                                            </div>
+                                        </div>
 
- 
+
                                     </form>
                                 </div>
+                            </div>
                     </div>
                 </div>
             </div>
-    </div>
-</div>
+        </div>
 
-{% endblock %}
+        {% endblock %}

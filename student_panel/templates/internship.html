@@ -1,17 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<style>
-    .container {
-    width: 100%;
-    max-width: 1500px;
-<!--    margin: 0 auto;-->
-}
-    .table-hover tbody tr:hover td {
-        color: black;
-    }
-
-</style>
 
 <!-- <div class="hk-pg-wrapper">-->
             <!-- Breadcrumb -->
@@ -24,27 +13,38 @@
             <!-- /Breadcrumb -->
 
             <!-- Container -->
-            <div class="container">
+            <div class="container-fluid">
 
                 <!-- Title -->
-                <div class="hk-pg-header">
-                    <h4 class="hk-pg-title">Internship</h4>
+                <div>
+
+                    <nav class="navbar mt-3 mb-2 ">
+                        <h4><i class="fa fa-bar-chart-o"></i>&nbsp;Internship</h4>
+                        <ul class=" nav justify-content-end float-right">
+                            <li class="breadcrumb-item">
+                                <a class="" aria-current="page" href="">Home</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a class="" href="">Internship</a>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
                 <!-- /Title -->
 
                 <!-- Row -->
                 <div class="row">
                     <div class="col-xl-12">
-                        <section class="hk-sec-wrapper">
+                        <section class="hk-sec-wrapper m-0">
 <!--                            <h5 class="hk-sec-title">Data Table</h5>-->
 <!--                            <p class="mb-40">Add advanced interaction controls to HTML tables like <code>search, pagination & selectors</code>. For responsive table just add the <code>responsive: true</code> to your DataTables function. <a href="https://datatables.net/reference/option/" >View all options</a>.</p>-->
                             <div class="row">
                                 <div class="col-sm">
                                     <div class="table-wrap">
 <!--                                        <div class="table-responsive">-->
-                                        <table id="datable_1" class="table table-hover w-100 display pb-30 table-bordered">
+                                        <table id="datable_1" class="table table-hover w-100 display mt-2 pb-30 table-bordered">
                                             <thead>
-                                                <tr class="bg-dark">
+                                                <tr style="background-color: #132649;">
                                                     <th class="text-white">S.No</th>
                                                     <th class="text-white">Company Name</th>
                                                     <th class="text-white">Task Name</th>

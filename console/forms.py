@@ -95,3 +95,11 @@ class jobrole_import_form(forms.Form):
 
 class classroom_import_form(forms.Form):
     classroom_file = forms.FileField()    
+
+
+
+class createstudent_import_form(forms.Form):
+    createstudent_file = forms.FileField()
+
+class certification_import_form(forms.Form):
+    certification_file = forms.FileField()

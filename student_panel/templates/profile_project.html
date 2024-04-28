@@ -1,271 +1,268 @@
 {% extends 'base.html' %} {% load static %} {% block content %}
+<div>
+
+    <nav class="navbar mt-3">
+        <h5>Project</h5>
+        <ul class="nav float-right justify-content-end">
+            <li class="breadcrumb-item">
+                <a class="" aria-current="page" href="{% url 'dash' %}">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a class="" aria-current="page" href="">Profile</a>
+            </li>
+ 
+        </ul>
+    </nav>
+     </div>
 <div class="container-fluid">
-  <div class="row">
-    <div class="col-xl-12 pa-0">
-      <div class="profile-cover-wrap overlay-wrap">
-        <div
-          class="profile-cover-img"
-          style="background-image: url('{% static 'dist/img/bg1.jpg' %}')"
-        ></div>
-        <div class="bg-overlay bg-trans-dark-60"></div>
-        <div class="container profile-cover-content py-3 py-sm-4 py-md-5">
-          <div class="row align-items-center">
-            <div class="col-lg-6 col-md-6 col-sm-12 mb-3 mb-md-0">
-              <div class="media">
-                <div class="media-img-wrap d-flex">
-                  <div class="avatar">
-                    <img
-                      src="{% static 'dist/img/avatar1.jpg' %}"
-                      alt="user"
-                      class="avatar-img rounded-circle"
-                    />
-                  </div>
-                </div>
-                <div class="media-body pl-3">
-                  <div
-                    class="text-white text-capitalize display-6 font-weight-400"
-                  >
-                    venkat
-                  </div>
-                  <div class="font-14 text-white">
-                    <span class="font-weight-500 pr-2">Admission No</span
-                    ><span class="mr-0">3413313</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-6">
-              <div class="button-list">
-                <a
-                  href="#"
-                  class="btn btn-dark btn-wth-icon icon-wthot-bg btn-rounded"
-                  ><span class="btn-text">Edit Profile</span
-                  ><span class="icon-label"
-                    ><i class="icon ion-md-mail"></i> </span
-                ></a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="bg-white shadow-bottom">
-  <div class="container">
-    <ul class="nav nav-light nav-tabs" role="tablist">
-      <li class="nav-item">
-        <a href="{% url 'student_profile' %}" class="nav-link d-flex align-items-center">
-          <span class="d-none d-sm-block">Over View</span>
-          <span class="d-block d-sm-none">Overview</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a href="{% url 'my_job' %}" class="nav-link d-flex align-items-center">
-          <span class="d-none d-sm-block">My Job</span>
-          <span class="d-block d-sm-none">Job</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a href="{% url 'profile_project' %}" class="nav-link d-flex align-items-center active">
-          <span class="d-none d-sm-block">Project</span>
-          <span class="d-block d-sm-none">Proj</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a href="{% url 'profile_certification' %}" class="nav-link d-flex align-items-center">
-          <span class="d-none d-sm-block">Certification</span>
-          <span class="d-block d-sm-none">Cert</span>
-        </a>
-      </li>
-    </ul>
-  </div>
-</div>
-
-      <div class="tab-content mt-sm-60 mt-30">
-        <div class="tab-pane fade show active" role="tabpanel">
-          <div class="container">
-            <div class="hk-row">
-              <div class="col-lg-12">
-                <div class="card">
-                  <div class="card-body">
-                    <div class="row">
-                    <div class="col-xl-12">
-                        <section class="hk-sec-wrapper">
-<!--                            <h5 class="hk-sec-title">Data Table</h5>-->
-<!--                            <p class="mb-40">Add advanced interaction controls to HTML tables like <code>search, pagination & selectors</code>. For responsive table just add the <code>responsive: true</code> to your DataTables function. <a href="https://datatables.net/reference/option/" >View all options</a>.</p>-->
-                            <div class="row">
-                                <div class="col-sm">
-                                    <div class="table-wrap">
-<!--                                        <div class="table-responsive">-->
-                                        <table id="datable_1" class="table table-hover w-100 display pb-30 table-bordered">
-                                            <thead>
-                                                <tr class="bg-dark">
-                                                    <th class="text-white">ID</th>
-                                                    <th class="text-white">Title</th>
-                                                    <th class="text-white">Company Name</th>
-                                                    <th class="text-white">Location</th>
-                                                    <th class="text-white">Category</th>
-                                                    <th class="text-white">Experience</th>
-                                                    <th class="text-white">Applied date</th>
-                                                    <th class="text-white">Status</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>605</td>
-                                                    <td class="text-primary " style="cursor: -webkit-grab; cursor: grab";
-                                                        data-toggle="modal"data-target="#jobdescription">DOT NET Full Stack Developer</td>                                                    <td>Ramana soft</td>
-                                                    <td>Pan India</td>
-                                                    <td>IT</td>
-                                                    <td>01</td>
-                                                    <td>1/1/2024</td>
-                                                    <td><span class="badge badge-success">Completed</span></td>
-                                                </tr>
-
-                                            </tbody>
-<!--                                            <tfoot>-->
-<!--                                                <tr>-->
-<!--                                                    <th>Name</th>-->
-<!--                                                    <th>Position</th>-->
-<!--                                                    <th>Office</th>-->
-<!--                                                    <th>Age</th>-->
-<!--                                                    <th>Start date</th>-->
-<!--                                                    <th>Salary</th>-->
-<!--                                                </tr>-->
-<!--                                            </tfoot>-->
-                                        </table>
+    <div class="row">
+        <div class="col-xl-12 pa-0">
+            <div class="profile-cover-wrap m-3 overlay-wrap">
+                <div class="profile-cover-img" style="background-image: url('{% static 'dist/img/bg1.jpg' %}')"></div>
+                <div class="bg-overlay bg-trans-dark-60"></div>
+                <div class="container profile-cover-content py-3 py-sm-4 py-md-5">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 col-md-6 col-sm-12 mb-3 mb-md-0">
+                            <div class="media">
+                                <div class="media-img-wrap d-flex">
+                                    <div class="avatar">
+                                        <img src="{% static 'dist/img/avatar1.jpg' %}" alt="user"
+                                            class="avatar-img rounded-circle" />
+                                    </div>
+                                </div>
+                                <div class="media-body pl-3">
+                                    <div class="text-white text-capitalize display-6 font-weight-400">
+                                        venkat
+                                    </div>
+                                    <div class="font-14 text-white">
+                                        <span class="font-weight-500 pr-2">Admission No</span><span
+                                            class="mr-0">3413313</span>
                                     </div>
                                 </div>
                             </div>
-                        </section>
-
-                      <!--end col-->
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="button-list">
+                                <a href="#" class="btn btn-dark btn-wth-icon icon-wthot-bg btn-rounded"><span
+                                        class="btn-text">Edit Profile</span><span class="icon-label"><i
+                                            class="icon ion-md-mail"></i> </span></a>
+                            </div>
+                        </div>
                     </div>
-                    <!--end row-->
-                  </div>
-                  <!--end card-body-->
                 </div>
-              </div>
-
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-      <div
-class="modal fade"
-id="jobdescription"
-tabindex="-1"
-role="dialog"
-aria-labelledby="jobdescription"
-aria-hidden="true"
->
-<div class="modal-dialog modal-lg" role="document">
-  <div class="modal-content">
-    <div class="modal-header bg-dark">
-      <h5 class="modal-title text-white md-3">Job description</h5>
-      <button
-        type="button"
-        class="close"
-        data-dismiss="modal"
-        aria-label="Close"
-      >
-        <span aria-hidden="true" class="text-white">&times;</span>
-      </button>
-    </div>
-      <div class="bg-white ">
-        <h5 class="text-danger px-3 pt-2 pb-30 text-center" > QT Placements</h5>
-                  <div class="px-3">
+            <div class="container-fluid">
+                <ul class="nav nav-light nav-tabs" role="tablist">
+                    <li class="nav-item">
+                        <a href="{% url 'student_profile' %}" class="nav-link d-flex align-items-center">
+                            <span class="d-none d-sm-block">Over View</span>
+                            <span class="d-block d-sm-none">Overview</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'my_job' %}" class="nav-link d-flex align-items-center">
+                            <span class="d-none d-sm-block">My Job</span>
+                            <span class="d-block d-sm-none">Job</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'profile_project' %}" class="nav-link d-flex align-items-center active">
+                            <span class="d-none d-sm-block">Project</span>
+                            <span class="d-block d-sm-none">Proj</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'profile_certification' %}" class="nav-link d-flex align-items-center">
+                            <span class="d-none d-sm-block">Certification</span>
+                            <span class="d-block d-sm-none">Cert</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="tab-content  mt-sm-60 mt-30 ">
+                <div class="tab-pane fade show active" role="tabpanel">
+                    <div class="container-fluid">
 
-                  <table class="table table-bordered border">
-                    <tr>
-                      <td style="font-weight: bold; width: 200px;">Job ID</td>
-                      <!-- <td>:</td> -->
-                      <td >101</td>
-                    </tr>
-                    <tr>
-                      <td style="font-weight: bold;">Job Title</td>
-                      <!-- <td>:</td> -->
-                      <td  >DOT NET Full Stack Developer</td>
-                    </tr>
-                    <tr>
-                      <td style="font-weight: bold;">Job Category</td>
-                      <!-- <td>:</td> -->
-                      <td  >Technical</td>
-                    </tr>
-                    <tr>
-                      <td style="font-weight: bold;">Experience</td>
-                      <!-- <td>:</td> -->
-                      <td  >1-2 years</td>
-                    </tr>
-                    <tr>
-                      <td style="font-weight: bold;">Qualification</td>
-                      <!-- <td>:</td> -->
-                      <td  >B.tech</td>
-                    </tr>
-                    <tr>
-                      <td style="font-weight: bold;">Skills</td>
-                      <!-- <td>:</td> -->
-                      <td  >Python,Html,CSS,Bootstrap,Django</td>
-                    </tr>
-                    <tr>
-                      <td style="font-weight: bold;">Role</td>
-                      <!-- <td>:</td> -->
-                      <td  >Python developer</td>
-                    </tr>
-                    <tr>
-                      <td style="font-weight: bold;">Salary</td>
-                      <!-- <td>:</td> -->
-                      <td  >4LPA</td>
-                    </tr>
-                    <tr >
-                      <td style="font-weight: bold;">location</td>
-                      <!-- <td>:</td> -->
-                      <td  >Hyderabad</td>
-                    </tr>
-                    <tr>
-                      <td style="font-weight: bold;">Email</td>
-                      <!-- <td>:</td> -->
-                      <td  >lokesh@gmail.com</td>
-                    </tr>
-                    <tr>
-                      <td style="font-weight: bold;">Contact Number</td>
-                      <!-- <td>:</td> -->
-                      <td  >9876598765</td>
-                    </tr>
-                    <tr>
-                      <td style="font-weight: bold;">Last Date to Apply</td>
-                      <!-- <td>:</td> -->
-                      <td  >23,march</td>
-                    </tr>
-                    <tr>
-                      <td style="font-weight: bold;">Posted Date</td>
-                      <!-- <td>:</td> -->
-                      <td   >30,march</td>
-                    </tr>
-                    <tr>
-                      <td style="font-weight: bold;">Job description</td>
-                      <!-- <td>:</td> -->
-                      <td>must need skills on python,html,bootstrap and django and need strong communication skills and presentation skills</td>
-                    </tr>
+                        <div class="hk-row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-xl-12">
+                                                <section class="hk-sec-wrapper">
+                                                    <!--                            <h5 class="hk-sec-title">Data Table</h5>-->
+                                                    <!--                            <p class="mb-40">Add advanced interaction controls to HTML tables like <code>search, pagination & selectors</code>. For responsive table just add the <code>responsive: true</code> to your DataTables function. <a href="https://datatables.net/reference/option/" >View all options</a>.</p>-->
+                                                    <div class="row">
+                                                        <div class="col-sm">
+                                                            <div class="table-wrap">
+                                                                <!--                                        <div class="table-responsive">-->
+                                                                <table id="datable_1"
+                                                                    class="table table-hover w-100 display mt-2 pb-30 table-bordered">
+                                                                    <thead>
+                                                                        <tr style="background-color: #132649;">
+                                                                            <th class="text-white">ID</th>
+                                                                            <th class="text-white">Title</th>
+                                                                            <th class="text-white">Company Name</th>
+                                                                            <th class="text-white">Location</th>
+                                                                            <th class="text-white">Category</th>
+                                                                            <th class="text-white">Experience</th>
+                                                                            <th class="text-white">Applied date</th>
+                                                                            <th class="text-white">Status</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td>605</td>
+                                                                            <td class="text-primary "
+                                                                                style="cursor: -webkit-grab; cursor: grab"
+                                                                                ; data-toggle="modal"
+                                                                                data-target="#jobdescription">DOT NET
+                                                                                Full Stack Developer</td>
+                                                                            <td>Ramana soft</td>
+                                                                            <td>Pan India</td>
+                                                                            <td>IT</td>
+                                                                            <td>01</td>
+                                                                            <td>1/1/2024</td>
+                                                                            <td><span
+                                                                                    class="badge badge-success">Completed</span>
+                                                                            </td>
+                                                                        </tr>
 
-                  </table>
-                  <div class="text-center py-2">
-                    <button
-                      type="button"
-                      class="btn btn-dark"
-                      data-dismiss="modal"
-                      aria-label="Close"
-                    >
-                    Close
-                  </button>
+                                                                    </tbody>
+                                                                    <!--                                            <tfoot>-->
+                                                                    <!--                                                <tr>-->
+                                                                    <!--                                                    <th>Name</th>-->
+                                                                    <!--                                                    <th>Position</th>-->
+                                                                    <!--                                                    <th>Office</th>-->
+                                                                    <!--                                                    <th>Age</th>-->
+                                                                    <!--                                                    <th>Start date</th>-->
+                                                                    <!--                                                    <th>Salary</th>-->
+                                                                    <!--                                                </tr>-->
+                                                                    <!--                                            </tfoot>-->
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </section>
+
+                                                <!--end col-->
+                                            </div>
+                                            <!--end row-->
+                                        </div>
+                                        <!--end card-body-->
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </div>
+
+
+            
         </div>
-    </div>
+        
+        <div class="modal fade" id="jobdescription" tabindex="-1" role="dialog" aria-labelledby="jobdescription"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-dark">
+                        <h5 class="modal-title text-white md-3">Job description</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="text-white">&times;</span>
+                        </button>
+                    </div>
+                    <div class="bg-white ">
+                        <h5 class="text-danger px-3 pt-2 pb-30 text-center"> QT Placements</h5>
+                        <div class="px-3">
 
-  </div>
-</div>
-</div>
+                            <table class="table table-bordered border">
+                                <tr>
+                                    <td style="font-weight: bold; width: 200px;">Job ID</td>
+                                    <!-- <td>:</td> -->
+                                    <td>101</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold;">Job Title</td>
+                                    <!-- <td>:</td> -->
+                                    <td>DOT NET Full Stack Developer</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold;">Job Category</td>
+                                    <!-- <td>:</td> -->
+                                    <td>Technical</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold;">Experience</td>
+                                    <!-- <td>:</td> -->
+                                    <td>1-2 years</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold;">Qualification</td>
+                                    <!-- <td>:</td> -->
+                                    <td>B.tech</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold;">Skills</td>
+                                    <!-- <td>:</td> -->
+                                    <td>Python,Html,CSS,Bootstrap,Django</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold;">Role</td>
+                                    <!-- <td>:</td> -->
+                                    <td>Python developer</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold;">Salary</td>
+                                    <!-- <td>:</td> -->
+                                    <td>4LPA</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold;">location</td>
+                                    <!-- <td>:</td> -->
+                                    <td>Hyderabad</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold;">Email</td>
+                                    <!-- <td>:</td> -->
+                                    <td>lokesh@gmail.com</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold;">Contact Number</td>
+                                    <!-- <td>:</td> -->
+                                    <td>9876598765</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold;">Last Date to Apply</td>
+                                    <!-- <td>:</td> -->
+                                    <td>23,march</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold;">Posted Date</td>
+                                    <!-- <td>:</td> -->
+                                    <td>30,march</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold;">Job description</td>
+                                    <!-- <td>:</td> -->
+                                    <td>must need skills on python,html,bootstrap and django and need strong
+                                        communication skills and presentation skills</td>
+                                </tr>
+
+                            </table>
+                            <div class="text-center py-2">
+                                <button type="button" class="btn btn-dark" data-dismiss="modal" aria-label="Close">
+                                    Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
 
 
-<!-- /Row -->
-{% endblock %}
+        <!-- /Row -->
+        {% endblock %}

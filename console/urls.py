@@ -44,7 +44,7 @@ urlpatterns = [
     path('topics/',views.topics,name='topics'),
     path('video_player',views.video_player,name='video_player'),
     path('language/',views.language,name="language"),
-    path('finance/',views.finance,name="finance"),
+    path('finance_view/',views.finance_view,name="finance_view"),
 
     #Questoning path
     path('quiz',views.quiz,name='quiz'),
@@ -175,12 +175,19 @@ urlpatterns = [
      path('company_vendor_export/',views.company_vendor_export,name="company_vendor_export"),
 
 
+     path('export_job_posts_to_csv/',views.export_job_posts_to_csv,name="export_job_posts_to_csv"),
+
+
+
+     path('get_company_vendor/<int:id>',views.get_company_vendor,name="get_company_vendor"),
+
+
 
 
    #  mock start here
     path('faculty_login/',views.faculty_login,name="faculty_login"),
     path('mock_dashboard/',views.mock_dashboard,name="mock_dashboard"),
-    path('student/',views.student,name="student"),
+    path('student_mock/',views.student,name="student"),
     path('faculty/',views.faculty_slot,name="faculty_slot"),
     path('facultymocks/', views.total_interviews, name="total_interviews"),
     path('past/', views.student_feedback, name="student_feedback"),
@@ -203,12 +210,28 @@ urlpatterns = [
    # mock end here
    
 
-   # certification start here
-     path('certif_dashboard',views.dashboard_certification,name='certif_dashboard'),
-    path('send_email',views.send_email,name='send_email'),
-    path('create_student',views.create_student,name='create_student'),
-   
+   # # certification start here
+# Dashboard
+    path('certif_dashboard',views.dashboard_certification,name='certif_dashboard'),
+# Filter Mails
+    path('send_email/',views.send_email,name='send_email'),
+#Craete Student
+    # certification list of students
+    path('list_student/',views.list_student,name='list_student'),
+    path('List_student_import/',views.List_student_import,name='List_student_import'),
+    path('List_student_all/',views.List_student_all,name='List_student_all'),
+    # certification Manual students
+    path('create_student/',views.create_student,name='create_student'),
+    path('create_student_edit/<int:id>',views.create_student_edit,name='create_student_edit'),
+    path('create_student_export/',views.create_student_export,name='create_student_export'),
+    path('create_student_import/',views.create_student_import,name='create_student_import'),
+    path('depnd_specilization/<int:id_course>',views.depnd_specilization,name='depnd_specilization'),
+    path('create_student_sent/',views.create_student_sent,name='create_student_sent'),
+#Bounced Mails
     path('bounced_email/',views.bounced_email,name='bounced_email'),
+    path('bounced_delete/<int:id>',views.bounced_delete,name='bounced_delete'),
+    path('bounced_edit/<int:id>',views.bounced_edit,name='bounced_edit'),
+
 
 
 

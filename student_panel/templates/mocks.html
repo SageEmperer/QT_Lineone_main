@@ -1,0 +1,522 @@
+{% extends 'base.html' %}
+{% block title %}Book a mock interview{% endblock %}
+
+{% block content %}
+<!-- message here -->
+
+{% if messages %}
+{% for message in messages %}
+{% if message.tags == "error" %}
+<div class="h-25 alert alert-danger alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
+{% elif message.tags == "success" %}
+<div class="h-25 alert alert-success alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
+{% else %}
+<div class="h-25 alert alert-info alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
+{% endif %}
+{% endfor %}
+{% endif %}
+
+
+<!-- Table starts here -->
+<div>
+
+<nav class="navbar">
+    <h4>Mocks</h4>
+    <ul class="nav float-right justify-content-end">
+        <li class="breadcrumb-item">
+            <a class="" aria-current="page" href="{% url 'dash' %}">Home</a>
+        </li>
+
+
+        <li class="breadcrumb-item active">
+            Mocks
+        </li>
+    </ul>
+</nav>
+ </div>
+<div class="container-fluid">
+    <div class="hk-pg-header mt-3 mb-2">
+        <h4 class="hk-pg-title">Booked Interviews </h4>
+
+    </div>
+    <section class="hk-sec-wrapper m-0">
+        <!-- <h4>Booked Interviews</h4> -->
+
+        <div class="d-flex align-items-center mb-3">
+
+
+            <button class="btn " style="background-color: #132649; color: white;" data-toggle="modal" data-target="#Bookinterview">Book new mock
+                <!-- <i class="fa fa-rocket"></i> -->
+            </button>
+
+            <!-- <div class="timer" style="padding-left:10px;color: red; font-weight: bold;" id="timer">00:00</div> -->
+        </div>
+        <!-- <div class="">
+ <button type="button" class="btn btn-primary mr-2 mb-3" data-toggle="modal" data-target="#Bookinterview">
+ <i class="glyphicon glyphicon-plus"></i> Add Slot
+ </button>
+ <a href="{% url 'course_export' %}" class="btn btn-success mr-2 mb-3"><i class="glyphicon glyphicon-export"></i>
+ Export</a>
+ <button type="button" class="btn btn-secondary mr-2 mb-3" data-toggle="modal" data-target="#UploadCourse">
+ <i class="glyphicon glyphicon-import"></i> Import
+ </button>
+ </div> -->
+
+        <div class="row">
+            <div class="col-sm">
+                <div class="table-wrap">
+                    <table id="datable_1" class="table table-hover mt-2 w-100 display pb-30 table-bordered ">
+                        <thead style="background-color: #132649;">
+                            <tr>
+                                <th class="text-white">S.no</th>
+                                <th class="text-white text-center">Course</th>
+                                <th class="text-white text-center">Specialization</th>
+                                <th class="text-white text-center">Faculty</th>
+                                <th class="text-white text-center">Scheduled Slot</th>
+                                <!-- <th class="text-white text-center">Mock Link</th> -->
+                                <th class="text-white text-center">Status</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr>
+                                <td>{{ slot.id }}1</td>
+                                <td class="text-center">Java</td>
+                                <td class="text-center">Fullstack</td>
+                                <td class="text-center">Jahnavi</td>
+                                <td class="text-center">{{ slot.date_time}} April 29, 2024 11:00 AM</td>
+                                <!-- <td class="text-center">
+ <button type="button" class="btn btn-link" data-toggle="tooltip" data-html="true"
+ title="<em>{{ slot.mock_link }}</b>">
+ #Mock Link
+ <button class="btn btn-icon btn-icon-only btn-icon-style-4" data-link='{{ slot.mock_link }}'><i class="fa fa-copy"></i></button>
+
+ </button>
+ </td> -->
+                                <td class="text-center">
+                                    <span class="badge badge-success badge-pill mt-15 mr-10">Active</span>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td class="text-center">Java</td>
+                                <td class="text-center">Fullstack</td>
+                                <td class="text-center">Jahnavi</td>
+                                <td class="text-center"> April 29, 2024 11:00 AM</td>
+                                <!-- <td class="text-center">
+ <button type="button" class="btn btn-link" data-toggle="tooltip" data-html="true"
+ title="<em>{{ slot.mock_link }}</b>">
+ #Mock Link
+ <button class="btn btn-icon btn-icon-only btn-icon-style-4" data-link='{{ slot.mock_link }}'><i class="fa fa-copy"></i></button>
+
+ </button>
+ </td> -->
+                                <td class="text-center">
+                                    <span class="badge badge-success badge-pill mt-15 mr-10">Active</span>
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<!-- Table ends here -->
+
+<!-- Book interview start here -->
+<div class="modal fade" id="Bookinterview" tabindex="-1" role="dialog" aria-labelledby="Bookinterview"
+ aria-hidden="true">
+ <div class="modal-dialog modal-dialog-centered" role="document">
+ <div class="modal-content">
+ <div class="modal-header" style="background-color: #132649;">
+ <h5 class="modal-title text-white">Book Slot</h5>
+ <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+ <span aria-hidden="true">&times;</span>
+ </button>
+ </div>
+ <form id="slot_add" method="post" action="{% url 'admin_mock' %}">
+ {% csrf_token %}
+ <div class="modal-body">
+ <div class="mb-3">
+ <label for="" class="form-label">Course<span class="text-danger"> *</span></label>
+ <select class="form-control custom-select id_course" name="course_name">
+ <option selected value="">Select Course</option>
+ {% for i in course %}
+ 
+ <option value="{{i.id}}">{{ i.course_name }}</option>
+
+ {% endfor %}
+ </select>
+ </div>
+ <div class="mb-3">
+ <label for="" class="form-label">Specialization <span class="text-danger">*</span></label>
+ <select class="form-control custom-select" id="specialization" name="specialization" >
+ <option selected value="">Select Your Specialization</option>
+ {% for i in specialization %}
+ 
+ <option value="{{i.id}}">{{ i.course_name }} {{ i.specilalization_name }}</option>
+
+ {% endfor %}
+ </select>
+ </div>
+ <div class="mb-3">
+ <label for="" class="form-label">Faculty <span class="text-danger">*</span></label>
+ <select class="form-control custom-select select2" name="faculty" id="faculty">
+ <option value="" disabled selected>Please Select</option>
+ <option value="1">vijaya</option>
+ <option value="2">Rashmika</option>
+ </select>
+ </div>
+
+ <div class="mb-3">
+ <label for="" class="form-label">Available Slot <span class="text-danger">*</span></label>
+ <select class="form-control custom-select" id="available_slot" name="available_slot" >
+ <option value="">Select Your Specialization</option>
+ <option value="">Select Your Specialization</option>
+ <option value="">Select Your Specialization</option>
+ </select>
+ </div>
+
+ <div class="mb-3">
+ <label for="" class="form-label">Upload Resume<span class="text-danger"> *</span></label>
+ <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+ <div class="input-group-prepend">
+ <span class="input-group-text">Upload</span>
+ </div>
+ <div class="form-control text-truncate" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
+ <span class="input-group-append">
+<span class=" btn btn-file" style="background-color: #132649; color: white;"><span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span>
+<input aria-describedby="inputGroupFileAddon03" aria-label="Upload" 
+name="chapter_image" accept="application/pdf" type="file">
+ </span>
+ <a href="#" class="btn btn-secondary fileinput-exists" data-dismiss="fileinput">Remove</a>
+ </span>
+ </div>
+ 
+
+ </div>
+ </div>
+ <div class="modal-footer d-flex justify-content-center">
+ <button type="submit" class="btn" style="background-color: #132649; color: white;">Book</button>
+ <button type="reset" class="btn btn-secondary" data-dismiss="modal" >Cancel</button>
+ </div>
+ </form>
+ </div>
+ </div>
+</div>
+
+<!-- Book interview ends here -->
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+ // Define handleOptionChange function
+ function handleOptionChange() {
+ var rescheduleRadio = document.getElementById("customRadio1");
+ var cancelRadio = document.getElementById("customRadio2");
+ var dateTimeInput = document.getElementById("dateTime");
+ var linkTextarea = document.getElementById("mockLink");
+ var reasonTextarea = document.getElementById("reasonField");
+
+ if (rescheduleRadio.checked) {
+ dateTimeInput.disabled = false;
+ linkTextarea.disabled = false;
+ reasonTextarea.disabled = true;
+ reasonTextarea.value = ''; // Clear the value
+ $('#radioError').html(''); // Clear error message
+ } else if (cancelRadio.checked) {
+ dateTimeInput.disabled = true;
+ dateTimeInput.value = ''; // Clear the value
+ linkTextarea.disabled = true;
+ linkTextarea.value = ''; // Clear the value
+ reasonTextarea.disabled = false;
+ $('#radioError').html(''); // Clear error message
+ }
+ }
+
+ // Validate form using jQuery Validation Plugin
+ $(document).ready(function () {
+ $.validator.addMethod("overspecialization", function (value, element) {
+ return !/\d/.test(value);
+ }, "Please enter a valid value.");
+
+ $.validator.addMethod("radioRequired", function (value, element) {
+ return $('input[name="customRadio"]:checked').length > 0;
+ }, "Please select an option.");
+
+ $("#Edit_slot").validate({
+ rules: {
+ dateTime: {
+ required: true,
+ overspecialization: false
+ },
+ link: {
+ required: true,
+ overspecialization: true
+ },
+ feedback: {
+ required: true,
+ },
+ customRadio: {
+ radioRequired: true
+ }
+
+ },
+ messages: {
+ dateTime: {
+ required: "Please Select Slot."
+ },
+ link: {
+ required: "Please provide link."
+ },
+ feedback: {
+ required: " Please enter a reason",
+ },
+ customRadio: {
+ radioRequired: "Please select an option."
+ }
+
+ },
+ errorPlacement: function (error, element) {
+ if (element.attr("name") == "customRadio") {
+ error.appendTo("#radioError");
+ } else {
+ error.insertAfter(element);
+ }
+ },
+ submitHandler: function (form) {
+ form.submit();
+ },
+ });
+ });
+</script>
+<!-- script for reschedule and cancel ends here-->
+<!-- radio buttons -->
+<script>
+ // JavaScript to handle radio button selection and modal display
+ document.getElementById("confirmAction").addEventListener("click", function () {
+ var selectedAction = document.querySelector('input[name="customRadio"]:checked').value;
+ if (selectedAction === "Reschedule Slot") {
+ $('#rescheduleModal').modal('show');
+ } else if (selectedAction === "Cancel Slot") {
+ $('#cancelModal').modal('show');
+ }
+ });
+</script>
+<!-- radio buttons ends-->
+
+<!-- script for timer starts here-->
+<script>
+ function startTimer(duration, timerDisplay) {
+ var start = Date.now();
+ var intervalId = setInterval(function () {
+ var diff = duration - (((Date.now() - start) / 1000) | 0);
+
+ var minutes = (diff / 60) | 0;
+ var seconds = (diff % 60) | 0;
+
+ minutes = minutes < 10 ? "0" + minutes : minutes;
+ seconds = seconds < 10 ? "0" + seconds : seconds;
+
+ timerDisplay.textContent = minutes + ":" + seconds;
+
+ if (diff <= 0) {
+ clearInterval(intervalId);
+ timerDisplay.textContent = "Time's up!";
+ }
+ }, 1000);
+ }
+
+ // Example: Set timer for 5 minutes (300 seconds) for each timer element
+ document.querySelectorAll('.timer').forEach(function (timer) {
+ startTimer(300, timer);
+ });
+</script>
+<!-- script for timer ends here-->
+<script>
+ $(document).ready(function () {
+ $.validator.addMethod("overspecialization", function (value, element) {
+ return !/\d/.test(value);
+ },);
+
+ $("#slot_add").validate({
+ rules: {
+ datetime: {
+ required: true,
+ overspecialization: false
+ },
+ link: {
+ required: true,
+ overspecialization: false
+ },
+ course: {
+ required: true,
+ },
+ specialization: {
+ required: true,
+ },
+ faculty: {
+ required: true,
+ },
+ },
+ messages: {
+ datetime: {
+ required: "Please Select Slot."
+ },
+ link: {
+ required: "Please provide link."
+ },
+ course: {
+ required: "Please Select Course."
+ },
+ specialization: {
+ required: " Please Select Specialization."
+ },
+ faculty: {
+ required: "Please Select Faculty."
+ },
+ },
+ submitHandler: function (form) {
+ form.submit();
+ },
+ });
+
+ // Set the minimum value of the datetime input field to the current date and time
+ var currentDate = new Date().toISOString().slice(0, 16);
+ $("#datetime").attr("min", currentDate);
+
+ // Function to reset the input field if a past date or time is entered
+ $("#datetime").on("change", function () {
+ var selectedDateTime = new Date($(this).val());
+ var currentDateTime = new Date();
+
+ // Compare selected datetime with current datetime
+ if (selectedDateTime < currentDateTime) {
+ // If selected datetime is in the past, reset the input field
+ $(this).val('');
+ }
+ });
+ });
+
+</script>
+
+
+
+<script>
+ function validateUploadForm(form) {
+ $(form).find('#input-file-now').on('change', function () {
+ var file = this.files[0];
+ var fileExt = file.name.split('.').pop().toLowerCase();
+
+ if (fileExt === 'csv') {
+ $(form).find('button[type="submit"]').prop('disabled', false);
+ $(form).find('#input-file-now').html('');
+ } else {
+ $(form).find('button[type="submit"]').prop('disabled', true);
+ $(form).find('#csvPreview').html('<span style="color: red;">Only CSV files are allowed.</span>');
+ }
+ });
+
+ $(form).on('submit', function (e) {
+ var file = $(form).find('#input-file-now')[0].files[0];
+
+ if (!file) {
+ e.preventDefault();
+ $(form).find('#csvPreview').html('<span style="color: red;">Please select a csv file.</span>');
+ }
+ });
+ }
+
+ $('#UploadCourse').on('shown.bs.modal', function () {
+ validateUploadForm($(this).find('form'));
+ });
+</script>
+
+<script>
+ $(document).ready(function () {
+ $('course_name').change(function(){
+ var courseID = $(this).val();
+ var url = 'mocks/'+courseID
+ $.ajax({
+ url:url,
+ success:function(data){
+ var course_list = data.course_list;
+ var options = '<option value="">Select Your Course</option>';
+ for (var i = 0; i < course_list.length; i++) {
+ options += '<option value="' + course_list[i].id + '">' + course_list[i].name + '</option>';
+ }
+ $('specialization').html(options);
+ }
+ });
+ });
+ $('specialization').change(function(){
+ var specializationID = $(this).val();
+ var url = 'mocks/'+specializationID
+ $.ajax({
+ url:url,
+ success:function(data){
+ var specialization_list = data.specialization_list;
+ var options = '<option value="">Select Your Specialization</option>';
+ for (var i = 0; i < course_list.length; i++) {
+ options += '<option value="' + specialization_list[i].id + '">' + specialization_list[i].name + '</option>';
+ }
+ $('faculty').html(options);
+ }
+ });
+ });
+ $('faculty').change(function(){
+ var facultyID = $(this).val();
+ var url = 'mocks/'+facultyID
+ $.ajax({
+ url:url,
+ success:function(data){
+ var faculty_list = data.faculty_list;
+ var options = '<option value="">Select Faculty</option>';
+ for (var i = 0; i < course_list.length; i++) {
+ options += '<option value="' + faculty_list[i].id + '">' + faculty_list[i].name + '</option>';
+ }
+ $('time_slot').html(options);
+ }
+ });
+ });
+ $('time_slot').change(function(){
+ var time_slotID = $(this).val();
+ var url = 'mocks/'+time_slotID
+ $.ajax({
+ url:url,
+ success:function(data){
+ var time_slot_list = data.time_slot_list;
+ var options = '<option value="">Available time slots </option>';
+ for (var i = 0; i < course_list.length; i++) {
+ options += '<option value="' + time_slot_list[i].id + '">' + time_slot_list[i].name + '</option>';
+ }
+ $('').html(options);
+ }
+ });
+ });
+
+
+ });
+</script>
+
+
+
+{% endblock %}

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'console',
     'student_panel',
     'rest_framework',
+    'parent_panel',
     
 ]
 

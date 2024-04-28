@@ -1,370 +1,378 @@
 {% extends 'base.html' %} {% load static %} {% block content %}
+<div>
+    <nav class="navbar mt-3 ">
+        <h5>Profile</h5>
+        <ul class="nav float-right justify-content-end ">
+            <li class="breadcrumb-item">
+                <a class="" aria-current="page" href="{% url 'dash' %}">Home</a>&nbsp;&nbsp;
+            </li>
+            <!-- <li class="breadcrumb-item">
+                <a class="" href="{% url 'my_courses' %}">My Courses</a>
+              </li>
+              
+              <li class="breadcrumb-item active">
+                Mocks
+              </li> -->
+        </ul>
+    </nav>
+</div>
 <div class="container-fluid">
-  <div class="row">
-    <div class="col-xl-12 pa-0">
-      <div class="profile-cover-wrap overlay-wrap">
-        <div class="profile-cover-img" style="background-image: url('{% static 'dist/img/bg1.jpg' %}')"></div>
-          <div class="bg-overlay bg-trans-dark-60"></div>
-          <div class="container profile-cover-content py-3 py-sm-4 py-md-5">
-            <div class="row align-items-center">
-              <div class="col-lg-6 col-md-6 col-sm-12 mb-3 mb-md-0">
-                <div class="media">
-                  <div class="media-img-wrap d-flex">
-                    <div class="avatar">
-                      <img src="{% static 'dist/img/avatar1.jpg' %}" alt="user" class="avatar-img rounded-circle" />
-                    </div>
-                  </div>
-                  <div class="media-body pl-3">
-                    <div class="text-white text-capitalize display-6 font-weight-400">venkat</div>
-                    <div class="font-14 text-white">
-                      <span class="font-weight-500 pr-2">Admission No</span><span class="mr-0">3413313</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="button-list d-flex justify-content-lg-end">
-                  <a href="#" class="btn btn-dark btn-wth-icon icon-wthot-bg btn-rounded" data-toggle="modal" data-target="#exampleModalCenter" >
-                    <span class="btn-text">Edit Profile</span>
-                    <span class="icon-label"><i class="icon ion-md-mail"></i> </span>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      <div class="bg-white shadow-bottom">
-  <div class="container">
-    <ul class="nav nav-light nav-tabs" role="tablist">
-      <li class="nav-item">
-        <a href="{% url 'student_profile' %}" class="nav-link d-flex align-items-center active">
-          <span class="d-none d-sm-block">Over View</span>
-          <span class="d-block d-sm-none">Overview</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a href="{% url 'my_job' %}" class="nav-link d-flex align-items-center">
-          <span class="d-none d-sm-block">My Job</span>
-          <span class="d-block d-sm-none">Job</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a href="{% url 'profile_project' %}" class="nav-link d-flex align-items-center">
-          <span class="d-none d-sm-block">Project</span>
-          <span class="d-block d-sm-none">Proj</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a href="{% url 'profile_certification' %}" class="nav-link d-flex align-items-center">
-          <span class="d-none d-sm-block">Certification</span>
-          <span class="d-block d-sm-none">Cert</span>
-        </a>
-      </li>
-    </ul>
-  </div>
-</div>
-
-      <div class="tab-content mt-sm-60 mt-30">
-        <div class="tab-pane fade show active" role="tabpanel">
-          <div class="container">
-            <div class="hk-row">
-              <div class="col-lg-7">
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title mb-3">About</h5>
-                    <p style="font-size:13px">
-                      Hi I'm venkatasai s, It will be as simple as Occidental;
-                      in fact, it will be Occidental. To an English person, it
-                      will seem like simplified English, as a skeptical
-                      Cambridge friend of mine told me what Occidental is
-                      European languages are members of the same family.
-                    </p>
-                    <p style="font-size: 13px">
-                      You always want to make sure that your fonts work well
-                      together and try to limit the number of fonts you use to
-                      three or less. Experiment and play around with the fonts
-                      that you already have in the software you’re working with
-                      reputable font websites. This may be the most commonly
-                      encountered tip I received from the designers I spoke
-                      with. They highly encourage that you use different fonts
-                      in one design, but do not over-exaggerate and go
-                      overboard.
-                    </p>
-                    <div class="row">
-                      <div class="col-6 col-md-4">
-                        <div class="d-flex mt-4">
-                          <div
-                            class="flex-shrink-0 avatar-xs align-self-center me-3"
-                          >
-                            <div
-                              class="avatar-title bg-light rounded-circle fs-16 text-primary"
-                            >
-                              <i class="ri-user-2-fill"></i>
-                            </div>
-                          </div>
-                          <div class="flex-grow-1 overflow-hidden">
-                            <p class="mb-1" style="font-size: 13px">
-                              Designation :
-                            </p>
-                            <h6 class="text-truncate mb-0" style="font-size: 13px">
-                              Lead Designer / Developer
-                            </h6>
-                          </div>
-                        </div>
-                      </div>
-                      <!--end col-->
-                      <div class="col-6 col-md-4">
-                        <div class="d-flex mt-4">
-                          <div
-                            class="flex-shrink-0 avatar-xs align-self-center me-3"
-                          >
-                            <div
-                              class="avatar-title bg-light rounded-circle fs-16 text-primary"
-                            >
-                              <i class="ion ion-ios-gl"></i>
-                            </div>
-                          </div>
-                          <div class="flex-grow-1">
-                            <p class="mb-1" style="font-size: 13px">
-                              Website :
-                            </p>
-                            <a
-                              class="fw-semibold"
-                              href="https://qualitythought.in/"
-                              >www.qualitythought.com</a
-                            >
-                          </div>
-                        </div>
-                      </div>
-                      <!--end col-->
-                    </div>
-                    <!--end row-->
-                  </div>
-                  <!--end card-body-->
-                </div>
-              </div>
-              <div class="col-lg-5">
-                <div class="card card-profile-feed">
-                  <div class="card-header card-header-action">
-                    <div class="media align-items-center">
-                      <div class="media-img-wrap d-flex mr-10">
-                        <div class="avatar avatar-sm">
-                          <img
-                            src="{% static 'dist/img/avatar1.jpg' %}"
-                            alt="user"
-                            class="avatar-img rounded-circle"
-                          />
-                        </div>
-                      </div>
-                      <div class="media-body">
-                        <div class="text-capitalize font-weight-500 text-dark">
-                          venkat
-                        </div>
-                        <div class="font-13">Student</div>
-                      </div>
-                    </div>
-                    <div class="d-flex align-items-center card-action-wrap">
-                      <div class="inline-block dropdown">
-                        <a
-                          class="dropdown-toggle no-caret"
-                          data-toggle="dropdown"
-                          href="#"
-                          aria-expanded="false"
-                          role="button"
-                          ><i class="ion ion-ios-settings"></i
-                        ></a>
-                        <div class="dropdown-menu dropdown-menu-right">
-                          <a class="dropdown-item" href="#">Action</a>
-                          <a class="dropdown-item" href="#">Edit</a>
-                          <a class="dropdown-item" href="#"
-                            >Something else here</a
-                          >
-                          <div class="dropdown-divider"></div>
-                          <a class="dropdown-item" href="#">Separated link</a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="table-responsive">
-                    <table class="table table-borderless mb-0">
-                      <tbody>
-                        <tr>
-                          <th class="ps-0" scope="row">Student Id :</th>
-                          <td class="text-muted">24IH508</td>
-                        </tr>
-                        <tr>
-                          <th class="ps-0" scope="row">Student Name:</th>
-                          <td class="text-muted">venkatasai s</td>
-                        </tr>
-                        <tr>
-                          <th class="ps-0" scope="row">Mobile No :</th>
-                          <td class="text-muted">+(91) 9398024041</td>
-                        </tr>
-                        <tr>
-                          <th class="ps-0" scope="row">E-mail :</th>
-                          <td class="text-muted">
-                            balanagavenkatasai@gmail.com
-                          </td>
-                        </tr>
-
-                        <tr>
-                          <th class="ps-0" scope="row">Location :</th>
-                          <td class="text-muted">Hyderabad, India</td>
-                        </tr>
-                        <tr>
-                          <th class="ps-0" scope="row">Joining Date :</th>
-                          <td class="text-muted">March 27, 2024, 1:22 p.m.</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-      <!-- end card -->
-
-
-  <div class="row">
-    <div class="col-lg-12">
-      <div class="card">
-        <div class="row">
-          <div class="col-md col-lg col-sm">
-            <div class="form-group">
-              <h5 class="card-header">Education Qualification</h5>
-            </div>
-          </div>
-        </div>
-        <div class="table-responsive mb-1">
-          <table
-            class="table align-middle table-nowrap table-bordered"
-            id="customerTable1"
-          >
-            <thead class="table text-center bg-dark">
-              <tr class="text-center">
-                <th class="text-white">Education</th>
-                <th class="text-white">School / College Name</th>
-                <th class="text-white">Passed Out Year</th>
-                <th class="text-white">Percentage</th>
-              </tr>
-            </thead>
-            <tbody align="center" class="list form-check-all">
-              <tr>
-                <td>SSC</td>
-                <td>Zepto High School</td>
-                <td>2014</td>
-                <td>70%</td>
-              </tr>
-              <tr>
-                <td>Intermediate</td>
-                <td>Whatsapp jr College</td>
-                <td>2016</td>
-                <td>70%</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <!-- end card -->
-    </div>
-    <!-- end col -->
-  </div>
-</div>
-<!-- /Row -->
-
-<!--edit modal-->
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title">Edit Profile</h5>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                  <div class="row">
-                                <div class="col-sm">
-                                    <form class="needs-validation" novalidate>
-                                        <div class="form-row">
-                                            <div class="col-md-6 mb-10">
-                                                <label for="validationCustom01">First name</label>
-                                                <input type="text" class="form-control" id="validationCustom01" placeholder="First name" value="Mark" required>
-                                                <div class="valid-feedback">
-                                                    Looks good!
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6 mb-10">
-                                                <label for="validationCustom02">Last name</label>
-                                                <input type="text" class="form-control" id="validationCustom02" placeholder="Last name" value="Otto" required>
-                                                <div class="valid-feedback">
-                                                    Looks good!
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                        <div class="form-row">
-                                            <div class="col-md-6 mb-10">
-                                                <label for="validationCustom03">Mobile_Number</label>
-                                                <input type="text" class="form-control" id="validationCustom03" placeholder="Mobile_number" required>
-                                                <div class="invalid-feedback">
-                                                    Please provide a valid Mobile Number.
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6 mb-10">
-                                                <label for="validationCustom04">Email</label>
-                                                <input type="text" class="form-control" id="validationCustom04" placeholder="Email" required>
-                                                <div class="invalid-feedback">
-                                                    Please provide a valid Email.
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                        <div class="form-row">
-                                            <div class="col-md-6 mb-10">
-                                                <div class="form-group">
-                                                     <label for="validationCustom04">Education</label>
-                                            <select class="form-control custom-select" required>
-
-                                                <option value="">Open this select menu</option>
-                                                <option value="1">SSC</option>
-                                                <option value="2">Inter/Diplamo</option>
-                                                <option value="3">B.Tech</option>
-                                            </select>
-                                            <div class="invalid-feedback">Example invalid custom select feedback</div>
-                                        </div>
-                                            </div>
-                                            <div class="col-md-6 mb-10">
-                                                <label for="validationCustom04">School/Collage</label>
-                                                <input type="text" class="form-control" id="validationCustom0" placeholder="School/college" required>
-                                                <div class="invalid-feedback">
-                                                    Please provide a valid School/college.
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-check custom-control custom-checkbox">
-                                                <input type="checkbox" class="form-check-input custom-control-input" id="invalidCheck" required>
-                                                <label class="form-check-label custom-control-label" for="invalidCheck">
-                                                    Agree to terms and conditions
-                                                </label>
-                                                <div class="invalid-feedback">
-                                                    You must agree before submitting.
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <button class="btn btn-primary" type="submit">Submit form</button>
-                                    </form>
+    <div class="row">
+        <div class="col-xl-12 pa-0">
+            <div class="profile-cover-wrap overlay-wrap mr-3 ml-3 mt-3 mb-0">
+                <div class="profile-cover-img" style="background-image: url('{% static 'dist/img/bg1.jpg' %}')"></div>
+                <div class="bg-overlay bg-trans-dark-60"></div>
+                <div class="container profile-cover-content py-3 py-sm-4 py-md-5">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 col-md-6 col-sm-12 mb-3 mb-md-0">
+                            <div class="media">
+                                <div class="media-img-wrap d-flex">
+                                    <div class="avatar">
+                                        <img src="{% static 'dist/img/avatar1.jpg' %}" alt="user"
+                                            class="avatar-img rounded-circle" />
+                                    </div>
+                                </div>
+                                <div class="media-body pl-3">
+                                    <div class="text-white text-capitalize display-6 font-weight-400">venkat</div>
+                                    <div class="font-14 text-white">
+                                        <span class="font-weight-500 pr-2">Admission No</span><span
+                                            class="mr-0">3413313</span>
+                                    </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="button-list d-flex justify-content-lg-end">
+                                <a href="#" class="btn btn-dark btn-wth-icon icon-wthot-bg btn-rounded"
+                                    data-toggle="modal" data-target="#exampleModalCenter">
+                                    <span class="btn-text">Edit Profile</span>
+                                    <span class="icon-label"><i class="icon ion-md-mail"></i> </span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="container-fluid ">
+                <ul class="nav nav-light nav-tabs " role="tablist">
+                    <li class="nav-item">
+                        <a href="{% url 'student_profile' %}" class="nav-link d-flex align-items-center active">
+                            <span class="d-none d-sm-block">Over View</span>
+                            <span class="d-block d-sm-none">Overview</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'my_job' %}" class="nav-link d-flex align-items-center">
+                            <span class="d-none d-sm-block">My Job</span>
+                            <span class="d-block d-sm-none">Job</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'profile_project' %}" class="nav-link d-flex align-items-center">
+                            <span class="d-none d-sm-block">Project</span>
+                            <span class="d-block d-sm-none">Proj</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'profile_certification' %}" class="nav-link d-flex align-items-center">
+                            <span class="d-none d-sm-block">Certification</span>
+                            <span class="d-block d-sm-none">Cert</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            
+            <div class="tab-content mt-sm-60 mt-30 float-left mx-auto">
+                <div class="tab-pane fade show active" role="tabpanel">
+                    <div class="container-fluid">
+                        <h5 class="">About</h5>
+                        <div class="row">
+                            <div class="col-lg-7 ">
+
+                                <div class="card shadow float-left">
+                                    <div class="card-body">
+
+                                        <p style="font-size:16px">
+                                            Hi I'm venkatasai s, It will be as simple as Occidental;
+                                            in fact, it will be Occidental. To an English person, it
+                                            will seem like simplified English, as a skeptical
+                                            Cambridge friend of mine told me what Occidental is
+                                            European languages are members of the same family.
+                                        </p>
+                                        <p style="font-size: 16px">
+                                            You always want to make sure that your fonts work well
+                                            together and try to limit the number of fonts you use to
+                                            three or less. Experiment and play around with the fonts
+                                            that you already have in the software you’re working with
+                                            reputable font websites. This may be the most commonly
+                                            encountered tip I received from the designers I spoke
+                                            with. They highly encourage that you use different fonts
+                                            in one design, but do not over-exaggerate and go
+                                            overboard.
+                                        </p>
+                                        <div class="row">
+                                            <div class="col-6 col-md-4">
+                                                <div class="d-flex mt-4">
+                                                    <div class="flex-shrink-0 avatar-xs align-self-center me-3">
+                                                        <div
+                                                            class="avatar-title bg-light rounded-circle fs-16 text-primary">
+                                                            <i class="ri-user-2-fill"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex-grow-1 overflow-hidden">
+                                                        <p class="mb-1" style="font-size: 13px">
+                                                            Designation :
+                                                        </p>
+                                                        <h6 class="text-truncate mb-0" style="font-size: 13px">
+                                                            Lead Designer / Developer
+                                                        </h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--end col-->
+                                            <div class="col-6 col-md-4">
+                                                <div class="d-flex mt-4">
+                                                    <div class="flex-shrink-0 avatar-xs align-self-center me-3">
+                                                        <div
+                                                            class="avatar-title bg-light rounded-circle fs-16 text-primary">
+                                                            <i class="ion ion-ios-gl"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex-grow-1">
+                                                        <p class="mb-1" style="font-size: 13px">
+                                                            Website :
+                                                        </p>
+                                                        <a class="fw-semibold"
+                                                            href="https://qualitythought.in/">www.qualitythought.com</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--end col-->
+                                        </div>
+                                        <!--end row-->
+                                    </div>
+                                    <!--end card-body-->
+                                </div>
+                            </div>
+                            <div class="col-lg-5">
+                                <div class="card shadow card-profile-feed">
+                                    <div class="card-header card-header-action">
+                                        <div class="media align-items-center">
+                                            <div class="media-img-wrap d-flex mr-10">
+                                                <div class="avatar avatar-sm">
+                                                    <img src="{% static 'dist/img/avatar1.jpg' %}" alt="user"
+                                                        class="avatar-img rounded-circle" />
+                                                </div>
+                                            </div>
+                                            <div class="media-body">
+                                                <div class="text-capitalize font-weight-500 text-dark">
+                                                    venkat
+                                                </div>
+                                                <div class="font-13">Student</div>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center card-action-wrap">
+                                            <div class="inline-block dropdown">
+                                                <a class="dropdown-toggle no-caret" data-toggle="dropdown" href="#"
+                                                    aria-expanded="false" role="button"><i
+                                                        class="ion ion-ios-settings"></i></a>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <a class="dropdown-item" href="#">Action</a>
+                                                    <a class="dropdown-item" href="#">Edit</a>
+                                                    <a class="dropdown-item" href="#">Something else here</a>
+                                                    <div class="dropdown-divider"></div>
+                                                    <a class="dropdown-item" href="#">Separated link</a>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="table-responsive">
+                                        <table class="table table-borderless mb-0">
+                                            <tbody>
+                                                <tr>
+                                                    <th class="ps-0" scope="row">Student Id :</th>
+                                                    <td class="text-muted">24IH508</td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="ps-0" scope="row">Student Name:</th>
+                                                    <td class="text-muted">venkatasai s</td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="ps-0" scope="row">Mobile No :</th>
+                                                    <td class="text-muted">+(91) 9398024041</td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="ps-0" scope="row">E-mail :</th>
+                                                    <td class="text-muted">
+                                                        balanagavenkatasai@gmail.com
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <th class="ps-0" scope="row">Location :</th>
+                                                    <td class="text-muted">Hyderabad, India</td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="ps-0" scope="row">Joining Date :</th>
+                                                    <td class="text-muted">March 27, 2024, 1:22 p.m.</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end card -->
+
+    <h5 class="">Education Qualification</h5>
+    <div class="row">
+
+        <div class="col-lg-12">
+            <div class="card shadow">
+                <div class="row">
+                    <div class="col-md col-lg col-sm">
+                        <div class="form-group">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="m-4">
+                    <table class="table align-middle  table-bordered" id="customerTable1">
+                        <thead class="table text-center  mr-2">
+                            <tr class="text-center" style="background-color: #132649;">
+                                <th class="text-white">Education</th>
+                                <th class="text-white">School / College Name</th>
+                                <th class="text-white">Passed Out Year</th>
+                                <th class="text-white">Percentage</th>
+                            </tr>
+                        </thead>
+                        <tbody align="center" class="list form-check-all">
+                            <tr>
+                                <td>SSC</td>
+                                <td>Zepto High School</td>
+                                <td>2014</td>
+                                <td>70%</td>
+                            </tr>
+                            <tr>
+                                <td>Intermediate</td>
+                                <td>Whatsapp jr College</td>
+                                <td>2016</td>
+                                <td>70%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- end card -->
+        </div>
+        <!-- end col -->
+    </div>
+</div>
+<!-- /Row -->
+
+<!--edit modal-->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Profile</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm">
+                        <form class="needs-validation" novalidate>
+                            <div class="form-row">
+                                <div class="col-md-6 mb-10">
+                                    <label for="validationCustom01">First name</label>
+                                    <input type="text" class="form-control" id="validationCustom01"
+                                        placeholder="First name" value="Mark" required>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-10">
+                                    <label for="validationCustom02">Last name</label>
+                                    <input type="text" class="form-control" id="validationCustom02"
+                                        placeholder="Last name" value="Otto" required>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-6 mb-10">
+                                    <label for="validationCustom03">Mobile_Number</label>
+                                    <input type="text" class="form-control" id="validationCustom03"
+                                        placeholder="Mobile_number" required>
+                                    <div class="invalid-feedback">
+                                        Please provide a valid Mobile Number.
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-10">
+                                    <label for="validationCustom04">Email</label>
+                                    <input type="text" class="form-control" id="validationCustom04" placeholder="Email"
+                                        required>
+                                    <div class="invalid-feedback">
+                                        Please provide a valid Email.
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-6 mb-10">
+                                    <div class="form-group">
+                                        <label for="validationCustom04">Education</label>
+                                        <select class="form-control custom-select" required>
+
+                                            <option value="">Open this select menu</option>
+                                            <option value="1">SSC</option>
+                                            <option value="2">Inter/Diplamo</option>
+                                            <option value="3">B.Tech</option>
+                                        </select>
+                                        <div class="invalid-feedback">Example invalid custom select feedback</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-10">
+                                    <label for="validationCustom04">School/Collage</label>
+                                    <input type="text" class="form-control" id="validationCustom0"
+                                        placeholder="School/college" required>
+                                    <div class="invalid-feedback">
+                                        Please provide a valid School/college.
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+                                <div class="form-check custom-control custom-checkbox">
+                                    <input type="checkbox" class="form-check-input custom-control-input"
+                                        id="invalidCheck" required>
+                                    <label class="form-check-label custom-control-label" for="invalidCheck">
+                                        Agree to terms and conditions
+                                    </label>
+                                    <div class="invalid-feedback">
+                                        You must agree before submitting.
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" type="submit">Submit form</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

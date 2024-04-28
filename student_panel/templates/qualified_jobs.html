@@ -4,191 +4,225 @@
 
 {% block content %}
 
-    <nav class="navbar">
-            <ul class=" nav justify-content-end">
-                <li class="breadcrumb-item">
-                  <a class="" aria-current="page" href="">Home</a>
-                </li>
-                <li class="breadcrumb-item">
-                  <a class="" href="{% url 'jobs' %}">Placements</a>
-                </li>
-                <li class="breadcrumb-item active">
-                  Qualified Jobs
-                </li>
-              </ul>
-      </nav>
+<div>
 
+    <nav class="navbar mt-3 mb-2 ">
+        <h4>Placements</h4>
+        <ul class=" nav justify-content-end float-right">
+            <li class="breadcrumb-item">
+                <a class="" aria-current="page" href="">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a class="" href="{% url 'jobs' %}">Placements</a>
+            </li>
 
-
-
-            <div class="col-xl-12 pa-0">
-                <div class="profile-cover-wrap overlay-wrap">
-                    <div class="profile-cover-img" style="background-image:url('../../static/dist/img/bg1.jpg')"></div>
-                    <div class="bg-overlay bg-trans-dark-60"></div>
-                    <div class="container profile-cover-content py-50">
-                        <div class="hk-row"> 
-                            <div class="col-lg-12">
-                                <div class="media align-items-center">
-                                    <div class="media-img-wrap  d-flex">
-                                        <div class="avatar">
-                                            <img src="../../static/dist/img/avatar1.jpg" alt="user" class="avatar-img rounded-circle">
-                                        </div>
-                                    </div>
-                                    <div class="media-body">
-                                        <div class="text-white text-capitalize display-6 mb-1 font-weight-400">Madelyn Shane
-
-                                            <i class=" fa fa-check-circle-o text-primary"></i>
-
-                                        </div>
-                                        <p class="text-white  font-weight-200">
-                                            Full Stack Python Developer
-                                            <br>
-                                            Date of joining: April 8th 2024
-                                         </p>
-                                        
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="button-list">
-                                    <a href="{% url 'jobs' %}" class="btn btn-light btn-wth-icon icon-wthot-bg btn-rounded"><span class="btn-text">Matched Jobs</span><span class="icon-label"><i class="icon ion-md-mail"></i> </span></a>
-                                    <a href="{% url 'applied_jobs' %}" class="btn btn-light btn-wth-icon icon-wthot-bg btn-rounded"><span class="btn-text">Applied Jobs</span><span class="icon-label"><i class="icon ion-md-mail"></i> </span></a>
-                                    <a href="{% url 'qualified_jobs' %}" class="btn btn-light btn-wth-icon icon-wthot-bg btn-rounded"><span class="btn-text">Qualified Jobs</span><span class="icon-label"><i class="icon ion-md-mail"></i> </span></a>
-                                    <!-- <a href="#" class="btn btn-icon btn-icon-circle btn-indigo btn-icon-style-2"><span class="btn-icon-wrap"><i class="fa fa-facebook"></i></span></a>
-                                    <a href="#" class="btn btn-icon btn-icon-circle btn-sky btn-icon-style-2"><span class="btn-icon-wrap"><i class="fa fa-twitter"></i></span></a>
-                                    <a href="#" class="btn btn-icon btn-icon-circle btn-purple btn-icon-style-2"><span class="btn-icon-wrap"><i class="fa fa-instagram"></i></span></a> -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-<section class="hk-sec-wrapper">
-   
-<br>
-    <!-- available_jobs --> 
-    <h5 class="hk-sec-title " id="available_jobs">Qualified Jobs</h5>
-    <hr>
-    <!-- <div class="row">
-        <div class="col border-0">
-            <div class="media pa-20 border  border-2  rounded-30 mb-20 ">
-                <img class="align-self-start mr-5 circle d-66" src="../../static/images/logo/qt_instance.png" alt="Generic placeholder image">
-                <div class="media-body ">
-                    <h5 class="">
-                        <a class="" href="{% url 'job_details' %}">SDE-1</a></h5>
-                    <h6 class="mb-2">QT lines, &nbsp;<i class="fa fa-map-marker"></i>&nbsp;Hyderabad</h6>
-
-                    <div class="row ">
-                        <div class="col-3 border-left  ">
-                                <span class="">₹ Not Disclosed</span>
-                        </div>
-                    </div>
-                    <div class="row col-8 border-left ">
-                        <span class="">Django | Python | Bootstrap | HTML | CSS | JavaScript</span>
-                </div>
-                    <br>
-                   <h6>Status:&nbsp;<span class="text-success">Qualified</span></h6>
-                </div>
-            </div> -->
-
-                <div class="col ">
-                    <div class="row">
-                        <div class="col-lg-4 col-md-6 col-sm-12 mb-30">
-                            <div class="card border rounded-30">
-                                <div class="card-header row ">
-                                    <a class="" href="{% url 'job_details' %}" >
-                                    <img class="align-self-start ml -2 mr-2 circle d-66 border border-light border-2" src="../../static/images/logo/qt_instance.png" alt="Generic placeholder image">
-            
-                                       <h6 class="ml-2 mt-3 text-info" style="text-decorator-type:none">Python Backend</a></h6>
-
-                                    </div>
-                                <div class="card-body">
-                                    <h5 class="card-title">QT lines, &nbsp;<i class="fa fa-map-marker"></i>&nbsp;Hyderabad</h6> </h5>
-                                    
-                                    <p style="max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                        <span class="">₹2-3 LPA</span>
-                                        <br>
-                                        <span class="text-smoke text-truncate">Django Python Flask MySQL</span>
-                                    </p>  
-               
-                                    
-                                </div>
-                                <div class="card-footer text-muted">
-                                    <!-- <a href="#" class="btn btn-primary">Apply</a> -->
-                                   
-                                    <p class="mt-2">Status: <p class="text-success mt-2">&nbsp; Qualified </p></p>
-                                </div>
-                            </div>
-                        </div>
-
-
-
-                        <div class="col-lg-4 col-md-6 col-sm-12 mb-30">
-                            <div class="card border rounded-30">
-                                <div class="card-header row ">
-                                    <a class="" href="{% url 'job_details' %}">
-                                    <img class="align-self-start ml -2 mr-2 circle d-66 border border-light border-2" src="../../static/images/logo/qt_instance.png" alt="Generic placeholder image">
-            
-                                       <h6 class="ml-2 mt-3">SDE-1</a></h6>
-                                    </div>
-                                <div class="card-body">
-                                    <h5 class="card-title">QT lines, &nbsp;<i class="fa fa-map-marker"></i>&nbsp;Hyderabad</h6> </h5>
-                                    
-                                    <p style="max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                        <span class="">₹2-3 LPA</span>
-                                        <br>
-                                        <span class="text-smoke " >Django Python Bootstrap HTML CSS JavaScript</span>
-                                    </p>  
-               
-                                    
-                                </div>
-                                <div class="card-footer text-muted">
-                                    <!-- <a href="#" class="btn btn-primary">Apply</a> -->
-                                    <p class="mt-2">Status: <p class="text-success mt-2">&nbsp; Qualified </p></p>
-                                    
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                           
-                                        
-            <!-- <div class="media pa-20 border border-2 border-light rounded mb-20">
-                <img class="align-self-center mr-15 circle d-66" src="dist/img/avatar9.jpg" alt="Generic placeholder image">
-                <div class="media-body">
-                    <h6 class="mb-5">Centered-aligned media</h6>
-                    <p class="">Libero justo laoreet sit amet cursus. In aliquam sem fringilla ut. Donec adipiscing tristique risus nec feugiat in fermentum. In egestas erat imperdiet sed euismod. Sit amet facilisis magna etiam tempor orci eu. A pellentesque sit amet porttitor. Nulla facilisi cras fermentum odio eu feugiat pretium nibh. At lectus urna duis convallis convallis tellus. Vel turpis nunc eget lorem dolor sed viverra.</p>
-                </div>
-            </div> -->
-            <!-- <div class="media pa-20 border border-2 border-light rounded">
-                <img class="align-self-end mr-15 circle d-66" src="dist/img/avatar9.jpg" alt="Generic placeholder image">
-                <div class="media-body">
-                    <h6 class="mb-5">Bottom-aligned media</h6>
-                    <p class="">Libero justo laoreet sit amet cursus. In aliquam sem fringilla ut. Donec adipiscing tristique risus nec feugiat in fermentum. In egestas erat imperdiet sed euismod. Sit amet facilisis magna etiam tempor orci eu. A pellentesque sit amet porttitor. Nulla facilisi cras fermentum odio eu feugiat pretium nibh. At lectus urna duis convallis convallis tellus. Vel turpis nunc eget lorem dolor sed viverra.</p>
-                </div>
-            </div> -->
-
-    <!-- </div> -->
-    <section class="hk-sec-wrapper" >
-        <div class="row">
-            <div class="col-sm">
-                <nav class="pagination-wrap d-inline-block" aria-label="Page navigation example" style="float: right;">
-                    <ul class="pagination custom-pagination">
-                        <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#">...</a></li>
-                        <li class="page-item"><a class="page-link" href="#">8</a></li>
-                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-    </section>
+            <li class="breadcrumb-item active">
+                Qualified Jobs
+            </li>
+        </ul>
+    </nav>
 </div>
 
 
+
+
+
+<div class="col-xl-12 pa-0">
+    <div class="profile-cover-wrap overlay-wrap m-3">
+        <div class="profile-cover-img" style="background-image:url('../../static/dist/img/bg1.jpg')"></div>
+        <div class="bg-overlay bg-trans-dark-60"></div>
+        <div class="container profile-cover-content py-50">
+            <div class="hk-row">
+                <div class="col-lg-6">
+                    <div class="media align-items-center">
+                        <div class="media-img-wrap  d-flex">
+                            <div class="avatar">
+                                <img src="../../static/dist/img/avatar1.jpg" alt="user"
+                                    class="avatar-img rounded-circle">
+                            </div>
+                        </div>
+                        <div class="media-body">
+                            <div class="text-white text-capitalize display-6 mb-1 font-weight-400">Madelyn Shane
+                                <i class=" fa fa-check-circle-o text-primary"></i>
+
+                            </div>
+                            <p class="text-white  font-weight-200">
+                                Full Stack Python Developer
+                                <br>
+                                Date of joining: April 8th 2024
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="button-list">
+                        <a href="{% url 'jobs' %}" class="btn btn-light btn-wth-icon icon-wthot-bg btn-rounded"><span
+                                class="btn-text">Matched Jobs</span><span class="icon-label"><i
+                                    class="icon ion-md-mail"></i> </span></a>
+                        <a href="{% url 'applied_jobs' %}"
+                            class="btn btn-light btn-wth-icon icon-wthot-bg btn-rounded"><span class="btn-text">Applied
+                                Jobs</span><span class="icon-label"><i class="icon ion-md-mail"></i> </span></a>
+                        <a href="{% url 'qualified_jobs' %}"
+                            class="btn btn-light btn-wth-icon icon-wthot-bg btn-rounded"><span
+                                class="btn-text">Qualified Jobs</span><span class="icon-label"><i
+                                    class="icon ion-md-mail"></i> </span></a>
+                        <!-- <a href="#" class="btn btn-icon btn-icon-circle btn-indigo btn-icon-style-2"><span class="btn-icon-wrap"><i class="fa fa-facebook"></i></span></a>
+                                    <a href="#" class="btn btn-icon btn-icon-circle btn-sky btn-icon-style-2"><span class="btn-icon-wrap"><i class="fa fa-twitter"></i></span></a>
+                                    <a href="#" class="btn btn-icon btn-icon-circle btn-purple btn-icon-style-2"><span class="btn-icon-wrap"><i class="fa fa-instagram"></i></span></a> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container-fluid m-0">
+        <div class="hk-pg-header mb-2 mt-4">
+            <h4 class="hk-pg-title">Qualified Jobs</h4>
+        </div>
+        <section class="hk-sec-wrapper">
+
+            <!-- <br> -->
+            <!-- available_jobs -->
+            <!-- <h5 class="hk-sec-title" id="available_jobs">Applied Jobs</h5> -->
+            <!-- <p class="mb-25"> Suggested Jobs are based on your profile and assessments completed </p> -->
+            
+            <div class="row">
+                <div class="col border-0">
+                    <!-- <div class="media pa-20 border  border-2  rounded-30 mb-20 ">
+                        <img class="align-self-start mr-5 circle d-66" src="../../static/images/logo/qt_instance.png" alt="Generic placeholder image">
+                        <div class="media-body ">
+                            <h5 class="">
+                                <a class="" href="{% url 'job_details' %}">SDE-1</a></h5>
+                            <h6 class="mb-2">QT lines, &nbsp;<i class="fa fa-map-marker"></i>Hyderabad</h6>
+                            <div class="row ">
+                                <div class="col-3 border-left  ">
+                                        <span class="">₹ Not Disclosed</span>
+                                </div>
+                            </div>
+                            <div class="row col-8 border-left ">
+                                <span class="text-smoke">Django  Python  Bootstrap  HTML  CSS  JavaScript</span>
+                        </div>
+                            <br>
+                           <p>Applied on 30 March 2024 </p>
+                        </div>
+                    </div> -->
+                    <div class="row">
+                        <div class="col-sm ">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-6 col-sm-12 mb-30">
+                                    <div class="card cards shadow border rounded-9">
+                                        <div class="card-header row ">
+                                            <a class="" style="color: #132649;" href="{% url 'job_details' %}">
+                                                <img class="align-self-start ml -2 mr-2 circle d-66 border border-light border-2"
+                                                    src="../../static/images/logo/qt_instance.png"
+                                                    alt="Generic placeholder image">
+
+                                                <h4 class="ml-2 mt-3">SDE-1
+                                            </a></h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <h5 class="card-title">QT lines, &nbsp;<i
+                                                    class="fa fa-map-marker"></i>&nbsp;Hyderabad</h6>
+                                            </h5>
+
+                                            <p
+                                                style="max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                <span class="">₹ Not Disclosed</span>
+                                                <br>
+                                                <span class="text-smoke">Django Python Bootstrap HTML CSS
+                                                    JavaScript</span>
+                                            </p>
+
+
+                                        </div>
+                                        <div class="card-footer text-muted">
+
+
+                                            <p>Status:</p>
+                                            <p class="text-success">&nbsp;&nbsp;&nbsp; Qualified </p>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6 col-sm-12 mb-30">
+                                    <div class="card cards shadow border rounded-9">
+                                        <div class="card-header row ">
+                                            <a style="color: #132649;" class="" href="{% url 'job_details' %}">
+                                                <img class="align-self-start ml -2 mr-2 circle d-66 border border-light border-2"
+                                                    src="../../static/images/logo/qt_instance.png"
+                                                    alt="Generic placeholder image">
+
+                                                <h4 class="ml-2 mt-3">Python Developer
+                                            </a></h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <h5 class="card-title">TestPress, &nbsp;<i
+                                                    class="fa fa-map-marker"></i>&nbsp;Chennai</h6>
+                                            </h5>
+
+                                            <p
+                                                style="max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                <span class="">₹2-3 LPA</span>
+                                                <br>
+                                                <span class="text-smoke">Django Python Flask MySQL</span>
+                                            </p>
+
+
+                                        </div>
+                                        <div class="card-footer text-muted">
+
+
+                                            <p>Status:</p>
+                                            <p class="text-success">&nbsp;&nbsp;&nbsp; Qualified </p>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- <div class="media pa-20 border border-2 border-light rounded mb-20">
+                        <img class="align-self-center mr-15 circle d-66" src="dist/img/avatar9.jpg" alt="Generic placeholder image">
+                        <div class="media-body">
+                            <h6 class="mb-5">Centered-aligned media</h6>
+                            <p class="">Libero justo laoreet sit amet cursus. In aliquam sem fringilla ut. Donec adipiscing tristique risus nec feugiat in fermentum. In egestas erat imperdiet sed euismod. Sit amet facilisis magna etiam tempor orci eu. A pellentesque sit amet porttitor. Nulla facilisi cras fermentum odio eu feugiat pretium nibh. At lectus urna duis convallis convallis tellus. Vel turpis nunc eget lorem dolor sed viverra.</p>
+                        </div>
+                    </div> -->
+                    <!-- <div class="media pa-20 border border-2 border-light rounded">
+                        <img class="align-self-end mr-15 circle d-66" src="dist/img/avatar9.jpg" alt="Generic placeholder image">
+                        <div class="media-body">
+                            <h6 class="mb-5">Bottom-aligned media</h6>
+                            <p class="">Libero justo laoreet sit amet cursus. In aliquam sem fringilla ut. Donec adipiscing tristique risus nec feugiat in fermentum. In egestas erat imperdiet sed euismod. Sit amet facilisis magna etiam tempor orci eu. A pellentesque sit amet porttitor. Nulla facilisi cras fermentum odio eu feugiat pretium nibh. At lectus urna duis convallis convallis tellus. Vel turpis nunc eget lorem dolor sed viverra.</p>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+            <div class="offset-4">
+                <nav class="pagination-wrap d-inline-block  mr-40 mt-15" aria-label="...">
+                    <ul class="pagination">
+                        <li class="page-item disabled">
+                            <span class="page-link">Previous</span>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item active">
+                            <span class="page-link">
+                        2
+                        <span class="sr-only">(current)</span>
+                            </span>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+           
+        </section>
+    </div>
+
+
+</div>
 {% endblock %}

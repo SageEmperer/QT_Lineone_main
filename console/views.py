@@ -7088,6 +7088,9 @@ def lead_prospects(request):
   prospect_count = register_user.leads.filter(lead_position = "PROSPECT").count()
   lead_count = register_user.leads.filter(lead_position = "LEAD").count()
   mql_count = register_user.leads.filter(lead_position = 'MQL').count()
+  sql_count = register_user.leads.filter(lead_position = 'SQL').count()
+  request_discount_count = register_user.leads.filter(lead_position = 'REQUEST_DISCOUNT').count()
+  admission_count = register_user.leads.filter(lead_position = 'ADMITTED').count()
 
   
   context={
@@ -7099,7 +7102,11 @@ def lead_prospects(request):
      'faculty':faculty,
      'prospect_count':prospect_count,
      'lead_count':lead_count,
-     'mql_count':mql_count
+     'mql_count':mql_count,
+     'sql_count':sql_count,
+     'request_discount_count':request_discount_count,
+     'admission_count':admission_count
+     
   }
   return render(request,'Leads/prospects.html', context)
 
@@ -8269,20 +8276,125 @@ def profilesent(request):
 
 def not_interested_hr(request):
     return render(request,'hr_portal/dashboard/company leads/not_interested_hr.html')
+
+
+
+# job gallery
 @admin_required
 def job_gallery(request):
     crn= request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
     company_vendor = register_user.company_vendor.all()
-    job_category = register_user.job_category.all()
-    qualification = register_user.qualifications.all()
+    job_category = register_user.job_category.filter(status='Active').all()
+    qualification = register_user.qualifications.filter(status='Active')
+    job_roles = register_user.jobrole.filter(status = 'Active')
+    job_postes = register_user.job_post.all()
+    if request.method == "POST":
+       jobtitle = request.POST.get('jobtitle')
+       company = request.POST.get('company')
+       experience = request.POST.get('experience')
+       qualification = request.POST.get('qualification')
+       skills = request.POST.get('skills')
+       role = request.POST.get('role')
+       salary = request.POST.get('salary')
+       last_date_to_apply = request.POST.get('last_date_to_apply')
+       requirements = request.POST.get('requirements')
+
+       Job_post.objects.create(
+        crn_number = register_user,
+        companyname = Company_vendor.objects.get(pk=company),
+        job_title = jobtitle,
+        experience = experience,
+        qualification = Qualification.objects.get(pk=qualification),
+        skills = skills,
+        role = Jobrole.objects.get(pk=role),
+        salary = salary,
+        last_date_to_apply = last_date_to_apply,
+        job_description = requirements
+       )
+       return redirect('job_gallery.html')
+        
+
+
+
     context={
       'company_vendor':company_vendor,
       'job_category':job_category,
-      'qualification':qualification
+      'qualification':qualification,
+      'job_roles':job_roles,
+      'job_postes':job_postes
 
     }
     return render(request, 'hr_portal/job gallery/job_gallery.html',context)
+
+
+def export_job_posts_to_csv(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="job_posts.csv"'
+
+    job_posts = Job_post.objects.all()
+
+    writer = csv.writer(response)
+    writer.writerow([
+        'Company Name', 'Job Title', 'Experience', 'Qualification', 
+        'Skills', 'Role', 'Salary', 'Post Date', 'Last Date to Apply', 
+        'Job Description', 'CRN Number', 'HR Name', 'Location', 
+        'Mobile', 'Alternate Mobile', 'Email', 'Website', 
+        'Point of Contact Name', 'Point of Contact Mobile'
+    ])
+
+    for job_post in job_posts:
+        writer.writerow([
+            job_post.companyname.companyname if job_post.companyname else '',
+            job_post.job_title,
+            job_post.experience,
+            job_post.qualification.qualification_name if job_post.qualification else '',
+            job_post.skills,
+            job_post.role.jobrole_name if job_post.role else '',
+            job_post.salary,
+            job_post.post_date,
+            job_post.last_date_to_apply,
+            job_post.job_description,
+            job_post.crn_number_id,
+            job_post.companyname.hrname if job_post.companyname else '',
+            job_post.companyname.location if job_post.companyname else '',
+            job_post.companyname.mobile if job_post.companyname else '',
+            job_post.companyname.alternatemobile if job_post.companyname else '',
+            job_post.companyname.email if job_post.companyname else '',
+            job_post.companyname.website if job_post.companyname else '',
+            job_post.companyname.pocname if job_post.companyname else '',
+            job_post.companyname.pocmobile if job_post.companyname else ''
+        ])
+
+    return response
+
+
+
+
+
+
+
+# company dependency
+
+def get_company_vendor(request, id):
+    company_id = request.GET.get('company_id')
+    if company_id:
+        try:
+            company = Company_vendor.objects.get(id=company_id)
+            data = {
+                'email': company.email,
+                'location': company.location,
+                'mobile': company.mobile,
+                'category': company.category.Jobcategory_name 
+            }
+            return JsonResponse(data)
+        except Company_vendor.DoesNotExist:
+            pass
+    return JsonResponse({})
+
+
+
+
 
 
 
@@ -8560,12 +8672,489 @@ def faculty_pending_mocks(request):
 
 
 #certification start here
+
+
+#certification start here
 def dashboard_certification(request):
-    return render(request,'certifications/certif_dashboard.html')
+  return render(request,'certifications/certif_dashboard.html')
 def send_email(request):
     return render(request,'certifications/sent_emails.html')
-def create_student(request):
-    return render(request,'certifications/create_students.html')
+# certification AUTO  of students
+def list_student(request):
+  crn=request.session.get('admin_user').get('crn')
+  register_user=Register_model.objects.get(crn=crn)
+  student=register_user.leads.filter(lead_position='ADMITTED')
+  context={'student':student}
+  print(student)
+  for i in student:
+     print(i.course_name.specialization.specilalization_name)
+  return render(request,'certifications/auto_certitfication.html',context)
 
+def List_student_import(request):
+  crn=request.session.get('admin_user').get('crn')
+  register_user=Register_model.objects.get(crn=crn)
+  student=register_user.leads.all().order_by('-id')
+  response = HttpResponse(content_type='text/csv')
+  response['Content-Disposition'] = 'attachment; filename="Student.csv"'
+  writer = csv.writer(response)
+  writer.writerow(['Full Name','Email','Mobile Number','Course Name','Specialization Name','Start Date','End Date','Certifictate Id'])
+  i=0
+  for s in student:
+    i+=1
+    writer.writerow([i,s.first_name,s.email,s.mobile_number,s.course_name.course_name,s.course_name.specialization.specilalization_name,s.admissions_date, s.enddate,s.certifictateid])
+  return response
+# sent maail all
+def List_student_all(request):
+  crn = request.session.get('admin_user').get('crn')
+  register_user = Register_model.objects.get(crn=crn)
+  if request.method == "POST":
+    selected_ids_str = request.POST.get('selected_ids')
+    selected_ids = [int(id_str) for id_str in selected_ids_str.split(',') if id_str.strip()]  # Convert to list of integers
+    if selected_ids:
+      selected_students = register_user.CreateStudent.filter(id__in=selected_ids)
+      for student in selected_students:
+        subject = 'Course Completion Certificate'
+        message = (
+            f"Congratulations {student.fullname},\n\n"
+            "We are happy to share with you the course completion certificate."
+            "You can download the attached PDF Format:\n\n"
+            "\nAll the Best."
+        )
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = [student.email]
+        try:
+          send_mail(subject, message, email_from, recipient_list, fail_silently=False)
+          student.cerficate_sent = True
+          student.save() 
+        except Exception as e:
+          messages.error(request, f"Failed to send email to {student.fullname}. Error: {str(e)}")
+          continue
+        
+      messages.success(request, 'Emails sent successfully.')
+      return redirect('auto_certification')
+
+# Mnaual student
+def create_student(request):
+  crn=request.session.get('admin_user').get('crn')
+  register_user=Register_model.objects.get(crn=crn)
+  if request.method == "POST":
+    
+    Fullname = request.POST.get('fullname')
+    Email = request.POST.get('email')
+    Mobilenumber = request.POST.get('mobilenumber')
+    Course = request.POST.get('course_name')
+    course_instance = register_user.courses.get(pk=Course)
+    Specialization = request.POST.get('specialization')
+    print(Specialization)
+    Specialization_instance = register_user.specializations.get(pk=Specialization)  # Retrieve the Specialization instance
+    print(Specialization_instance)
+    Startdate = request.POST.get('startdate')
+    Enddate = request.POST.get('enddate')
+    Certifictateid = request.POST.get('certifictateid')
+    if register_user.CreateStudent.filter(fullname=Fullname,certifictateid=Certifictateid).exists():
+      messages.error(request, f'{Fullname} ,{Certifictateid} Already Exists')
+      return redirect('create_student')
+    else:
+      creatstudents.objects.create(
+        fullname=Fullname,
+        email=Email,
+        mobilenumber=Mobilenumber,
+        course=course_instance,
+        specialization=Specialization_instance,
+        startdate=Startdate,  
+        enddate=Enddate, 
+        certifictateid=Certifictateid,
+        crn_number= register_user  
+      )
+      messages.success(request, f'{Fullname.strip().title()} Created Successfully')
+      return redirect('create_student')
+  student=register_user.CreateStudent.all().order_by('-id')
+  coursename=register_user.courses.all()
+  specialization=register_user.specializations.all()
+  context={
+      'student' : student,
+      'coursename': coursename,
+      'specialization': specialization,    
+  }       
+  return render(request,'certifications/manual_certification.html',context)
+# certification edit 
+def create_student_edit(request,id):
+  crn=request.session.get('admin_user').get('crn')
+  register_user=Register_model.objects.get(crn=crn)
+  if request.method == "POST":
+    Fullname = request.POST.get('editfullname')
+    Email = request.POST.get('editemail')
+    Mobilenumber = request.POST.get('editmobilenumber')
+    Course = request.POST.get('editcourse_name')
+    course_instance = register_user.courses.get(pk=Course)  # Retrieve the Specialization instance
+    Specialization = request.POST.get('editspecialization')
+    Specialization_instance = register_user.specializations.get(pk=Specialization)  # Retrieve the Specialization instance
+    Startdate = request.POST.get('editstartdate')
+    Enddate = request.POST.get('editenddate')
+    Certifictateid = request.POST.get('editcertifictateid')
+    if register_user.CreateStudent.filter(fullname=Fullname, certifictateid=Certifictateid).exists():
+      messages.error(request, f'{Fullname}) Already Exists')
+      return redirect('create_student')
+    else:
+      register_user.CreateStudent.filter(id=id).update(
+        fullname=Fullname,
+        email=Email,
+        mobilenumber=Mobilenumber,
+        course=course_instance,
+        specialization=Specialization_instance,
+        startdate=Startdate,  
+        enddate=Enddate, 
+        certifictateid=Certifictateid,
+      )
+      messages.success(request, f'{Fullname} Manual Updated Successfully')
+      return redirect('create_student')
+    
+
+
+
+# certification export
+def create_student_export(request):
+  crn=request.session.get('admin_user').get('crn')
+  register_user=Register_model.objects.get(crn=crn)
+  student=register_user.CreateStudent.all().order_by('-id')
+  response = HttpResponse(content_type='text/csv')
+  response['Content-Disposition'] = 'attachment; filename="Student.csv"'
+  writer = csv.writer(response)
+  writer.writerow(['Full Name','Email','Mobile Number','Course Name','Specialization Name','Start Date','End Date','Certifictate Id'])
+  i=0
+  for s in student:
+    i+=1
+    writer.writerow([i,s.fullname,s.email,s.mobilenumber,s.course,s.specialization,s.startdate, s.enddate,s.certifictateid])
+  return response
+
+#certification import
+def create_student_import(request):
+    crn=request.session.get('admin_user').get('crn')
+    register_user=Register_model.objects.get(crn=crn)
+    if request.method == 'POST':
+        form =createstudent_import_form(request.POST, request.FILES)
+        if form.is_valid():
+          try:
+              csv_file = request.FILES['createstudent_file']
+              decoded_file = csv_file.read().decode('utf-8')
+              reader = csv.reader(decoded_file.splitlines())
+              headers = next(reader)
+              expected_headers = 9
+              for row in reader:
+                  if len(row) != expected_headers:
+                      messages.error(request, f'File should have {expected_headers} columns')
+                      return redirect('create_student')
+                  print(row)
+                  fullname = row[1]
+                  email = row[2]
+                  mobilenumber = row[3]
+                  course = row[4]
+                  course_instance = register_user.courses.get_or_create(course_name=course)[0]
+                  specialization = row[5]
+                  specialization_instance=register_user.specializations.get_or_create(specilalization_name=specialization)[0]
+                  startdate = row[6]
+                  enddate = row[7]
+                  certifictateid = row[8]
+                  if fullname and email and mobilenumber and course_instance and specialization_instance  and startdate and enddate and certifictateid:
+                      if not creatstudents.objects.filter(fullname=fullname,certifictateid=certifictateid).exists():
+                          creatstudents.objects.create(
+                              fullname=fullname,
+                              email=email,
+                              mobilenumber=mobilenumber,
+                              course=course_instance,
+                              specialization=specialization_instance,
+                              startdate=startdate,
+                              enddate=enddate,
+                              certifictateid=certifictateid,
+                              crn_number=register_user
+                          )
+                  else:
+                      messages.error(request, 'Some required fields are missing for creating Demo. Skipping this entry.')
+              
+              messages.success(request, 'File imported successfully')
+              return redirect('create_student')
+          except Exception as e:
+            print(e)
+            messages.error(request, f'{e}. File should be in CSV format')
+            return redirect('create_student')   
+    return render(request,'certifications/manual_certification.html')
+# Dependances from Courses to Specialization
+
+@admin_required
+def depnd_specilization(request, id_course):
+  crn=request.session.get('admin_user').get('crn')
+  register_user=Register_model.objects.get(crn=crn)
+  course = register_user.courses.get(id=id_course)
+  display_spec = register_user.specializations.filter(course_name=course,status='Active')
+  specialization_list = [{'id': spec.id, 'name': spec.specilalization_name} for spec in display_spec]
+  
+  return JsonResponse({'specialization_list': specialization_list})
+
+#certification sent maail all
+def create_student_sent(request):
+  crn = request.session.get('admin_user').get('crn')
+  register_user = Register_model.objects.get(crn=crn)
+  if request.method == "POST":
+    selected_ids_str = request.POST.get('selected_ids')
+    selected_ids = [int(id_str) for id_str in selected_ids_str.split(',') if id_str.strip()]  # Convert to list of integers
+    if selected_ids:
+      selected_students = register_user.CreateStudent.filter(id__in=selected_ids)
+      for student in selected_students:
+        subject = 'Course Completion Certificate'
+        message = (
+            f"Congratulations {student.fullname},\n\n"
+            "We are happy to share with you the course completion certificate."
+            "You can download the attached PDF Format:\n\n"
+            "\nAll the Best."
+        )
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = [student.email]
+        try:
+          send_mail(subject, message, email_from, recipient_list, fail_silently=False)
+          student.cerficate_sent = True
+          student.save() 
+        except Exception as e:
+          messages.error(request, f"Failed to send email to {student.fullname}. Error: {str(e)}")
+          continue
+        
+      messages.success(request, 'Emails sent successfully.')
+      return redirect('create_student')
+
+
+
+# bounced mails
 def bounced_email(request):
     return render(request,'certifications/bounced_mails.html') 
+  # edit
+def bounced_edit(request,id):
+  crn=request.session.get('admin_user').get('crn')
+  register_user=Register_model.objects.get(crn=crn)
+  if request.method == "POST":
+    Fullname = request.POST.get('editfullname')
+    Email = request.POST.get('editemail')
+    Mobilenumber = request.POST.get('editmobilenumber')
+    Course = request.POST.get('editcourse_name')
+    course_instance = register_user.courses.get(pk=Course)  # Retrieve the Specialization instance
+    Specialization = request.POST.get('editspecialization')
+    print(Specialization)
+    Specialization_instance = register_user.specializations.get(pk=Specialization)  # Retrieve the Specialization instance
+    print(Specialization_instance)
+    Startdate = request.POST.get('editstartdate')
+    Enddate = request.POST.get('editenddate')
+    Certifictateid = request.POST.get('editcertifictateid')
+    if register_user.BouncedStudent.filter(fullname=Fullname).exists():
+      messages.error(request, f'{Fullname}) Already Exists')
+      return redirect('bounced_mails')
+    else:
+      register_user.BouncedStudent.filter(id=id).update(
+        editfullname=Fullname,
+        editemail=Email,
+        editmobilenumber=Mobilenumber,
+        editcourse=course_instance,
+        editspecialization=Specialization_instance,
+        editstartdate=Startdate,  
+        editenddate=Enddate, 
+        editcertifictateid=Certifictateid,
+      )
+      messages.success(request, f'{Fullname} Manual Updated Successfully')
+      return redirect('bounced_mails')
+    #delete
+def bounced_delete(request,id):
+  crn=request.session.get('admin_user').get('crn')
+  register_user=Register_model.objects.get(crn=crn)
+  if request.method == "POST":
+    if register_user.BouncedStudent.filter(id=id).exists():
+      demo = register_user.demo.get(id=id)
+      demo.delete()
+      messages.success(request, f'{demo.demotitle}  deleted successfully')
+      return redirect('bounced_mails')
+    else:
+      messages.error(request, f'demo not found')
+      return redirect('bounced_mails')
+    
+
+#CERTIFICATION NAME
+def create_certification(request):
+  crn=request.session.get('admin_user').get('crn')
+  register_user=Register_model.objects.get(crn=crn)
+  if request.method == 'POST':
+    Course = request.POST.get('course_name')
+    course_instance = register_user.courses.get(pk=Course)
+    print(Course)
+    print(course_instance)
+    Specialization = request.POST.get('specialization')
+    print(Specialization)
+    Specialization_instance = register_user.specializations.get(pk=Specialization)  # Retrieve the Specialization instance
+    print(Specialization_instance)
+    Coursetitle = request.POST.get('course_title')
+    Description = request.POST.get('description')
+    if register_user.certifications.filter(course=course_instance,specialization=Specialization_instance).exists():
+      messages.error(request, f'{course_instance} with {Specialization_instance}  already exists')
+      return redirect('create_certification')
+    else:
+      Certification.objects.create(
+        course=course_instance,
+        specialization=Specialization_instance,
+        course_title=Coursetitle,
+        description=Description, 
+        crn_number=register_user,
+      )
+      messages.success(request,f'{course_instance} with {Specialization_instance} details created successfully')
+      return redirect('create_certification')
+  manage=register_user.courses.all()
+  special=register_user.specializations.all() 
+  certifi=register_user.certifications.all().order_by('-id')
+  context={
+    'manage':manage,
+    'certifi':certifi,
+    'special':special,
+  } 
+  return render(request,'settings_page/certification_name.html',context)
+
+
+# Dependances from Courses to Specialization
+
+@admin_required
+def depnd_specilization(request, id_course):
+  crn=request.session.get('admin_user').get('crn')
+  register_user=Register_model.objects.get(crn=crn)
+  course = register_user.courses.get(id=id_course)
+  display_spec = register_user.specializations.filter(course_name=course,status='Active')
+  specialization_list = [{'id': spec.id, 'name': spec.specilalization_name} for spec in display_spec]
+  
+  return JsonResponse({'specialization_list': specialization_list})
+
+
+@admin_required
+def edit_certification(request,id):
+  if request.method == 'POST':
+    crn=request.session.get('admin_user').get('crn')
+    register_user=Register_model.objects.get(crn=crn)
+    Course = request.POST.get('editcourse_name')
+    course_instance = register_user.courses.get(pk=Course)
+    print(Course)
+    print(course_instance)
+    Specialization = request.POST.get('editspecialization')
+    print(Specialization)
+    Specialization_instance = register_user.specializations.get(pk=Specialization)  # Retrieve the Specialization instance
+    print(Specialization_instance)
+    Coursetitle = request.POST.get('editcourse_title')
+    Description = request.POST.get('editdescription')
+    if register_user.certifications.filter(id=id).exists():
+      if register_user.certifications.filter(course=course_instance,specialization=Specialization_instance).exists():
+        messages.error(request, f'{course_instance} with {Specialization_instance}  already exists')
+        return redirect('create_certification')
+      else:
+        register_user.certifications.filter(id=id).update(
+          course=course_instance,
+          specialization=Specialization_instance,
+          course_title=Coursetitle,
+          description=Description, 
+          crn_number=register_user,    
+        )
+        messages.success(request,f'{course_instance} with {Specialization_instance} details created successfully')      
+        return redirect('create_certification')
+
+
+@admin_required
+def delete_certification(request, id):
+    if request.method == "POST":
+        admin_user = request.session.get('admin_user')
+        if admin_user:
+            crn = admin_user.get('crn')
+            register_user = get_object_or_404(Register_model, crn=crn)
+            course = register_user.certifications.filter(id=id).first()
+            if course:
+                course.delete()
+                messages.success(request, 'Certification Deleted Successfully')
+            else:
+                messages.error(request, 'Certification not found')
+        else:
+            messages.error(request, 'User not logged in')
+    else:
+        messages.error(request, 'Invalid request method')
+
+    return redirect('create_certification')
+
+
+@admin_required
+def certification_all(request):
+  crn=request.session.get('admin_user').get('crn')
+  register_user=Register_model.objects.get(crn=crn)
+  if request.method == "POST":
+    selected_departments=request.POST.get('selected_departments')
+    selected_list=selected_departments.split(",")
+    register_user.departments.filter(id__in=selected_list).delete()
+    messages.success(request, 'Records deleted successfully')
+    return redirect('create_certification')
+
+  else:
+     return redirect('create_certification')
+  
+@admin_required
+def export_certification(request):
+  crn=request.session.get('admin_user').get('crn')
+  register_user=Register_model.objects.get(crn=crn)
+  manage = register_user.certifications.all()
+  response = HttpResponse(content_type='text/csv')
+  response['Content-Disposition'] = 'attachment; filename="course_manage.csv"'
+  writer = csv.writer(response)
+  writer.writerow(['S.no','Course Name','Specialization','Course Title','Description'])
+  i=0
+  for d in manage:
+    i+=1
+    writer.writerow([i,d.course,d.specialization,d.course_title,d.description])
+  return response
+
+
+@admin_required
+def import_certification(request):
+    crn = request.session.get('admin_user', {}).get('crn')
+    register_user = Register_model.objects.get(crn=crn)
+    
+    if request.method == 'POST':
+        form = certification_import_form(request.POST, request.FILES)
+        if form.is_valid():
+            try:
+                csv_file = request.FILES['certification_file']
+                decoded_file = csv_file.read().decode('utf-8')
+                reader = csv.reader(decoded_file.splitlines())
+                headers = next(reader)
+                expected_headers = 5
+
+                for row in reader:
+                    if len(row) != expected_headers:
+                        messages.error(request, "File does not match the expected format")
+                        return redirect('create_certification')
+
+                    course_name = row[1]
+                    course_instance = register_user.courses.filter(course_name=course_name).first()
+                    specialization_name = row[2]
+                    specialization_instance = register_user.specializations.filter(specilalization_name=specialization_name).first()
+                    course_title = row[3]
+                    description = row[4]
+
+                    if course_instance and specialization_instance and course_title and description:
+                        if not Certification.objects.filter(course=course_instance, specialization=specialization_instance, course_title=course_title).exists():
+                            Certification.objects.create(
+                                course=course_instance,
+                                specialization=specialization_instance,
+                                course_title=course_title,
+                                description=description,
+                                crn_number=register_user
+                            )
+                    else:
+                        messages.error(request, 'Some required fields are missing for creating certification. Skipping this entry.')
+
+                messages.success(request, 'File imported successfully')
+                return redirect('create_certification')
+            except Exception as e:
+                print(e)
+                messages.error(request, f'{e}. File should be in CSV format')
+                return redirect('create_certification')
+    else:
+        form = certification_import_form()
+
+    return render(request, 'settings_page/certification_name.html', {'form': form})
+
+  

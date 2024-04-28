@@ -693,7 +693,7 @@
 
                         <!-- finance and hrm star there -->
 
-                        <li class="nav-item {% if request.resolver_match.url_name in "['finance']" %} active {% endif %}">
+                        <li class="nav-item {% if request.resolver_match.url_name in "['finance_view']" %} active {% endif %}">
                             <a class="nav-link" href="javascript:void(0);" data-toggle="collapse" data-target="#user_drp">
                                 <i class="ion ion-ios-cash"></i>
                                 <span class="nav-link-text">Finance and Accounts</span>
@@ -703,7 +703,7 @@
                                     <ul class="nav flex-column">
                                         <!-- employee start here -->
                                         <li class="nav-item {% if request.resolver_match.url_name == 'employees' %} active {% endif %}">
-                                            <a class="nav-link" href="{% url 'finance' %}">Latest Transactions</a>
+                                            <a class="nav-link" href="{% url 'finance_view' %}">Latest Transactions</a>
                                         </li>
                                        
                                     </ul>
@@ -818,41 +818,44 @@
 
                         <!-- hr portal end here -->
 
-                            <!-- cerfication start here -->
+                         <!-- cerfication start here -->
 
-                            <li class="nav-item {% if request.resolver_match.url_name in "['','send_email','create_student','bounced_email']" %} active {% endif %}">
-                                <a class="nav-link" href="javascript:void(0);" data-toggle="collapse" data-target="#user_drp">
-                                    <i class="ion ion-ios-paper"></i>
-                                    <span class="nav-link-text">Certifications</span>
-                                </a>
-                                <ul id="user_drp" class="nav flex-column collapse collapse-level-1">
-                                    <li class="nav-item">
-                                        <ul class="nav flex-column">
-                                            <!-- employee start here -->
-                                            <li class="nav-item {% if request.resolver_match.url_name == 'certif_dashboard' %} active {% endif %}">
-                                                <a class="nav-link" href="{% url 'certif_dashboard' %}">Dashboard</a>
-                                            </li>
-                                            <!-- employee end here -->
-                                            <!-- create course -->
-                                            <li class="nav-item {% if request.resolver_match.url_name == 'send_email' %} active {% endif %}">
-                                                <a class="nav-link" href="{% url 'send_email' %}">Send Mail</a>
-                                            </li>
-                                            <!-- create course end here -->
-                                            <!--create demo start here -->
-                                            <li class="nav-item {% if request.resolver_match.url_name == 'create_student' %} active {% endif %}">
-                                                <a class="nav-link" href="{% url 'create_student' %}">Create Student</a>
-                                            </li>
-                                            <!--create demo start here -->
-                                            <li class="nav-item {% if request.resolver_match.url_name == 'bounced_email' %} active {% endif %}">
-                                                <a class="nav-link" href="{% url 'bounced_email' %}">Bounced Email</a>
-                                            </li>
-                                            <!-- create demo end here -->
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
+                         <li class="nav-item {% if request.resolver_match.url_name in "['certif_dashboard','send_email','create_student','bounced_email']" %} active {% endif %}">
+                            <a class="nav-link" href="javascript:void(0);" data-toggle="collapse" data-target="#user_drp">
+                                <i class="ion ion-ios-paper"></i>
+                                <span class="nav-link-text">Certifications</span>
+                            </a>
+                            <ul id="user_drp" class="nav flex-column collapse collapse-level-1">
+                                <li class="nav-item">
+                                    <ul class="nav flex-column">
+                                        <!-- employee start here -->
+                                        <li class="nav-item {% if request.resolver_match.url_name == 'certif_dashboard' %} active {% endif %}">
+                                            <a class="nav-link" href="{% url 'certif_dashboard' %}">Dashboard</a>
+                                        </li>
+                                        <!-- employee end here -->
+                                        <!-- create course -->
+                                        <li class="nav-item {% if request.resolver_match.url_name == 'send_email' %} active {% endif %}">
+                                            <a class="nav-link" href="{% url 'send_email' %}">Filters</a>
+                                        </li>
+                                        <!-- create course end here -->
+                                        <!--create demo start here -->
+                                        <li class="nav-item {% if request.resolver_match.url_name == 'create_student' %} active {% endif %}">
+                                            <a class="nav-link" href="{% url 'list_student' %}">Auto Certification</a>
+                                        </li>
+                                        <li class="nav-item {% if request.resolver_match.url_name == 'create_student' %} active {% endif %}">
+                                            <a class="nav-link" href="{% url 'create_student' %}">Manual Certification</a>
+                                        </li>
+                                        <!--create demo start here -->
+                                        <li class="nav-item {% if request.resolver_match.url_name == 'bounced_email' %} active {% endif %}">
+                                            <a class="nav-link" href="{% url 'bounced_email' %}">Bounced Email</a>
+                                        </li>
+                                        <!-- create demo end here -->
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
 
-                            <!-- certification end here -->
+                        <!-- certification end here -->
 
 
                             <!-- Console start here -->
