@@ -541,10 +541,10 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-6 col-lg-3">
+                        <div class="col-sm-12 col-md-6 col-lg-3 ">
                             <div class="mb-3">
                                 <label for="" class="form-label">Designation <span class="text-red">*</span> </label>
-                                <select class="form-control custom-select" id="designation_select"
+                                <select class="form-control custom-select designation_name" id="designation_select"
                                     name="designation_name">
                                     <option selected value="">Select Your Designation</option>
 
@@ -566,6 +566,35 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="col-sm-12 col-md-6 col-lg-3 course">
+                            <div class="mb-3">
+                                <label for="" class="form-label">Course <span class="text-danger">*</span></label>
+                                <select class="form-control custom-select course_select" name="course_id">
+                                    <option selected value="">Select Course</option>
+                                    {% for course in courses %}
+                                    
+                                    <option value="{{course.id}}">{{course.course_name}}</option>
+                                    
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-3 specialization">
+                            <div class="mb-3">
+                                <label for="" class="form-label">Specialization
+                                    
+                                </label>
+                                <select name="specialization_id" id="" class="form-control custom-select specialization-select">
+
+
+                                </select>
+                                
+                                                                    
+
+                            </div>
+                        </div>       
+
 
                         
                         <div class="col-sm-12 col-md-6 ">
@@ -1143,7 +1172,7 @@
                         <div class="col-sm-12 col-md-6 col-lg-3">
                             <div class="mb-3">
                                 <label for="" class="form-label">Designation <span class="text-red">*</span> </label>
-                                <select class="form-control custom-select edit_designation_select"
+                                <select class="form-control custom-select edit_designation_select designation_name"
                                     name="designation_name_edit">
                                     <option value="">Select Your Designation</option>
                                     {% for designations in designation %}
@@ -1170,6 +1199,41 @@
                                 </select>
                             </div>
                         </div>
+
+
+                        <div class="col-sm-12 col-md-6 col-lg-3 course">
+                            <div class="mb-3">
+                                <label for="" class="form-label">Course <span class="text-danger">*</span></label>
+                                <select class="form-control custom-select course_select" name="course_id">
+                                    <option selected value="">Select Course</option>
+                                    {% for course in courses %}
+                                    
+                                    <option value="{{course.id}}">{{course.course_name}}</option>
+                                    
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-3 specialization">
+                            <div class="mb-3">
+                                <label for="" class="form-label">Specialization
+                                    
+                                </label>
+                                <select name="specialization_id" id="" class="form-control custom-select specialization-select">
+
+
+                                </select>
+                                
+                                                                    
+
+                            </div>
+                        </div>       
+
+
+
+
+
 
                         <div class="col-sm-12 col-md-6" data-employee-id="{{ employees.id }}">
                             <div class="mb-3">
@@ -1582,6 +1646,85 @@
 
 
 {% block scripts %}
+
+<script>
+    $(document).ready(function(){
+        $('.course').hide();
+        $('.specialization').hide();
+        $('.designation_name').change(function(){
+            if ($(this).find("option:selected").text() == "Teaching Staff") {
+                $('.course').show();
+                $('.specialization').show();
+                console.log($(this).find("option:selected").text())
+                console.log("fount")
+            }
+            else{
+                $('.course').hide();
+                $('.specialization').hide();
+                console.log($(this).find("option:selected").text())
+                console.log("not found")
+            }
+        });
+    });
+
+</script>
+<!--  -->
+<script>
+    $(document).ready(function(){
+        if ( $('#selectAll').is(':checked') ) {
+            $('.row-checkbox').each(function() {
+                $(this).prop('checked',true)
+            })
+        }
+
+    })
+</script>
+
+<!--  -->
+
+<script>
+    $(document).ready(function () {
+        $('.course_select').change(function(){
+            var course_id = $(this).val();
+            var url = '/get_specialization_for_emp/' + course_id;
+            console.warn(url);
+            $.ajax({
+                url: url,
+                success: function (data) {
+                    var spec_list = data.specialization_list;
+                    console.log(spec_list)
+                    var options = '<option value="">Select Specialization</option>';
+                    for (var i = 0; i < spec_list.length; i++) {
+                        options += '<option value="' + spec_list[i].id + '">' + spec_list[i].specialization + '</option>';
+                        
+                    }
+                    $('.specialization-select').html(options);
+
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching specialization data:', error);
+                }
+            });
+        });
+    });
+    
+    
+</script>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
 <script>
     $(document).ready(function () {
         $.validator.addMethod("noSpecialChars", function (value, element) {
@@ -2620,7 +2763,7 @@
             } else {
                 $('#designation_select').prop('disabled', true);
                 $('#designation_select').empty();
-                $('#designation_select').append('<option value="">Select Your Designation</option>');
+                $('#designation_select').append('<option value="" >Select Your Designation</option>');
             }
         });
         $('.edit_designation_select').prop('disabled', true);

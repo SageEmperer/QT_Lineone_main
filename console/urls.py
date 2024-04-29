@@ -631,6 +631,8 @@ urlpatterns = [
     path('employee_detail/<int:id>',views.employee_detail,name="employee_detail"),
     #employee delete all
     path('employee_delete_all/',views.employee_list_all,name="employee_delete_all"),
+   #  dropdown dependency
+   path('get_specialization_for_emp/<int:id>',views.get_specialization_for_emp,name="get_specialization_for_emp"),
     #employee import
     path('employee_import/',views.employee_upload,name="employee_import"),
 

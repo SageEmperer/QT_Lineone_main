@@ -601,6 +601,8 @@ class Employee_model(models.Model):
     employee_type=models.ForeignKey(EmployeeType_model,on_delete=models.CASCADE,null=True)
     department_name=models.ForeignKey(Department,on_delete=models.CASCADE,null=True)
     designation_name=models.ForeignKey(Designation,on_delete=models.CASCADE,null=True)
+    course_id = models.ForeignKey(Course,on_delete=models.CASCADE,null=True)
+    specialization_id = models.ForeignKey(Specialization,on_delete=models.CASCADE,null=True)
     branch=models.ForeignKey(BranchModel,on_delete=models.CASCADE)
     salary=models.DecimalField(max_digits=20,decimal_places=2)
     profile_image= models.ImageField(upload_to='profile_image',null=True,blank=True)
@@ -634,6 +636,9 @@ class Employee_model(models.Model):
 
     def __str__(self) ->str:
         return self.first_name 
+
+
+
 
 
 
@@ -930,15 +935,15 @@ class Student_payment(models.Model):
     payment_verification = models.CharField(max_length=100, choices=verification,blank=True,null=True)
     remarks = models.TextField(null=True, blank=True)
     student_password=models.CharField(max_length=225,null=True,blank=True)
-    payment_status=models.BooleanField(default=False,choices=choice_status)
+    payment_status=models.BooleanField(default=False)
     
-    def save(self, *args, **kwargs):
-       if self.payment_amount:
+    # def save(self, *args, **kwargs):
+    #    if self.payment_amount:
            
-               self.payment_status = 'Paid'
-       else:
-               self.payment_status = 'Not Paid'
-       super().save(*args, **kwargs)
+    #            self.payment_status = 'Paid'
+    #    else:
+    #            self.payment_status = 'Not Paid'
+    #    super().save(*args, **kwargs)
         
         
     

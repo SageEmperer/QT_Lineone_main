@@ -5812,6 +5812,10 @@ def employee_list(request):
    employee_type=register_user.employee_types.get(id=request.POST.get('employee_type'))
    department_name=register_user.departments.get(pk=request.POST.get('department_name'))
    designation_name=register_user.designations.get(pk=request.POST.get('designation_name'))
+   specialization_id =  Specialization.objects.get(pk=request.POST.get('specialization_id'))
+   course_id =  Course.objects.get(pk=request.POST.get('course_id'))
+  #  specialization_id =  register_user.specializations.get(pk=request.POST.get('specialization_id'))
+  #  course_id =  register_user.courses.get(pk=request.POST.get('course_id'))
    branch=register_user.branches.get(pk=request.POST.get('branch'))
    profile_image=request.FILES.get('profile_image')
    salary=request.POST.get('salary')
@@ -5872,6 +5876,8 @@ def employee_list(request):
       employee_type=employee_type,
       department_name=department_name,
       designation_name=designation_name,
+      course_id= course_id,
+      specialization_id = specialization_id,
       branch=branch,
       profile_image=profile_image,
       salary=salary,
@@ -5898,15 +5904,26 @@ def employee_list(request):
   employee_type=register_user.employee_types.all().order_by('-id')
   department=register_user.departments.all().order_by('-id')
   designation=register_user.designations.all().order_by('-id')
+  courses = register_user.courses.filter(status='Active')
+  specializations = register_user.specializations.filter(status="Active").order_by('-id')
   context={
     'employee':employee,
     'branch':branch,
     'employee_type':employee_type,
     'department':department,
-    'designation':designation
+    'designation':designation,
+    'courses':courses,
+    'specializations':specializations
   }
   return render(request,'employee_management/employee_list.html',context)
 
+
+
+
+def get_specialization_for_emp(request, id):
+    specialization = Specialization.objects.filter(course_name=id, status="Active")
+    specialization_list = [{'id': spc.id, 'specialization': spc.specilalization_name} for spc in specialization]
+    return JsonResponse({'specialization_list': specialization_list})
 
 
 
@@ -6048,6 +6065,9 @@ def employee_update(request,id):
     employee_type=register_user.employee_types.get(pk=request.POST.get('employee_type_edit'))
     department_name=register_user.departments.get(pk=request.POST.get('department_name_edit'))
     designation_name=register_user.designations.get(pk=request.POST.get('designation_name_edit'))
+    specialization_id =  Specialization.objects.get(pk=request.POST.get('specialization_id'))
+    course_id =  Course.objects.get(pk=request.POST.get('course_id'))
+    
     branch=register_user.branches.get(pk=request.POST.get('branch_edit'))
     profile_image=request.FILES.get('profile_image_edit')
     salary=request.POST.get('salary_edit')
@@ -6117,7 +6137,8 @@ def employee_update(request,id):
       nationality=nationality,
       religion=religion,
       caste=caste,
-     
+      course_id= course_id,
+      specialization_id = specialization_id,
       employee_type=employee_type,
       department_name=department_name,
       designation_name=designation_name,
@@ -6134,7 +6155,10 @@ def employee_update(request,id):
       
     )
     messages.success(request, f'Employee updated successfully')
+    return redirect('employees')
    
+
+
 
 
 
@@ -8362,6 +8386,7 @@ def student_payment_update(request):
           f'In case of any query, please contact us at {request.session.get("admin_user").get("name")}.\n\n'
           f'Thank you for using {request.session.get("admin_user").get("company_name")}.'
         )
+
         #send email to the student
         email_form=settings.EMAIL_HOST_USER
         to_email=[obj.studend_id.email]
@@ -8880,7 +8905,7 @@ def student(request):
     return render(request,'mock_interview/student.html')
 # student book an interview view start here
 def student_Book_an_interview(request):
-    return render(request, 'faculty/student.html', context)
+    return render(request, 'faculty/student.html')
 
 
 from django.http import JsonResponse
