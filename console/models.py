@@ -617,25 +617,23 @@ class Employee_model(models.Model):
     pan_card_pdf= models.FileField(upload_to='pan_card_pdf',default=None,blank=True)
     status = models.CharField(max_length=20, choices=choice_status, default='Active')
     def generate_employee_id(self):
-        prefix=f'{self.crn_number.company_short_name}'
-        today=datetime.now().date()
-        year=today.year%100
-        month=today.month
-        day=today.day
-        last_employee=Employee_model.objects.filter().order_by('-Employee_id').first()
-        if last_employee:
-            last_number = int(last_employee.Employee_id[-3:]) + 1
-        else:
-            last_number = 1
-        return f'{prefix}E{day:02d}{month:02d}{year:02d}{last_number:03d}'
+            prefix = f'{self.crn_number.company_short_name}E'
+            today = datetime.now().date()
+            year = today.year % 100
+            month = today.month
+            day = today.day
+            employee_id_prefix = f'{prefix}{day:02d}{month:02d}{year:02d}'
+            last_employee = Employee_model.objects.filter(Employee_id__startswith=employee_id_prefix).order_by('-Employee_id').first()
+            if last_employee:
+                last_number = int(last_employee.Employee_id[-3:]) + 1
+            else:
+                last_number = 1
+            return f'{employee_id_prefix}{last_number:03d}'
     def save(self, *args, **kwargs):
         if not self.Employee_id:
             self.Employee_id = self.generate_employee_id()
         super().save(*args, **kwargs)
-            
 
-    def __str__(self) ->str:
-        return self.first_name 
 
 
 

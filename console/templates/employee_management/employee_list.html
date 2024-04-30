@@ -1205,7 +1205,7 @@
                             <div class="mb-3">
                                 <label for="" class="form-label">Course <span class="text-danger">*</span></label>
                                 <select class="form-control custom-select course_select" name="course_id">
-                                    <option selected value="">Select Course</option>
+                                    <option selected value="">Select Course </option>
                                     {% for course in courses %}
                                     
                                     <option value="{{course.id}}">{{course.course_name}}</option>
@@ -1870,6 +1870,12 @@
                     minlength: 10
 
                 },
+                course_id:{
+                    required:true
+                },
+                specialization_id:{
+                    required:true
+                },
                 aadhar_card: {
                     required: true,
                     digits: true,
@@ -1954,6 +1960,12 @@
                 },
                 pan_card_pdf: {
                     accept: 'Only PDF files are allowed.'
+                },
+                course_id:{
+                    required:"Please select course"
+                },
+                specialization_id:{
+                    required:"Please select specialization"
                 }
 
             },
@@ -2092,6 +2104,12 @@
                     branch_edit: {
                         required: true
                     },
+                    course_id:{
+                        required:true
+                    },
+                    specialization_id:{
+                        required:true
+                    },
                     pincode_edit: {
                         digits: true,
                         minlength: 6,
@@ -2180,6 +2198,12 @@
                         digits: "Alphabets and special characters are not allowed",
                         minlength: "Minimum of 6 characters",
                         maxlength: "Maximum of 6 characters",
+                    },
+                    course_id:{
+                        required:"Please select course"
+                    },
+                    specialization_id:{
+                        required:"Please select specialization"
                     },
                     address_edit: {
                         maxlength: "Maximum of 1200 characters",

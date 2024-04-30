@@ -7,6 +7,7 @@ urlpatterns = [
     path('otp_page/<int:user_id>/',views.otp_page,name="otp_page"),
     path('register_resend_otp/',views.register_resend_otp,name="register_resend_otp"),
     path('terms_and_conditions/',views.terms_and_conditions,name="terms_and_conditions"),
+    path('forgot_password/',views.forgot_password,name="forgot_password"),
     path('departments/',views.departments,name="departments"),
     path('settings/',views.settings_page,name="settings"),
     path('designations/',views.designations,name="designations"),

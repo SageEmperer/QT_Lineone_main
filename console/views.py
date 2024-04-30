@@ -191,6 +191,26 @@ def terms_and_conditions(request):
 
 
 
+# forgot password function for the admin
+# forgot password
+def forgot_password(request):
+ if request.method == "POST":
+  email = request.POST.get('email_id')
+  if Register_model.objects.filter(email_id=email).exists():
+    user = Register_model.objects.get(email_id=email)
+    message = f'Your password is {user.password}'
+    send_mail('Forgot Password', message, settings.EMAIL_HOST_USER, [email])
+    messages.success(request, 'Password sent to your email')
+    return redirect('login')
+
+
+ return render(request,'accounts/forgot_password.html')
+
+
+
+
+
+
 
 # Dashboard page
 @admin_required  
@@ -5809,11 +5829,11 @@ def employee_list(request):
    religion=request.POST.get('religion')
    caste=request.POST.get('caste')
    Employee_id=request.POST.get('Employee_id')
-   employee_type=register_user.employee_types.get(id=request.POST.get('employee_type'))
+   employee_type= register_user.employee_types.get(id=request.POST.get('employee_type'))
    department_name=register_user.departments.get(pk=request.POST.get('department_name'))
    designation_name=register_user.designations.get(pk=request.POST.get('designation_name'))
-   specialization_id =  Specialization.objects.get(pk=request.POST.get('specialization_id'))
-   course_id =  Course.objects.get(pk=request.POST.get('course_id'))
+  #  specialization_id = Specialization.objects.get(pk=request.POST.get('specialization_id'))
+  #  course_id =  Course.objects.get(pk=request.POST.get('course_id'))
   #  specialization_id =  register_user.specializations.get(pk=request.POST.get('specialization_id'))
   #  course_id =  register_user.courses.get(pk=request.POST.get('course_id'))
    branch=register_user.branches.get(pk=request.POST.get('branch'))
@@ -5876,8 +5896,8 @@ def employee_list(request):
       employee_type=employee_type,
       department_name=department_name,
       designation_name=designation_name,
-      course_id= course_id,
-      specialization_id = specialization_id,
+      # course_id= course_id,
+      # specialization_id = specialization_id,
       branch=branch,
       profile_image=profile_image,
       salary=salary,
@@ -5897,6 +5917,14 @@ def employee_list(request):
       password = "A#aruddin@834",
       employee = emp
       )  
+      if request.POST.get('specialization_id'):
+        if Specialization.objects.filter(id=request.POST.get('specialization_id')).exists():
+          emp.specialization.add(Specialization.objects.get(pk=request.POST.get('specialization_id')))
+
+      if request.POST.get('course_id'):
+        course_id = request.POST.get('course_id')
+        if Course.objects.filter(id=course_id).exists():
+          emp.course.add(Course.objects.get(pk=course_id)) 
       messages.success(request,'Employee has been successfully created')
       return redirect('employees')
   employee=register_user.employee.all().order_by('-id')
@@ -6065,8 +6093,8 @@ def employee_update(request,id):
     employee_type=register_user.employee_types.get(pk=request.POST.get('employee_type_edit'))
     department_name=register_user.departments.get(pk=request.POST.get('department_name_edit'))
     designation_name=register_user.designations.get(pk=request.POST.get('designation_name_edit'))
-    specialization_id =  Specialization.objects.get(pk=request.POST.get('specialization_id'))
-    course_id =  Course.objects.get(pk=request.POST.get('course_id'))
+    # specialization_id =  Specialization.objects.get(pk=request.POST.get('specialization_id'))
+    # course_id =  Course.objects.get(pk=request.POST.get('course_id'))
     
     branch=register_user.branches.get(pk=request.POST.get('branch_edit'))
     profile_image=request.FILES.get('profile_image_edit')
@@ -6124,7 +6152,7 @@ def employee_update(request,id):
         employee.save()
         
     else:
-       register_user.employee.filter(id=id).update(
+      register_user.employee.filter(id=id).update(
       first_name=first_name,
       last_name=last_name,
       personal_number=personal_number,
@@ -6137,8 +6165,8 @@ def employee_update(request,id):
       nationality=nationality,
       religion=religion,
       caste=caste,
-      course_id= course_id,
-      specialization_id = specialization_id,
+      # course_id= course_id,
+      # specialization_id = specialization_id,
       employee_type=employee_type,
       department_name=department_name,
       designation_name=designation_name,
@@ -6154,6 +6182,16 @@ def employee_update(request,id):
       pan_card=pan_card,
       
     )
+      emp = register_user.employee.get(id=id)
+
+      if request.POST.get('specialization_id'):
+        if Specialization.objects.filter(id=request.POST.get('specialization_id')).exists():
+          emp.specialization.add(Specialization.objects.get(pk=request.POST.get('specialization_id')))
+      if request.POST.get('course_id'):
+        course_id = request.POST.get('course_id')
+        if Course.objects.filter(id=course_id).exists():
+          emp.course.add(Course.objects.get(pk=course_id)) 
+
     messages.success(request, f'Employee updated successfully')
     return redirect('employees')
    
