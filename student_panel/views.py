@@ -96,6 +96,18 @@ def reset_paasword(request):
 @student_required    
 def internship(request):
     return render(request, 'internship.html')
+ 
+
+
+def faculty_jason(request,spec_id):
+    faculty = Employee_model.objects.filter(specialization_id=spec_id)
+    faculty_list = [{'first_name': fac.first_name,'last_name': fac.last_name, 'id': fac.id} for fac in faculty] 
+    return JsonResponse(faculty_list, safe=False)
+
+def find_slot(request,fac_id):
+    slot = Scheduling_mock_model.objects.filter(faculty=fac_id)
+    slot_list = [{'available_slot': slot.available_slot, 'id': slot.id} for slot in slot] 
+    return JsonResponse(slot_list, safe=False)
 
 
 
@@ -107,6 +119,12 @@ def mocks(request):
     crn = credentials.studend_id.crn_number.crn
     register_user = Register_model.objects.get(crn=crn)
     courses = register_user.courses.all()
+    if request.method == 'POST':
+        course_name = request.POST.get('course_name')
+        specialization = request.POST.get('specialization')
+        
+
+
     # student= LeadModel.objects.get(id=credentials.studend_id)
     # print(student)
     # crn = LeadModel.objects.get(id=student_id).crn_number

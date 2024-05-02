@@ -5961,7 +5961,7 @@ def employee_list(request):
       pan_card=pan_card,
       aadhar_card_pdf=aadhar_card_pdf,
       pan_card_pdf=pan_card_pdf,
-      password=rand_password,
+      # password=rand_password,
       crn_number=register_user
       )
       if course_id and specialization_id:
@@ -7263,6 +7263,21 @@ def jobrole_import(request):
 
 
 # Leads start here
+
+def getting_teaching_emp(request,course_id,spec_id):
+
+  crn = request.session.get('admin_user').get('crn')
+  register_user = Register_model.objects.get(crn=crn)
+  employee = Employee_model.objects.filter(course_id=course_id,specialization_id = spec_id).all()
+  employee_list = [{'id': emp.id, 'first_name': emp.first_name, 'last_name':emp.last_name} for emp in employee]
+  
+  return JsonResponse(employee_list, safe=False)
+
+
+
+
+
+
 @admin_required
 def lead_prospects(request):
  
@@ -7281,7 +7296,7 @@ def lead_prospects(request):
   # getting prospect types
   prospect_types = register_user.prospect_types.filter(status='Active')
   # getting faculty
-  faculty = register_user.employee.all()
+  # faculty = register_user.employee.all()
   prospect_count = register_user.leads.filter(lead_position = "PROSPECT").count()
   lead_count = register_user.leads.filter(lead_position = "LEAD").count()
   mql_count = register_user.leads.filter(lead_position = 'MQL').count()
@@ -7290,6 +7305,7 @@ def lead_prospects(request):
   opportunity_count = register_user.leads.filter(lead_position = 'OPPORTUNITY').count()
   admission_count = register_user.leads.filter(lead_position = 'ADMITTED').count()
   spam_count = register_user.leads.filter(lead_position = 'SPAM').count()
+  faculty = register_user.employee.filter(designation_name__designation_name = "Teaching Staff").all()
 
   
   context={
@@ -8641,6 +8657,198 @@ def payment_view(request,id):
 
 
 
+# expense start here
+
+
+#Expences Types
+@admin_required
+def expences_types(request):
+  crn=request.session.get('admin_user').get('crn')
+  register_user=Register_model.objects.get(crn=crn)
+  if request.method == 'POST':
+    expences_type=request.POST.get('expences_type')
+    if register_user.expences_type.filter(expences_type=expences_type).exists():
+      messages.error(request,'Expences type already exists')
+      return redirect('expences_types')
+    else:
+      register_user.expences_type.create(expences_type=expences_type.strip().title(),crn=register_user)
+      messages.success(request,'Expences type added successfully')
+      return redirect('expences_types')
+  expences_type=register_user.expences_type.all().order_by('-id')
+  context={
+    'expences_type':expences_type
+  }
+
+  return render(request,'finance_and_accounts/expences_types.html',context)
+
+@admin_required
+def expences_types_status(request,id):
+  crn=request.session.get('admin_user').get('crn')
+  register_user=Register_model.objects.get(crn=crn)
+  expences_type=register_user.expences_type.get(id=id)
+  if expences_type.status=="Active":
+    expences_type.status="Deactive"
+  else:
+    expences_type.status="Active"
+  expences_type.save()
+  messages.success(request,'Expences type status updated successfully')
+  return redirect('expences_types')
+
+@admin_required
+def expences_types_all(request):
+  crn=request.session.get('admin_user').get('crn')
+  register_user=Register_model.objects.get(crn=crn)
+  if request.method == 'POST':
+    selected_ids=request.POST.get('selected_ids')
+    selected_ids_list=selected_ids.split(',')
+    register_user.expences_type.filter(id__in=selected_ids_list).delete()
+    messages.success(request,'Expences type deleted successfully')
+    return redirect('expences_types')
+
+
+@admin_required
+def expences_types_update(request,id):
+  crn=request.session.get('admin_user').get('crn')
+  register_user=Register_model.objects.get(crn=crn)
+  if request.method == 'POST':
+    expences_type_edit=request.POST.get('expences_type_edit')
+    if register_user.expences_type.filter(expences_type=expences_type_edit).exists():
+      messages.error(request,'Expences type already exists')
+      return redirect('expences_types')
+    else:
+      register_user.expences_type.filter(id=id).update(
+        expences_type=expences_type_edit.strip().title(),
+        )
+      messages.success(request,'Expences type updated successfully')
+      return redirect('expences_types')
+@admin_required
+def expences_types_delete(request,id):
+  crn=request.session.get('admin_user').get('crn')
+  register_user=Register_model.objects.get(crn=crn)
+  if request.method == "POST":
+    if register_user.expences_type.filter(id=id).exists():
+      expences_type = register_user.expences_type.get(id=id)
+      expences_type.delete()
+      messages.success(request,'Expences type deleted successfully')
+      return redirect('expences_types')
+    else:
+      messages.error(request,'Expences type does not exists')
+      return redirect('expences_types')
+  else:
+    messages.error(request,'Invalid request')
+    return redirect('expences_types')
+
+#company expences and employee expences
+@admin_required
+def company_expences_and_employee_expences(request):
+  crn=request.session.get('admin_user').get('crn')
+  register_user=Register_model.objects.get(crn=crn)
+  if request.method == 'POST':
+    category=request.POST.get('category')
+    faculty = register_user.employee.get(pk=request.POST.get('faculty'))
+    title=request.POST.get('title')
+    expences=register_user.expences_type.get(id=request.POST.get('expences'))
+    mode_of_payment=request.POST.get('mode_of_payment')
+    upi_type=register_user.upi.get(id=request.POST.get('upi_type'))
+    upi_transaction_id=request.POST.get('upi_transaction_id')
+    account_number=request.POST.get('account_number')
+    account_name=request.POST.get('account_name')
+    ifsc_code=request.POST.get('ifsc_code')
+    bank_name=request.POST.get('bank_name')
+    branch_name=request.POST.get('branch_name')
+    amount=request.POST.get('amount')
+    payment_date=request.POST.get('payment_date')
+    payment_recipt=request.FILES.get('payment_recipt')
+    if register_user.company_expences_and_employee_expences.filter(upi_transaction_id=upi_transaction_id,ifsc_code=ifsc_code,bank_name=bank_name,branch_name=branch_name).exists():
+      messages.error(request,'Expences already exists')
+      return redirect('company_expences_and_employee_expences')
+    else:
+      register_user.company_and_employee_modal.create(
+        category=category.strip().title(),
+        faculty=faculty,
+        title=title.strip().title(),
+        expences=expences,
+        mode_of_payment=mode_of_payment.strip().title(),
+        upi_type=upi_type,
+        upi_transaction_id=upi_transaction_id.strip().title(),
+        account_number=account_number,
+        account_name=account_name.strip().title(),
+        ifsc_code=ifsc_code.strip().title(),
+        bank_name=bank_name.strip().title(),
+        branch_name=branch_name.strip().title(),
+        amount=amount,
+        payment_date=payment_date,
+        payment_recipt=payment_recipt,
+        crn_number=register_user
+      )
+      return redirect('company_expences_and_employee_expences')
+  expence=register_user.company_and_employee_modal.all().order_by("-id")
+  faculty=register_user.employee.all().order_by("-id")
+  upi=register_user.upi.all().order_by("-id")
+  expences_type=register_user.expences_type.all().order_by("-id")
+  context = {
+        'expence':expence,
+        'faculty':faculty,
+        'upi':upi,
+        'expences_type':expences_type
+        
+        
+    }
+    
+  return render(request,'finance_and_accounts/company_expences_and_employee_expences.html',context)  
+
+
+
+
+@admin_required
+def fetch_employee_details(request, employee_id):
+    try:
+        employee = Employee_model.objects.get(id=employee_id)
+        # Assuming Employee_model has fields: first_name, last_name, department, designation, branch
+        data = {
+            'employee_name': f"{employee.first_name} {employee.last_name}",
+            'designation': employee.designation,
+            'department': employee.department,
+            'branch': employee.branch
+        }
+        return JsonResponse(data)
+    except Employee_model.DoesNotExist:
+        return JsonResponse({'error': 'Employee not found'}, status=404)
+
+
+
+
+
+
+
+
+# expense end here
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # 
 # 
@@ -8676,8 +8884,47 @@ def hr_details(request):
     
     return render(request,'hr_portal/HR details/hrdetails.html',context)
 
-def job_detailes(request):
-    return render(request,'hr_portal/HR details/jobdetails.html')
+
+@admin_required
+def job_detailes(request,id):
+    crn=request.session.get('admin_user').get('crn')
+    register_user = Register_model.objects.get(crn=crn)
+    
+    if register_user.job_post.filter(post_by=id).exists():
+      job_posts = register_user.job_post.filter(post_by=id)
+      employee = register_user.employee.get(id=id)
+
+    else:
+      job_posts = None
+    context= {
+      'job_posts':job_posts,
+      'employee':employee
+    }  
+    return render(request,'hr_portal/HR details/jobdetails.html',context)
+
+
+
+
+# job details export
+@admin_required
+def job_details_export(request,id):
+  crn = request.session.get('admin_user').get('crn')
+  register_user = Register_model.objects.get(crn=crn)
+  job_posts = register_user.job_post.filter(post_by=id)
+  response = HttpResponse(content_type='text/csv')
+  response['Content-Disposition'] = f'attachment; filename="job_details.csv"'
+  writer = csv.write(response)
+  writer.writerow['S.No','Job ID','Job Title','Job Category','Experience','Qualification','Skills','Role','Salary','Location','Email','Contact Number','Last Date to Apply','Posted Date','Job Description']
+
+  num= 0
+  for i in job_posts:
+    num+=1
+
+
+
+
+
+
 
 def job_description(request):
     return render(request,'hr_portal/jobdescription.html')

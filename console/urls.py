@@ -87,6 +87,7 @@ urlpatterns = [
     path('mark_as_spam/', views.mark_as_spam, name='mark_as_spam'),
     path('get_upi_details/<int:upi_id>',views.get_upi_details,name="get_upi_details"),
     path('request_dis/<int:id>',views.request_dis,name="request_dis"),
+    path('getting_teaching_emp/<int:course_id>/<int:spec_id>',views.getting_teaching_emp,name="getting_teaching_emp"),
 
 
 
@@ -131,10 +132,32 @@ urlpatterns = [
 
 
 
+
+   #expences
+   path('expences_types',views.expences_types,name="expences_types"),
+   path('expences_types_status/<int:id>',views.expences_types_status,name="expences_types_status"),
+   path('expences_types_all/',views.expences_types_all,name="expences_types_all"),
+   path('expences_types_update/<int:id>',views.expences_types_update,name="expences_types_update"),
+   path('expences_types_delete/<int:id>',views.expences_types_delete,name="expences_types_delete"),
+   
+   #company_expences and employee expences
+   path('Expences/',views.company_expences_and_employee_expences,name="Expences"), 
+   #company_expences and employee expences details
+ path('fetch_employee_details/<int:employee_id>/', views.fetch_employee_details, name='fetch_employee_details'),
+
+
+
+
+
+
+
+
+
+
       # hr portal start here
     path('hr',views.hr_details,name="hr"),
     path('placement_dashboard/',views.placement_dashboard,name='placement_dashboard'),
-    path('jobdetails/',views.job_detailes, name='jobdetails'),
+    path('jobdetails/<int:id>/',views.job_detailes, name='jobdetails'),
     path('applied/',views.applied_students, name='applied'),
     path('placed/',views.placed_students,name='placed'),
     path('jobdescription/',views.job_description, name='jobdescription'),

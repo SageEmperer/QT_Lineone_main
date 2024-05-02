@@ -27,5 +27,7 @@ urlpatterns = [
     path('certificate', views.CERTIFICATE, name='certificate'),
     path('payments/', views.payments, name='payments'),
     path('invoice/',views.Invoice,name='invoice'),
+    path('faculty_jason/<int:spec_id>/',views.faculty_jason,name="spec_id"),
+    path('find_slot/<int:fac_id>',views.find_slot,name="find_slot"),
     
 ]

@@ -59,7 +59,7 @@
               {{forloop.counter}}  <!-- <input type="checkbox" class="row-checkbox" data-id="{{i.id}}"> -->
               </td>
               <td>{{i.Employee_id}}</td>
-              <td><a href="{% url 'jobdetails' %}">{{i.first_name}} {{i.last_name}}</a></td>
+              <td><a href="{% url 'jobdetails' i.id %}">{{i.first_name}} {{i.last_name}}</a></td>
               <td>{{i.personal_email}}</td>
               <td>{{i.personal_number}}</td>
               <td>{{i.branch.branch_name}}</td>

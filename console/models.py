@@ -994,6 +994,42 @@ class Finance_and_Accounts(models.Model):
 
 
 
+# expense
+
+class expences_type(models.Model):
+    choice_satus = (('Active', 'Active'), ('Deactive', 'Deactive'))
+    crn=models.ForeignKey(Register_model,on_delete=models.CASCADE,related_name='expences_type')
+    expences_type=models.CharField(max_length=100,null=True,blank=True)
+    status=models.CharField(max_length=100, choices=choice_satus, default='Active')
+    
+    def __str__(self):
+        return str(self.expences_type)
+    
+class company_and_employee_modal(models.Model):
+    crn_number = models.ForeignKey(Register_model, on_delete=models.CASCADE, related_name='company_and_employee_modal')
+    category=models.CharField(max_length=100,null=True,blank=True)
+    faculty = models.ForeignKey(Employee_model, on_delete=models.SET_NULL, null=True,blank=True)
+    title=models.CharField(max_length=100,null=True,blank=True)
+    expences=models.ForeignKey(expences_type,on_delete=models.SET_NULL,null=True ,blank=True)
+    mode_of_payment=models.CharField(max_length=100,null=True,blank=True)
+    upi_type=models.ForeignKey(upipayments,on_delete=models.SET_NULL,null=True,blank=True)
+    upi_transaction_id=models.CharField(max_length=100,null=True,blank=True)
+    net_banking = models.ForeignKey(netbanking,on_delete=models.SET_NULL,null=True,blank=True)
+    account_number=models.CharField(max_length=100,null=True,blank=True)
+    account_name=models.CharField(max_length=100,null=True,blank=True)
+    ifsc_code=models.CharField(max_length=100,null=True,blank=True)
+    bank_name=models.CharField(max_length=100,null=True,blank=True)
+    branch_name=models.CharField(max_length=100,null=True,blank=True)
+    amount=models.DecimalField(max_digits=9,decimal_places=2)
+    payment_date=models.DateTimeField(default=datetime.now(),null=True,blank=True)
+    payment_recipt=models.FileField(upload_to='payment_recipt',null=True,blank=True)
+
+
+
+
+
+
+
 
 
 

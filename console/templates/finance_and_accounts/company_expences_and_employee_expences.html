@@ -1,0 +1,664 @@
+{% extends 'base/base.html' %}
+
+{% block title %} QTLineone | Expences {% endblock %}
+
+{% block breadCrum %}
+
+<!-- Breadcrumb -->
+<div class="hk-pg-header d-flex justify-content-between mb-0">
+    <h4 class="hk-pg-title m-3">Expences</h4>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-transparent mb-0">
+            <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Expences</li>
+        </ol>
+    </nav>
+
+</div>
+
+<!-- /Breadcrumb -->
+{% endblock %}
+
+{% block content %}
+{% if messages %}
+{% for message in messages %}
+{% if message.tags == "error" %}
+<div class="h-25 alert alert-danger alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
+{% elif message.tags == "success" %}
+<div class="h-25 alert alert-success alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
+{% else %}
+<div class="h-25 alert alert-info alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
+{% endif %}
+{% endfor %}
+{% endif %}
+
+<h4 class="hk-pg-title mb-3">Expences of 2024</h4>
+<section class="hk-sec-wrapper">
+    <div class="d-flex justify-content-between">
+        <button type="button" class="btn btn-primary mr-2 mb-3" data-toggle="modal" data-target="#exampleModalCenter">
+            Add Expences
+        </button>
+
+    </div>
+    <div class="accordion accordion-type-1 mt-3" id="accordion_1">
+
+        <div class="card">
+            <div class="card-header d-flex justify-content-between activestate">
+                <a role="button" data-toggle="collapse" href="#collapse_1" aria-expanded="true">April</a>
+            </div>
+            <div id="collapse_1" class="collapse show" data-parent="#accordion_1" role="tabpanel">
+                <div class="card-body pa-15">
+
+                    <div class="table-wrap">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="bg-dark">
+                                    <tr>
+                                        <th class="text-white">#</th>
+                                        <th class="text-white">Title</th>
+                                        <th class="text-white">Amount</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+</section>
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title text-white">Add Expenses</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="post" id="Expenceform">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="name" class="form-label"><b>Category <span class="text-danger">*</span></b></label>
+                        <select name="category" id="category" class="form-control custom-select" onchange="toggleEmployeeFields()">
+                            <option value="" selected>Select Category</option>
+                            <option value="Employee">Employee</option>
+                            <option value="Company">Company</option>
+                        </select>
+                    </div>
+                    <!-- Employee Fields -->
+                    <div id="employeeFields" style="display: none;">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Employee ID <span class="text-danger">*</span>
+                                    </label>
+                                    <select name="employee_id" class="form-control custom-select"  onchange="fetchEmployeeDetails()" id="">
+                                        <option value="" selected>Select Employee ID</option>
+                                        {% for i in faculty %}
+                                        {% if i.status == 'Active' %}
+                                        <option value="{{ i.id }}" data-employee-id="{{ i.id }}">{{ i.Employee_id }}</option>
+                                        {% endif %}
+                                        {% endfor %}
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Employee Name <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" name="employee_name" class="form-control" id="" value="{{faculty.first_name}} {{faculty.last_name}}"
+                                        readonly>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Designation <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" name="designation" class="form-control" id="" value="" readonly>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Department <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" name="department" class="form-control" id="" value="" readonly>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Branch <span class="text-danger">*</span></label>
+                                    <input type="text" name="branch" class="form-control" id="" value="" readonly>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Expences Type <span
+                                            class="text-danger">*</span></label>
+                                    <select name="expences_type" id=""  class="form-control custom-select">
+                                        <option value="" selected>Select Expences Type</option>
+                                        {% for expences_types in expences_type %}
+                                        {% if expences_types.status == 'Active' %}
+                                        <option value="{{expences_types.id}}">{{expences_types.expences_type}}</option>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12 col-md-6">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Mode of Payment <span
+                                            class="text-danger">*</span></label>
+                                    <select name="mode_of_payment" id="" class="form-control custom-select">
+                                        <option value="" selected>Select Mode of Payment</option>
+                                        <option value="Cash">Cash</option>
+                                        <option value="Cheque">Cheque</option>
+                                        <option value="UPI">UPI</option>
+                                        <option value="Netbanking">Netbanking</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">UPI Type <span class="text-danger">*</span></label>
+                                    <select name="upi_type" id="" class="form-control custom-select">
+                                        <option value="" selected>Select UPI Type</option>
+                                        {% for upi_types in upi %}
+                                        {% if upi_types.status == 'Active' %}
+                                        <option value="{{upi_types.id}}">{{upi_types.upipayments_name}}</option>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label" for="">UPI Transaction Id</label>
+                                    <input type="text" name="upi_transaction_id" class="form-control" id="">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Account Number <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" name="account_number" class="form-control" id="" value="">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Account Name <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" name="account_name" class="form-control" id="" value="">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">IFSC Code <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" name="ifsc_code" class="form-control" id="" value="">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Bank Name <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" name="bank_name" class="form-control" id="" value="">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Branch Name <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" name="branch_name" class="form-control" id="" value="">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Amount <span class="text-danger">*</span></label>
+                                    <input type="text" name="amount" class="form-control" id="" value="">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Payment Date <span
+                                            class="text-danger">*</span></label>
+                                    <input type="date" name="payment_date" class="form-control" id="" value="">
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Payment Recipt <span
+                                            class="text-danger">*</span></label>
+                                    <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Upload</span>
+                                        </div>
+                                        <div class="form-control text-truncate" data-trigger="fileinput"><i
+                                                class="glyphicon glyphicon-file fileinput-exists"></i> <span
+                                                class="fileinput-filename"></span></div>
+                                        <span class="input-group-append">
+                                            <span class=" btn btn-primary btn-file"><span class="fileinput-new">Select
+                                                    file</span><span class="fileinput-exists">Change</span>
+                                                <input type="file" name="payment_recipt">
+                                            </span>
+                                            <a href="#" class="btn btn-secondary fileinput-exists"
+                                                data-dismiss="fileinput">Remove</a>
+                                        </span>
+                                    </div>
+                                    <div id="payment_error"></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 ">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Remarks <span class="text-danger">*</span></label>
+                                    <textarea name="remarks" id="" class="form-control" rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Company Fields -->
+                    <div id="companyFields" style="display: none;">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Title <span class="text-danger">*</span></label>
+                                    <input type="text" name="title" class="form-control" id="" value="">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Expences Type <span
+                                            class="text-danger">*</span></label>
+                                    <select name="expences_type" id="" class="form-control custom-select">
+                                        <option value="" selected>Select Expences Type</option>
+                                        {% for expences_types in expences_type %}
+                                        {% if expences_types.status == 'Active' %}
+                                        <option value="{{expences_types.id}}">{{expences_types.expences_type}}</option>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Mode of Payment <span
+                                            class="text-danger">*</span></label>
+                                    <select name="mode_of_payment" id="" class="form-control custom-select">
+                                        <option value="" selected>Select Mode of Payment</option>
+                                        <option value="Cash">Cash</option>
+                                        <option value="Cheque">Cheque</option>
+                                        <option value="UPI">UPI</option>
+                                        <option value="Netbanking">Netbanking</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">UPI Type <span class="text-danger">*</span></label>
+                                    <select name="upi_type" id="" class="form-control custom-select">
+                                        <option value="" selected>Select UPI Type</option>
+                                        {% for upi_types in upi %}
+                                        {% if upi_types.status == 'Active' %}
+                                        <option value="{{upi_types.id}}">{{upi_types.upipayments_name}}</option>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label" for="">UPI Transaction Id</label>
+                                    <input type="text" name="upi_transaction_id" class="form-control" id="">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Account Number <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" name="account_number" class="form-control" id="" value="">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Account Name <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" name="account_name" class="form-control" id="" value="">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">IFSC Code <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" name="ifsc_code" class="form-control" id="" value="">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Bank Name <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" name="bank_name" class="form-control" id="" value="">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Branch Name <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" name="branch_name" class="form-control" id="" value="">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Amount <span class="text-danger">*</span></label>
+                                    <input type="text" name="amount" class="form-control" id="" value="">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Payment Date <span
+                                            class="text-danger">*</span></label>
+                                    <input type="date" name="payment_date" class="form-control" id="" value="">
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Payment Recipt <span
+                                            class="text-danger">*</span></label>
+                                    <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Upload</span>
+                                        </div>
+                                        <div class="form-control text-truncate" data-trigger="fileinput"><i
+                                                class="glyphicon glyphicon-file fileinput-exists"></i> <span
+                                                class="fileinput-filename"></span></div>
+                                        <span class="input-group-append">
+                                            <span class=" btn btn-primary btn-file"><span class="fileinput-new">Select
+                                                    file</span><span class="fileinput-exists">Change</span>
+                                                <input type="file" name="payment_recipt">
+                                            </span>
+                                            <a href="#" class="btn btn-secondary fileinput-exists"
+                                                data-dismiss="fileinput">Remove</a>
+                                        </span>
+                                    </div>
+                                    <div id="payment_error"></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 ">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Remarks <span class="text-danger">*</span></label>
+                                    <textarea name="remarks" id="" class="form-control" rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary m-1">Submit</button>
+                        <button type="button" class="btn btn-secondary m-1" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% block scripts %}
+
+
+<script>
+    document.getElementById('category').addEventListener('change', function () {
+        var category = this.value;
+        if (category === 'Employee') {
+            document.getElementById('employeeFields').style.display = 'block';
+            document.getElementById('companyFields').style.display = 'none';
+        } else if (category === 'Company') {
+            document.getElementById('employeeFields').style.display = 'none';
+            document.getElementById('companyFields').style.display = 'block';
+        } else {
+            document.getElementById('employeeFields').style.display = 'none';
+            document.getElementById('companyFields').style.display = 'none';
+        }
+    });
+</script>
+
+
+
+
+<script>
+    $(document).ready(function () {
+        //for ifsc code
+        jQuery.validator.addMethod("ifscCode", function (value, element) {
+            // Regular expression for Indian IFSC code format
+            var ifscRegex = /^[A-Z]{4}0[A-Z0-9]{6}$/;
+            return this.optional(element) || ifscRegex.test(value);
+        }, "Please enter a valid Indian IFSC code"); jQuery.validator.addMethod("ifscCode", function (value, element) {
+            // Regular expression for Indian IFSC code format
+            var ifscRegex = /^[A-Z]{4}0[A-Z0-9]{6}$/;
+            return this.optional(element) || ifscRegex.test(value);
+        }, "Please enter a valid Indian IFSC code");
+
+        $.validator.addMethod("noSpecialChars", function (value, element) {
+            return /^[a-zA-Z\s]*$/.test(value);
+        }, 'No Special Charectors and numbers are not allowed');
+        $.validator.addMethod("noSpace", function (value, element) {
+            return !(/^\s|\s$|\s{2,}/.test(value));
+        }, "No excessive or leading/trailing spaces");
+        $.validator.setDefaults({
+            errorPlacement: function (error, element) {
+                if (element.attr("name") === "payment_recipt") {
+                    error.appendTo("#payment_error");
+                } else {
+                    error.insertAfter(element);
+                }
+            }
+        });
+        $('#Expenceform').validate({
+            rules: {
+                category: {
+                    required: true
+                },
+                employee_id: {
+                    required: true
+                },
+                title: {
+                    required: true,
+                    noSpecialChars: true,
+                    noSpace: true,
+                },
+                expences_type: {
+                    required: true
+                },
+                mode_of_payment: {
+                    required: true
+                },
+                upi_type: {
+                    required: true
+                },
+                upi_transaction_id: {
+                    required: true,
+                    
+                    noSpace: true,
+                    maxlength: 100,
+                    minlength: 11,
+
+                },
+                account_number: {
+                    required: true,
+                   
+                    noSpace: true,
+                    maxlength: 30,
+                    minlength: 11,
+
+                },
+                account_name: {
+                    required: true,
+                    noSpecialChars: true,
+                    noSpace: true,
+                    maxlength: 50,
+                    minlength: 3,
+                },
+                ifsc_code: {
+                    required: true,
+                    ifscCode: true,
+                    noSpace:true,
+                    maxlength: 11,
+                    minlength: 11,
+
+                },
+                bank_name:{
+                    required: true,
+                    noSpecialChars: true,
+                    noSpace: true,
+                    maxlength: 100,
+                    minlength: 3,
+
+                },
+                branch_name:{
+                    required: true,
+                    noSpecialChars: true,
+                    noSpace: true,
+                    maxlength: 100,
+                    minlength: 3,
+                },
+                amount: {
+                    required: true
+                },
+                payment_date: {
+                    required: true
+                },
+                payment_recipt: {
+                    required: true,
+                    accept: "application/pdf"
+
+                },
+                remarks: {
+                    required: true,
+                    noSpecialChars: true,
+                    noSpace: true,
+                    maxlength: 2000,
+                    minlength: 20,
+                },
+
+            },
+            messages: {
+                category: {
+                    required: "Please select category"
+                },
+                employee_id: {
+                    required: "Please select employee"
+                },
+                title: {
+                    required: "Please enter title",
+                    maxlength: "Maximum 100 characters allowed",
+                    minlength: "Minimum 3 characters required",
+                },
+                expences_type: {
+                    required: "Please select expences type"
+                },
+                mode_of_payment: {
+                    required: "Please select mode of payment"
+                },
+                upi_type: {
+                    required: "Please select upi type"
+                },
+                upi_transaction_id: {
+                    required: "Please enter upi transaction id",
+                    maxlength: "Maximum 100 characters allowed",
+                    minlength: "Minimum 11 characters required",
+                },
+                account_number: {
+                    required: "Please enter account number",
+                    maxlength: "Maximum 30 characters allowed",
+                    minlength: "Minimum 11 characters required",
+                },
+                account_name: {
+                    required: "Please enter account name",
+                    maxlength: "Maximum 50 characters allowed",
+                    minlength: "Minimum 3 characters required",
+                },
+                ifsc_code: {
+                    required: "Please enter ifsc code",
+                    maxlength: "Maximum 11 characters allowed",
+                    minlength: "Minimum 11 characters required",
+                },
+                bank_name: {
+                    required: "Please enter bank name",
+                    maxlength: "Maximum 100 characters allowed",
+                    minlength: "Minimum 3 characters required",
+                },
+                branch_name: {
+                    required: "Please enter branch name",
+                    maxlength: "Maximum 100 characters allowed",
+                    minlength: "Minimum 3 characters required",
+                },
+                amount: {
+                    required: "Please enter amount",
+                },
+                payment_recipt: {
+                    required: "Please select payment recipt",
+                    accept: "Only pdf files are allowed"
+                },
+                payment_date: {
+                    required: "Please select payment date",
+                },
+                remarks: {
+                    required: "Please enter remarks",
+                    maxlength: "Maximum 2000 characters allowed",
+                    minlength: "Minimum 20 characters required",
+                },
+            },
+            submitHandler: function(form) {
+                form.submit();
+            }
+            
+        })
+
+    })
+</script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+    function fetchEmployeeDetails() {
+        var employeeId = document.getElementById("employee_id").value;
+        // AJAX request to fetch employee details
+        $.ajax({
+            url: "/fetch_employee_details/" + employeeId,  // Update the URL to your Django view
+            type: "GET",
+            success: function(response) {
+                // Update the DOM with employee details
+                document.getElementById("employee_name").value = response.employee_name;
+                document.getElementById("designation").value = response.designation;
+                document.getElementById("department").value = response.department;
+                document.getElementById("branch").value = response.branch;
+            },
+            error: function(xhr, errmsg, err) {
+                // Handle errors
+                console.log(xhr.status + ": " + xhr.responseText); // Log error message
+            }
+        });
+    }
+    
+</script>
+
+
+
+
+
+
+
+{% endblock %}
+
+
+{% endblock %}

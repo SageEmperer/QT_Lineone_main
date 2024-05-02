@@ -695,8 +695,7 @@
                         <!-- follow ups end here -->
 
                         <!-- finance and hrm star there -->
-
-                        <li class="nav-item {% if request.resolver_match.url_name in "['payment_verification']" %} active {% endif %}">
+                        <li class="nav-item {% if request.resolver_match.url_name in "['finance']" %} active {% endif %}">
                             <a class="nav-link" href="javascript:void(0);" data-toggle="collapse" data-target="#user_drp">
                                 <i class="ion ion-ios-cash"></i>
                                 <span class="nav-link-text">Finance and Accounts</span>
@@ -705,15 +704,26 @@
                                 <li class="nav-item">
                                     <ul class="nav flex-column">
                                         <!-- employee start here -->
-                                        <li class="nav-item {% if request.resolver_match.url_name == 'payment_verification' %} active {% endif %}">
+                                        <li class="nav-item {% if request.resolver_match.url_name == 'student_payment' %} active {% endif %}">
                                             <a class="nav-link" href="{% url 'payment_verification' %}">Latest Transactions</a>
                                         </li>
-                                       
+                                       <li class="nav-item">
+                                        <a href="javascript:void(0);" class="nav-link" data-toggle="collapse" data-target="#Components_drp">
+                                            Expences 
+                                        </a>
+                                        <ul id="user_drp" class="nav flex-column collapse collapse-level-2">
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="{% url 'expences_types' %}">Expences Types</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="{% url 'Expences' %}">Expences</a>
+                                            </li>
+                                        </ul>
+                                       </li>
                                     </ul>
                                 </li>
                             </ul>
                         </li>
-                        
 
 
                        <!-- Mocks  starts here -->

@@ -1,0 +1,387 @@
+{%  extends 'base/base.html' %}
+{% block title %} QTLineone | Expences Types {% endblock %}
+
+{% block breadCrum %}
+
+<!-- Breadcrumb -->
+<div class="hk-pg-header d-flex justify-content-between mb-0">
+    <h4 class="hk-pg-title m-3">Expences Types</h4>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-transparent mb-0">
+            <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+            
+            <li class="breadcrumb-item active" aria-current="page">Expences Types</li>
+        </ol>
+    </nav>
+</div>
+
+<!-- /Breadcrumb -->
+{% endblock %}
+
+{% block content %}
+{% if messages %}
+{% for message in messages %}
+{% if message.tags == "error" %}
+<div class="h-25 alert alert-danger alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
+{% elif message.tags == "success" %}
+<div class="h-25 alert alert-success alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
+{% else %}
+<div class="h-25 alert alert-info alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
+{% endif %}
+{% endfor %}
+{% endif %}
+
+
+<section class="hk-sec-wrapper">
+    <div class="">
+        <div class="d-flex justify-content-between">
+            <div>
+
+                <button type="button" class="btn btn-primary mr-2 mb-3" data-toggle="modal" data-target="#exampleModalCenter">
+                    <i class="glyphicon glyphicon-plus"></i> Add Expences Type
+                </button>
+            </div>
+
+
+            <div>
+                <button type="button" class="btn btn-danger mr-2 mb-3" id="deleteButton" data-toggle="modal"
+                data-target="#deleteModal" style="display: none;">
+                <i class="glyphicon glyphicon-trash"></i> Delete
+              </button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm">
+            <div class="table-wrap">
+                <table id="datable_1" class="table table-hover w-100 display pb-30">
+                    <thead class="bg-dark">
+                        <tr>
+
+                            <th class="text-white text-center"><input type="checkbox" id="selectAll"> All</th>
+                            <th class="text-white">S.No</th>
+                            <th class="text-white">Expences Type</th>
+                            <th class="text-white text-center">Status</th>
+                            <th class="text-white text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for expences_types in expences_type %}
+                        <tr>
+                            <td class="text-center"><input type="checkbox" class="row-checkbox" data-course-id="{{expences_types.id}}"
+                                data-course-name="{{expences_types.id}}"></td>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{expences_types.expences_type}}</td>
+                            <td class="text-center">
+                               {% if expences_types.status == 'Active' %}
+                                <a href="{% url 'expences_types_status' expences_types.id %}" class="badge badge-success badge-pill">
+                                    Active
+                                </a>
+                                {% else %}
+                                <a href="{% url 'expences_types_status' expences_types.id %}" class="badge badge-danger badge-pill">
+                                    Deactive
+                                </a>
+                                {% endif %}
+                            </td>
+                            <td class="text-center">
+                                <button class="btn btn-primary m-1" data-toggle="modal" data-target="#exampleModalCenter2{{forloop.counter}}">
+                                    <i class="fa fa-pencil"></i>
+                                  </button>
+                                  <button class="btn btn-danger m-1" data-toggle="modal" data-target="#DeleteCourse{{forloop.counter}}">
+                                    <i class="fa fa-trash"></i>
+                                  </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title text-white">Create Expences Type</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="post" id="createform">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="" class="form-label">Expences Type <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" placeholder="Ex: Travelling, Food, Petrol" name="expences_type">
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary m-1">Submit</button>
+                        <button type="reset" class="btn btn-secondary m-1" >reset</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!--Edit model start here-->
+{% for expences_types in expences_type %}
+<div class="modal fade" id="exampleModalCenter2{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter2{{forloop.counter}}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title text-white">Edit Expences Type</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'expences_types_update' expences_types.id %}" method="post" class="createform">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="" class="form-label">Expences Type <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" placeholder="Ex: Travelling, Food, Petrol" name="expences_type_edit" value="{{expences_types.expences_type}}">
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary m-1">Submit</button>
+                        <button type="button" class="btn btn-secondary m-1" data-dismiss="modal" >close</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+<!--Edit model end here-->
+
+<!--Delete model start here-->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-danger">
+                <h5 class="modal-title text-white " id="deleteModalLabel">Delete Expences Type</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3 text-center">
+                    <div class="d-flex justify-content-center mb-3">
+                        <img src="../../static/triangle-exclamation-solid.svg" width="120" height="70" alt="">
+                    </div>
+                    <form action="{% url 'expences_types_all' %}" method="post">
+                        {% csrf_token %}
+                        <p id="deleteMessage">Are you sure you want to delete <span id="selectedCount"></span> records?</p>
+                        <input type="hidden" id="selected_ids_input" name="selected_ids">
+                </div>
+                <div class="d-flex justify-content-center">
+                  <button type="submit" class="btn btn-danger m-1" id="confirmDelete">Yes</button>
+                  <button type="button" class="btn btn-secondary m-1" data-dismiss="modal">No</button>
+                </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+{% for expences_types in expences_type %}
+<div class="modal fade" id="DeleteCourse{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="DeleteCourse"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-danger">
+        <h5 class="modal-title text-white">Delete Expences Type</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" class="text-white">&times;</span>
+        </button>
+      </div>
+      <form action="{% url 'expences_types_delete' expences_types.id %}" method="post">
+        {% csrf_token %}
+        <div class="modal-body">
+          <div class="mb-3 text-center">
+            <div class="d-flex justify-content-center mb-3">
+              <img src="../../static/triangle-exclamation-solid.svg" width="120" height="70" alt="">
+            </div>
+            Are you sure you want to delete {{expences_types.expences_type}} Course ?
+          </div>
+        </div>
+        <div class="mb-3 d-flex justify-content-center">
+          <button type="submit" class="btn btn-danger m-1">Yes</button>
+          <button type="button" class="btn btn-secondary m-1" data-dismiss="modal" aria-label="Close">
+            No
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+
+
+
+
+
+
+
+
+{% block scripts %}
+<script>
+    $(document).ready(function() {
+        $.validator.addMethod("noSpecialChars", function (value, element) {
+            return /^[a-zA-Z\s]*$/.test(value);
+        }, 'No Special Charectors and numbers are not allowed');
+        $.validator.addMethod("noSpace", function (value, element) {
+            return !(/^\s|\s$|\s{2,}/.test(value));
+          }, "No excessive or leading/trailing spaces");
+          $("#createform").validate({
+            rules: {
+                expences_type: {
+                    required: true,
+                    noSpecialChars: true,
+                    noSpace: true,
+                    minlength: 3,
+                    maxlength: 50
+                }
+            },
+            messages: {
+                expences_type: {
+                    required: "Please Enter Expences Type",
+                    
+                    minlength: "Expences Type must be at least 3 characters long",
+                    maxlength: "Expences Type must be at most 50 characters long"
+                }
+            },
+            submitHandler: function(form) {
+                form.submit();
+            }
+        });
+      
+    })
+</script>
+
+
+
+
+<script>
+    $(document).ready(function() {
+        $.validator.addMethod("noSpecialChars", function (value, element) {
+            return /^[a-zA-Z\s]*$/.test(value);
+        }, 'No Special Charectors and numbers are not allowed');
+        $.validator.addMethod("noSpace", function (value, element) {
+            return !(/^\s|\s$|\s{2,}/.test(value));
+          }, "No excessive or leading/trailing spaces");
+         $('.createform').each(function() {
+            $(this).validate({
+                rules: {
+                    expences_type_edit: {
+                        required: true,
+                        noSpecialChars: true,
+                        noSpace: true,
+                        minlength: 3,
+                        maxlength: 50
+                    },
+                },
+                messages: {
+                    expences_type_edit: {
+                        required: "Please Enter Expences Type",
+                        minlength: "Expences Type must be at least 3 characters long",
+                        maxlength: "Expences Type must be at most 50 characters long"
+                    }
+                },
+                submitHandler: function(form) {
+                    form.submit();
+                }
+            })
+         })
+    })
+</script>
+
+
+
+
+
+
+<script>
+    // Function to update the "Select All" checkbox status
+    function updateSelectAllCheckbox() {
+      var selectAllCheckbox = document.getElementById('selectAll');
+      var rowCheckboxes = document.querySelectorAll('.row-checkbox');
+      var allChecked = true;
+  
+      rowCheckboxes.forEach(function (checkbox) {
+        if (!checkbox.checked) {
+          allChecked = false;
+        }
+      });
+  
+      selectAllCheckbox.checked = allChecked;
+      updateSelectedRowsList(); // Update selected rows list when "Select All" checkbox is clicked
+    }
+  
+    // Function to update the selected rows list and toggle delete button visibility
+    function updateSelectedRowsList() {
+      var selectedRowsList = document.getElementById('selectedRowsList');
+      var selectedIdsInput = document.getElementById('selected_ids_input');
+      var deleteButton = document.getElementById('deleteButton');
+  
+      var selectedRows = document.querySelectorAll('.row-checkbox:checked');
+      var selectedCount = selectedRows.length;
+  
+      if (selectedCount > 1) {
+        deleteButton.style.display = 'block'; // Show delete button if more than one row is selected
+      } else {
+        deleteButton.style.display = 'none'; // Hide delete button if only one row or none is selected
+      }
+  
+      var selectedIds = [];
+      selectedRows.forEach(function (row) {
+        var courseId = row.dataset.courseId;
+        selectedIds.push(courseId);
+      });
+  
+      // Set the value of the hidden input field to the selected IDs
+      selectedIdsInput.value = selectedIds.join(',');
+  
+      // Update the delete modal message with the selected count
+      document.getElementById('deleteMessage').textContent = "Are you sure you want to delete " + selectedCount + " records?";
+    }
+  
+    // Event listener for checkbox change
+    document.querySelectorAll('.row-checkbox').forEach(function (checkbox) {
+      checkbox.addEventListener('change', function () {
+        updateSelectedRowsList();
+        updateSelectAllCheckbox();
+      });
+    });
+  
+    // Event listener for select all checkbox change
+    document.getElementById('selectAll').addEventListener('change', function () {
+      var isChecked = this.checked;
+      document.querySelectorAll('.row-checkbox').forEach(function (checkbox) {
+        checkbox.checked = isChecked;
+      });
+      updateSelectedRowsList();
+    });
+  
+    // Initially update delete button visibility
+    updateSelectedRowsList();
+  
+    // Event listener for delete button click
+    document.getElementById('confirmDelete').addEventListener('click', function () {
+      // Perform delete action here
+      // For now, let's just close the modal
+      $('#deleteModal').modal('hide');
+    });
+  </script>
+{% endblock %}
+
+{% endblock %}

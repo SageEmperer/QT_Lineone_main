@@ -3,7 +3,7 @@
 
 <!-- Breadcrumb -->
 <div class="hk-pg-header d-flex justify-content-between mb-0">
-  <h4 class="hk-pg-title m-3">Job posted by anusha reddy[1]</h4>
+  <h4 class="hk-pg-title m-3">Job posted by {{employee.first_name}} {{employee.last_name}} [{{job_posts.count}}]</h4>
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb bg-transparent mb-0">
       <li class="breadcrumb-item"><a href="{% url 'placement_dashboard' %}">Dashboard</a></li>
@@ -39,18 +39,20 @@
                   </tr>
               </thead>
               <tbody>
+                {% for i in job_posts %}
                   <tr>
-                      <td>101</td>
+                      <td>{{i.id}}</td>
                       <td class="text-primary " style="cursor: -webkit-grab; cursor: grab";
-                      data-toggle="modal"data-target="#jobdescription">DOT NET Full Stack Developer</td>
-                      <td>Seguro Soft Technoligies</td>
-                      <td>Hyderabad</td>
-                      <td>4LPA</td>
-                      <td>30,march</td>
+                      data-toggle="modal"data-target="#jobdescription{{ forloop.counter }}">{{i.job_title}}</td>
+                      <td>{{i.companyname.companyname}}</td>
+                      <td>{{i.companyname.location}}</td>
+                      <td> {{i.salary}} LPA</td>
+                      <td>{{i.last_date_to_apply}}</td>
                       <td class="text-center">
                            <span class="bg-success rounded-pill py-1 px-2"><a href="{% url 'placed' %}" class="text-white">1</a></span> / <span class="bg-primary py-1 px-2 rounded-pill"><a href="{% url 'applied' %}" class="text-white">100</a></span>
                       </td>                         
                   </tr>
+                  {% endfor %}
               </tbody>
           </table>
       </div>
@@ -303,13 +305,14 @@ aria-hidden="true"
 <!-- Create modal ends here -->
 
 <!-- Job description model starts here -->
+{% for i in job_posts %}
 
 <div
 class="modal fade"
-id="jobdescription"
+id="jobdescription{{ forloop.counter }}"
 tabindex="-1"
 role="dialog"
-aria-labelledby="jobdescription"
+aria-labelledby="jobdescription{{ forloop.counter }}"
 aria-hidden="true"
 >
 <div class="modal-dialog modal-lg" role="document">
@@ -326,79 +329,79 @@ aria-hidden="true"
       </button>
     </div>
       <div class="bg-white ">
-        <h5 class="text-danger px-3 pt-2 pb-30 text-center" > QT Placements</h5>
+        <h5 class="text-danger px-3 pt-2 pb-30 text-center" > {{request.session.admin_user.company_name}} Placements</h5>
                   <div class="px-3"> 
                       
                   <table class="table table-bordered border">
                     <tr>
                       <td style="font-weight: bold; width: 200px;">Job ID</td>
                       <!-- <td>:</td> -->
-                      <td >101</td>
+                      <td >{{i.id}}</td>
                     </tr>
                     <tr>
                       <td style="font-weight: bold;">Job Title</td>
                       <!-- <td>:</td> -->
-                      <td  >DOT NET Full Stack Developer</td>
+                      <td  >{{i.job_title}}</td>
                     </tr>
                     <tr>
                       <td style="font-weight: bold;">Job Category</td>
                       <!-- <td>:</td> -->
-                      <td  >Technical</td>
+                      <td  >{{i.companyname.category}}</td>
                     </tr>
                     <tr>
                       <td style="font-weight: bold;">Experience</td>
                       <!-- <td>:</td> -->
-                      <td  >1-2 years</td>
+                      <td  >{{i.companyname.experience}} years</td>
                     </tr>
                     <tr>
                       <td style="font-weight: bold;">Qualification</td>
                       <!-- <td>:</td> -->
-                      <td  >B.tech</td>
+                      <td  >{{i.qualification.qualification_name}}</td>
                     </tr>
                     <tr>
                       <td style="font-weight: bold;">Skills</td>
                       <!-- <td>:</td> -->
-                      <td  >Python,Html,CSS,Bootstrap,Django</td>
+                      <td  >{{i.skills}}</td>
                     </tr>
                     <tr>
                       <td style="font-weight: bold;">Role</td>
                       <!-- <td>:</td> -->
-                      <td  >Python developer</td>
+                      <td  >{{i.role.jobrole_name}}</td>
                     </tr>
                     <tr>
                       <td style="font-weight: bold;">Salary</td>
                       <!-- <td>:</td> -->
-                      <td  >4LPA</td>
+                      <td  >{{i.salary}} LPA</td>
                     </tr>
                     <tr >
                       <td style="font-weight: bold;">location</td>
                       <!-- <td>:</td> -->
-                      <td  >Hyderabad</td>
+                      <td  >{{i.companyname.location}}</td>
                     </tr>
                     <tr>
                       <td style="font-weight: bold;">Email</td>
                       <!-- <td>:</td> -->
-                      <td  >lokesh@gmail.com</td>
+                      <td  >{{i.companyname.email}}</td>
                     </tr>
                     <tr>
                       <td style="font-weight: bold;">Contact Number</td>
                       <!-- <td>:</td> -->
-                      <td  >9876598765</td>
+                      <td  >{{i.companyname.mobile}}</td>
                     </tr>
                     <tr>
                       <td style="font-weight: bold;">Last Date to Apply</td>
                       <!-- <td>:</td> -->
-                      <td  >23,march</td>
+                      <td  >{{i.last_date_to_apply}}</td>
                     </tr>
                     <tr>
                       <td style="font-weight: bold;">Posted Date</td>
                       <!-- <td>:</td> -->
-                      <td   >30,march</td>
+                      <td   >{{i.post_date}}</td>
                     </tr>
                     <tr>
                       <td style="font-weight: bold;">Job description</td>
                       <!-- <td>:</td> -->
-                      <td>must need skills on python,html,bootstrap and django and need strong communication skills and presentation skills</td>
+                      <td>{{i.job_description | safe}}</td>
                     </tr>
                     
                   </table>
@@ -418,6 +421,7 @@ aria-hidden="true"
   </div>
 </div>
 </div>
+{% endfor %}
 
         <!-- Job description model ends here -->
         

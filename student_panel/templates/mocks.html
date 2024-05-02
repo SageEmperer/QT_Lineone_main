@@ -164,17 +164,14 @@
  <label for="" class="form-label">Faculty <span class="text-danger">*</span></label>
  <select class="form-control custom-select select2" name="faculty" id="faculty">
  <option value="" disabled selected>Please Select</option>
- <option value="1">vijaya</option>
- <option value="2">Rashmika</option>
+
  </select>
  </div>
 
  <div class="mb-3">
  <label for="" class="form-label">Available Slot <span class="text-danger">*</span></label>
- <select class="form-control custom-select" id="available_slot" name="available_slot" >
- <option value="">Select Your Specialization</option>
- <option value="">Select Your Specialization</option>
- <option value="">Select Your Specialization</option>
+ <select class="form-control custom-select available-slot" id="available_slot" name="available_slot" >
+
  </select>
  </div>
 
@@ -229,8 +226,11 @@ name="chapter_image" accept="application/pdf" type="file">
             var cos_id = $(this).val();
             var course_select = $('.course-select')
             var specialization = $('.specialization-select')
-    
+            var select2 = $('.select2')
+
+            select2.empty().append('<option value="">Select faculty</option>')
             specialization.empty().append('<option value="">Select Specialization</option>')
+
             if (cos_id) {
                 $.getJSON('/spec_jason/' + cos_id, function(data) {
                     $.each(data, function(index, spec) {
@@ -243,6 +243,45 @@ name="chapter_image" accept="application/pdf" type="file">
         })
     })
     
+</script>
+<script>
+    $(document).ready(function(){
+        $('.specialization-select').change(function(){
+            console.log($(this).val())
+            var spec_id = $(this).val();
+            var specialization = $('.select2')
+            specialization.empty().append('<option value="">Select Faculty</option>')
+
+            if (spec_id) {
+                $.getJSON('/student_panel/faculty_jason/' + spec_id, function(data) {
+                    $.each(data, function(index, spec) {
+                        specialization.append('<option value="' + spec.id + '">' + spec.first_name +  ' ' + spec.last_name +'</option>');
+                    });
+                }).fail(function(jqxhr, textStatus, error) {
+                    console.error('Error fetching courses:', textStatus, error);
+                });
+            }
+
+        })
+    })
+</script>
+<script>
+    $(document).ready(function(){
+         $('.select2').change(function(){
+             console.log($(this).val())
+             var fac_id = $(this).val();
+
+             if (fac_id) {
+                $.getJSON('/student_panel/find_slot/' + fac_id, function(data) {
+                    $.each(data,function(index,data){
+                        $('.available-slot').append('<option value="'+data.id+'">'+data.available_slot+'</option>')
+                    }).fail(function(jqxhr, textStatus, error) {
+                        console.error('Error fetching courses:', textStatus, error);
+                    })
+                })
+             }
+         })   
+    })
 </script>
 
 
