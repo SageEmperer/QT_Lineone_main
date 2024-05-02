@@ -32,103 +32,30 @@
                 <th class="text-white text-center">Student</th>
                 <th class="text-white text-center">Student Email id</th>
                 <th class="text-white text-center">Course</th>
-                <th class="text-white text-center">Past Date Of Interview</th>
-                <th class="text-white text-center">Resume</th>
-                <th class="text-white text-center">Action</th>
+                <th class="text-white text-center">Past Interview Date</th>
+                <th class="text-white text-center">Updated Interview Date</th>
+
               </tr>
             </thead>
             <tbody>
+              {% for reschedule in scheduling %}
+              {% if reschedule.student_name %}
               <tr>
-                <td>1</td>
-                <td>Aadil</td>
-                <td>aadil33@gmail.com</td>
-                <td>Python</td>
-                <td>Mar.04,2024,10:30 am</td>
-                <td class="text-center">
-                  <a href="" title=""><img src="/static/media/pdf.png" width="35" alt="Student resume" /></a>
-             </td>
-                <td class="text-center">
-                    <button  class="btn btn-icon btn-success" data-toggle="modal" data-target="#reschedule">
-                          <span class="btn-icon-wrap"><i class="icon-rocket"></i></span>
-                    </button>
-                </td>
+                <td>{{forloop.counter}}</td>
+                <td>{{reschedule.student_name.first_name }}&nbsp;&nbsp;{{reschedule.student_name.last_name }}</td>
+                <td>{{reschedule.student_name.email}}</td>
+                <td>{{reschedule.course_name}}</td>
+                <td>{{reschedule.available_slot}}</td>
+                <td>{{reschedule.rescheduled_slot}}</td>
               </tr>
-
-              <tr>
-                <td>2</td>
-                <td>Aadil</td>
-                <td>aadil33@gmail.com</td>
-                <td>Python</td>
-                <td>Mar.04,2024,10:30 am</td>
-                <td class="text-center"> <a href="" title=""><img src="/static/media/pdf.png" width="35" alt="Student resume" /></a>
-                </td>
-                <td class="text-center">
-                    <button  class="btn btn-icon btn-success" data-toggle="modal" data-target="#reschedule">
-                          <span class="btn-icon-wrap"><i class="icon-rocket"></i></span>
-                    </button>
-                </td>
-              </tr>
+              {% endif %}
+              {% endfor %}
             </tbody>
           </table>
         </div>
       </div>
     </div>
   </section>
-
-
-  <div class="modal fade" id="reschedule" tabindex="-1" role="dialog" aria-labelledby="FeedbackFormLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header bg-dark">
-          <h5 class="modal-title text-white">Reschedule Slot</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true" class="text-white">&times;</span>
-          </button>
-        </div>
-        <form action="" method="post" id="">
-          {% csrf_token %}
-          <div class="modal-body">
-            <div class="mb-3">
-              <label for="">Student<span class="text-danger">*</span></label>
-              <input type="text" class="form-control" id="fullname" name="fullname" placeholder="chinmai" value=""  />
-            </div>
-
-
-            <div class="mb-3">
-              <label for="">Student Email<span class="text-danger">*</span></label>
-              <input type="text" class="form-control" id="Email" name="Email" placeholder="chinmai5@gmail.com" value=""  />
-            </div>
-
-
-
-            <div class="mb-3">
-                <label for="">Course<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="Email" name="Email" placeholder="Python" value=""  />
-            </div>
-
-            <div class="mb-3">
-                <label for="">Specialization<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="Email" name="Email" placeholder="Full Stack Python" value=""  />
-            </div>
-
-            <div class="mb-3">
-                <label for="">Slot<span class="text-danger">*</span></label>
-                <input  class="form-control" type="datetime-local" id="datetime" name="datetime" required>
-            </div>
-
-          </div>
-
-          <div class="modal-footer d-flex justify-content-center">
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <button type="reset" class="btn btn-secondary">Reset</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <!-- Create model end here -->
-
 
   <!-- Ensure jQuery and Bootstrap are included -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

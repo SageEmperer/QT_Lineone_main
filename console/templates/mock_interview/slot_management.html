@@ -31,61 +31,6 @@
    {% endfor %}
  {% endif %}
 
-<!--<section class="hk-sec-wrapper">-->
-<!--  <div class="">-->
-<!--    <button type="button" class="btn btn-primary mr-2 mb-3" data-toggle="modal" data-target="#CreateCourse">-->
-<!--      <i class="glyphicon glyphicon-plus"></i> Create Course-->
-<!--    </button>-->
-<!--    <a href="{% url 'course_export' %}" class="btn btn-success mr-2 mb-3"><i class="glyphicon glyphicon-export"></i>-->
-<!--      Export</a>-->
-<!--    <button type="button" class="btn btn-secondary mr-2 mb-3" data-toggle="modal" data-target="#UploadCourse">-->
-<!--      <i class="glyphicon glyphicon-import"></i> Import-->
-<!--    </button>-->
-<!--  </div>-->
-
-<!-- message end here -->
-<!--<section class="hk-sec-wrapper shadow-lg p-3 mb-10 bg-white rounded">-->
-
-<!--  <div class="heading" style="padding-bottom:10px;">-->
-<!--  </div>-->
-<!--     <form action="" method="post" id="">-->
-
-<!--      <div class="container-fluid">-->
-<!--       <div class="row">-->
-<!--                  <div class="col-md-4">-->
-<!--                    <div class="form-group">-->
-<!--                    <label for="" class="form-label">Available  Slot Date <span class="text-danger">*</span></label>-->
-<!--&lt;!&ndash;                      <input  class="form-control" type="datetime-local" id="dateTime" name="dateTime" required>&ndash;&gt;-->
-<!--                       <input  class="form-control" type="date" id="date" name="date" required>-->
-<!--                  </div>-->
-<!--                  </div>-->
-<!--                  <div class="col-md-4">-->
-<!--                    <div class="form-group">-->
-<!--                    <label for="" class="form-label">Start Time<span class="text-danger">*</span></label>-->
-<!--                       <input  class="form-control" type="time" id="time" name="time" required>-->
-<!--                  </div>-->
-<!--                  </div>-->
-<!--                   <div class="col-md-4">-->
-<!--                    <div class="form-group">-->
-<!--                    <label for="" class="form-label">End Time<span class="text-danger">*</span></label>-->
-<!--                       <input  class="form-control" type="time" id="time" name="time" required>-->
-<!--                  </div>-->
-<!--                  </div>-->
-<!--                  <div class="col-md-4 form-group">-->
-<!--                    <label for="" class="form-label">Link<span class="text-danger">*</span></label>-->
-<!--                      <textarea  class="form-control" type="text"  name="" required></textarea>-->
-
-<!--                  </div>-->
-<!--       </div>-->
-<!--                </div>-->
-<!--          <div class="modal-footer d-flex justify-content-center mt-20">-->
-<!--                  <button type="submit" class="btn btn-primary">Submit</button>-->
-<!--                  <button type="reset" class="btn btn-secondary">Reset</button>-->
-<!--                </div>-->
-<!--         </form>-->
-<!--</section>-->
-
-
 <!-- Table starts here -->
 
 <section class="hk-sec-wrapper shadow-lg p-3 mb-10 bg-white rounded">
@@ -93,120 +38,58 @@
     <button  type="button" class="btn btn-primary mr-2 mb-3" data-toggle="modal" data-target="#Bookinterview">
       <i class="glyphicon glyphicon-plus"></i> Add Slot
     </button>
-    <a href="{% url 'course_export' %}" class="btn btn-success mr-2 mb-3"><i class="glyphicon glyphicon-export"></i>
+    <!-- export faculty slot starts  -->
+    <a href="{% url 'faculty_slot_export' %}" class="btn btn-success mr-2 mb-3"><i class="glyphicon glyphicon-export"></i>
       Export</a>
-    <button type="button" class="btn btn-secondary mr-2 mb-3" data-toggle="modal" data-target="#UploadCourse">
+      <!-- export faculty slot ends  -->
+    <button type="button" class="btn btn-secondary mr-2 mb-3" data-toggle="modal" data-target="#UploadSlot">
       <i class="glyphicon glyphicon-import"></i> Import
     </button>
   </div>
-
+<!--    Table starts here -->
   <div class="row">
     <div class="col-sm">
       <div class="table-wrap">
         <table id="datable_1" class="table table-hover w-100  pb-30 table-bordered">
-          <thead class="bg-dark">
-            <tr>
-              <th class="text-white">S.no</th>
-              <th class="text-white text-center">Available Slot</th>
-                 <th class="text-white text-center">Mock Link</th>
-              <th class="text-white text-center">Status</th>
-              <th class="text-white text-center" >Action</th>
-            </tr>
-          </thead>
-          <tbody>
-
-            <tr>
-              <td>1</td>
-               <td class="text-center">March 02,2024 11:00 AM</td>
-              <td class="text-center">
-                <button type="button" class="btn btn-link" data-toggle="tooltip" data-html="true" title="<em>Tooltip</em> <u>on</u> <b>Link</b>">
-                                           #Mock Link
-                  <button class="btn btn-icon btn-icon-only btn-icon-style-4"><i class="fa fa-copy"></i></button>
-
-                </button>
-              </td>
+            <thead class="bg-dark">
+              <tr>
+                <th class="text-white">S.no</th>
+                <th class="text-white text-center">Available Slot</th>
+                  <th class="text-white text-center">Mock Link</th>
+                <th class="text-white text-center">Status</th>
+                <th class="text-white text-center" >Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for scheduled in scheduling %}
+              <tr>
+                <td>{{forloop.counter}}</td>
+                <td class="text-center">{{scheduled.available_slot}}</td>
                 <td class="text-center">
-                <span class="badge badge-success badge-pill mt-15 mr-10">Active</span>
+                  <button type="button" class="btn btn-link" data-toggle="tooltip" data-html="true" title="<em>Tooltip</em> <u>on</u> <b>Link</b>">
+                    {{scheduled.mock_link}}
+                    <button class="btn btn-icon btn-icon-only btn-icon-style-4 copyButton"><i class="fa fa-copy"></i></button>
+                  </button>
                 </td>
-              <td class="text-center">
-                  <div class="d-flex align-items-center justify-content-center ">
-<!--                  <button class="btn btn-icon btn-success " data-toggle="modal" data-target="#Cancel">-->
-<!--                   <i class="fa fa-rocket"></i>-->
-<!--                 </button>-->
-
-                <button class="btn btn-icon btn-success " data-toggle="modal" data-target="#Edit">
-                  <i class="fa fa-rocket"></i>
-                 </button>
-
-
-<!--                 <button class="btn btn-icon btn-danger " data-toggle="modal" data-target="#Delete">-->
-<!--                   <i class="fa fa-trash"></i>-->
-<!--                 </button>--><div class="timer" style="padding-left:10px;color: red; font-weight: bold;" id="timer">00:00</div>
-                  </div>
-
-              </td>
-
-            </tr>
-            <tr>
-              <td>2</td>
-               <td class="text-center">March 03,2024 11:00 AM</td>
-                  <td class="text-center">
-                <button type="button" class="btn btn-link" data-toggle="tooltip" data-html="true" title="<em>Tooltip</em> <u>on</u> <b>Link</b>">
-                                           #Mock Link
-                  <button class="btn btn-icon btn-icon-only btn-icon-style-4"><i class="fa fa-copy"></i></button>
-
-                </button>
-              </td>
                 <td class="text-center">
-                <span class="badge badge-danger badge-pill mt-15 mr-10">Cancel</span>
+                  {% if scheduled.status == 'Active' %}
+                    <span class="badge badge-success badge-pill mt-15 mr-10">Active</span>
+                  {% elif scheduled.status == 'Reschedule'  %}
+                    <span class="badge badge-pumpkin badge-pill mt-15 mr-10">Reschedule</span>
+                  {% else %}
+                    <span class="badge badge-danger badge-pill mt-15 mr-10">Cancel</span>
+                  {% endif %}
                 </td>
-               <td class="text-center">
-                  <div class="d-flex align-items-center justify-content-center ">
-<!--                  <button class="btn btn-icon btn-success " data-toggle="modal" data-target="#Cancel">-->
-<!--                   <i class="fa fa-rocket"></i>-->
-<!--                 </button>-->
-
-                <button class="btn btn-icon btn-success " data-toggle="modal" data-target="#Edit">
-                  <i class="fa fa-rocket"></i>
-                 </button>
-
-
-<!--                 <button class="btn btn-icon btn-danger " data-toggle="modal" data-target="#Delete">-->
-<!--                   <i class="fa fa-trash"></i>-->
-<!--                 </button>--><div class="timer" style="padding-left:10px;color: red; font-weight: bold;" id="timer">00:00</div>
-                  </div>
-
-              </td>
-            </tr>
-            <tr>
-              <td>3</td>
-               <td class="text-center">March 03,2024 11:00 AM</td>
-                  <td class="text-center">
-                <button type="button" class="btn btn-link" data-toggle="tooltip" data-html="true" title="<em>Tooltip</em> <u>on</u> <b>Link</b>">
-                                           # Mock Link
-                  <button class="btn btn-icon btn-icon-only btn-icon-style-4"><i class="fa fa-copy"></i></button>
-
-                </button>
-              </td>
                 <td class="text-center">
-                <span class="badge badge-pumpkin badge-pill mt-15 mr-10">Reschedule</span>
-                </td>
-              <td class="text-center">
-                  <div class="d-flex align-items-center justify-content-center ">
-<!--                  <button class="btn btn-icon btn-success " data-toggle="modal" data-target="#Cancel">-->
-<!--                   <i class="fa fa-rocket"></i>-->
-<!--                 </button>-->
-
-                <button class="btn btn-icon btn-success " data-toggle="modal" data-target="#Edit">
-                  <i class="fa fa-rocket"></i>
-                 </button>
-
-
-<!--                 <button class="btn btn-icon btn-danger " data-toggle="modal" data-target="#Delete">-->
-<!--                   <i class="fa fa-trash"></i>-->
-<!--                 </button>--><div class="timer" style="padding-left:10px;color: red; font-weight: bold;"  id="timer">00:00</div>
+                  <div class="d-flex align-items-center justify-content-center">
+                    <button class="btn btn-icon btn-success " data-toggle="modal" data-target="#Edit-{{scheduled.id}}">
+                      <i class="fa fa-rocket"></i>
+                    </button>
                   </div>
-
+                </td>
+              </tr>
+              {% endfor %}
+              
               </td>
             </tr>
 
@@ -218,7 +101,7 @@
 </section>
 <!--    Table ends here -->
 
-<!--    Book interview start here -->
+<!-- add faculty slot starts here-->
 <div class="modal fade" id="Bookinterview" tabindex="-1" role="dialog" aria-labelledby="Bookinterview" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -228,29 +111,26 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form action="" method="post" id="slot_add">
+      <form action="" method="post" class="Add_slot">
         {% csrf_token %}
         <div class="modal-body">
           <div class="mb-3">
             <label for="" class="form-label">Available  Slot <span class="text-danger">*</span></label>
-<!--                      <input  class="form-control" type="datetime-local" id="dateTime" name="dateTime" required>-->
-                       <input  class="form-control" type="datetime-local" id="datetime" name="datetime" required>
+              <input  class="form-control" type="datetime-local" id="datetime" name="datetime" required>
           </div>
-<!--          <div class="mb-3">-->
-<!--              <label for="" class="form-label">Start Time<span class="text-danger">*</span></label>-->
-<!--                       <input  class="form-control" type="time" id="time" name="time" required>-->
-<!--          </div>-->
-<!--          <div class="mb-3">-->
-<!--                    <div class="form-group">-->
-<!--                    <label for="" class="form-label">End Time<span class="text-danger">*</span></label>-->
-<!--                       <input  class="form-control" type="time" id="time" name="time" required>-->
-<!--                  </div>-->
-<!--                  </div>-->
-                  <div class="mb-3">
-                    <label for="" class="form-label">Mock Link<span class="text-danger"> *</span></label>
-                      <textarea  class="form-control"  name="link" required></textarea>
-
-                  </div>
+          <div class="mb-3">
+            <label for="" class="form-label">Faculty Name: <span class="text-danger">*</span></label>
+            <select class="form-control custom-select" name="faculty" id="">
+              <option value="" selected>Please Select Faculty</option>
+              {% for i in employees %}
+              <option value="{{i.id}}">{{i.first_name}} {{i.last_name}}</option>
+              {% endfor %}
+            </select>
+          </div> 
+          <div class="mb-3">
+            <label for="" class="form-label">Mock Link<span class="text-danger"> *</span></label>
+              <textarea  class="form-control"  name="link" required></textarea>
+          </div>
         </div>
         <div class="modal-footer d-flex justify-content-center">
           <button type="submit" class="btn btn-primary">Submit</button>
@@ -261,45 +141,13 @@
   </div>
 </div>
 
-<!--    Book interview ends here -->
-
-<!--&lt;!&ndash; Cancel model start here &ndash;&gt;-->
-
-<!--<div class="modal fade" id="Cancel" tabindex="-1" role="dialog" aria-labelledby="Cancel"-->
-<!--  aria-hidden="true">-->
-<!--  <div class="modal-dialog modal-dialog-centered" role="document">-->
-<!--    <div class="modal-content">-->
-<!--      <div class="modal-header bg-warning">-->
-<!--        <h5 class="modal-title text-white">Cancel Slot</h5>-->
-<!--        <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
-<!--          <span aria-hidden="true" class="text-white">&times;</span>-->
-<!--        </button>-->
-<!--      </div>-->
-<!--      <form action="" method="post">-->
-<!--        {% csrf_token %}-->
-<!--        <div class="modal-body">-->
-<!--          <div class="mb-3 text-center">-->
-<!--            <div class="d-flex justify-content-center mb-3">-->
-<!--              <img src="../../static/triangle-exclamation-solid.svg" width="120" height="70" alt="">-->
-<!--            </div>-->
-<!--            Are you sure you want to  cancel the slot ?-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="modal-footer d-flex justify-content-center">-->
-<!--          <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">-->
-<!--            No-->
-<!--          </button>-->
-<!--          <button type="submit" class="btn btn-warning">Yes</button>-->
-<!--        </div>-->
-<!--      </form>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</div>-->
+<!-- Add faculty slot ends here-->
 
 
-<!--&lt;!&ndash; Cancel model ends here&ndash;&gt;-->
-<!-- Edit model start here -->
-<div class="modal fade" id="Edit" tabindex="-1" role="dialog" aria-labelledby="Edit" aria-hidden="true">
+<!-- Edit faculty slot starts here-->
+
+{% for scheduled in scheduling %}
+<div class="modal fade" id="Edit-{{scheduled.id}}" tabindex="-1" role="dialog" aria-labelledby="Edit" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header bg-dark">
@@ -308,38 +156,58 @@
           <span aria-hidden="true" class="text-white">&times;</span>
         </button>
       </div>
-      <form action="" method="post" id="Edit_slot">
+      <form action="{% url 'edit_faculty_slot' scheduled.id %}" method="post" class="Edit_slot">
         {% csrf_token %}
         <div class="modal-body">
           <div class="container-fluid">
             <div class="row">
               <div class="col-sm">
-                <div class="row mb-20">
+                <div class="row mb-10">
                   <div class="col-md-6 mt-15">
                     <div class="custom-control custom-radio">
-                      <input type="radio" id="customRadio1" name="customRadio" value="Reschedule Slot" class="custom-control-input" onchange="handleOptionChange()">
-                      <label class="custom-control-label" for="customRadio1">Reschedule Slot</label>
+                      <input type="radio" name="type_of_change_{{scheduled.id}}" class="resc_check_re" value="Reschedule Slot" onclick="toggleFields('Edit-{{scheduled.id}}', this)">
+                      <label for="" class="form-label">Reschedule </label>
                     </div>
                   </div>
                   <div class="col-md-6 mt-15">
                     <div class="custom-control custom-radio">
-                      <input type="radio" id="customRadio2" name="customRadio" value="Cancel Slot" class="custom-control-input" onchange="handleOptionChange()">
-                      <label class="custom-control-label" for="customRadio2">Cancel Slot</label>
+                      <input type="radio" name="type_of_change_{{scheduled.id}}" class="resc_check-can" value="Cancel Slot" onclick="toggleFields('Edit-{{scheduled.id}}', this)">
+                      <label for="" class="form-label">Cancel </label> 
                     </div>
                   </div>
-                    <div class="col-md-6 mt-15" id="radioError"></div>
+                  <div class="col-md-6 mt-15" id="radioError{{scheduled.id}}"></div>
                 </div>
-                <div class="mb-3">
+                <div class="mb-3" id="BookedFields-{{scheduled.id}}">
+                  <label for="" class="form-label">Booked details</label>
+                  <div class="form-group row">
+                    <label for="" class="col-sm-4 col-form-label" >Student Name:</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" value="{{ scheduled.student_name.first_name }} {{ scheduled.student_name.last_name }}" id="student"  readonly>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="" class="col-sm-4 col-form-label" >Student ID:</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" value=" {{ scheduled.student_name.token_id }}" id="student"   readonly>
+                    </div>
+                </div>
+
+              </div>
+                <div class="mb-3" id="rescheduleFields-{{scheduled.id}}">
                   <label for="" class="form-label">Available Slot <span class="text-danger">*</span></label>
-                  <input class="form-control" type="datetime-local" id="dateTime" name="dateTime" >
+                  <input type="datetime-local" class="form-control slot-input reschedule-input"  id="available_slot" name="available_slot">
                 </div>
-                <div class="mb-3">
+                <div class="mb-3" id="mockLinkField-{{scheduled.id}}">
                   <label for="" class="form-label">Mock Link<span class="text-danger"> *</span></label>
-                  <textarea class="form-control" name="link" id="mockLink" placeholder="Enter mock link here." ></textarea>
+                  <input type="text" class="form-control slot-input reschedule-input" name="mock_link" placeholder="Enter mock link here." >
                 </div>
-                <div class="mb-3">
+                <div class="mb-3" id="rescheduleReason-{{scheduled.id}}">
+                  <label for="" class="form-label">Reason for Reschedule Slot<span class="text-danger"> *</span></label>
+                  <textarea class="form-control reschedule-reason reschedule-input" placeholder="What Would you like to say?" rows="5"  name="reschedule_reason" ></textarea>
+                </div>
+                <div class="mb-3" id="cancelFields-{{scheduled.id}}" style="display: none;">
                   <label for="">Reason for Cancel Slot <span class="text-danger">*</span></label>
-                  <textarea id="reasonField" class="form-control" name="feedback" placeholder="What Would you like to say?" rows="5" ></textarea>
+                  <textarea class="form-control cancel-reason reschedule-input" placeholder="What Would you like to say?" rows="5" name="cancel_reason"></textarea>
                 </div>
               </div>
             </div>
@@ -353,48 +221,15 @@
     </div>
   </div>
 </div>
-<!-- Edit model end here -->
+{% endfor %}
 
 
-<!-- Delete model start here -->
-<!--<div class="modal fade" id="Delete" tabindex="-1" role="dialog" aria-labelledby="Delete"-->
-<!--  aria-hidden="true">-->
-<!--  <div class="modal-dialog modal-dialog-centered" role="document">-->
-<!--    <div class="modal-content">-->
-<!--      <div class="modal-header bg-danger">-->
-<!--        <h5 class="modal-title text-white">Delete Slot</h5>-->
-<!--        <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
-<!--          <span aria-hidden="true" class="text-white">&times;</span>-->
-<!--        </button>-->
-<!--      </div>-->
-<!--      <form action="" method="post">-->
-<!--        {% csrf_token %}-->
-<!--        <div class="modal-body">-->
-<!--          <div class="mb-3 text-center">-->
-<!--            <div class="d-flex justify-content-center mb-3">-->
-<!--              <img src="../../static/triangle-exclamation-solid.svg" width="120" height="70" alt="">-->
-<!--            </div>-->
-<!--            Are you sure you want to delete {{i.course_name}} Slot ?-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="modal-footer d-flex justify-content-center">-->
-<!--          <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">-->
-<!--            No-->
-<!--          </button>-->
-<!--          <button type="submit" class="btn btn-danger">Yes</button>-->
-<!--        </div>-->
-<!--      </form>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</div>-->
-
-
-<!-- Delete model end here -->
+<!-- Edit faculty slot ends here-->
 
 <!-- Upload model  -->
 
 
-<div class="modal fade" id="UploadCourse" tabindex="-1" role="dialog" aria-labelledby="UploadCourse" aria-hidden="true">
+<div class="modal fade" id="UploadSlot" tabindex="-1" role="dialog" aria-labelledby="UploadSlot" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header bg-dark">
@@ -403,10 +238,10 @@
           <span aria-hidden="true" class="text-whte">&times;</span>
         </button>
       </div>
-      <form action="{% url 'course_import' %}" method="post" id="uploadfile" enctype="multipart/form-data">
+      <form action="{% url 'faculty_slot_import' %}" method="post" id="uploadfile" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="modal-body">
-          <input type="file" name="cos_file" accept=".csv" id="input-file-now" class="dropify" />
+          <input type="file" name="faculty_slot_file" accept=".csv" id="input-file-now" class="dropify" />
           <div id="csvPreview"></div>
          </div>
         <div class="modal-footer d-flex justify-content-center">
@@ -427,35 +262,8 @@
 {% endblock %}
 
 {% block scripts %}
-
-
-
-
+<!-- add faculty slots starts -->
 <script>
-  // Define handleOptionChange function
-  function handleOptionChange() {
-    var rescheduleRadio = document.getElementById("customRadio1");
-    var cancelRadio = document.getElementById("customRadio2");
-    var dateTimeInput = document.getElementById("dateTime");
-    var linkTextarea = document.getElementById("mockLink");
-    var reasonTextarea = document.getElementById("reasonField");
-
-    if (rescheduleRadio.checked) {
-      dateTimeInput.disabled = false;
-      linkTextarea.disabled = false;
-      reasonTextarea.disabled = true;
-      reasonTextarea.value = ''; // Clear the value
-      $('#radioError').html(''); // Clear error message
-    } else if (cancelRadio.checked) {
-      dateTimeInput.disabled = true;
-      dateTimeInput.value = ''; // Clear the value
-      linkTextarea.disabled = true;
-      linkTextarea.value = ''; // Clear the value
-      reasonTextarea.disabled = false;
-      $('#radioError').html(''); // Clear error message
-    }
-  }
-
   // Validate form using jQuery Validation Plugin
   $(document).ready(function () {
     $.validator.addMethod("overspecialization", function (value, element) {
@@ -463,44 +271,99 @@
     }, "Please enter a valid value.");
 
     $.validator.addMethod("radioRequired", function (value, element) {
-        return $('input[name="customRadio"]:checked').length > 0;
+        return $('input[name="type_of_change"]:checked').length > 0;
     }, "Please select an option.");
 
-    $("#Edit_slot").validate({
+    $(".Add_slot").each(function () {
+      $(this).validate({
         rules: {
-            dateTime: {
+          datetime: {
                 required: true,
                 overspecialization: false
             },
-            link: {
+          link: {
                 required: true,
-                overspecialization: true
+                overspecialization: false
             },
-            feedback: {
-                required:true,
-            },
-            customRadio: {
-                radioRequired: true
-            }
-
         },
         messages: {
-            dateTime: {
+          datetime: {
                 required: "Please Select Slot."
             },
             link: {
                 required: "Please provide link."
             },
-            feedback: {
+        },
+        submitHandler: function (form) {
+            form.submit();
+        },
+    });
+  });
+});
+</script>
+<!-- add faculty slots ends -->
+
+<!-- edit faculty slots starts -->
+<script>
+  // Validate form using jQuery Validation Plugin
+  $(document).ready(function () {
+    $.validator.addMethod("overspecialization", function (value, element) {
+        return !/\d/.test(value);
+    }, "Please enter a valid value.");
+
+    $.validator.addMethod("radioRequired", function (value, element) {
+        return $('input[name="type_of_change"]:checked').length > 0;
+    }, "Please select an option.");
+
+    $(".Edit_slot").each(function () {
+      $(this).validate({
+        rules: {
+          available_slot: {
+                required: true,
+                overspecialization: false
+            },
+          mock_link: {
+                required: true,
+                overspecialization: false
+            },
+            reschedule_reason: {
+                required:true,
+            },
+            cancel_reason: {
+                required:true,
+                
+            },
+            faculty:{
+              required:true
+            },
+            type_of_change: {
+                radioRequired: true
+            }
+
+        },
+        messages: {
+          available_slot: {
+                required: "Please Select Slot."
+            },
+            mock_link: {
+                required: "Please provide link."
+            },
+            reschedule_reason: {
                 required:" Please enter a reason",
             },
-            customRadio: {
+            cancel_reason: {
+                required:" Please enter a reason",
+            },
+            faculty:{
+              required:"Please  select faculty"
+            },
+            type_of_change: {
                 radioRequired: "Please select an option."
             }
 
         },
         errorPlacement: function(error, element) {
-            if (element.attr("name") == "customRadio") {
+            if (element.attr("name") == "type_of_change") {
                 error.appendTo("#radioError");
             } else {
                 error.insertAfter(element);
@@ -511,119 +374,46 @@
         },
     });
   });
+});
 </script>
-<!-- script for reschedule and cancel ends here-->
-<!-- radio buttons -->
+<!-- edit faculty slots ends -->
+
+<!-- reschedule and cancel radiobuttons starts -->
 <script>
-  // JavaScript to handle radio button selection and modal display
-  document.getElementById("confirmAction").addEventListener("click", function() {
-    var selectedAction = document.querySelector('input[name="customRadio"]:checked').value;
-    if (selectedAction === "Reschedule Slot") {
-      $('#rescheduleModal').modal('show');
-    } else if (selectedAction === "Cancel Slot") {
-      $('#cancelModal').modal('show');
+  function toggleFields(modalId, radio) {
+    var rescheduleFields = document.getElementById('rescheduleFields-' + modalId.split('-')[1]);
+    var cancelFields = document.getElementById('cancelFields-' + modalId.split('-')[1]);
+    var mockLinkField = document.getElementById('mockLinkField-' + modalId.split('-')[1]);
+    var rescheduleReason = document.getElementById('rescheduleReason-' + modalId.split('-')[1]);
+    
+    if (radio.value === 'Reschedule Slot') {
+      rescheduleFields.style.display = 'block';
+      rescheduleReason.style.display = 'block';
+      cancelFields.style.display = 'none';
+      mockLinkField.style.display = 'block';  // Show mock link field for reschedule
+    } else if (radio.value === 'Cancel Slot') {
+      rescheduleFields.style.display = 'none';
+      rescheduleReason.style.display = 'none';
+      cancelFields.style.display = 'block';
+      mockLinkField.style.display = 'none';  // Hide mock link field for cancel
+    }
+  }
+  
+  // Initialize fields display on page load
+  document.addEventListener("DOMContentLoaded", function() {
+    var radioButtons = document.querySelectorAll('input[class^="resc_check"]');
+    for (var i = 0; i < radioButtons.length; i++) {
+      if (radioButtons[i].checked) {
+        var modalId = radioButtons[i].closest('.modal').id;
+        toggleFields(modalId, radioButtons[i]);
+      }
     }
   });
 </script>
-<!-- radio buttons ends-->
 
-<!-- script for timer starts here-->
-<script>
-  function startTimer(duration, timerDisplay) {
-    var start = Date.now();
-    var intervalId = setInterval(function () {
-      var diff = duration - (((Date.now() - start) / 1000) | 0);
+  <!-- reschedule and cancel radiobuttons ends -->
 
-      var minutes = (diff / 60) | 0;
-      var seconds = (diff % 60) | 0;
-
-      minutes = minutes < 10 ? "0" + minutes : minutes;
-      seconds = seconds < 10 ? "0" + seconds : seconds;
-
-      timerDisplay.textContent = minutes + ":" + seconds;
-
-      if (diff <= 0) {
-        clearInterval(intervalId);
-        timerDisplay.textContent = "Time's up!";
-      }
-    }, 1000);
-  }
-
-  // Example: Set timer for 5 minutes (300 seconds) for each timer element
-  document.querySelectorAll('.timer').forEach(function (timer) {
-    startTimer(300, timer);
-  });
-</script>
-<!-- script for timer ends here-->
-<script>
-  $(document).ready(function () {
-    $.validator.addMethod("overspecialization", function (value, element) {
-        return !/\d/.test(value);
-    }, );
-
-    $("#slot_add").validate({
-        rules: {
-            datetime: {
-                required: true,
-                overspecialization: false
-            },
-            link: {
-                required: true,
-                overspecialization: false
-            },
-            course: {
-                required:true,
-            },
-            specialization:{
-                required:true,
-            },
-            faculty:{
-                required:true,
-            },
-        },
-        messages: {
-            datetime: {
-                required: "Please Select  Slot."
-            },
-            link: {
-                required: "Please provide link."
-            },
-            course:{
-                required:"Please Select Course."
-            },
-            specialization:{
-                required:" Please Select Specialization."
-            },
-            faculty:{
-                required:"Please Select Faculty."
-            },
-        },
-        submitHandler: function (form) {
-            form.submit();
-        },
-    });
-
-    // Set the minimum value of the datetime input field to the current date and time
-    var currentDate = new Date().toISOString().slice(0, 16);
-    $("#datetime").attr("min", currentDate);
-
-    // Function to reset the input field if a past date or time is entered
-    $("#datetime").on("change", function () {
-        var selectedDateTime = new Date($(this).val());
-        var currentDateTime = new Date();
-
-        // Compare selected datetime with current datetime
-        if (selectedDateTime < currentDateTime) {
-            // If selected datetime is in the past, reset the input field
-            $(this).val('');
-        }
-    });
-});
-
-</script>
-
-
-
+<!-- upload file starts  -->
 <script>
   function validateUploadForm(form) {
     $(form).find('#input-file-now').on('change', function () {
@@ -649,8 +439,38 @@
     });
   }
 
-  $('#UploadCourse').on('shown.bs.modal', function () {
+  $('#UploadSlot').on('shown.bs.modal', function () {
     validateUploadForm($(this).find('form'));
+  });
+</script>
+<!-- uppload file ends -->
+
+<!-- for fading previous dates -->
+<script>
+    $(document).ready(function () {
+      var now = new Date().toISOString().slice(0, 16);
+
+      $("#datetime").attr("min", now);
+      $("#available_slot").attr("min", now);
+  
+     
+    })
+</script>
+  
+
+
+<script>
+  $(document).ready(function() {
+    $('.copyButton').click(function() {
+      var mockLink = $(this).parent().text().trim(); // Get the text content of the parent element
+      var tempInput = document.createElement('input');
+      tempInput.setAttribute('type', 'text');
+      tempInput.value = mockLink;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempInput);
+    });
   });
 </script>
 

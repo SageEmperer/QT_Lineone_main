@@ -27,4 +27,5 @@ urlpatterns = [
     path('certificate', views.CERTIFICATE, name='certificate'),
     path('payments/', views.payments, name='payments'),
     path('invoice/',views.Invoice,name='invoice'),
+    
 ]

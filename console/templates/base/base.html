@@ -262,8 +262,9 @@
                     <div class="dropdown-menu dropdown-menu-right" data-dropdown-in="flipInX" data-dropdown-out="flipOutX">
                         <a class="dropdown-item" href="#"><i class="dropdown-icon zmdi zmdi-pin-account"></i><span>Pin : {{request.session.admin_user.pin}}</span></a>
                         <a class="dropdown-item" href="#"><i class="dropdown-icon zmdi zmdi-account"></i><span>Profile</span></a>
-                        <a class="dropdown-item" href="{% url 'student_login' %}"><i class="dropdown-icon zmdi zmdi-account"></i><span>Stuent Login</span></a>
+                        <a class="dropdown-item" href="{% url 'student_login' %}"><i class="dropdown-icon zmdi zmdi-account"></i><span>Student Login</span></a>
                         <a class="dropdown-item" href="{% url 'parentLogin' %}"><i class="dropdown-icon zmdi zmdi-card"></i><span>Parent Login</span></a>
+                        <a class="dropdown-item" href="{% url 'create_terms_and_conditions' %}"><i class="dropdown-icon zmdi zmdi-card"></i><span>Terms and conditions</span></a>
                         <a class="dropdown-item" href="#"><i class="dropdown-icon zmdi zmdi-card"></i><span>My balance</span></a>
                         <a class="dropdown-item" href="inbox.html"><i class="dropdown-icon zmdi zmdi-email"></i><span>Inbox</span></a>
                         <a class="dropdown-item" href="#"><i class="dropdown-icon zmdi zmdi-settings"></i><span>Settings</span></a>
@@ -1073,7 +1074,7 @@
     <script src="../../static/vendors4/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
     <script src="../../static/dist/js/dataTables-data.js"></script>
 
-
+ 
         <!-- Toggles JavaScript -->
         <script src="../../static/vendors4/jquery-toggles/toggles.min.js"></script>
         <script src="../../static/dist/js/toggle-data.js"></script>

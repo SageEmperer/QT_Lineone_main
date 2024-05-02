@@ -6,8 +6,8 @@
   <h4 class="hk-pg-title m-3">Job Gallary</h4>
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb bg-transparent mb-0">
-      <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
-      <li class="breadcrumb-item"><a href="">Quality Thoughts</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'placement_dashboard' %}">Dashboard</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">{{request.session.admin_user.company_name}}</a></li>
       <li class="breadcrumb-item active" aria-current="page">Job Gallary</li>
     </ol>
   </nav>
@@ -138,7 +138,7 @@ aria-hidden="true"
                     <tr>
                       <td style="font-weight: bold;">Role</td>
                       <!-- <td>:</td> -->
-                      <td  >{{i.role}}</td>
+                      <td  >{{i.role.jobrole_name}}</td>
                     </tr>
                     <tr>
                       <td style="font-weight: bold;">Salary</td>
@@ -159,6 +159,11 @@ aria-hidden="true"
                       <td style="font-weight: bold;">Contact Number</td>
                       <!-- <td>:</td> -->
                       <td  >{{i.companyname.mobile}}</td>
+                    </tr>
+                    <tr>
+                      <td style="font-weight: bold;">Post By</td>
+                      <!-- <td>:</td> -->
+                      <td  >{{i.post_by.first_name}} {{i.post_by.last_name}}</td>
                     </tr>
                     <tr>
                       <td style="font-weight: bold;">Last Date to Apply</td>
@@ -306,9 +311,26 @@ aria-hidden="true"
               <input type="date" id="last_date_to_apply" name="last_date_to_apply" class="last_date_to_apply form-control"> 
 
             </div>
+
+            <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+              <label for="" class="form-label">HR Name: <span class="text-danger">*</span></label>
+              <select name="hr" class="form-control custom-select" id="">
+                <option value="" selected>Please select HR</option>
+                {% for i in hr_details %}
+                <option value="{{i.id}}">{{i.first_name}} {{i.last_name}}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+
+
             <div class="col-12 ">
               <label for="" class="form-label">Job Description <span class="text-danger">*</span></label>
-              <input type="text"placeholder="need skills like python" name="requirements" id="Suggestions" class="form-control mb-3"/>
+              
+              <textarea name="requirements" id="Suggestions" class="form-control mb-3" cols="30" rows="10">
+
+
+              </textarea>
                  
             </div>
             
@@ -397,6 +419,9 @@ aria-hidden="true"
           required: true,
           number: true
         },
+        hr:{
+          required:true
+        },
         last_date_to_apply: {
           required: true
         }
@@ -418,6 +443,9 @@ aria-hidden="true"
           required: "Please enter your skills",
           minlength: "Please enter at least 3 characters",
           maxlength: "Please enter no more than 100 characters"
+        },
+        hr:{
+          required:"Please select hr name"
         },
         role: "Please enter the job role",
         salary: {

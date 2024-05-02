@@ -526,6 +526,8 @@
                 },
                 certifictateid: {
                     required: true,
+                    noSpace: true,
+                    noSpecialChars: true,
                 }
             },
             messages: {
@@ -635,6 +637,8 @@
                 },
                 editcertifictateid: {
                     required: true,
+                    noSpace: true,
+                    noSpecialChars: true,
                 }
             },
             messages: {
@@ -796,78 +800,7 @@
         $('#deleteModal').modal('hide');
     });
 </script>
-<script>
-    // Function to update the "Select All" checkbox status
-    function updateSelectAllCheckbox() {
-        var selectAllCheckbox = document.getElementById('selectAll');
-        var rowCheckboxes = document.querySelectorAll('.row-checkbox');
-        var allChecked = true;
 
-        rowCheckboxes.forEach(function (checkbox) {
-            if (!checkbox.checked) {
-                allChecked = false;
-            }
-        });
-
-        selectAllCheckbox.checked = allChecked;
-        updateSelectedRowsList(); // Update selected rows list when "Select All" checkbox is clicked
-    }
-
-    // Function to update the selected rows list and toggle delete button visibility
-    function updateSelectedRowsList() {
-        var selectedRowsList = document.getElementById('selectedRowsList');
-        var selectedIdsInput = document.getElementById('selected_ids_input');
-        var deleteButton = document.getElementById('deleteButton');
-
-        var selectedRows = document.querySelectorAll('.row-checkbox:checked');
-        var selectedCount = selectedRows.length;
-
-        if (selectedCount > 0) {
-            deleteButton.style.display = 'block'; // Show delete button if more than one row is selected
-        } else {
-            deleteButton.style.display = 'none'; // Hide delete button if only one row or none is selected
-        }
-
-        var selectedIds = [];
-        selectedRows.forEach(function (row) {
-            var courseId = row.dataset.courseId;
-            selectedIds.push(courseId);
-        });
-
-        // Set the value of the hidden input field to the selected IDs
-        selectedIdsInput.value = selectedIds.join(',');
-
-        // Update the delete modal message with the selected count
-        document.getElementById('deleteMessage').textContent = "Are you sure you want to delete " + selectedCount + " records?";
-    }
-
-    // Event listener for checkbox change
-    document.querySelectorAll('.row-checkbox').forEach(function (checkbox) {
-        checkbox.addEventListener('change', function () {
-            updateSelectedRowsList();
-            updateSelectAllCheckbox();
-        });
-    });
-
-    // Event listener for select all checkbox change
-    document.getElementById('selectAll').addEventListener('change', function () {
-        var isChecked = this.checked;
-        document.querySelectorAll('.row-checkbox').forEach(function (checkbox) {
-            checkbox.checked = isChecked;
-        });
-        updateSelectedRowsList();
-    });
-
-    // Initially update delete button visibility
-    updateSelectedRowsList();
-
-    // Event listener for delete button click
-    document.getElementById('confirmDelete').addEventListener('click', function () {
-        // Perform delete action here
-        // For now, let's just close the modal
-        $('#deleteModal').modal('hide');
-    });
-</script>
 
 
 {% endblock %}

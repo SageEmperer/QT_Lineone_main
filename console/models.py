@@ -54,6 +54,21 @@ class Register_model(models.Model):
        
 
 
+
+
+# terms and conditions
+class Terms_and_conditions(models.Model):
+    # crn = models.ForeignKey(Register_model,on_delete=models.CASCADE,related_name="terms_and_condition")
+    terms = models.TextField()
+    def __str__(self):
+        return self.terms
+
+
+
+
+
+
+
 # department
 class Department(models.Model):
     crn_number = models.ForeignKey(Register_model, on_delete=models.CASCADE, related_name='departments')
@@ -284,7 +299,7 @@ class BranchModel(models.Model):
         if not self.id:
             return
 
-        qr_url = f"http://192.168.1.141:8080/inquiry_form/{self.id}/{self.crn_number.crn}"
+        qr_url = f"http://192.168.1.10:8080/inquiry_form/{self.id}/{self.crn_number.crn}"
 
         qr = qrcode.make(qr_url)
         buffer = BytesIO()
@@ -1036,6 +1051,8 @@ class Job_post(models.Model):
     salary = models.DecimalField(max_digits=9,decimal_places=2)
     post_date = models.DateField(default=datetime.today())
     last_date_to_apply = models.DateField()
+    post_by = models.ForeignKey(Employee_model,on_delete=models.SET_NULL,null=True) 
+    # date_of_post=models.DateTimeField(default=datetime.now())
     job_description = models.TextField()
 
 
@@ -1067,22 +1084,50 @@ class Job_post(models.Model):
 
 
  
+# filter
+class filter(models.Model):
+    crn_number = models.ForeignKey(Register_model, on_delete=models.CASCADE, related_name='Filters')
+
+    course=models.ForeignKey(Course,on_delete=models.CASCADE)
+    batchno=models.ForeignKey(Regulations,on_delete=models.CASCADE,null=True)
+    autocertification = models.CharField(max_length=100)
+    manualcertification = models.CharField(max_length=100)
+    startdate=models.DateField(max_length=100)
+    enddate=models.DateField(max_length=100)
+    
 
 
- #Manual
+
+#Manual
 class creatstudents(models.Model):
     crn_number = models.ForeignKey(Register_model, on_delete=models.CASCADE, related_name='CreateStudent')
 
     fullname= models.CharField(max_length=100)
     email=models.CharField(max_length=100)
     mobilenumber=models.CharField(max_length=100)
-    organization=models.CharField(max_length=100)
     course=models.ForeignKey(Course,on_delete=models.CASCADE)
     specialization=models.ForeignKey(Specialization,on_delete=models.CASCADE,null=True)
-    startdate=models.CharField(max_length=100)
-    enddate=models.CharField(max_length=100)
+    startdate=models.DateField(max_length=100)
+    enddate=models.DateField(max_length=100)
     certifictateid = models.CharField(max_length=100,null=True)
     cerficate_sent = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        today = timezone.now()
+        token_prefix = f"{self.crn_number.company_short_name}S{today.day:02d}{today.month:02d}{today.year % 100:02d}"
+
+        last_token_id = creatstudents.objects.filter(crn_number=self.crn_number).aggregate(Max('token_id'))['token_id__max']
+
+        if last_token_id:
+            last_count = int(last_token_id[len(token_prefix):])
+            new_count = last_count + 1
+            self.token_id = f"{token_prefix}{new_count:03d}"
+        else:
+            self.token_id = f"{token_prefix}001"
+
+        self.token_generated_date = datetime.now()
+        super().save(*args, **kwargs)    
+
 
 # bounced
 class Bouncedstudents(models.Model):
@@ -1091,13 +1136,12 @@ class Bouncedstudents(models.Model):
     fullname= models.CharField(max_length=100)
     email=models.CharField(max_length=100)
     mobilenumber=models.CharField(max_length=100)
-    organization=models.CharField(max_length=100)
     course=models.ForeignKey(Course,on_delete=models.CASCADE)
     specialization=models.ForeignKey(Specialization,on_delete=models.CASCADE,null=True)
     startdate=models.CharField(max_length=100)
     enddate=models.CharField(max_length=100)
     certifictateid = models.CharField(max_length=100,null=True) 
-
+    cerficate_sent = models.BooleanField(default=False)
 
 
 # dashboard
@@ -1116,11 +1160,13 @@ class Mail(models.Model):
 # CERTIFICATION 
 class Certification(models.Model):
     crn_number = models.ForeignKey(Register_model, on_delete=models.CASCADE, related_name='certifications')
+
+    certification=models.CharField(max_length=100,null=True)
     course=models.ForeignKey(Course,on_delete=models.CASCADE)
     specialization=models.ForeignKey(Specialization,on_delete=models.CASCADE,null=True)
     course_title = models.CharField(max_length=100)
+    image=models.ImageField(upload_to='image',null=True)
     description = models.TextField()
-   
 
 
 
@@ -1148,35 +1194,28 @@ class Certification(models.Model):
 
 
 
-
 class Scheduling_mock_model(models.Model):
     choice_status = (
         ('Active', 'Active'),
         ('Cancel', 'Cancel'),
         ('Reschedule', 'Reschedule'))
-    crn= models.ForeignKey(Register_model, on_delete=models.CASCADE,related_name="schedule",null=True)
-    faculty_name = models.ForeignKey(Employee_model, on_delete=models.CASCADE,related_name="schedule")
-    available_slot = models.DateTimeField(null=True)
-    mock_link = models.CharField(max_length=30,null=True)
-    status = models.CharField(max_length=10,choices=choice_status, default="Active")
-    reason = models.CharField(max_length=50,null=True)
-
-# Student book an interview modals
-
-class Student_Book_Interview_modal(models.Model):
     interview_status = [
         ('completed', 'Completed'),
         ('pending', 'Pending')
     ]
-    crn_number = models.ForeignKey(Register_model, on_delete=models.CASCADE, related_name='Student_Book_Interview_modal',null=True)
-    student_name=models.ForeignKey(LeadModel, on_delete=models.CASCADE)
+    crn= models.ForeignKey(Register_model, on_delete=models.CASCADE,related_name="schedule")
+    student_name=models.ForeignKey(LeadModel, on_delete=models.CASCADE,null=True)
+    faculty = models.ForeignKey(Employee_model, on_delete=models.CASCADE, null=True)
     course_name=models.ForeignKey(Course,on_delete=models.CASCADE,null=True)
-    specilalization_name=models.ForeignKey(Specialization,on_delete=models.CASCADE,null=True)
-    faculty_name = models.ForeignKey(Employee_model,on_delete=models.CASCADE,null=True)
-    available_slot = models.ForeignKey(Scheduling_mock_model, on_delete=models.CASCADE,null=True)
-    attach_Resume = models.FileField(upload_to='resumes/')  
-    interview_status = models.CharField(choices=interview_status, max_length=10)
-
+    specilalization_name = models.ForeignKey(Specialization, on_delete=models.CASCADE, null=True)
+    available_slot = models.DateTimeField(default=timezone.now)
+    rescheduled_slot = models.DateTimeField(default=timezone.now)
+    mock_link = models.CharField(max_length=30,null=True)
+    status = models.CharField(max_length=10,choices=choice_status, default="Active")
+    reschedule_reason=models.CharField(max_length=50,null=True)
+    cancel_reason = models.CharField(max_length=50,null=True)
+    attach_Resume = models.FileField(upload_to='resumes/',null=True)  
+    interview_status = models.CharField(choices=interview_status, max_length=10,null=True)
     
     
 
@@ -1204,7 +1243,7 @@ class Feedback(models.Model):
 
     ]    
     crn_number = models.ForeignKey(Register_model, on_delete=models.CASCADE, related_name='feedback',null=True)
-    interview= models.ForeignKey(Student_Book_Interview_modal, on_delete=models.CASCADE)
+    interview= models.ForeignKey(Scheduling_mock_model, on_delete=models.CASCADE)
     attendance_status = models.CharField(choices=attendance, max_length=10)
     communication_skills=models.IntegerField(choices=marks, default=0)
     body_language=models.IntegerField(choices=marks, default=0)

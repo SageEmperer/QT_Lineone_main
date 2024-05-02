@@ -15,8 +15,9 @@
                 <div class="media align-items-center">
                     <div class="media-img-wrap  d-flex">
                         <div class="avatar">
+                            {% if employee.profile_image %}
                             <img src="{{employee.profile_image.url}}" alt="user" class="avatar-img rounded-circle">
-                        </div>
+                            {% endif  %}                        </div>
                     </div>
                     <div class="media-body">
                         <div class="text-white text-capitalize display-6 mb-5 font-weight-400">{{employee.first_name}} {{employee.last_name}}</div>

@@ -4,11 +4,11 @@
 
 <!-- Breadcrumb -->
 <div class="hk-pg-header d-flex justify-content-between mb-0">
-  <h4 class="hk-pg-title m-3">HR Information [1]</h4>
+  <h4 class="hk-pg-title m-3">HR Information [{{hr_details.count}}]</h4>
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb bg-transparent mb-0">
       <li class="breadcrumb-item"><a href="{% url 'placement_dashboard' %}">Dashboard</a></li>
-      <li class="breadcrumb-item"><a href="">Quality Thoughts</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">{{request.session.admin_user.company_name}}</a></li>
       <li class="breadcrumb-item active" aria-current="page">HR details</li>
     </ol>
   </nav>
@@ -20,7 +20,7 @@
  <!-- Row -->
  
  <section class="hk-sec-wrapper">
-  <div class="row">
+  <!-- <div class="row">
     <div class="col">
       
     </div>
@@ -31,7 +31,7 @@
     <div class="d-flex justify-content-end">
       <a href='#' type="button" class="btn btn-success ml-auto mr-3 mb-3"><i class="fa fa-download"></i> Print</a>
     </div>
-  </div>
+  </div> -->
 
   <div class="row">
     <div class="col-xl-12">
@@ -40,7 +40,9 @@
       <thead class="bg-dark">
           <tr>
               <th class="text-white  text-center">
-                <p class="mr-5">All<input type="checkbox" class="form-check-input" style="margin-left:3px; margin-right: 20px;" id="checkAll"></p>
+                <p class="mr-5">S.No
+                  <!-- <input type="checkbox" class="form-check-input" style="margin-left:3px; margin-right: 20px;" id="checkAll"> -->
+                </p>
               </th>
               <th class="text-white">Employee ID</th>
               <th class="text-white">HR Name</th>
@@ -51,13 +53,16 @@
           </tr>
       </thead>
       <tbody>
+        {% for i in hr_details %}
           <tr>
-              <td><input type="checkbox" class="row-checkbox" data-id="{{i.id}}"></td>
-              <td>QT4545</td>
-              <td><a href="{% url 'jobdetails' %}">Anusha Reddy</a></td>
-              <td>anusha.p@qualitythought.in</td>
-              <td>9494324345</td>
-              <td>Ameerpet</td>
+              <td class="text-center">
+              {{forloop.counter}}  <!-- <input type="checkbox" class="row-checkbox" data-id="{{i.id}}"> -->
+              </td>
+              <td>{{i.Employee_id}}</td>
+              <td><a href="{% url 'jobdetails' %}">{{i.first_name}} {{i.last_name}}</a></td>
+              <td>{{i.personal_email}}</td>
+              <td>{{i.personal_number}}</td>
+              <td>{{i.branch.branch_name}}</td>
               <!-- <td class="text-center">
                   <button
                       class="btn btn-primary m-1"data-toggle="modal"data-target="#Edithr">
@@ -71,27 +76,9 @@
                   </button>
               </td> -->
           </tr>
+          {% endfor %}
 
-          <tr>
-            <td><input type="checkbox" class="row-checkbox" data-id="{{i.id}}"></td>
-            <td>QT4545</td>
-            <td><a href="{% url 'jobdetails' %}">Anusha Reddy</a></td>
-            <td>anusha.p@qualitythought.in</td>
-            <td>9494324345</td>
-            <td>Ameerpet</td>
-            <!-- <td class="text-center">
-                <button
-                    class="btn btn-primary m-1"data-toggle="modal"data-target="#Edithr">
-                    <i class="fa fa-pencil"></i>
-                </button>
-                <button
-                class="btn btn-danger m-1"
-                data-toggle="modal"
-                data-target="#Delete">
-                    <i class="fa fa-trash"></i>
-                </button>
-            </td> -->
-        </tr>
+       
           </tbody>
   </table>
 </div>

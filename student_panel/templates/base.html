@@ -714,7 +714,7 @@ License: You must have a valid license purchased only from templatemonster to le
     <script src="../../static/vendors4/jasny-bootstrap/dist/js/jasny-bootstrap.min.js"></script>
 
     <!--ID card modal-->
-    <div class="modal fade" id="exampleModal"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <!-- <div class="modal fade" id="exampleModal"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content" style="margin-right: 50%; margin-left:15%">
                 <div class="modal-body">
@@ -805,13 +805,16 @@ License: You must have a valid license purchased only from templatemonster to le
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
     <script>
         function flipCard() {
             var card = document.querySelector(".flip-card");
             card.classList.toggle("flipped");
         }
     </script>
+    {% block scripts %}
+
+    {% endblock %}
 </body>
 
 <!-- Mirrored from hencework.com/theme/deepor/dashboard1.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 08 Nov 2023 13:25:55 GMT -->

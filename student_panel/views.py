@@ -1,4 +1,5 @@
 
+from django.http import JsonResponse
 from django.shortcuts import render,redirect
 from .models import *
 from django.contrib import messages
@@ -100,7 +101,28 @@ def internship(request):
 
 @student_required    
 def mocks(request):
-    return render(request, 'mocks.html')
+    student_id = request.session.get('student').get('student_id')
+    credentials = Studen_credentials.objects.get(id = student_id)
+    print(credentials.studend_id)
+    crn = credentials.studend_id.crn_number.crn
+    register_user = Register_model.objects.get(crn=crn)
+    courses = register_user.courses.all()
+    # student= LeadModel.objects.get(id=credentials.studend_id)
+    # print(student)
+    # crn = LeadModel.objects.get(id=student_id).crn_number
+    # print(crn)
+    context={
+        'courses':courses
+    }
+     
+    # coursess= Course.objects.all()
+    return render(request, 'mocks.html',context)
+
+
+
+
+
+
 
 
 

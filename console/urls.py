@@ -7,6 +7,7 @@ urlpatterns = [
     path('otp_page/<int:user_id>/',views.otp_page,name="otp_page"),
     path('register_resend_otp/',views.register_resend_otp,name="register_resend_otp"),
     path('terms_and_conditions/',views.terms_and_conditions,name="terms_and_conditions"),
+    path('create_terms_and_conditions/',views.create_terms_and_conditions,name="create_terms_and_conditions"),
     path('forgot_password/',views.forgot_password,name="forgot_password"),
     path('departments/',views.departments,name="departments"),
     path('settings/',views.settings_page,name="settings"),
@@ -181,6 +182,7 @@ urlpatterns = [
 
 
      path('get_company_vendor/<int:id>',views.get_company_vendor,name="get_company_vendor"),
+      path('spec_jason/<int:id>',views.spec_jason,name="spec_jason"),
 
 
 
@@ -190,11 +192,18 @@ urlpatterns = [
     path('mock_dashboard/',views.mock_dashboard,name="mock_dashboard"),
     path('student/',views.student,name="student"),
     path('faculty/',views.faculty_slot,name="faculty_slot"),
+    path('editfacultyslots/<int:slot_id>/', views.edit_faculty_slot, name='edit_faculty_slot'),
+    path('facultyslotimport/', views.faculty_slot_import, name='faculty_slot_import'),
+    path('facultyslotexport/', views.faculty_slot_export, name='faculty_slot_export'),
     path('facultymocks/', views.total_interviews, name="total_interviews"),
     path('FeedbackForm/<int:id>',views.FeedbackForm,name="FeedbackForm"),
     path('past/', views.student_feedback, name="student_feedback"),
     path('open_pdf/<int:document_id>/', views.open_pdf, name='open_pdf'),
     path('admin/', views.admin_mock, name="admin_mock"),
+    path('editadmin_mock/<int:slot_id>/', views.edit_admin_mock, name='edit_admin_mock'),
+    path('adminslotimport/', views.admin_slot_import, name='admin_slot_import'),
+    path('adminslotexport/', views.admin_slot_export, name='admin_slot_export'),
+    
     path('reschedule/', views.reschedule, name="reschedule"),
     path('adinterview/', views.admin_interview_list, name="admin_interview_list"),
     path('facultydashboard/', views.faculty_dashboard, name="faculty_dashboard"),
@@ -216,12 +225,13 @@ urlpatterns = [
 # Dashboard
     path('certif_dashboard',views.dashboard_certification,name='certif_dashboard'),
 # Filter Mails
-    path('send_email/',views.send_email,name='send_email'),
+    path('send_email/', views.send_email, name='send_email'),
+    path('student-filter/', views.student_filter, name='student_filter'),
 #Craete Student
     # certification list of students
     path('list_student/',views.list_student,name='list_student'),
     path('List_student_import/',views.List_student_import,name='List_student_import'),
-    path('List_student_all/',views.List_student_all,name='List_student_all'),
+    path('List_student_sent/', views.list_student_sent, name='list_student_sent'),    
     # certification Manual students
     path('create_student/',views.create_student,name='create_student'),
     path('create_student_edit/<int:id>',views.create_student_edit,name='create_student_edit'),
@@ -231,8 +241,8 @@ urlpatterns = [
     path('create_student_sent/',views.create_student_sent,name='create_student_sent'),
 #Bounced Mails
     path('bounced_email/',views.bounced_email,name='bounced_email'),
-    path('bounced_delete/<int:id>',views.bounced_delete,name='bounced_delete'),
     path('bounced_edit/<int:id>',views.bounced_edit,name='bounced_edit'),
+    path('bounced_sent/',views.bounced_sent,name='bounced_sent'),
 
 
 

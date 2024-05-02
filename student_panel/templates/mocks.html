@@ -16,7 +16,7 @@
 {% endfor %}
 {% endif %}
 
-
+ 
 <!-- Table starts here -->
 <div>
 
@@ -146,7 +146,7 @@
  <label for="" class="form-label">Course<span class="text-danger"> *</span></label>
  <select class="form-control custom-select id_course" name="course_name">
  <option selected value="">Select Course</option>
- {% for i in course %}
+ {% for i in courses %}
  
  <option value="{{i.id}}">{{ i.course_name }}</option>
 
@@ -155,13 +155,9 @@
  </div>
  <div class="mb-3">
  <label for="" class="form-label">Specialization <span class="text-danger">*</span></label>
- <select class="form-control custom-select" id="specialization" name="specialization" >
- <option selected value="">Select Your Specialization</option>
- {% for i in specialization %}
- 
- <option value="{{i.id}}">{{ i.course_name }} {{ i.specilalization_name }}</option>
+ <select class="form-control custom-select specialization-select" id="specialization" name="specialization" >
 
- {% endfor %}
+
  </select>
  </div>
  <div class="mb-3">
@@ -226,296 +222,29 @@ name="chapter_image" accept="application/pdf" type="file">
 {% endblock %}
 
 {% block scripts %}
-
 <script>
- // Define handleOptionChange function
- function handleOptionChange() {
- var rescheduleRadio = document.getElementById("customRadio1");
- var cancelRadio = document.getElementById("customRadio2");
- var dateTimeInput = document.getElementById("dateTime");
- var linkTextarea = document.getElementById("mockLink");
- var reasonTextarea = document.getElementById("reasonField");
-
- if (rescheduleRadio.checked) {
- dateTimeInput.disabled = false;
- linkTextarea.disabled = false;
- reasonTextarea.disabled = true;
- reasonTextarea.value = ''; // Clear the value
- $('#radioError').html(''); // Clear error message
- } else if (cancelRadio.checked) {
- dateTimeInput.disabled = true;
- dateTimeInput.value = ''; // Clear the value
- linkTextarea.disabled = true;
- linkTextarea.value = ''; // Clear the value
- reasonTextarea.disabled = false;
- $('#radioError').html(''); // Clear error message
- }
- }
-
- // Validate form using jQuery Validation Plugin
- $(document).ready(function () {
- $.validator.addMethod("overspecialization", function (value, element) {
- return !/\d/.test(value);
- }, "Please enter a valid value.");
-
- $.validator.addMethod("radioRequired", function (value, element) {
- return $('input[name="customRadio"]:checked').length > 0;
- }, "Please select an option.");
-
- $("#Edit_slot").validate({
- rules: {
- dateTime: {
- required: true,
- overspecialization: false
- },
- link: {
- required: true,
- overspecialization: true
- },
- feedback: {
- required: true,
- },
- customRadio: {
- radioRequired: true
- }
-
- },
- messages: {
- dateTime: {
- required: "Please Select Slot."
- },
- link: {
- required: "Please provide link."
- },
- feedback: {
- required: " Please enter a reason",
- },
- customRadio: {
- radioRequired: "Please select an option."
- }
-
- },
- errorPlacement: function (error, element) {
- if (element.attr("name") == "customRadio") {
- error.appendTo("#radioError");
- } else {
- error.insertAfter(element);
- }
- },
- submitHandler: function (form) {
- form.submit();
- },
- });
- });
-</script>
-<!-- script for reschedule and cancel ends here-->
-<!-- radio buttons -->
-<script>
- // JavaScript to handle radio button selection and modal display
- document.getElementById("confirmAction").addEventListener("click", function () {
- var selectedAction = document.querySelector('input[name="customRadio"]:checked').value;
- if (selectedAction === "Reschedule Slot") {
- $('#rescheduleModal').modal('show');
- } else if (selectedAction === "Cancel Slot") {
- $('#cancelModal').modal('show');
- }
- });
-</script>
-<!-- radio buttons ends-->
-
-<!-- script for timer starts here-->
-<script>
- function startTimer(duration, timerDisplay) {
- var start = Date.now();
- var intervalId = setInterval(function () {
- var diff = duration - (((Date.now() - start) / 1000) | 0);
-
- var minutes = (diff / 60) | 0;
- var seconds = (diff % 60) | 0;
-
- minutes = minutes < 10 ? "0" + minutes : minutes;
- seconds = seconds < 10 ? "0" + seconds : seconds;
-
- timerDisplay.textContent = minutes + ":" + seconds;
-
- if (diff <= 0) {
- clearInterval(intervalId);
- timerDisplay.textContent = "Time's up!";
- }
- }, 1000);
- }
-
- // Example: Set timer for 5 minutes (300 seconds) for each timer element
- document.querySelectorAll('.timer').forEach(function (timer) {
- startTimer(300, timer);
- });
-</script>
-<!-- script for timer ends here-->
-<script>
- $(document).ready(function () {
- $.validator.addMethod("overspecialization", function (value, element) {
- return !/\d/.test(value);
- },);
-
- $("#slot_add").validate({
- rules: {
- datetime: {
- required: true,
- overspecialization: false
- },
- link: {
- required: true,
- overspecialization: false
- },
- course: {
- required: true,
- },
- specialization: {
- required: true,
- },
- faculty: {
- required: true,
- },
- },
- messages: {
- datetime: {
- required: "Please Select Slot."
- },
- link: {
- required: "Please provide link."
- },
- course: {
- required: "Please Select Course."
- },
- specialization: {
- required: " Please Select Specialization."
- },
- faculty: {
- required: "Please Select Faculty."
- },
- },
- submitHandler: function (form) {
- form.submit();
- },
- });
-
- // Set the minimum value of the datetime input field to the current date and time
- var currentDate = new Date().toISOString().slice(0, 16);
- $("#datetime").attr("min", currentDate);
-
- // Function to reset the input field if a past date or time is entered
- $("#datetime").on("change", function () {
- var selectedDateTime = new Date($(this).val());
- var currentDateTime = new Date();
-
- // Compare selected datetime with current datetime
- if (selectedDateTime < currentDateTime) {
- // If selected datetime is in the past, reset the input field
- $(this).val('');
- }
- });
- });
-
+    $(document).ready(function(){
+        $('.id_course').change(function(){
+            console.log($(this).val())
+            var cos_id = $(this).val();
+            var course_select = $('.course-select')
+            var specialization = $('.specialization-select')
+    
+            specialization.empty().append('<option value="">Select Specialization</option>')
+            if (cos_id) {
+                $.getJSON('/spec_jason/' + cos_id, function(data) {
+                    $.each(data, function(index, spec) {
+                        specialization.append('<option value="' + spec.id + '">' + spec.specilalization_name + '</option>');
+                    });
+                }).fail(function(jqxhr, textStatus, error) {
+                    console.error('Error fetching courses:', textStatus, error);
+                });
+            }  
+        })
+    })
+    
 </script>
 
-
-
-<script>
- function validateUploadForm(form) {
- $(form).find('#input-file-now').on('change', function () {
- var file = this.files[0];
- var fileExt = file.name.split('.').pop().toLowerCase();
-
- if (fileExt === 'csv') {
- $(form).find('button[type="submit"]').prop('disabled', false);
- $(form).find('#input-file-now').html('');
- } else {
- $(form).find('button[type="submit"]').prop('disabled', true);
- $(form).find('#csvPreview').html('<span style="color: red;">Only CSV files are allowed.</span>');
- }
- });
-
- $(form).on('submit', function (e) {
- var file = $(form).find('#input-file-now')[0].files[0];
-
- if (!file) {
- e.preventDefault();
- $(form).find('#csvPreview').html('<span style="color: red;">Please select a csv file.</span>');
- }
- });
- }
-
- $('#UploadCourse').on('shown.bs.modal', function () {
- validateUploadForm($(this).find('form'));
- });
-</script>
-
-<script>
- $(document).ready(function () {
- $('course_name').change(function(){
- var courseID = $(this).val();
- var url = 'mocks/'+courseID
- $.ajax({
- url:url,
- success:function(data){
- var course_list = data.course_list;
- var options = '<option value="">Select Your Course</option>';
- for (var i = 0; i < course_list.length; i++) {
- options += '<option value="' + course_list[i].id + '">' + course_list[i].name + '</option>';
- }
- $('specialization').html(options);
- }
- });
- });
- $('specialization').change(function(){
- var specializationID = $(this).val();
- var url = 'mocks/'+specializationID
- $.ajax({
- url:url,
- success:function(data){
- var specialization_list = data.specialization_list;
- var options = '<option value="">Select Your Specialization</option>';
- for (var i = 0; i < course_list.length; i++) {
- options += '<option value="' + specialization_list[i].id + '">' + specialization_list[i].name + '</option>';
- }
- $('faculty').html(options);
- }
- });
- });
- $('faculty').change(function(){
- var facultyID = $(this).val();
- var url = 'mocks/'+facultyID
- $.ajax({
- url:url,
- success:function(data){
- var faculty_list = data.faculty_list;
- var options = '<option value="">Select Faculty</option>';
- for (var i = 0; i < course_list.length; i++) {
- options += '<option value="' + faculty_list[i].id + '">' + faculty_list[i].name + '</option>';
- }
- $('time_slot').html(options);
- }
- });
- });
- $('time_slot').change(function(){
- var time_slotID = $(this).val();
- var url = 'mocks/'+time_slotID
- $.ajax({
- url:url,
- success:function(data){
- var time_slot_list = data.time_slot_list;
- var options = '<option value="">Available time slots </option>';
- for (var i = 0; i < course_list.length; i++) {
- options += '<option value="' + time_slot_list[i].id + '">' + time_slot_list[i].name + '</option>';
- }
- $('').html(options);
- }
- });
- });
-
-
- });
-</script>
 
 
 

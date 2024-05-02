@@ -185,9 +185,38 @@ def logout_page(request):
   del request.session['admin_user']
   return redirect('login')
   
+
+
+
+
+# terms and condition create here
+@admin_required
+def create_terms_and_conditions(request):
+    if request.method == "POST":
+        # Check if any terms and conditions exist
+        existing_terms = Terms_and_conditions.objects.first()
+        
+        # If terms exist, update them
+        if existing_terms:
+            existing_terms.delete()
+        
+        # Create new terms and conditions
+        terms = request.POST.get('terms')
+        Terms_and_conditions.objects.create(terms=terms)
+        messages.success(request, 'Terms and conditions created successfully')
+        return redirect('create_terms_and_conditions')
+
+    return render(request, 'accounts/create_terms_and_conditions.html')
+
+
     
 def terms_and_conditions(request):
-  return render(request,'accounts/terms_and_conditions.html')  
+  terms = Terms_and_conditions.objects.first()
+  print(terms)
+  context = {
+    'terms':terms
+  }
+  return render(request,'accounts/terms_and_conditions.html',context)  
 
 
 
@@ -202,9 +231,16 @@ def forgot_password(request):
     send_mail('Forgot Password', message, settings.EMAIL_HOST_USER, [email])
     messages.success(request, 'Password sent to your email')
     return redirect('login')
+  else:
+    messages.error(request,'Email does not exists')
+    return redirect('forgot_password')
 
 
  return render(request,'accounts/forgot_password.html')
+
+
+
+
 
 
 
@@ -2340,6 +2376,19 @@ def specialization(request):
         'cos': cos,
     }
     return render(request, 'settings_page/specialization.html', context)
+
+
+def spec_jason(rquest,id):
+    
+    specialization = Specialization.objects.filter(course_name_id=id).values('id', 'specilalization_name')
+    specializations = [{'id': spec['id'], 'specilalization_name': spec['specilalization_name']} for spec in specialization]
+    return JsonResponse(specializations, safe=False)
+
+
+
+
+
+
 
 
 @admin_required
@@ -5815,71 +5864,72 @@ def depnd_specilization(request, id_course):
 def employee_list(request):
   crn=request.session.get('admin_user').get('crn')
   register_user=Register_model.objects.get(crn=crn)
-  if request.method=='POST':
-   first_name=request.POST.get('first_name').capitalize()
-   last_name=request.POST.get('last_name').capitalize()
-   personal_number=request.POST.get('personal_number')
-   alternative_number=request.POST.get('alternative_number')
-   personal_email=request.POST.get('personal_email')
-   professional_email=request.POST.get('professional_email')
-   blood_group=request.POST.get('blood_group')
-   gender=request.POST.get('gender')
-   date_of_birth=request.POST.get('date_of_birth')
-   nationality=request.POST.get('nationality')
-   religion=request.POST.get('religion')
-   caste=request.POST.get('caste')
-   Employee_id=request.POST.get('Employee_id')
-   employee_type= register_user.employee_types.get(id=request.POST.get('employee_type'))
-   department_name=register_user.departments.get(pk=request.POST.get('department_name'))
-   designation_name=register_user.designations.get(pk=request.POST.get('designation_name'))
-  #  specialization_id = Specialization.objects.get(pk=request.POST.get('specialization_id'))
-  #  course_id =  Course.objects.get(pk=request.POST.get('course_id'))
-  #  specialization_id =  register_user.specializations.get(pk=request.POST.get('specialization_id'))
-  #  course_id =  register_user.courses.get(pk=request.POST.get('course_id'))
-   branch=register_user.branches.get(pk=request.POST.get('branch'))
-   profile_image=request.FILES.get('profile_image')
-   salary=request.POST.get('salary')
-   country=request.POST.get('country')
-   state=request.POST.get('state')
-   city=request.POST.get('city')
-   pincode=request.POST.get('pincode')
-   address=request.POST.get('address')
-   aadhar_card=request.POST.get('aadhar_card')
-   pan_card=request.POST.get('pan_card')
-   aadhar_card_pdf=request.FILES.get('aadhar_card_pdf')
-   pan_card_pdf=request.FILES.get('pan_card_pdf')
-
-
-
-
-
-
-
-   if register_user.employee.filter(personal_number=personal_number).exists():
-     messages.error(request,'Employee personal number already exists')
-     return redirect('employees')
-   if alternative_number:
-     if register_user.employee.filter(alternative_number=alternative_number).exists():
-       messages.error(request,'Employee alternative number already exists')
-       return redirect('employees')
-   if register_user.employee.filter(personal_email=personal_email).exists():
-     messages.error(request,'Employee personal email already exists')
-     return redirect('employees')
-   if professional_email:
-     if register_user.employee.filter(professional_email=professional_email).exists():
-       messages.error(request,'Employee professional email already exists')
-       return redirect('employees')
-   if register_user.employee.filter(aadhar_card=aadhar_card).exists():
-     messages.error(request,'Employee aadhar card already exists')
-     return redirect('employees')
-   if pan_card:
-     if register_user.employee.filter(pan_card=pan_card).exists():
-       messages.error(request,'Employee pan card already exists')
-       return redirect('employees') 
+  if request.method == "POST":
+    first_name=request.POST.get('first_name')
+    last_name=request.POST.get('last_name')
+    personal_number=request.POST.get('personal_number')
+    alternative_number=request.POST.get('alternative_number')
+    personal_email=request.POST.get('personal_email')
+    professional_email=request.POST.get('professional_email')
+    blood_group=request.POST.get('blood_group')
+    gender=request.POST.get('gender')
+    date_of_birth=request.POST.get('date_of_birth')
+    nationality=request.POST.get('nationality')
+    religion=request.POST.get('religion')
+    caste=request.POST.get('caste')
+    Employee_id=request.POST.get('Employee_id')
+    employee_type=register_user.employee_types.get(id=request.POST.get('employee_type'))
+    department_name=register_user.departments.get(id=request.POST.get('department_name'))
+    designation_name=register_user.designations.get(id=request.POST.get('designation_name'))
+    branch=register_user.branches.get(id=request.POST.get('branch'))
+    course_id=request.POST.get('course_id')
+    specialization_id=request.POST.get('specialization_id')
+    # course_id=register_user.courses.get(id=request.POST.get('course_id'))
+    # specialization_id=register_user.specializations.get(id=request.POST.get('specialization_id'))
+    salary=request.POST.get('salary')
+    profile_image=request.FILES.get('profile_image')
+    country=request.POST.get('country')
+    state=request.POST.get('state')
+    city=request.POST.get('city')
+    pincode=request.POST.get('pincode')
+    address=request.POST.get('address')
+    aadhar_card=request.POST.get('aadhar_card')
+    pan_card=request.POST.get('pan_card')
+    aadhar_card_pdf=request.FILES.get('aadhar_card_pdf')
+    pan_card_pdf=request.FILES.get('pan_card_pdf')
+    rand_password=generate_password()
    
    
-   else:
-      emp = Employee_model.objects.create(
+    
+    if register_user.employee.filter(personal_number=personal_number).exists():
+      messages.error(request, f'{personal_number} is already exists')
+      return redirect('employees')
+    if register_user.employee.filter(personal_email=personal_email).exists():
+      messages.error(request, f'{personal_email} is already exists')
+      return redirect('employees')
+    if alternative_number:
+      if register_user.employee.filter(alternative_number=alternative_number).exists():
+        messages.error(request, f'{alternative_number} is already exists')
+        return redirect('employees')
+    if professional_email:
+      if register_user.employee.filter(professional_email=professional_email).exists():
+        messages.error(request, f'{professional_email} is already exists')
+        return redirect('employees')
+    if aadhar_card:
+      if register_user.employee.filter(aadhar_card=aadhar_card).exists():
+        messages.error(request, f'{aadhar_card} is already exists')
+        return redirect('employees')
+    if pan_card:
+      if register_user.employee.filter(pan_card=pan_card).exists():
+        messages.error(request, f'{pan_card} is already exists')
+        return redirect('employees')
+   
+    
+    else:
+      if course_id and specialization_id:
+        course=register_user.courses.get(id=course_id)
+        specialization=register_user.specializations.get(id=specialization_id)
+      employee=register_user.employee.create(
       first_name=first_name,
       last_name=last_name,
       personal_number=personal_number,
@@ -5896,11 +5946,12 @@ def employee_list(request):
       employee_type=employee_type,
       department_name=department_name,
       designation_name=designation_name,
-      # course_id= course_id,
-      # specialization_id = specialization_id,
       branch=branch,
-      profile_image=profile_image,
+      course_id=course if course_id else None,
+      specialization_id= specialization if specialization_id else None,
+      
       salary=salary,
+      profile_image=profile_image,
       country=country,
       state=state,
       city=city,
@@ -5910,40 +5961,72 @@ def employee_list(request):
       pan_card=pan_card,
       aadhar_card_pdf=aadhar_card_pdf,
       pan_card_pdf=pan_card_pdf,
-      crn_number=register_user)
-      Employee_credentials.objects.create(
-      crn = register_user,
-      email = personal_email,
-      password = "A#aruddin@834",
-      employee = emp
-      )  
-      if request.POST.get('specialization_id'):
-        if Specialization.objects.filter(id=request.POST.get('specialization_id')).exists():
-          emp.specialization.add(Specialization.objects.get(pk=request.POST.get('specialization_id')))
+      password=rand_password,
+      crn_number=register_user
+      )
+      if course_id and specialization_id:
+        subject = f'{request.session.get("admin_user").get("company_name")}'
+        message = (
+          f'Hi {first_name} {last_name},\n\n'
+          f'Thank You for joining {request.session.get("admin_user").get("company_name")}. we are happy to have you onboard. Your Employee Id is {employee.Employee_id}. Your Department is {department_name}. Your Designation is {designation_name}.\n\n'
+          f'Your Details: \n\n'
+          f'Course: {course.course_name}\n'
+          f'Specialization: {specialization.specilalization_name}\n'
+          f'Salary: Rs.{salary}\n'
+          f'Username: {personal_email}\n'
+          f'Password: {rand_password}\n\n'
+          f'To Login Click here URL: http://192.168.1.87:8080/\n\n'
+          f'Regards,\n'
+          f'{request.session.get("admin_user").get("company_name")}'
+          f'\n')
+        email_from=settings.EMAIL_HOST_USER
+        email_to=[personal_email]
+        send_mail(subject, message, email_from, email_to)
+      else:
+        subject = f'{request.session.get("admin_user").get("company_name")}'
+        message = (
+          f'Hi {first_name} {last_name},\n\n'
+          f'Thank You for joining {request.session.get("admin_user").get("company_name")}. we are happy to have you onboard. Your Employee Id is {employee.Employee_id}. Your Department is {department_name}. Your Designation is {designation_name}.\n\n'
+          f'Your Details: \n\n'
+          f'Salary: Rs.{salary}\n'
+          f'Username: {personal_email}\n'
+          f'Password: {rand_password}\n\n'
+          f'To Login Click here URL: http://192.168.1.87:8080/\n\n'
+          f'Regards,\n'
+          f'{request.session.get("admin_user").get("company_name")}'
+          
+        )
+        email_from=settings.EMAIL_HOST_USER
+        email_to=[personal_email]
+        send_mail(subject, message, email_from, email_to)
+      
 
-      if request.POST.get('course_id'):
-        course_id = request.POST.get('course_id')
-        if Course.objects.filter(id=course_id).exists():
-          emp.course.add(Course.objects.get(pk=course_id)) 
-      messages.success(request,'Employee has been successfully created')
+      messages.success(request, f'Employee is added successfully')
       return redirect('employees')
+      
+      
+      
   employee=register_user.employee.all().order_by('-id')
-  branch=register_user.branches.all().order_by('-id')
   employee_type=register_user.employee_types.all().order_by('-id')
   department=register_user.departments.all().order_by('-id')
   designation=register_user.designations.all().order_by('-id')
   courses = register_user.courses.filter(status='Active')
   specializations = register_user.specializations.filter(status="Active").order_by('-id')
+  branch=register_user.branches.all().order_by('-id')
   context={
-    'employee':employee,
-    'branch':branch,
-    'employee_type':employee_type,
-    'department':department,
-    'designation':designation,
-    'courses':courses,
-    'specializations':specializations
-  }
+      'employee':employee,
+      'employee_type':employee_type,
+      'department':department,
+      'designation':designation,
+      'courses':courses,
+      'specializations':specializations,
+      'branch':branch
+    }
+    
+  
+
   return render(request,'employee_management/employee_list.html',context)
+
 
 
 
@@ -6095,7 +6178,8 @@ def employee_update(request,id):
     designation_name=register_user.designations.get(pk=request.POST.get('designation_name_edit'))
     # specialization_id =  Specialization.objects.get(pk=request.POST.get('specialization_id'))
     # course_id =  Course.objects.get(pk=request.POST.get('course_id'))
-    
+    course_id=request.POST.get('course_id_edit')
+    specialization_id=request.POST.get('specialization_id_edit')
     branch=register_user.branches.get(pk=request.POST.get('branch_edit'))
     profile_image=request.FILES.get('profile_image_edit')
     salary=request.POST.get('salary_edit')
@@ -6108,6 +6192,7 @@ def employee_update(request,id):
     pan_card=request.POST.get('pan_card_edit')
     aadhar_card_pdf=request.FILES.get('aadhar_card_pdf_edit')
     pan_card_pdf=request.FILES.get('pan_card_pdf_edit')
+    rand_password=generate_password()
     
     if register_user.employee.filter(personal_number=personal_number).exclude(id=id).exists():
       messages.error(request, 'Employee Personal number already exists')
@@ -6131,6 +6216,9 @@ def employee_update(request,id):
         messages.error(request, 'Employee Pan card already exists')
         return redirect('employees')
     
+       
+    
+    
    
     if 'profile_image_edit' in request.FILES:
       profile_image = request.FILES['profile_image_edit']
@@ -6151,7 +6239,15 @@ def employee_update(request,id):
         employee.pan_card_pdf = pan_card_pdf
         employee.save()
         
+      
+      
+        
     else:
+      if course_id and specialization_id:
+        info=register_user.employee.filter(id=id).update(
+          course_id=register_user.courses.get(pk=course_id),
+          specialization_id=register_user.specializations.get(pk=specialization_id),
+        )
       register_user.employee.filter(id=id).update(
       first_name=first_name,
       last_name=last_name,
@@ -6165,8 +6261,7 @@ def employee_update(request,id):
       nationality=nationality,
       religion=religion,
       caste=caste,
-      # course_id= course_id,
-      # specialization_id = specialization_id,
+      
       employee_type=employee_type,
       department_name=department_name,
       designation_name=designation_name,
@@ -6176,25 +6271,55 @@ def employee_update(request,id):
       state=state,
       city=city,
       pincode=pincode,
-      address=address,
-      
+      address=address,    
       aadhar_card=aadhar_card,
       pan_card=pan_card,
+      password=rand_password,
+      crn_number=register_user)
+      if course_id and specialization_id:
+        subject = f'{request.session.get("admin_user").get("company_name")}'
+        message = (
+          f'Hi {first_name} {last_name},\n\n'
+          f'Thank You for joining {request.session.get("admin_user").get("company_name")}. we are happy to have you onboard. Your Employee Id is {employee.Employee_id}. Your Department is {department_name}. Your Designation is {designation_name}.\n\n'
+          f'Your Details: \n\n'
+          f'Course: {course_id}\n'
+          f'Specialization: {specialization_id}\n'
+          f'Salary: Rs.{salary}\n'
+          f'Username: {personal_email}\n'
+          f'Password: {rand_password}\n\n'
+          f'To Login Click here URL: http://192.168.1.87:8080/\n\n'
+          f'Regards,\n'
+          f'{request.session.get("admin_user").get("company_name")}'
+          )
+        email_from=settings.EMAIL_HOST_USER
+        email_to=[personal_email]
+        send_mail(subject, message, email_from, email_to)
+      else:
+        subject = f'{request.session.get("admin_user").get("company_name")}'
+        message = (
+          f'Hi {first_name} {last_name},\n\n'
+          f'Thank You for joining {request.session.get("admin_user").get("company_name")}. we are happy to have you onboard. Your Employee Id is {employee.Employee_id}. Your Department is {department_name}. Your Designation is {designation_name}.\n\n'
+          f'Your Details: \n\n'
+          f'Salary: Rs.{salary}\n'
+          f'Username: {personal_email}\n'
+          f'Password: {rand_password}\n\n'
+          f'To Login Click here URL: http://192.168.1.87:8080/\n\n'
+          f'Regards,\n'
+          f'{request.session.get("admin_user").get("company_name")}'
+          
+        )
+        email_from=settings.EMAIL_HOST_USER
+        email_to=[personal_email]
+        send_mail(subject, message, email_from, email_to)
       
-    )
-      emp = register_user.employee.get(id=id)
-
-      if request.POST.get('specialization_id'):
-        if Specialization.objects.filter(id=request.POST.get('specialization_id')).exists():
-          emp.specialization.add(Specialization.objects.get(pk=request.POST.get('specialization_id')))
-      if request.POST.get('course_id'):
-        course_id = request.POST.get('course_id')
-        if Course.objects.filter(id=course_id).exists():
-          emp.course.add(Course.objects.get(pk=course_id)) 
+    
+        
+      
 
     messages.success(request, f'Employee updated successfully')
     return redirect('employees')
-   
+      
+
 
 
 
@@ -7422,7 +7547,8 @@ def enquiry_verify_otp(request):
             return JsonResponse({'otpVerified': False, 'error': 'A lead with this email already exists.'})
         if register_user.leads.filter(Q (mobile_number=lead_data.get('mobile_number')) & Q(email=lead_data.get('email'))).exists():
             print("both exists")
-            return JsonResponse({'otpVerified': False, 'error': 'A lead with this mobile number and email already exists.'})    
+            return JsonResponse({'otpVerified': False, 'error': 'A lead with this mobile number and email already exists.'})  
+              
         
         print(otp_entered,otp_generated)  
         if otp_entered:
@@ -8424,6 +8550,12 @@ def student_payment_update(request):
           f'In case of any query, please contact us at {request.session.get("admin_user").get("name")}.\n\n'
           f'Thank you for using {request.session.get("admin_user").get("company_name")}.'
         )
+        Studen_credentials.objects.create(
+          studend_id=obj.studend_id,
+          email=obj.studend_id.email,
+          password=password,
+          crn = register_user
+        )
 
         #send email to the student
         email_form=settings.EMAIL_HOST_USER
@@ -8527,9 +8659,22 @@ def payment_view(request,id):
 # 
 # 
 
-
+@admin_required
 def hr_details(request):
-    return render(request,'hr_portal/HR details/hrdetails.html')
+    crn = request.session.get('admin_user').get('crn')
+    register_user = Register_model.objects.get(crn=crn)
+    if register_user.employee.filter(department_name__department_name = 'Human Resources').exists():
+      hr_details = register_user.employee.filter(department_name__department_name = 'Human Resources')
+      
+    else:
+      hr_details = None
+
+       
+    context={
+       'hr_details':hr_details
+    } 
+    
+    return render(request,'hr_portal/HR details/hrdetails.html',context)
 
 def job_detailes(request):
     return render(request,'hr_portal/HR details/jobdetails.html')
@@ -8614,7 +8759,8 @@ def job_gallery(request):
     job_category = register_user.job_category.filter(status='Active').all()
     qualification = register_user.qualifications.filter(status='Active')
     job_roles = register_user.jobrole.filter(status = 'Active')
-    job_postes = register_user.job_post.all()
+    job_postes = register_user.job_post.all().order_by('-id')
+    hr_details = register_user.employee.filter(department_name__department_name = 'Human Resources')
     if request.method == "POST":
        jobtitle = request.POST.get('jobtitle')
        company = request.POST.get('company')
@@ -8624,6 +8770,7 @@ def job_gallery(request):
        role = request.POST.get('role')
        salary = request.POST.get('salary')
        last_date_to_apply = request.POST.get('last_date_to_apply')
+       hr = request.POST.get('hr')
        requirements = request.POST.get('requirements')
 
        Job_post.objects.create(
@@ -8636,11 +8783,10 @@ def job_gallery(request):
         role = Jobrole.objects.get(pk=role),
         salary = salary,
         last_date_to_apply = last_date_to_apply,
+        post_by = Employee_model.objects.get(pk=hr),
         job_description = requirements
        )
        return redirect('job_gallery.html')
-        
-
 
 
     context={
@@ -8648,7 +8794,8 @@ def job_gallery(request):
       'job_category':job_category,
       'qualification':qualification,
       'job_roles':job_roles,
-      'job_postes':job_postes
+      'job_postes':job_postes,
+      'hr_details':hr_details
 
     }
     return render(request, 'hr_portal/job gallery/job_gallery.html',context)
@@ -8928,6 +9075,13 @@ def company_vendor_export(request):
 
 # moke interview sart here
 
+def getting_employ_slot(request,course_id,spc_id):
+  employee_details = Employee_model.objects.filter(course_id = course_id,specialization_id = spc_id)
+  employee_list = [{'id': emp.id, 'first_name': emp.first_name, 'last_name':emp.last_name} for emp in employee_details]
+  return JsonResponse(employee_list, safe=False)
+
+
+
 
 # faculty login
 def faculty_login(request):
@@ -8980,7 +9134,155 @@ def submit_feedback(request, interview_id):
 
 # Faculty slot availbility
 def faculty_slot(request):
-    return render(request,'mock_interview/slot_management.html')
+    crn=request.session.get('admin_user').get('crn')
+    register_user=Register_model.objects.get(crn=crn)
+    scheduling = register_user.schedule.all() 
+    employees = register_user.employee.filter(designation_name__designation_name = "Teaching Staff").all()
+    if request.method == 'POST':
+        Available_Slot = request.POST.get('datetime')
+        Mock_Link = request.POST.get('link')
+        faculty = request.POST.get('faculty')
+        faculty_instance = Employee_model.objects.get(pk=faculty)
+        if register_user.schedule.filter(available_slot=Available_Slot).exists():
+          messages.error(request,"This slot has already scheduled")
+          return redirect('faculty_slot')
+        Scheduling_mock_model.objects.create(available_slot = Available_Slot,mock_link = Mock_Link,crn = register_user,faculty = faculty_instance)
+        messages.success(request, "Slot rescheduled successfully.")
+        return redirect('faculty_slot')
+    return render(request,'mock_interview/slot_management.html',{'scheduling':scheduling,'employees':employees})
+
+
+
+
+
+# edit  faculty slot
+def edit_faculty_slot(request, slot_id):  
+    crn = request.session.get('admin_user').get('crn')
+    register_user = Register_model.objects.get(crn=crn)
+    if request.method == 'POST':
+        selected_option = request.POST.get('type_of_change_' + str(slot_id))  
+        if selected_option == 'Reschedule Slot':
+            Reschedule_Slot = request.POST.get('available_slot')
+            Mock_Link = request.POST.get('mock_link')
+            Reschedule_Reason = request.POST.get('reschedule_reason')
+            if register_user.schedule.filter(available_slot=Reschedule_Slot).exists():
+                messages.error(request, "This slot has already been scheduled.")
+                return redirect('faculty_slot')
+            slot = register_user.schedule.get(id=slot_id)
+            slot.rescheduled_slot = Reschedule_Slot
+            slot.mock_link = Mock_Link
+            slot.reschedule_reason = Reschedule_Reason
+            slot.status = 'Reschedule'
+            slot.save()
+            subject = 'Slot Rescheduled'
+            message =  (f"Hello {slot.student_name.first_name},\n\n" 
+                "Your mock interview slot has been rescheduled due to "f'{slot.reschedule_reason}'
+                ".\n\n"
+                "Here are your Rescheduled details:\n\n"
+                f" Alotted Time : {slot.rescheduled_slot}\n"
+                f"link: {slot.mock_link}.\n"
+            
+                "Should you have any questions or need further information, please do not hesitate to contact us.\n\n"
+                "Best Regards,\n"
+                f"{request.session.get('admin_user').get('company_name')}\n"
+                "Contact Information")
+                
+            email_from = settings.EMAIL_HOST_USER
+            to_email=f'{slot.student_name.email}'
+            send_mail(subject, message, email_from, [to_email], fail_silently=False)
+            messages.success(request, "Slot rescheduled successfully.")
+        elif selected_option == 'Cancel Slot':
+            print(selected_option)
+            Cancel_Reason = request.POST.get('cancel_reason')
+            slot = register_user.schedule.filter(id=slot_id)
+            slot.status='Cancel'
+            slot.cancel_reason=Cancel_Reason
+            slot.save()
+            subject = 'Slot Canceled'
+            message =  (f"Hello {slot.student_name.first_name},\n\n" 
+                "Your mock interview slot has been canceled due to" f'{slot.cancel_reason}'
+            
+                "Should you have any questions or need further information, please do not hesitate to contact us.\n\n"
+                "Best Regards,\n"
+                f"{request.session.get('admin_user').get('company_name')}\n"
+                "Contact Information")
+            to_email=f'{slot.student_name.email}'
+            send_mail(subject, message, email_from, [to_email], fail_silently=False)
+            messages.success(request, "Slot canceled successfully.")
+        return redirect('faculty_slot')
+
+    
+# faculty slot import
+def faculty_slot_import(request):
+    crn = request.session.get('admin_user').get('crn')
+    register_user = Register_model.objects.get(crn=crn)
+
+    if request.method == 'POST':
+        form = faculty_slot_import_form(request.POST, request.FILES)
+        if form.is_valid():
+            try:
+                csv_file = request.FILES['faculty_slot_file']
+                decoded_file = csv_file.read().decode('utf-8')
+                reader = csv.reader(decoded_file.splitlines(), delimiter=',')
+
+                headers = next(reader)
+                expected_headers = 3
+                for row in reader:
+                    if len(row) != expected_headers:
+                        messages.error(request, f'File should have {expected_headers} columns')
+                        return redirect('faculty_slot')
+
+                    slot_import = row[1]
+                    mock_import = row[2]
+
+                    if not slot_import or not mock_import:
+                        continue
+
+                    if Scheduling_mock_model.objects.filter(available_slot=slot_import).exists():
+                        messages.error(request, f'{slot_import} has already scheduled')
+                    else:
+                        Scheduling_mock_model.objects.create(
+                            available_slot=slot_import,
+                            mock_link=mock_import,
+                            crn=register_user
+                        )
+
+                messages.success(request, 'File Imported Successfully')
+                return redirect('faculty_slot')
+            except Exception as e:
+                messages.error(request, 'An error occurred while processing the file')
+                return redirect('faculty_slot')
+
+    slots = Scheduling_mock_model.objects.all()
+    context = {
+        'slots': slots
+    }
+    return render(request, 'mock_interview/slot_management.html', context)
+
+
+# faculty slot export
+def faculty_slot_export(request):
+   crn = request.session.get('admin_user').get('crn')
+   register_user = Register_model.objects.get(crn=crn)
+   response = HttpResponse(content_type='text/csv')
+   writer = csv.writer(response)
+   writer.writerow(['S.NO','Available Slot','Mock Link'])
+   i=0
+   for slot in register_user.schedule.all():
+     i+=1
+     writer.writerow([i,slot.available_slot,slot.mock_link])
+
+   response['Content-Disposition'] = 'attachment; filename="slot.csv"'
+   return response
+
+
+
+
+
+
+
+
+
 
 def FeedbackForm(request, id):
     crn = request.session.get('admin_user').get('crn')
@@ -9040,47 +9342,47 @@ def FeedbackForm(request, id):
 @admin_required
 
 def total_interviews(request):
-    crn = request.session.get('admin_user').get('crn')
-    register_user = Register_model.objects.get(crn=crn)
-    faculty_id = register_user.employee.all().order_by("-id")
+    # crn = request.session.get('admin_user').get('crn')
+    # register_user = Register_model.objects.get(crn=crn)
+    # faculty_id = register_user.employee.all().order_by("-id")
     
-    today = datetime.now().date()
-    print("Today:", today)
+    # today = datetime.now().date()
+    # print("Today:", today)
 
-    tomorrow = today + timedelta(days=1)
-    print("Tomorrow:", tomorrow)
+    # tomorrow = today + timedelta(days=1)
+    # print("Tomorrow:", tomorrow)
 
-    upcoming=date.today() + timedelta(days=2)
-    print("Upcoming:",upcoming)
+    # upcoming=date.today() + timedelta(days=2)
+    # print("Upcoming:",upcoming)
 
-    # Filter interviews for today, tomorrow, and upcoming days
-    today_interviews = Student_Book_Interview_modal.objects.filter(
-        crn_number=register_user, available_slot__available_slot__date=today
-    ).exclude(interview_status__in=['completed', 'pending'])
-    print("Today Interviews:", today_interviews)
+    # # Filter interviews for today, tomorrow, and upcoming days
+    # today_interviews = Student_Book_Interview_modal.objects.filter(
+    #     crn_number=register_user, available_slot__available_slot__date=today
+    # ).exclude(interview_status__in=['completed', 'pending'])
+    # print("Today Interviews:", today_interviews)
     
-    tomorrow_interviews = Student_Book_Interview_modal.objects.filter(
-        crn_number=register_user, available_slot__available_slot__date=tomorrow
-    ).exclude(interview_status__in=['completed', 'pending'])
-    print("Tomorrow Interviews:", tomorrow_interviews)
+    # tomorrow_interviews = Student_Book_Interview_modal.objects.filter(
+    #     crn_number=register_user, available_slot__available_slot__date=tomorrow
+    # ).exclude(interview_status__in=['completed', 'pending'])
+    # print("Tomorrow Interviews:", tomorrow_interviews)
     
-    upcoming_interviews = Student_Book_Interview_modal.objects.filter(
-        crn_number=register_user, available_slot__available_slot__date__gte=upcoming
-    ).exclude(interview_status__in=['completed', 'pending'])
-    print("Upcoming Interviews:", upcoming_interviews)
+    # upcoming_interviews = Student_Book_Interview_modal.objects.filter(
+    #     crn_number=register_user, available_slot__available_slot__date__gte=upcoming
+    # ).exclude(interview_status__in=['completed', 'pending'])
+    # print("Upcoming Interviews:", upcoming_interviews)
 
   
-    completed_interviews = Feedback.objects.filter(crn_number=register_user)
-    document = Student_Book_Interview_modal.objects.get(id=1)
-    pdf_file = document.attach_Resume
+    # completed_interviews = Feedback.objects.filter(crn_number=register_user)
+    # document = Student_Book_Interview_modal.objects.get(id=1)
+    # pdf_file = document.attach_Resume
     
     context = {
-        'faculty_id': faculty_id,
-        'today_interviews': today_interviews,
-        'pdf_file': pdf_file,
-        'tomorrow_interviews': tomorrow_interviews,
-        'upcoming_interviews': upcoming_interviews,
-        'completed_interviews': completed_interviews,
+        # 'faculty_id': faculty_id,
+        # 'today_interviews': today_interviews,
+        # 'pdf_file': pdf_file,
+        # 'tomorrow_interviews': tomorrow_interviews,
+        # 'upcoming_interviews': upcoming_interviews,
+        # 'completed_interviews': completed_interviews,
     }
     return render(request, 'mock_interview/interview_list.html', context)
 
@@ -9109,11 +9411,167 @@ def open_pdf(request, document_id):
 
 # Admin mock slot scheduling
 def admin_mock(request):
-    return render(request,'mock_interview/adminmock_slot.html')
+    crn = request.session.get('admin_user').get('crn')
+    register_user = Register_model.objects.get(crn=crn)
+    courses = Course.objects.all()
+    specializations = Specialization.objects.all()
+    faculty = Employee_model.objects.all()
+    assigning = Scheduling_mock_model.objects.all() 
+
+    if request.method == 'POST':
+        Available_Slot = request.POST.get('datetime')
+        Mock_Link = request.POST.get('link')
+        Course_Name = Course.objects.get(id=request.POST.get('course'))
+        Faculty = Employee_model.objects.get(id=request.POST.get('faculty'))
+        
+        # Check if the slot has already been scheduled for the faculty
+        if register_user.schedule.filter(faculty=Faculty, available_slot=Available_Slot).exists():
+            messages.error(request, "This slot has already been scheduled")
+            return redirect('admin_mock')
+        
+        # Create a new slot assignment
+        Scheduling_mock_model.objects.create(
+            available_slot=Available_Slot, 
+            mock_link=Mock_Link, 
+            course_name=Course_Name, 
+            faculty=Faculty,
+            crn=register_user
+        )
+        subject='Mock Scheduled successfully'
+        message=(f"Hello {faculty.first_name},\n\n" 
+                "Your mock has been scheduled  successfully" 
+                  "Here are your Scheduled details:\n\n"
+                f" Alotted Time : {Available_Slot}\n"
+                f"link: {Mock_Link}.\n"
+                "Should you have any questions or need further information, please do not hesitate to contact us.\n\n"
+                "Best Regards,\n"
+                f"{request.session.get('admin_user').get('company_name')}\n"
+                "Contact Information")
+        email_from=settings.EMAIL_HOST_USER
+        to_email=f'{faculty.personal_email}'
+        send_mail(subject,message,email_from,[to_email], fail_silently=False)
+        messages.success(request, "Slot has been scheduled successfully")
+        return redirect('admin_mock')
+  
+
+    context = {
+        'courses': courses,  
+        'specializations': specializations,
+        'faculty': faculty,
+        'assigning': assigning,
+        # 'faculty_slots_count': faculty_slots_count
+    }
+    return render(request, 'mock_interview/adminmock_slot.html', context)
+
+
+def edit_admin_mock(request, slot_id):  
+    crn = request.session.get('admin_user').get('crn')
+    register_user = Register_model.objects.get(crn=crn)
+    if request.method == 'POST':
+        selected_option = request.POST.get('type_of_change_' + str(slot_id))  
+        if selected_option == 'Reschedule Slot':
+            Available_Slot = request.POST.get('available_slot')
+            Mock_Link = request.POST.get('mock_link')
+            Reschedule_Reason = request.POST.get('reschedule_reason')
+            if register_user.assigning.filter(available_slot=Available_Slot).exists():
+                messages.error(request, "This slot has already been scheduled.")
+                return redirect('admin_mock')
+            register_user.schedule.filter(id=slot_id).update(
+                available_slot=Available_Slot,
+                mock_link=Mock_Link,
+                status='Reschedule',
+                reschedule_reason=Reschedule_Reason,
+                crn=register_user
+            )
+            messages.success(request, "Slot rescheduled successfully.")
+        elif selected_option == 'Cancel Slot':
+            print(selected_option)
+            Cancel_Reason = request.POST.get('cancel_reason')
+            register_user.schedule.filter(id=slot_id).update(status='Cancel', cancel_reason=Cancel_Reason)
+            messages.success(request, "Slot canceled successfully.")
+        return redirect('admin_mock')
+
+
+
+
+def admin_slot_import(request):
+    crn = request.session.get('admin_user').get('crn')
+    register_user = Register_model.objects.get(crn=crn)
+
+    if request.method == 'POST':
+        form = admin_slot_import_form(request.POST, request.FILES)
+        if form.is_valid():
+            try:
+                csv_file = request.FILES['admin_slot_file']
+                decoded_file = csv_file.read().decode('utf-8')
+                reader = csv.reader(decoded_file.splitlines(), delimiter=',')
+
+                headers = next(reader)
+                expected_headers = 6
+                for row in reader:
+                    if len(row) != expected_headers:
+                        messages.error(request, f'File should have {expected_headers} columns')
+                        return redirect('admin_mock')
+
+                    faculty_import = row[1]
+                    course_import = row[2]
+                    specialization_import = row[3]
+                    slot_import = row[4]
+                    mock_link_import = row[5]
+
+                    if not faculty_import or not course_import or not specialization_import or not slot_import or not mock_link_import:
+                       continue
+
+                    if Scheduling_mock_model.objects.filter(faculty=faculty_import, available_slot=slot_import).exists():
+                        messages.error(request, f'{slot_import} has already been scheduled for {faculty_import}')
+                    else:
+                        Scheduling_mock_model.objects.create(
+                            faculty=faculty_import,
+                            course_name=course_import,
+                            specilalization_name=specialization_import,
+                            available_slot=slot_import,
+                            mock_link=mock_link_import,
+                            crn=register_user
+                        )
+
+                messages.success(request, 'File imported successfully')
+                return redirect('admin_mock')
+            except Exception as e:
+                messages.error(request, 'An error occurred while processing the file')
+                return redirect('admin_mock')
+    slots = Scheduling_mock_model.objects.all()
+    context = {
+        'slots': slots
+    }
+    return render(request, 'mock_interview/adminmock_slot.html', context)
+
+
+
+def admin_slot_export(request):
+   crn = request.session.get('admin_user').get('crn')
+   register_user = Register_model.objects.get(crn=crn)
+   response = HttpResponse(content_type='text/csv')
+   writer = csv.writer(response)
+   writer.writerow(['S.NO','Faculty', 'Course', 'Specialization', 'Slot', 'Mock Link'])
+   i=0
+   for slot in register_user.schedule.all():
+     i+=1
+     writer.writerow([i,slot.faculty,slot.course_name,slot.specilalization_name ,slot.available_slot,slot.mock_link])
+
+   response['Content-Disposition'] = 'attachment; filename="Admin_slot_assigning.csv"'
+   return response
+
+
 
 #  mock slot rescheduling
 def reschedule(request):
-    return render(request,'mock_interview/reschedule.html')
+    crn = request.session.get('admin_user').get('crn')
+    register_user = Register_model.objects.get(crn=crn)
+
+    student = Scheduling_mock_model.objects.all()
+    scheduling = Scheduling_mock_model.objects.filter(status='Reschedule')
+    
+    return render(request,'mock_interview/reschedule.html',{'scheduling':scheduling,'student':student})
 
 #  admin interview list
 def admin_interview_list(request):
@@ -9249,8 +9707,71 @@ def faculty_pending_mocks(request):
 #certification start here
 def dashboard_certification(request):
   return render(request,'certifications/certif_dashboard.html')
+#Filter
+def student_filter(request):
+    # crn = request.session.get('admin_user').get('crn')
+    # register_user = Register_model.objects.get(crn=crn)
+    # if request.method == 'POST':
+    #     # Process form data here
+    #     course=register_user.courses.get(pk=request.POST.get('course'))
+    #     batchno=register_user.regulations.get(pk=request.POST.get('batchno'))
+    #     auto_cert = register_user.regulations.get(pk=request.POST.get('auto_certs'))
+    #     manual_cert = register_user.regulations.get(pk=request.POST.get('manual_certs'))
+    #     start_date = request.POST.get('startdate')
+    #     end_date = request.POST.get('enddate')
+    #     if register_user.Filters.filter(course=course,batchno=batchno,autocertification=auto_cert,manualcertification=manual_cert,startdate=start_date,enddate=end_date).exists():
+           
+    #     else:
+    #        filter
+           
+    # coursename=register_user.courses.all()
+    # batchno=register_user.regulations.all()
+    # auto_certs =register_user.leads.all()
+    # manual_certs =register_user.CreateStudent.all()
+
+    # context = {
+    #     'coursename': coursename,
+    #     'batchno': batchno,
+    #     'auto_certs': auto_certs,
+    #     'manual_certs': manual_certs,
+    # }
+
+    return render(request, 'certifications/sent_emails.html')
+
 def send_email(request):
-    return render(request,'certifications/sent_emails.html')
+    crn = request.session.get('admin_user').get('crn')
+    register_user = Register_model.objects.get(crn=crn)
+    
+    if request.method == "POST":
+        selected_ids_str = request.POST.get('selected_ids')
+        selected_ids = [int(id_str) for id_str in selected_ids_str.split(',') if id_str.strip()]  # Convert to list of integers
+        if selected_ids:
+            selected_students = register_user.CreateStudent.filter(id__in=selected_ids)
+            for student in selected_students:
+                subject = 'Course Completion Certificate'
+                message = (
+                    f"Congratulations {student.fullname},\n\n"
+                    "We are happy to share with you the course completion certificate."
+                    "You can download the attached PDF Format:\n\n"
+                    "\nAll the Best."
+                )
+                email_from = settings.EMAIL_HOST_USER
+                recipient_list = [student.email]
+                try:
+                    send_mail(subject, message, email_from, recipient_list, fail_silently=False)
+                    student.cerficate_sent = True
+                    student.save() 
+                except Exception as e:
+                    messages.error(request, f"Failed to send email to {student.fullname}. Error: {str(e)}")
+                    continue
+                
+            messages.success(request, 'Emails sent successfully')
+            return redirect('send_email')
+    
+    # If request method is GET, render a response
+    return render(request, 'certifications/sent_emails.html')
+
+
 # certification AUTO  of students
 def list_student(request):
   crn=request.session.get('admin_user').get('crn')
@@ -9260,8 +9781,8 @@ def list_student(request):
   print(student)
   for i in student:
      print(i.course_name.specialization.specilalization_name)
-  return render(request,'certifications/auto_certitfication.html',context)
-
+  return render(request,'certifications/auto_certification.html',context)
+# Auto import
 def List_student_import(request):
   crn=request.session.get('admin_user').get('crn')
   register_user=Register_model.objects.get(crn=crn)
@@ -9273,17 +9794,17 @@ def List_student_import(request):
   i=0
   for s in student:
     i+=1
-    writer.writerow([i,s.first_name,s.email,s.mobile_number,s.course_name.course_name,s.course_name.specialization.specilalization_name,s.admissions_date, s.enddate,s.certifictateid])
+    writer.writerow([i,s.first_name,s.email,s.mobile_number,s.course_name.course_name,s.course_name.specialization.specilalization_name,s.admissions_date, s.end_date,s.certifictate_id])
   return response
-# sent maail all
-def List_student_all(request):
+# Auto sent maail all    
+def list_student_sent(request):
   crn = request.session.get('admin_user').get('crn')
   register_user = Register_model.objects.get(crn=crn)
   if request.method == "POST":
     selected_ids_str = request.POST.get('selected_ids')
     selected_ids = [int(id_str) for id_str in selected_ids_str.split(',') if id_str.strip()]  # Convert to list of integers
     if selected_ids:
-      selected_students = register_user.CreateStudent.filter(id__in=selected_ids)
+      selected_students = register_user.leads.filter(id__in=selected_ids)
       for student in selected_students:
         subject = 'Course Completion Certificate'
         message = (
@@ -9303,9 +9824,13 @@ def List_student_all(request):
           continue
         
       messages.success(request, 'Emails sent successfully.')
-      return redirect('auto_certification')
+      return redirect('list_student')
 
-# Mnaual student
+# send_mail('Subject', 'Message', 'from@example.com', ['to@example.com'])
+
+
+
+# Manual student
 def create_student(request):
   crn=request.session.get('admin_user').get('crn')
   register_user=Register_model.objects.get(crn=crn)
@@ -9497,7 +10022,7 @@ def create_student_sent(request):
 # bounced mails
 def bounced_email(request):
     return render(request,'certifications/bounced_mails.html') 
-  # edit
+  #bounced edit
 def bounced_edit(request,id):
   crn=request.session.get('admin_user').get('crn')
   register_user=Register_model.objects.get(crn=crn)
@@ -9508,66 +10033,106 @@ def bounced_edit(request,id):
     Course = request.POST.get('editcourse_name')
     course_instance = register_user.courses.get(pk=Course)  # Retrieve the Specialization instance
     Specialization = request.POST.get('editspecialization')
-    print(Specialization)
     Specialization_instance = register_user.specializations.get(pk=Specialization)  # Retrieve the Specialization instance
-    print(Specialization_instance)
     Startdate = request.POST.get('editstartdate')
     Enddate = request.POST.get('editenddate')
     Certifictateid = request.POST.get('editcertifictateid')
-    if register_user.BouncedStudent.filter(fullname=Fullname).exists():
+    if register_user.BouncedStudent.filter(fullname=Fullname, certifictateid=Certifictateid).exists():
       messages.error(request, f'{Fullname}) Already Exists')
       return redirect('bounced_mails')
     else:
       register_user.BouncedStudent.filter(id=id).update(
-        editfullname=Fullname,
-        editemail=Email,
-        editmobilenumber=Mobilenumber,
-        editcourse=course_instance,
-        editspecialization=Specialization_instance,
-        editstartdate=Startdate,  
-        editenddate=Enddate, 
-        editcertifictateid=Certifictateid,
+        fullname=Fullname,
+        email=Email,
+        mobilenumber=Mobilenumber,
+        course=course_instance,
+        specialization=Specialization_instance,
+        startdate=Startdate,  
+        enddate=Enddate, 
+        certifictateid=Certifictateid,
       )
       messages.success(request, f'{Fullname} Manual Updated Successfully')
       return redirect('bounced_mails')
-    #delete
-def bounced_delete(request,id):
+# Dependances from Courses to Specialization
+
+@admin_required
+def depnd_specilization(request, id_course):
   crn=request.session.get('admin_user').get('crn')
   register_user=Register_model.objects.get(crn=crn)
-  if request.method == "POST":
-    if register_user.BouncedStudent.filter(id=id).exists():
-      demo = register_user.demo.get(id=id)
-      demo.delete()
-      messages.success(request, f'{demo.demotitle}  deleted successfully')
-      return redirect('bounced_mails')
-    else:
-      messages.error(request, f'demo not found')
-      return redirect('bounced_mails')
-    
+  course = register_user.courses.get(id=id_course)
+  display_spec = register_user.specializations.filter(course_name=course,status='Active')
+  specialization_list = [{'id': spec.id, 'name': spec.specilalization_name} for spec in display_spec]
+  
+  return JsonResponse({'specialization_list': specialization_list})
 
-#CERTIFICATION NAME
+ 
+def bounced_sent(request):
+    crn = request.session.get('admin_user', {}).get('crn')
+    if crn:
+        register_user = Register_model.objects.get(crn=crn)
+        if request.method == "POST":
+            selected_ids_str = request.POST.get('selected_ids')
+            if selected_ids_str:
+                selected_ids = [int(id_str) for id_str in selected_ids_str.split(',') if id_str.strip()]
+                if selected_ids:
+                    selected_students = register_user.CreateStudent.filter(id__in=selected_ids)
+                    for student in selected_students:
+                        subject = 'Course Completion Certificate'
+                        message = (
+                            f"Congratulations {student.fullname},\n\n"
+                            "We are happy to share with you the course completion certificate."
+                            "You can download the attached PDF Format:\n\n"
+                            "\nAll the Best."
+                        )
+                        email_from = settings.EMAIL_HOST_USER
+                        recipient_list = [student.email]
+                        try:
+                            send_mail(subject, message, email_from, recipient_list, fail_silently=False)
+                            student.certificate_sent = True
+                            student.save()
+                        except Exception as e:
+                            messages.error(request, f"Failed to send email to {student.fullname}. Error: {str(e)}")
+                            continue
+                    messages.success(request, 'Emails sent successfully.')
+                    return redirect('bounced_mails')
+                else:
+                    messages.error(request, 'No selected students found.')
+            else:
+                messages.error(request, 'No selected IDs provided.')
+        else:
+            messages.error(request, 'Invalid request method.')
+    else:
+        messages.error(request, 'CRN not found in session.')
+    return redirect('bounced_mails') 
+
+    
+    
+#cerication name
 def create_certification(request):
   crn=request.session.get('admin_user').get('crn')
   register_user=Register_model.objects.get(crn=crn)
   if request.method == 'POST':
+    CertificationName=request.POST.get('certificationname')
     Course = request.POST.get('course_name')
     course_instance = register_user.courses.get(pk=Course)
     print(Course)
     print(course_instance)
     Specialization = request.POST.get('specialization')
-    print(Specialization)
-    Specialization_instance = register_user.specializations.get(pk=Specialization)  # Retrieve the Specialization instance
+    Specialization_instance = register_user.specializations.get(pk=Specialization) 
     print(Specialization_instance)
     Coursetitle = request.POST.get('course_title')
+    Image= request.FILES.get('image')
     Description = request.POST.get('description')
     if register_user.certifications.filter(course=course_instance,specialization=Specialization_instance).exists():
       messages.error(request, f'{course_instance} with {Specialization_instance}  already exists')
       return redirect('create_certification')
     else:
       Certification.objects.create(
-        course=course_instance,
+        course=course_instance, 
+        certification=CertificationName,
         specialization=Specialization_instance,
         course_title=Coursetitle,
+        image=Image,
         description=Description, 
         crn_number=register_user,
       )
@@ -9602,30 +10167,52 @@ def edit_certification(request,id):
   if request.method == 'POST':
     crn=request.session.get('admin_user').get('crn')
     register_user=Register_model.objects.get(crn=crn)
+    CertificationName=request.POST.get('editcertificationname')
     Course = request.POST.get('editcourse_name')
-    course_instance = register_user.courses.get(pk=Course)
-    print(Course)
-    print(course_instance)
     Specialization = request.POST.get('editspecialization')
-    print(Specialization)
-    Specialization_instance = register_user.specializations.get(pk=Specialization)  # Retrieve the Specialization instance
-    print(Specialization_instance)
     Coursetitle = request.POST.get('editcourse_title')
+    Image= request.FILES.get('image')
     Description = request.POST.get('editdescription')
-    if register_user.certifications.filter(id=id).exists():
-      if register_user.certifications.filter(course=course_instance,specialization=Specialization_instance).exists():
-        messages.error(request, f'{course_instance} with {Specialization_instance}  already exists')
+
+    print("crn",crn)
+    print("register_user",register_user)
+    print("CertificationName",CertificationName)
+    print("Course",Course)
+    print("Specialization",Specialization)
+    print("Coursetitle",Coursetitle)
+    print("Image",Image)
+    print("Description",Description)
+
+    print("stage one")
+    if 'image' in request.FILES:
+      print("Stage two")
+      if Image:
+        certifi = register_user.certifications.get(id=id)
+        certifi.Image=Image
+        certifi.save()
+      if register_user.certifications.filter(course=Course,specialization=Specialization).exclude(id=id).exists():
+        messages.error(request, f'{Course} with {Specialization}  already exists')
         return redirect('create_certification')
       else:
         register_user.certifications.filter(id=id).update(
-          course=course_instance,
-          specialization=Specialization_instance,
+          course=Course,
+          specialization=Specialization,
+          certification=CertificationName,
           course_title=Coursetitle,
+          image=Image,
           description=Description, 
           crn_number=register_user,    
         )
-        messages.success(request,f'{course_instance} with {Specialization_instance} details created successfully')      
+        messages.success(request,f'updated successfully')      
         return redirect('create_certification')
+      
+    else:
+       messages.error(request,'Please select file')  
+       return redirect('create_certification')
+
+  else:
+    messages.error(request,'Invalid request')     
+    return redirect('create_certification')
 
 
 @admin_required
@@ -9662,6 +10249,8 @@ def certification_all(request):
 
   else:
      return redirect('create_certification')
+
+
   
 @admin_required
 def export_certification(request):
@@ -9728,5 +10317,12 @@ def import_certification(request):
         form = certification_import_form()
 
     return render(request, 'settings_page/certification_name.html', {'form': form})
+#certi_Templete
+def certifi_templete (request,id):
+   certificate = Certification.objects.get(id=id)
+   context={
+      'certificate':certificate
+   }
+   return render(request,'settings_page/Certifi_templete.html',context)
 
   

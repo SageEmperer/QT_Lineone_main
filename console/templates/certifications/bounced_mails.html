@@ -37,7 +37,7 @@
     </div>
     <div class="">
       <button type="button" class="btn btn-primary mr-2 mb-3" id="deleteButton" data-toggle="modal"
-        data-target="#send_Modal" style="display: none; position: relative; top: 0px; ">
+        data-target="#sendModal">
         <i class="glyphicon glyphicon-envelope"></i> Resent Mail
       </button>
     </div>
@@ -53,7 +53,7 @@
       <table id="datable_1" id="bouncedTable" class="table table-hover w-100 display pb-30 table-bordered">
         <thead class="bg-dark">
           <tr>
-            <th class="text-white text-center"><input type="checkbox" id="selectAll"> All</th>
+            <th class="text-white text-center"><input type="checkbox" id="selectAllCheckbox"> All</th>
             <th class="text-white">S.No</th>
             <th class="text-white">Full Name</th>
             <th class="text-white">Email</th>
@@ -68,22 +68,25 @@
         </thead>
         <tbody>
           <tr>
-            <td class="text-center"><input type="checkbox" class="row-checkbox" data-course-id="{{i.id}}" data-course-name="{{i.fullname}}"></td>               
-            <td>1</td>
-            <td>Sumitra</td>
-            <td>sumitra@gmail.com</td>
-            <td>8328364119</td>
-            <td>Developer</td>
-            <td>full stack python</td>
-            <td>07-07-2024</td>
-            <td>10-10-2024</td>
-            <td>20-10-2024</td>
+            <td class="text-center"><input type="checkbox" class="row-checkbox" data-course-id="{{i.id}}"
+                data-course-name="{{i.fullname}}"></td>
+            </td>
+            <td>{{forloop.counter}}</td>
+            <td>{{i.fullname}}</td>
+            <td class="">{{i.email}}</td>
+            <td class="">{{i.mobilenumber}}</td>
+            <td class="">{{i.course}}</td>
+            <td class="">{{i.specialization}}</td>
+            <td class="">{{i.startdate}}</td>
+            <td class="">{{i.enddate}}</td>
+            <td class="">{{i.certifictateid}}</td>
             <td class="text-center">
-              <button class="btn btn-primary m-1" data-toggle="modal" data-target="#Editstudent">
+              <button type="button" class="btn btn-primary m-1" data-toggle="modal"
+                data-target="#Editbounced{{forloop.counter}}">
                 <i class="fa fa-pencil"></i>
               </button>
-              <button class="btn btn-danger m-1" data-toggle="modal" data-target="#Deletestudent{{forloop.counter}}">
-                <i class="fa fa-trash"></i>
+              <button type="button" class="btn btn-success" id="downloadButton">
+                <i class="fa fa-download"></i>
               </button>
             </td>
           </tr>
@@ -91,36 +94,38 @@
       </table>
     </div>
   </div>
-
 </section>
 <!--Edit student modal start here-->
+{% for i in student %}
 
-
-<div class="modal fade" id="Editstudent" tabindex="-1" role="dialog" aria-labelledby="Editstudent"
+<div class="modal fade" id="Editbounced{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="Editbounced"
   aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header bg-dark">
-        <h5 class="modal-title text-white"> Edit Student</h5>
+        <h5 class="modal-title text-white"> Edit Bounced</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true" class="text-white">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <form action="" method="post" id="Edit_Student" enctype="multipart/form-data">
+        <form action="{% url 'bounced_edit' i.id %}" method="post" id="Edit_Student" enctype="multipart/form-data">
           {% csrf_token %}
           <div class="row">
             <div class="col-sm-12 col-md-6 mb-3">
               <label for="" class="form-label">Full Name <span class="text-danger">*</span></label>
-              <input name="editfullname" type="text" placeholder="Enter Full Name" class="form-control" />
+              <input name="editfullname" value="{{i.fullname}}" type="text" placeholder="Enter Full Name"
+                class="form-control" />
             </div>
             <div class="col-sm-12 col-md-6 mb-3">
               <label for="" class="form-label">Email</label> <span class="text-danger">*</span></label>
-              <input name="editemail" type="text" placeholder="Enter Email Id" class="form-control" />
+              <input name="editemail" value="{{i.email}}" type="text" placeholder="Enter Email Id"
+                class="form-control" />
             </div>
             <div class="col-sm-12 col-md-6 mb-3">
               <label for="" class="form-label">Mobile Number <span class="text-danger">*</span></label>
-              <input name="editmobilenumber" type="text" placeholder="Enter Mobile Number" class="form-control" />
+              <input name="editmobilenumber" value="{{i.mobilenumber}}" type="text" placeholder="Enter Mobile Number"
+                class="form-control" />
             </div>
             <div class="col-sm-12 col-md-6 mb-3">
               <label class="form-label">Course Name <span class="text-danger">*</span></label>
@@ -138,19 +143,20 @@
               <select class="form-control custom-select id_specialization" name="editspecialization">
               </select>
             </div>
-
-
             <div class="col-sm-12 col-md-6 mb-3">
               <label for="" class="form-label">Start Date<span class="text-danger">*</span></label>
-              <input name="editstartdate" type="date" id="start-date-input" placeholder="" class="form-control" />
+              <input name="editstartdate" value="{{i.startdate}}" type="date" id="start-date-edit" placeholder=""
+                class="form-control" />
             </div>
             <div class="col-sm-12 col-md-6 mb-3">
               <label for="" class="form-label">End Date<span class="text-danger">*</span></label>
-              <input name="editenddate" type="date" id="end-date-input" placeholder="" class="form-control" />
+              <input name="editenddate" value="{{i.enddate}}" type="date" id="end-date-edit" placeholder=""
+                class="form-control" />
             </div>
             <div class="col-sm-12 col-md-6 mb-3">
               <label for="" class="form-label">Certifictate Id<span class="text-danger">*</span></label>
-              <input name="editcertifictateid" type="text" placeholder="Enter Certificate Id" class="form-control" />
+              <input name="editcertifictateid" value="{{i.certifictateid}}" type="text"
+                placeholder="Enter Certificate Id" class="form-control" />
             </div>
           </div>
           <div class="mb-3 d-flex justify-content-center">
@@ -162,76 +168,39 @@
     </div>
   </div>
 </div>
+{% endfor %}
 
-<!--edit end here -->
-<!--delete -->
+<!--Edit student modal end here-->
 
-
-<div class="modal fade" id="Deletestudent{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="DeleteBatch"
-  aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header bg-danger">
-        <h5 class="modal-title text-white">Delete Batch</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true" class="text-white">&times;</span>
-        </button>
-      </div>
-      <form action="" method="post">
-        {% csrf_token %}
-        <div class="modal-body">
-          <div class="mb-3 text-center">
-            <div class="d-flex justify-content-center mb-3">
-
-              <img src="../../static/triangle-exclamation-solid.svg" width="120" height="70" alt="">
-            </div>
-            Are you sure you want to delete {{i.fullname}} ?
-          </div>
-        </div>
-        <div class="mb-3 d-flex justify-content-center">
-          <button type="submit" class="btn btn-danger m-1">Yes</button>
-          <button type="button" class="btn btn-secondary m-1" data-dismiss="modal" aria-label="Close">
-            No
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-<!---delete end here -->
 
 <!---send mail start here -->
-
-
-<div class="modal fade" id="send_Modal" tabindex="-1" role="dialog" aria-labelledby=""
-  aria-hidden="true">
+<div class="modal fade" id="sendModal" tabindex="-1" role="dialog" aria-labelledby="sendModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header bg-primary">
-        <h5 class="modal-title text-white " id="">Send Mail</h5>
+        <h5 class="modal-title text-white" id="sendModalLabel">Resend Mail</h5>
         <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
         <div class="mb-3 text-center">
-          <form action="" method="post">
+          <form action="{% url 'bounced_sent' %}" method="post">
             {% csrf_token %}
-            <p id="sentmailMessage">Are you sure you want to sent <strong><span id="selectedCount"></span></strong>
+            <p id="sentmailMessage">Are you sure you want to send <strong><span id="selectedCount"></span></strong>
               manual certification?</p>
             <input type="hidden" id="selected_ids_input" name="selected_ids">
-        </div>
+        </div> <!-- Close the div for mb-3 text-center -->
         <div class="d-flex justify-content-center">
           <button type="submit" class="btn btn-primary m-1">Yes</button>
           <button type="button" class="btn btn-secondary m-1" data-dismiss="modal">No</button>
         </div>
         </form>
       </div>
-
     </div>
   </div>
 </div>
+
 <!---send mail end here -->
 
 {% endblock %}
@@ -240,17 +209,17 @@
 <script>
   $(document).ready(function () {
     var today = new Date().toISOString().split('T')[0];
-    $("#start-date-input").attr("min", today);
+    $("#start-date-edit").attr("min", today);
 
 
-    $('#start-date-input').on('change', function () {
+    $('#start-date-edit').on('change', function () {
       var startDate = $(this).val();
       if (startDate) {
-        $('#end-date-input').prop('disabled', false);
-        $('#end-date-input').attr('min', startDate);
+        $('#end-date-edit').prop('disabled', false);
+        $('#end-date-edit').attr('min', startDate);
       }
       else {
-        $('#end-date-input').prop('disabled', true)
+        $('#end-date-edit').prop('disabled', true)
       }
     });
   })
@@ -347,76 +316,92 @@
 </script>
 
 <script>
-  // Function to update the "Select All" checkbox status
-  function updateSelectAllCheckbox() {
-    var selectAllCheckbox = document.getElementById('selectAll');
-    var rowCheckboxes = document.querySelectorAll('.row-checkbox');
-    var allChecked = true;
+  document.addEventListener("DOMContentLoaded", function() {
+    // Function to update checkbox states
+    function updateCheckboxes() {
+      var checkboxes = document.querySelectorAll(".checkbox");
+      var selectAllCheckbox = document.getElementById("selectAllCheckbox");
+      
+      checkboxes.forEach(function(checkbox) {
+        checkbox.checked = selectAllCheckbox.checked;
+      });
 
-    rowCheckboxes.forEach(function (checkbox) {
-      if (!checkbox.checked) {
-        allChecked = false;
-      }
-    });
-
-    selectAllCheckbox.checked = allChecked;
-    updateSelectedRowsList(); // Update selected rows list when "Select All" checkbox is clicked
-  }
-
-  // Function to update the selected rows list and toggle delete button visibility
-  function updateSelectedRowsList() {
-    var selectedRowsList = document.getElementById('selectedRowsList');
-    var selectedIdsInput = document.getElementById('selected_ids_input');
-    var deleteButton = document.getElementById('deleteButton');
-
-    var selectedRows = document.querySelectorAll('.row-checkbox:checked');
-    var selectedCount = selectedRows.length;
-
-    if (selectedCount > 0) {
-      deleteButton.style.display = 'block'; // Show delete button if more than one row is selected
-    } else {
-      deleteButton.style.display = 'none'; // Hide delete button if only one row or none is selected
+      updateResendButtonVisibility();
     }
 
-    var selectedIds = [];
-    selectedRows.forEach(function (row) {
-      var courseId = row.dataset.courseId;
-      selectedIds.push(courseId);
+    // Function to update the resend button visibility
+    function updateResendButtonVisibility() {
+      var resendButton = document.getElementById("resendButton");
+      var selectedCount = document.querySelectorAll(".checkbox:checked").length;
+
+      if (selectedCount > 0) {
+        resendButton.style.display = "block";
+      } else {
+        resendButton.style.display = "none";
+      }
+
+      document.getElementById("selectedCount").textContent = selectedCount;
+      document.getElementById("selected_ids_input").value = getSelectedIds();
+    }
+
+    // Function to get the IDs of selected items
+    function getSelectedIds() {
+      var selectedIds = [];
+      var checkboxes = document.querySelectorAll(".checkbox:checked");
+      
+      checkboxes.forEach(function(checkbox) {
+        selectedIds.push(checkbox.value);
+      });
+
+      return selectedIds.join(",");
+    }
+
+    // Attach event listener to select all checkbox
+    var selectAllCheckbox = document.getElementById("selectAllCheckbox");
+    if (selectAllCheckbox) {
+      selectAllCheckbox.addEventListener("change", function() {
+        updateCheckboxes();
+      });
+    }
+
+    // Attach event listener to individual checkboxes
+    var checkboxes = document.querySelectorAll(".checkbox");
+    checkboxes.forEach(function(checkbox) {
+      checkbox.addEventListener("change", function() {
+        updateResendButtonVisibility();
+      });
     });
 
-    // Set the value of the hidden input field to the selected IDs
-    selectedIdsInput.value = selectedIds.join(',');
+    // Initial call to update the resend button visibility
+    updateResendButtonVisibility();
+  });
+</script>
 
-    // Update the delete modal message with the selected count
-    document.getElementById('deleteMessage').textContent = "Are you sure you want to delete " + selectedCount + " records?";
-  }
 
-  // Event listener for checkbox change
-  document.querySelectorAll('.row-checkbox').forEach(function (checkbox) {
-    checkbox.addEventListener('change', function () {
-      updateSelectedRowsList();
-      updateSelectAllCheckbox();
+
+
+<script>
+  $(document).ready(function () {
+    $('.id_course').change(function () {
+      var specializationId = $(this).val();
+      console.warn(specializationId)
+      var url = '/depnd_specilization/' + specializationId;
+      console.warn(url)
+      $.ajax({
+        url: url,
+        success: function (data) {
+          var specialization_list = data.specialization_list;
+          console.log(specialization_list)
+          var options = '<option value="">Select Specialization</option>';
+          for (var i = 0; i < specialization_list.length; i++) {
+            options += '<option value="' + specialization_list[i].id + '">' + specialization_list[i].name + '</option>';
+          }
+          $('.id_specialization').html(options);
+        }
+      });
     });
   });
 
-  // Event listener for select all checkbox change
-  document.getElementById('selectAll').addEventListener('change', function () {
-    var isChecked = this.checked;
-    document.querySelectorAll('.row-checkbox').forEach(function (checkbox) {
-      checkbox.checked = isChecked;
-    });
-    updateSelectedRowsList();
-  });
-
-  // Initially update delete button visibility
-  updateSelectedRowsList();
-
-  // Event listener for delete button click
-  document.getElementById('confirmDelete').addEventListener('click', function () {
-    // Perform delete action here
-    // For now, let's just close the modal
-    $('#deleteModal').modal('hide');
-  });
 </script>
 
 

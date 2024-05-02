@@ -70,7 +70,7 @@
                             <th class="text-white">Mobile Number</th>
                             <th class="text-white">Department (Designation)</th>
                             <th class="text-white">Branch</th>
-                            <th class="text-white">Employee Type</th>
+                            <th class="text-white">Salary</th>
                             <th class="text-white">Status</th>
                             <th class="text-white">Actions</th>
                         </tr>
@@ -566,7 +566,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-6 col-lg-3 course">
+                        <div class="col-sm-12 col-md-6  course">
                             <div class="mb-3">
                                 <label for="" class="form-label">Course <span class="text-danger">*</span></label>
                                 <select class="form-control custom-select course_select" name="course_id">
@@ -580,7 +580,7 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-12 col-md-6 col-lg-3 specialization">
+                        <div class="col-sm-12 col-md-6  specialization">
                             <div class="mb-3">
                                 <label for="" class="form-label">Specialization
                                     
@@ -1201,10 +1201,10 @@
                         </div>
 
 
-                        <div class="col-sm-12 col-md-6 col-lg-3 course">
+                        <div class="col-sm-12 col-md-6  course">
                             <div class="mb-3">
                                 <label for="" class="form-label">Course <span class="text-danger">*</span></label>
-                                <select class="form-control custom-select course_select" name="course_id">
+                                <select class="form-control custom-select course_select" name="course_id_edit">
                                     <option selected value="">Select Course </option>
                                     {% for course in courses %}
                                     
@@ -1215,12 +1215,12 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-12 col-md-6 col-lg-3 specialization">
+                        <div class="col-sm-12 col-md-6  specialization">
                             <div class="mb-3">
                                 <label for="" class="form-label">Specialization
                                     
                                 </label>
-                                <select name="specialization_id" id="" class="form-control custom-select specialization-select">
+                                <select name="specialization_id_edit" id="" class="form-control custom-select specialization-select">
 
 
                                 </select>
@@ -2127,6 +2127,7 @@
                     salary_edit:{
                         required: true,
                         digits: true,
+                        float:true
                         
                     },
                     aadhar_card_edit: {
