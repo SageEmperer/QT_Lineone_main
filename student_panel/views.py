@@ -119,9 +119,27 @@ def mocks(request):
     crn = credentials.studend_id.crn_number.crn
     register_user = Register_model.objects.get(crn=crn)
     courses = register_user.courses.all()
+    schedules = Scheduling_mock_model.objects.filter(student_name = credentials.studend_id)
     if request.method == 'POST':
         course_name = request.POST.get('course_name')
         specialization = request.POST.get('specialization')
+        faculty = request.POST.get('faculty')
+        available_slot = request.POST.get('available_slot')
+        attach_Resume = request.FILES.get('attach_Resume')
+        schedule = Scheduling_mock_model.objects.filter(id=available_slot)
+        if Scheduling_mock_model.objects.filter(id=available_slot, student_name = credentials.studend_id).exists():
+            messages.error(request, 'Already Booked')
+            return redirect('mocks')
+        if schedule.exists():
+            Scheduling_mock_model.objects.filter(id=available_slot).update(attach_Resume=attach_Resume, course_name=course_name, specilalization_name=specialization,student_name = credentials.studend_id)
+        messages.success(request, 'Slot Booked successfully')
+        return redirect('mocks')
+    
+
+    
+
+
+
         
 
 
@@ -130,7 +148,8 @@ def mocks(request):
     # crn = LeadModel.objects.get(id=student_id).crn_number
     # print(crn)
     context={
-        'courses':courses
+        'courses':courses,
+        'schedules':schedules
     }
      
     # coursess= Course.objects.all()

@@ -1,57 +1,42 @@
-{% extends 'base.html' %}
-{% block title %}Book a mock interview{% endblock %}
-
+{% extends 'base.html' %} {% block title %}Book a mock interview{% endblock %}
 {% block content %}
 <!-- message here -->
 
-{% if messages %}
-{% for message in messages %}
-{% if message.tags == "error" %}
-<div class="h-25 alert alert-danger alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
-{% elif message.tags == "success" %}
-<div class="h-25 alert alert-success alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
-{% else %}
-<div class="h-25 alert alert-info alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
-{% endif %}
-{% endfor %}
-{% endif %}
 
- 
 <!-- Table starts here -->
 <div>
-
-<nav class="navbar">
+  <nav class="navbar">
     <h4>Mocks</h4>
     <ul class="nav float-right justify-content-end">
-        <li class="breadcrumb-item">
-            <a class="" aria-current="page" href="{% url 'dash' %}">Home</a>
-        </li>
+      <li class="breadcrumb-item">
+        <a class="" aria-current="page" href="{% url 'dash' %}">Home</a>
+      </li>
 
-
-        <li class="breadcrumb-item active">
-            Mocks
-        </li>
+      <li class="breadcrumb-item active">Mocks</li>
     </ul>
-</nav>
- </div>
+  </nav>
+</div>
 <div class="container-fluid">
-    <div class="hk-pg-header mt-3 mb-2">
-        <h4 class="hk-pg-title">Booked Interviews </h4>
+  <div class="hk-pg-header mt-3 mb-2">
+    <h4 class="hk-pg-title">Booked Interviews</h4>
+  </div>
+  <section class="hk-sec-wrapper m-0">
+    <!-- <h4>Booked Interviews</h4> -->
 
+    <div class="d-flex align-items-center mb-3">
+      <button
+        class="btn"
+        style="background-color: #132649; color: white"
+        data-toggle="modal"
+        data-target="#Bookinterview"
+      >
+        Book new mock
+        <!-- <i class="fa fa-rocket"></i> -->
+      </button>
+
+      <!-- <div class="timer" style="padding-left:10px;color: red; font-weight: bold;" id="timer">00:00</div> -->
     </div>
-    <section class="hk-sec-wrapper m-0">
-        <!-- <h4>Booked Interviews</h4> -->
-
-        <div class="d-flex align-items-center mb-3">
-
-
-            <button class="btn " style="background-color: #132649; color: white;" data-toggle="modal" data-target="#Bookinterview">Book new mock
-                <!-- <i class="fa fa-rocket"></i> -->
-            </button>
-
-            <!-- <div class="timer" style="padding-left:10px;color: red; font-weight: bold;" id="timer">00:00</div> -->
-        </div>
-        <!-- <div class="">
+    <!-- <div class="">
  <button type="button" class="btn btn-primary mr-2 mb-3" data-toggle="modal" data-target="#Bookinterview">
  <i class="glyphicon glyphicon-plus"></i> Add Slot
  </button>
@@ -61,32 +46,59 @@
  <i class="glyphicon glyphicon-import"></i> Import
  </button>
  </div> -->
+ 
+{% if messages %} {% for message in messages %} {% if message.tags == "error" %}
+<div
+  class="h-25 alert alert-danger alert-dismissible fade show mt-2 h-25 text-center"
+  role="alert"
+>
+  {{ message }}
+</div>
+{% elif message.tags == "success" %}
+<div
+  class="h-25 alert alert-success alert-dismissible fade show mt-2 h-25 text-center"
+  role="alert"
+>
+  {{ message }}
+</div>
+{% else %}
+<div
+  class="h-25 alert alert-info alert-dismissible fade show mt-2 h-25 text-center"
+  role="alert"
+>
+  {{ message }}
+</div>
+{% endif %} {% endfor %} {% endif %}
 
-        <div class="row">
-            <div class="col-sm">
-                <div class="table-wrap">
-                    <table id="datable_1" class="table table-hover mt-2 w-100 display pb-30 table-bordered ">
-                        <thead style="background-color: #132649;">
-                            <tr>
-                                <th class="text-white">S.no</th>
-                                <th class="text-white text-center">Course</th>
-                                <th class="text-white text-center">Specialization</th>
-                                <th class="text-white text-center">Faculty</th>
-                                <th class="text-white text-center">Scheduled Slot</th>
-                                <!-- <th class="text-white text-center">Mock Link</th> -->
-                                <th class="text-white text-center">Status</th>
-
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                            <tr>
-                                <td>{{ slot.id }}1</td>
-                                <td class="text-center">Java</td>
-                                <td class="text-center">Fullstack</td>
-                                <td class="text-center">Jahnavi</td>
-                                <td class="text-center">{{ slot.date_time}} April 29, 2024 11:00 AM</td>
-                                <!-- <td class="text-center">
+    <div class="row">
+      <div class="col-sm">
+        <div class="table-wrap">
+          <table
+            id="datable_1"
+            class="table table-hover mt-2 w-100 display pb-30 table-bordered"
+          >
+            <thead style="background-color: #132649">
+              <tr>
+                <th class="text-white">S.no</th>
+                <th class="text-white text-center">Course</th>
+                <th class="text-white text-center">Specialization</th>
+                <th class="text-white text-center">Faculty</th>
+                <th class="text-white text-center">Scheduled Slot</th>
+                <!-- <th class="text-white text-center">Mock Link</th> -->
+                <th class="text-white text-center">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for i in schedules %}
+              <tr>
+                <td>{{ forloop.counter }}</td>
+                <td class="text-center">{{i.course_name.course_name}}</td>
+                <td class="text-center">{{i.curse_name.specilalization_name.specilalization_name}}</td>
+                <td class="text-center">Jahnavi</td>
+                <td class="text-center">
+                  {{ slot.date_time}} April 29, 2024 11:00 AM
+                </td>
+                <!-- <td class="text-center">
  <button type="button" class="btn btn-link" data-toggle="tooltip" data-html="true"
  title="<em>{{ slot.mock_link }}</b>">
  #Mock Link
@@ -94,197 +106,240 @@
 
  </button>
  </td> -->
-                                <td class="text-center">
-                                    <span class="badge badge-success badge-pill mt-15 mr-10">Active</span>
-                                </td>
-
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td class="text-center">Java</td>
-                                <td class="text-center">Fullstack</td>
-                                <td class="text-center">Jahnavi</td>
-                                <td class="text-center"> April 29, 2024 11:00 AM</td>
-                                <!-- <td class="text-center">
- <button type="button" class="btn btn-link" data-toggle="tooltip" data-html="true"
- title="<em>{{ slot.mock_link }}</b>">
- #Mock Link
- <button class="btn btn-icon btn-icon-only btn-icon-style-4" data-link='{{ slot.mock_link }}'><i class="fa fa-copy"></i></button>
-
- </button>
- </td> -->
-                                <td class="text-center">
-                                    <span class="badge badge-success badge-pill mt-15 mr-10">Active</span>
-                                </td>
-
-                            </tr>
-
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                <td class="text-center">
+                  <span class="badge badge-success badge-pill mt-15 mr-10"
+                    >Active</span
+                  >
+                </td>
+              </tr>
+              {% endfor %}
+            
+            </tbody>
+          </table>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 </div>
 <!-- Table ends here -->
 
 <!-- Book interview start here -->
-<div class="modal fade" id="Bookinterview" tabindex="-1" role="dialog" aria-labelledby="Bookinterview"
- aria-hidden="true">
- <div class="modal-dialog modal-dialog-centered" role="document">
- <div class="modal-content">
- <div class="modal-header" style="background-color: #132649;">
- <h5 class="modal-title text-white">Book Slot</h5>
- <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
- <span aria-hidden="true">&times;</span>
- </button>
- </div>
- <form id="slot_add" method="post" action="{% url 'admin_mock' %}">
- {% csrf_token %}
- <div class="modal-body">
- <div class="mb-3">
- <label for="" class="form-label">Course<span class="text-danger"> *</span></label>
- <select class="form-control custom-select id_course" name="course_name">
- <option selected value="">Select Course</option>
- {% for i in courses %}
- 
- <option value="{{i.id}}">{{ i.course_name }}</option>
+<div
+  class="modal fade"
+  id="Bookinterview"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="Bookinterview"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #132649">
+        <h5 class="modal-title text-white">Book Slot</h5>
+        <button
+          type="button"
+          class="close text-white"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="slot_add" method="post" action="{% url 'mocks' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="" class="form-label"
+              >Course<span class="text-danger"> *</span></label
+            >
+            <select
+              class="form-control custom-select id_course"
+              name="course_name"
+            >
+              <option selected value="">Select Course</option>
+              {% for i in courses %}
 
- {% endfor %}
- </select>
- </div>
- <div class="mb-3">
- <label for="" class="form-label">Specialization <span class="text-danger">*</span></label>
- <select class="form-control custom-select specialization-select" id="specialization" name="specialization" >
+              <option value="{{i.id}}">{{ i.course_name }}</option>
 
+              {% endfor %}
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="" class="form-label"
+              >Specialization <span class="text-danger">*</span></label
+            >
+            <select
+              class="form-control custom-select specialization-select"
+              id="specialization"
+              name="specialization"
+            ></select>
+          </div>
+          <div class="mb-3">
+            <label for="" class="form-label"
+              >Faculty <span class="text-danger">*</span></label
+            >
+            <select
+              class="form-control custom-select select2"
+              name="faculty"
+              id="faculty"
+            >
+              <option value="" disabled selected>Please Select</option>
+            </select>
+          </div>
 
- </select>
- </div>
- <div class="mb-3">
- <label for="" class="form-label">Faculty <span class="text-danger">*</span></label>
- <select class="form-control custom-select select2" name="faculty" id="faculty">
- <option value="" disabled selected>Please Select</option>
+          <div class="mb-3">
+            <label for="" class="form-label"
+              >Available Slot <span class="text-danger">*</span></label
+            >
+            <select
+              class="form-control custom-select available-slot"
+              id="available_slot"
+              name="available_slot"
+            ></select>
+          </div>
 
- </select>
- </div>
-
- <div class="mb-3">
- <label for="" class="form-label">Available Slot <span class="text-danger">*</span></label>
- <select class="form-control custom-select available-slot" id="available_slot" name="available_slot" >
-
- </select>
- </div>
-
- <div class="mb-3">
- <label for="" class="form-label">Upload Resume<span class="text-danger"> *</span></label>
- <div class="fileinput fileinput-new input-group" data-provides="fileinput">
- <div class="input-group-prepend">
- <span class="input-group-text">Upload</span>
- </div>
- <div class="form-control text-truncate" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
- <span class="input-group-append">
-<span class=" btn btn-file" style="background-color: #132649; color: white;"><span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span>
-<input aria-describedby="inputGroupFileAddon03" aria-label="Upload" 
-name="chapter_image" accept="application/pdf" type="file">
- </span>
- <a href="#" class="btn btn-secondary fileinput-exists" data-dismiss="fileinput">Remove</a>
- </span>
- </div>
- 
-
- </div>
- </div>
- <div class="modal-footer d-flex justify-content-center">
- <button type="submit" class="btn" style="background-color: #132649; color: white;">Book</button>
- <button type="reset" class="btn btn-secondary" data-dismiss="modal" >Cancel</button>
- </div>
- </form>
- </div>
- </div>
+          <div class="mb-3">
+            <label for="" class="form-label"
+              >Upload Resume<span class="text-danger"> *</span></label
+            >
+            <div
+              class="fileinput fileinput-new input-group"
+              data-provides="fileinput"
+            >
+              <div class="input-group-prepend">
+                <span class="input-group-text">Upload</span>
+              </div>
+              <div class="form-control text-truncate" data-trigger="fileinput">
+                <i class="glyphicon glyphicon-file fileinput-exists"></i>
+                <span class="fileinput-filename"></span>
+              </div>
+              <span class="input-group-append">
+                <span
+                  class="btn btn-file"
+                  style="background-color: #132649; color: white"
+                  ><span class="fileinput-new">Select file</span
+                  ><span class="fileinput-exists">Change</span>
+                  <input
+                    aria-describedby="inputGroupFileAddon03"
+                    aria-label="Upload"
+                    name="attach_Resume"
+                    accept="application/pdf"
+                    type="file"
+                  />
+                </span>
+                <a
+                  href="#"
+                  class="btn btn-secondary fileinput-exists"
+                  data-dismiss="fileinput"
+                  >Remove</a
+                >
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer d-flex justify-content-center">
+          <button
+            type="submit"
+            class="btn"
+            style="background-color: #132649; color: white"
+          >
+            Book
+          </button>
+          <button type="reset" class="btn btn-secondary" data-dismiss="modal">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 
 <!-- Book interview ends here -->
 
-
-
-
-
-
-
-
-
-
-
-
-{% endblock %}
-
-{% block scripts %}
+{% endblock %} {% block scripts %}
 <script>
-    $(document).ready(function(){
-        $('.id_course').change(function(){
-            console.log($(this).val())
-            var cos_id = $(this).val();
-            var course_select = $('.course-select')
-            var specialization = $('.specialization-select')
-            var select2 = $('.select2')
+  $(document).ready(function () {
+    $(".id_course").change(function () {
+      console.log($(this).val());
+      var cos_id = $(this).val();
+      var course_select = $(".course-select");
+      var specialization = $(".specialization-select");
+      var select2 = $(".select2");
 
-            select2.empty().append('<option value="">Select faculty</option>')
-            specialization.empty().append('<option value="">Select Specialization</option>')
+      select2.empty().append('<option value="">Select faculty</option>');
+      specialization
+        .empty()
+        .append('<option value="">Select Specialization</option>');
 
-            if (cos_id) {
-                $.getJSON('/spec_jason/' + cos_id, function(data) {
-                    $.each(data, function(index, spec) {
-                        specialization.append('<option value="' + spec.id + '">' + spec.specilalization_name + '</option>');
-                    });
-                }).fail(function(jqxhr, textStatus, error) {
-                    console.error('Error fetching courses:', textStatus, error);
-                });
-            }  
-        })
-    })
-    
+      if (cos_id) {
+        $.getJSON("/spec_jason/" + cos_id, function (data) {
+          $.each(data, function (index, spec) {
+            specialization.append(
+              '<option value="' +
+                spec.id +
+                '">' +
+                spec.specilalization_name +
+                "</option>"
+            );
+          });
+        }).fail(function (jqxhr, textStatus, error) {
+          console.error("Error fetching courses:", textStatus, error);
+        });
+      }
+    });
+  });
 </script>
 <script>
-    $(document).ready(function(){
-        $('.specialization-select').change(function(){
-            console.log($(this).val())
-            var spec_id = $(this).val();
-            var specialization = $('.select2')
-            specialization.empty().append('<option value="">Select Faculty</option>')
+  $(document).ready(function () {
+    $(".specialization-select").change(function () {
+      console.log($(this).val());
+      var spec_id = $(this).val();
+      var specialization = $(".select2");
+      specialization.empty().append('<option value="">Select Faculty</option>');
 
-            if (spec_id) {
-                $.getJSON('/student_panel/faculty_jason/' + spec_id, function(data) {
-                    $.each(data, function(index, spec) {
-                        specialization.append('<option value="' + spec.id + '">' + spec.first_name +  ' ' + spec.last_name +'</option>');
-                    });
-                }).fail(function(jqxhr, textStatus, error) {
-                    console.error('Error fetching courses:', textStatus, error);
-                });
-            }
-
-        })
-    })
+      if (spec_id) {
+        $.getJSON("/student_panel/faculty_jason/" + spec_id, function (data) {
+          $.each(data, function (index, spec) {
+            specialization.append(
+              '<option value="' +
+                spec.id +
+                '">' +
+                spec.first_name +
+                " " +
+                spec.last_name +
+                "</option>"
+            );
+          });
+        }).fail(function (jqxhr, textStatus, error) {
+          console.error("Error fetching courses:", textStatus, error);
+        });
+      }
+    });
+  });
 </script>
 <script>
-    $(document).ready(function(){
-         $('.select2').change(function(){
-             console.log($(this).val())
-             var fac_id = $(this).val();
+  $(document).ready(function () {
+    $(".select2").change(function () {
+      console.log($(this).val());
+      var fac_id = $(this).val();
 
-             if (fac_id) {
-                $.getJSON('/student_panel/find_slot/' + fac_id, function(data) {
-                    $.each(data,function(index,data){
-                        $('.available-slot').append('<option value="'+data.id+'">'+data.available_slot+'</option>')
-                    }).fail(function(jqxhr, textStatus, error) {
-                        console.error('Error fetching courses:', textStatus, error);
-                    })
-                })
-             }
-         })   
-    })
+      if (fac_id) {
+        $.getJSON("/student_panel/find_slot/" + fac_id, function (data) {
+          $.each(data, function (index, data) {
+            $(".available-slot").append(
+              '<option value="' +
+                data.id +
+                '">' +
+                data.available_slot +
+                "</option>"
+            );
+          }).fail(function (jqxhr, textStatus, error) {
+            console.error("Error fetching courses:", textStatus, error);
+          });
+        });
+      }
+    });
+  });
 </script>
-
-
-
 
 {% endblock %}

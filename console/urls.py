@@ -266,7 +266,7 @@ urlpatterns = [
     path('bounced_email/',views.bounced_email,name='bounced_email'),
     path('bounced_edit/<int:id>',views.bounced_edit,name='bounced_edit'),
     path('bounced_sent/',views.bounced_sent,name='bounced_sent'),
-
+    path('create_certification/',views.create_certification,name="create_certification"),     
 
 
 

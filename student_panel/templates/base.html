@@ -812,6 +812,18 @@ License: You must have a valid license purchased only from templatemonster to le
             card.classList.toggle("flipped");
         }
     </script>
+    <script>
+        $(document).ready(function(){
+            
+    
+        setTimeout(function() {
+            $(".alert").fadeOut("slow", function() {
+                // This function is called after the fadeOut completes
+                $(this).remove(); // Removes the element from the DOM
+            });
+        }, 5000);
+        })
+    </script>
     {% block scripts %}
 
     {% endblock %}

@@ -41,7 +41,7 @@
       <button type="button" class="btn btn-primary mr-2 mb-3" data-toggle="modal" data-target="#CreateCertification">
         <i class="glyphicon glyphicon-plus"></i> Create Certification
       </button>
-      <a href="{% url 'export_certification' %}" class="btn btn-success mr-2 mb-3"><i
+      <a href="" class="btn btn-success mr-2 mb-3"><i
           class="glyphicon glyphicon-export"></i> Export</a>
       <button type="button" class="btn btn-secondary mr-2 mb-3" data-toggle="modal" data-target="#UploadCertification">
         <i class="glyphicon glyphicon-import"></i> Import
@@ -271,7 +271,7 @@
           <div class="d-flex justify-content-center mb-3">
             <img src="../../static/triangle-exclamation-solid.svg" width="120" height="70" alt="">
           </div>
-          <form action="{% url 'certification_all' %}" method="post">
+          <form action="" method="post">
             {% csrf_token %}
             <p id="deleteMessage">Are you sure you want to delete <span id="selectedCount"></span> records?</p>
             <input type="hidden" id="selected_ids_input" name="selected_ids">
@@ -333,7 +333,7 @@
           <span aria-hidden="true" class="text-white">&times;</span>
         </button>
       </div>
-      <form action="{% url 'import_certification' %}" method="post" enctype="multipart/form-data">
+      <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="modal-body">
           <input type="file" name="certification_file" id="input-file-now" class="dropify" />
