@@ -7871,6 +7871,7 @@ def opportunity(request):
 
   return render(request,'Leads/opportunity.html', context) 
 
+
 @admin_required
 def move_to_admission(request, id):
     crn = request.session.get('admin_user').get('crn')
@@ -7880,13 +7881,21 @@ def move_to_admission(request, id):
         opportunity_lead = register_user.leads.filter(id=id).first()
         
         if opportunity_lead:
+            # Capture the existing token_id
+            existing_token_id = opportunity_lead.token_id
+
             if request.POST.get('paymenttype') == 'Cash':
                 opportunity_lead.lead_position = 'ADMITTED'
                 opportunity_lead.faculty = register_user.employee.get(pk=request.POST.get('courseFaculty'))
                 opportunity_lead.batch_number = register_user.regulations.get(pk=request.POST.get("batchno"))
-                opportunity_lead.admission_date = datetime.now()
-                opportunity_lead.save()
+                opportunity_lead.admission_date = timezone.now()
 
+                # Exclude token_id from the update
+                opportunity_lead.save(update_fields=['lead_position', 'faculty', 'batch_number', 'admission_date'])
+
+                # Restore the existing token_id
+                opportunity_lead.token_id = existing_token_id
+                
                 Student_payment.objects.create(
                     crn_number=register_user,
                     payment_amount=request.POST.get('admissionFee'),
@@ -7894,24 +7903,38 @@ def move_to_admission(request, id):
                     mode_of_payment=request.POST.get('paymenttype'),
                     transaction_id=request.POST.get('transactionId'),
                     course_id=opportunity_lead.course_name,
-                    date_of_payment=datetime.now()
+                    date_of_payment=timezone.now()
                 )
+
+                password = generate_password()
                 Studen_credentials.objects.create(
-                  crn = register_user,
-                  studend_id = opportunity_lead,
-                  email = opportunity_lead.email,
-                  password = 'A#aruddin@834'
-                )  
+                    crn=register_user,
+                    studend_id=opportunity_lead,
+                    email=opportunity_lead.email,
+                    password=password
+                )
+
+                email_from = settings.EMAIL_HOST_USER
+                recipient_list = [opportunity_lead.email]
+                subject = 'Admission Confirmation'
+                message = f'Your Admission has been confirmed. Your username is {opportunity_lead.email} and password is {password} \n\nThank you for using {request.session.get("admin_user").get("company_name")}. \n\n Your Link to Login: http://192.168.1.87:8080/student_panel/'
+                send_mail(subject, message, email_from, recipient_list)   
 
                 messages.success(request, 'Lead moved to Admission')
                 return redirect('admissions')
+
             elif request.POST.get('paymenttype') == 'UPI':
                 opportunity_lead.lead_position = 'ADMITTED'
                 opportunity_lead.faculty = register_user.employee.get(pk=request.POST.get('courseFaculty'))
                 opportunity_lead.batch_number = register_user.regulations.get(pk=request.POST.get("batchno"))
-                opportunity_lead.admission_date = datetime.now()
-                opportunity_lead.save()
+                opportunity_lead.admission_date = timezone.now()
 
+                # Exclude token_id from the update
+                opportunity_lead.save(update_fields=['lead_position', 'faculty', 'batch_number', 'admission_date'])
+
+                # Restore the existing token_id
+                opportunity_lead.token_id = existing_token_id
+                
                 Student_payment.objects.create(
                     crn_number=register_user,
                     payment_amount=request.POST.get('admissionFee'),
@@ -7919,26 +7942,39 @@ def move_to_admission(request, id):
                     mode_of_payment=request.POST.get('paymenttype'),
                     transaction_id=request.POST.get('transactionId'),
                     course_id=opportunity_lead.course_name,
-                    date_of_payment=datetime.now(),
+                    date_of_payment=timezone.now(),
                     upi_id=register_user.upi.get(pk=request.POST.get('upi_id_id'))
                 )
+
+                password = generate_password()
                 Studen_credentials.objects.create(
-                  crn = register_user,
-                  studend_id = opportunity_lead,
-                  email = opportunity_lead.email,
-                  password = 'A#aruddin@834'
-                )                  
+                    crn=register_user,
+                    studend_id=opportunity_lead,
+                    email=opportunity_lead.email,
+                    password=password
+                )
+
+                email_from = settings.EMAIL_HOST_USER
+                recipient_list = [opportunity_lead.email]
+                subject = 'Admission Confirmation'
+                message = f'Your Admission has been confirmed. Your username is {opportunity_lead.email} and password is {password} \n\nThank you for using {request.session.get("admin_user").get("company_name")}. \n\n Your Link to Login: http://192.168.1.87:8080/student_panel/'
+                send_mail(subject, message, email_from, recipient_list)   
 
                 messages.success(request, 'Lead moved to Admission')
                 return redirect('admissions')
+
             elif request.POST.get('paymenttype') == 'netbanking':
                 opportunity_lead.lead_position = 'ADMITTED'
                 opportunity_lead.faculty = register_user.employee.get(pk=request.POST.get('courseFaculty'))
                 opportunity_lead.batch_number = register_user.regulations.get(pk=request.POST.get("batchno"))
-                
-                opportunity_lead.admission_date = datetime.now()
-                opportunity_lead.save()
+                opportunity_lead.admission_date = timezone.now()
 
+                # Exclude token_id from the update
+                opportunity_lead.save(update_fields=['lead_position', 'faculty', 'batch_number', 'admission_date'])
+
+                # Restore the existing token_id
+                opportunity_lead.token_id = existing_token_id
+                
                 Student_payment.objects.create(
                     crn_number=register_user,
                     payment_amount=request.POST.get('admissionFee'),
@@ -7946,29 +7982,38 @@ def move_to_admission(request, id):
                     mode_of_payment=request.POST.get('paymenttype'),
                     transaction_id=request.POST.get('transactionId'),
                     course_id=opportunity_lead.course_name,
-                    date_of_payment=datetime.now(),
+                    date_of_payment=timezone.now(),
                     net_banking=register_user.net_banking.get(pk=request.POST.get('net_banking_id'))
                 )
+
+                password = generate_password()
                 Studen_credentials.objects.create(
-                  crn = register_user,
-                  studend_id = opportunity_lead,
-                  email = opportunity_lead.email,
-                  password = 'A#aruddin@834'
-                )                  
+                    crn=register_user,
+                    studend_id=opportunity_lead,
+                    email=opportunity_lead.email,
+                    password=password
+                )
+
+                email_from = settings.EMAIL_HOST_USER
+                recipient_list = [opportunity_lead.email]
+                subject = 'Admission Confirmation'
+                message = f'Your Admission has been confirmed. Your username is {opportunity_lead.email} and password is {password} \n\nThank you for using {request.session.get("admin_user").get("company_name")}. \n\n Your Link to Login: http://192.168.1.87:8080/student_panel/'
+                send_mail(subject, message, email_from, recipient_list)   
 
                 messages.success(request, 'Lead moved to Admission')
                 return redirect('admissions')
+
             else:
                 messages.error(request, 'Invalid payment type')
                 return redirect('admissions')
+
         else:
             messages.error(request, 'Lead not found')
             return redirect('admissions')
+
     else:
         messages.error(request, 'Invalid request')
-        return redirect('admissions')    
-
-          
+        return redirect('admissions')          
           
             
 

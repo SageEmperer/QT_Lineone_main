@@ -45,9 +45,9 @@
 
                             </div>
                             <p class="text-white  font-weight-200">
-                                Full Stack Python Developer
+                                {{student.course_name.course_name}} {{student.course_name.specialization.specilalization_name}}
                                 <br>
-                                Date of joining: April 8th 2024
+                                Date of joining: {{student.admission_date | date:"d-m-Y"}}
                             </p>
 
                         </div>
@@ -80,128 +80,92 @@
         <h4 class="hk-pg-title"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-anchor"><circle cx="12" cy="5" r="3"></circle><line x1="12" y1="22" x2="12" y2="8"></line><path d="M5 12H2a10 10 0 0 0 20 0h-3"></path></svg>&nbsp;Matched Jobs</h4>
     </div>
     <section class="hk-sec-wrapper">
-        <div class="row">
-            <div class="col-sm ">
-                <div class="row mt-2">
-                    <div class="col-lg-4 col-md-6 col-sm-12 mb-30">
-                        <div class="card shadow cards border rounded-7">
-                            <div class="card-header row ">
-                                <a style="color: #132649;" class="" href="{% url 'job_details' %}">
-                                    <img class="align-self-start ml -2 mr-2 circle d-66 border border-light border-2"
-                                        src="../../static/images/logo/qt_instance.png" alt="Generic placeholder image">
-
-                                    <div class="col-sm-20">
-                                        <h4>SDE-1
-                                </a></h4>
-                                <h6 class="card-title">QT lines, &nbsp;<i class="fa fa-map-marker"></i>&nbsp;Hyderabad
-                                </h6>
-                                </h6>
+        <!-- <div class="row">
+            <div class="col-lg-4 col-sm-12 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-4"><img width="100%" src="../../static/images/logo/qt_instance.png" alt=""></div>
+                            <div class="col">Lorem ipsum dolor sit amet consectetur.</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">455</div>
+                            <div class="col-12">
+                                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga, tenetur? Error, voluptatum.
                             </div>
-                        </div>
-                        <div class="card-body">
-                            <!-- <h6 class="card-title">QT lines, &nbsp;<i class="fa fa-map-marker"></i>&nbsp;Hyderabad</h6> </h6> -->
 
-                            <p style="max-width: 100%;">
-                                <span class="">₹2-3 LPA</span>
-                                <br>
-                                <span class="text-smoke">Django Python Bootstrap HTML CSS JavaScript</span>
-                            </p>
-
-
-                        </div>
-                        <div class="card-footer text-muted">
-                            <!-- <a href="#" class="btn btn-primary">Apply</a> -->
-                            <button class="btn " style="background-color: #132649; color: white;" data-toggle="modal"
-                                data-target="#exampleModalLarge01">Apply</button>
-                            &nbsp;&nbsp;&nbsp;
-                            &nbsp;&nbsp;&nbsp;
-                            &nbsp;&nbsp;&nbsp;
-                            &nbsp;&nbsp;&nbsp;
-                            <p class="text-red mt-2"><b>Last date : 14-04-2024</b></p>
                         </div>
                     </div>
-
-
                 </div>
-                <div class="col-lg-4 col-md-6 col-sm-12 mb-30">
-                    <div class="card cards shadow border rounded-7">
-                        <div class="card-header row ">
-                            <a style="color: #132649;" class="" href="{% url 'job_details' %}">
-                                <img class="align-self-start ml -2 mr-2 circle d-66 border border-light border-2"
-                                    src="../../static/images/logo/qt_instance.png" alt="Generic placeholder image">
+            </div>
+        </div> -->
 
-                                <div class="col-sm-20">
-                                    <h4>SDE-1
-                            </a></h4>
-                            <h6 class="card-title">QT lines, &nbsp;<i class="fa fa-map-marker"></i>&nbsp;Hyderabad</h6>
-                            </h6>
-                        </div>
+
+
+
+
+
+
+        <div class="row">
+            {% for i in jobs %} 
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                <div class="card shadow border rounded-7">
+                    <div class="card-header">
+                        <a style="color: #132649;" class="" href="{% url 'job_details' %}">
+                            <img class="align-self-start ml-2 mr-2 circle d-66 border border-light border-2 img-fluid"
+                                src="../../static/images/logo/qt_instance.png" alt="Generic placeholder image">
+                            <h4 class="mt-3">{{i.job_title}}</h4>
+                        </a>
+                        <h6 class="card-title">{{i.companyname.companyname}}, &nbsp;<i class="fa fa-map-marker"></i>&nbsp;{{i.companyname.location}}</h6>
                     </div>
                     <div class="card-body">
-                        <!-- <h6 class="card-title">QT lines, &nbsp;<i class="fa fa-map-marker"></i>&nbsp;Hyderabad</h6> </h6> -->
-
-                        <p style="max-width: 100%; ">
-                            <span class="">₹2-3 LPA</span>
+                        <p>
+                            <span class="font-weight-bold">{{i.salary}} LPA</span>
                             <br>
-                            <span class="text-smoke">Django Python Bootstrap HTML CSS JavaScript</span>
+                            <span class="text-smoke">{{i.skills}}</span>
                         </p>
-
-
                     </div>
                     <div class="card-footer text-muted">
-                        <!-- <a href="#" class="btn btn-primary">Apply</a> -->
-                        <button class="btn " style="background-color: #132649; color: white;" data-toggle="modal"
-                            data-target="#exampleModalLarge01">Apply</button>
-                        &nbsp;&nbsp;&nbsp;
-                        &nbsp;&nbsp;&nbsp;
-                        &nbsp;&nbsp;&nbsp;
-                        &nbsp;&nbsp;&nbsp;
-                        <p class="text-red mt-2"><b>Last date : 14-04-2024</b></p>
+                        <button class="btn btn-primary m-2" data-toggle="modal" data-target="#job_apply_modal{{i.id}}">Apply</button>
+                        <p class="text-red mt-2"><b>Last date : {{i.last_date_to_apply}}</b></p>
                     </div>
                 </div>
+                <!--  -->
+
+                <!-- <div class="card">
+                    <div class="card-body">
+                      <img src="../../static/images/logo/qt_instance.png" height="40"><br><br>
+                      <strong>{{i.job_title}}</strong> <br>
+                      <span class="text-success">{{i.companyname.companyname}}</span> <br><br>
+                      <div class="job" >
+                        <i class="ri-wallet-3-line"></i> Salary: {{i.salary}} LPA <br>
+                        <i class="ri-map-pin-line"></i> Exp: {{i.experience}} <br>
+                        <i class="ri-briefcase-3-line"></i> Job Category: {{i.companyname.category}} <br>
+                      </div>
+                      <hr>
+                      <div class="d-flex justify-content-between">
+                        <span style="font-family: italic;">Last Date: <span class="text-danger">25-12-2024</span></span>
+                        <a href="apply_job.html"><button class="btn btn-outline-success btn-sm rounded-pill float-end">Apply
+                            Now</button></a>
+                      </div>
+                    </div>
+                  </div> -->
+
+
+
+                <!--  -->
+
+
 
 
             </div>
-            <div class="col-lg-4 col-md-6 col-sm-12 mb-30">
-                <div class="card cards shadow border rounded-7">
-                    <div class="card-header row ">
-                        <a style="color: #132649;" class="" href="{% url 'job_details' %}">
-                            <img class="align-self-start ml -2 mr-2 circle d-66 border border-light border-2"
-                                src="../../static/images/logo/qt_instance.png" alt="Generic placeholder image">
-
-                            <div class="col-sm-20">
-                                <h4>SDE-1
-                        </a></h4>
-                        <h6 class="card-title">QT lines, &nbsp;<i class="fa fa-map-marker"></i>&nbsp;Hyderabad</h6>
-                        </h6>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <!-- <h6 class="card-title">QT lines, &nbsp;<i class="fa fa-map-marker"></i>&nbsp;Hyderabad</h6> </h6> -->
-
-                    <p style="max-width: 100%;">
-                        <span class="">₹2-3 LPA</span>
-                        <br>
-                        <span class="text-smoke">Django Python Bootstrap HTML CSS JavaScript</span>
-                    </p>
-
-
-                </div>
-                <div class="card-footer text-muted">
-                    <!-- <a href="#" class="btn btn-primary">Apply</a> -->
-                    <button class="btn " style="background-color: #132649; color: white;" data-toggle="modal"
-                        data-target="#exampleModalLarge01">Apply</button>
-                    &nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;
-                    <p class="text-red mt-2"><b>Last date : 14-04-2024</b></p>
-                </div>
-            </div>
-
-
+            {% endfor %}
         </div>
-        <div class="offset-4">
+        
+    </section>
+    <div class="row">
+        <div class="col">
+
             <nav class="pagination-wrap d-inline-block  mr-40 mt-15" aria-label="...">
                 <ul class="pagination">
                     <li class="page-item disabled">
@@ -221,7 +185,7 @@
                 </ul>
             </nav>
         </div>
-    </section>
+    </div>
 
 </div>
 
@@ -245,7 +209,7 @@
                         <span class="">Django | Python | Bootstrap | HTML | CSS | JavaScript</span>
                 </div>
                     <br>
-                    <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLarge01" >Apply</button>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#job_apply_modal{{i.id}}" >Apply</button>
                 </div>
             </div>
             
@@ -257,7 +221,8 @@
 
 
 <!-- Apply form modal -->
-<div class="modal fade" id="exampleModalLarge01" tabindex="-1" role="dialog" aria-labelledby="exampleModalLarge01"
+{% for i in jobs %} 
+<div class="modal fade" id="job_apply_modal{{i.id}}" tabindex="-1" role="dialog" aria-labelledby="job_apply_modal{{i.id}}"
     aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content  pr-6 pl-6 pd-12  pt-12" style="font-size: 16px;">
@@ -280,44 +245,44 @@
                                             <div class="col-md-6 form-group">
                                                 <label for="firstName">Job ID</label>
                                                 <input class="form-control" id=""
-                                                    type="text" placeholder="984">
+                                                    type="text" readonly value="{{i.id}}">
                                             </div>
                                             <div class="col-md-6 form-group">
                                                 <label for="lastName">Company name</label>
-                                                <input class="form-control " id="" type="text" placeholder="QT Lines">
+                                                <input class="form-control " id="" type="text" readonly value="{{i.companyname.companyname}}">
                                             </div>
                                         </div>
 
                                         <div class="row">
                                             <div class="col-md-6 form-group">
                                                 <label for="firstName">Experience</label>
-                                                <input class="form-control" id="" type="text" placeholder="0-1 Year">
+                                                <input class="form-control" id="" readonly value="{{i.experience}}" type="text" placeholder="0-1 Year">
                                             </div>
                                             <div class="col-md-6 form-group">
                                                 <label for="lastName">Location</label>
-                                                <input class="form-control " id="" placeholder="Hyderabad"  type="text">
+                                                <input class="form-control " id="" readonly value="{{i.companyname.location}}" type="text">
                                             </div>
                                         </div>
 
                                         <div class="row">
                                             <div class="col-md-6 form-group">
                                                 <label for="firstName">First name</label>
-                                                <input class="form-control " id="firstName" placeholder="First Name" type="text">
+                                                <input class="form-control " id="firstName"  readonly value="{{student.first_name}}" type="text">
                                             </div>
                                             <div class="col-md-6 form-group">
                                                 <label for="lastName">Last name</label>
-                                                <input class="form-control " id="" placeholder="Shane" type="text">
+                                                <input class="form-control " id="" readonly value="{{student.last_name}}"  type="text">
                                             </div>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="email">Email</label>
-                                            <input type="email" class="form-control" placeholder="example@gmail.com" id="" name="">
+                                            <input type="email" class="form-control" readonly value="{{student.email}}"  id="" name="">
                                         </div>
 
                                         <div class="form-group">
                                             <label for="phone_number">Phone Number</label>
-                                            <input type="number" class="form-control" placeholder="9876543210" id="phone_number" name="phone_number">
+                                            <input type="number" class="form-control" placeholder="9876543210" readonly value="{{student.mobile}}" id="phone_number" name="phone_number">
                                         </div>
 
 
@@ -340,5 +305,10 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
+{% endfor %}
 
-        {% endblock %}
+
+
+{% endblock %}
