@@ -19,8 +19,55 @@
 {% block content %}
 
 
+
+<section class="hk-sec-wrapper shadow-lg p-3 mb-5 bg-white rounded" style="border:grey;">
+  <div class="d-flex justify-content-end">
+    <a href="{% url 'job_details_export' employee.id %}" type="button" class="btn btn-success mr-2 mb-3 float-right"><i class="fa fa-print"></i> Print </a>
+    </div>
+
+  <div class="row" >
+    <div class="col-sm">
+      <div class="table-wrap">
+        <table class="table table-hover w-100 display pb-30 table-bordered">
+            <thead class="bg-dark">
+              <tr>
+                <!-- <th class="text-white">S.No</th> -->
+                <th class="text-white">Profile</th>
+                <th class="text-white">Employee ID</th>
+                <th class="text-white">Name</th>
+                <th class="text-white">Email</th>
+                <th class="text-white">Phone</th>
+                
+                <td class="text-white">Department</td>
+                <td class="text-white">Designation</td>
+                <th class="text-white">Date of Joining</th>
+                <th class="text-white">Current Location</th>
+              </tr>
+            </thead>
+            <tbody style="background-color:mistyrose;">
+              <!-- <td>1</td> -->
+                <td><img src="{{employee.profile_image.url}}" alt="user" class="avatar-img rounded-circle" style="width: 70px; height: 70px;"></td>
+                <td class="font-weight-bold">{{employee.Employee_id}}</td>
+                <td style="font-weight:bold">{{employee.first_name}} {{employee.last_name}}</td>
+                <td>{{employee.personal_email}}</td>
+                <td>{{employee.personal_number}}</td>
+                <td>{{employee.department_name.department_name}}</td>
+                <td>{{employee.designation_name.designation_name}}</td>
+                <td>{{employee.joining_date}}</td>
+                <td>{{employee.city}}</td>
+            </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
 <section class="hk-sec-wrapper">
-  <div class="d-flex row justify-content-between g-2">
+  <!-- <div class="d-flex row justify-content-between g-2">
     <div class="card col-sm-12 col-lg-4 col-md-4">
       <div class="card-body ">
         
@@ -61,32 +108,18 @@
         </div>
         <div class="col-md-12 col-lg-12 col-sm-12">
 
-          <div class="card card-sm shadow-lg" >
-            <div class="card-body">
-              <div class="d-flex justify-content-between mb-5">
-                <div>
-                  <span class="d-block font-15 text-dark font-weight-500">Total Jobs Posted</span>
-                </div>
-                <div>
-                  <span class="text-success font-14 font-weight-500"></span>
-                </div>
-              </div>
-              <div class="text-center">
-                <span class="d-block display-4 text-dark mb-5"><span class="counter-anim">{{job_posts.count}}</span></span>
-                <small class="d-block">472,458 Targeted</small>
-              </div>
-            </div>
-          </div>
+
+
         </div>
       </div>
 
 
   </div>
 
-  </div>
-  <div class="d-flex justify-content-end">
+  </div> -->
+  <!-- <div class="d-flex justify-content-end">
     <a href="{% url 'job_details_export' employee.id %}" type="button" class="btn btn-success mr-2 mb-3"><i class="fa fa-download"></i> Print</a>  
-  </div>
+  </div> -->
   <div class="row">
     <div class="col-sm">
       <div class="table-wrap">

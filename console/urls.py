@@ -237,6 +237,8 @@ urlpatterns = [
     path('facultyschedule/', views.faculty_schedule_list, name="faculty_schedule_list"),
     path('faculty_completed/', views.faculty_completed_mocklist, name="faculty_completed_mocklist"),
     path('facultypending/', views.faculty_pending_mocks, name="faculty_pending_mocks"),
+    path('completed_student_mock/<int:student_id>', views.completed_student_mock, name="completed_student_mock"),
+
 
 
 

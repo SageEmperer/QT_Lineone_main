@@ -1,8 +1,9 @@
 import csv
 from django.http import FileResponse
 from datetime import date, timedelta
-
+from django.utils.safestring import mark_safe
 from django.db.models import Count
+from django.utils.html import strip_tags
 import io
 from team_panel.models import *
 from django.http import FileResponse, Http404, HttpResponse, HttpResponseRedirect, JsonResponse
@@ -8926,13 +8927,16 @@ def job_details_export(request,id):
   job_posts = register_user.job_post.filter(post_by=id)
   response = HttpResponse(content_type='text/csv')
   response['Content-Disposition'] = f'attachment; filename="job_details.csv"'
-  writer = csv.write(response)
-  writer.writerow['S.No','Job ID','Job Title','Job Category','Experience','Qualification','Skills','Role','Salary','Location','Email','Contact Number','Last Date to Apply','Posted Date','Job Description']
+  writer = csv.writer(response)
+
+  writer.writerow(['S.no','Job Title','Company Name','Location','Job Category','HR Name','HR Email','Posted Date','Salary','Last Date To Apply','Job Description'])
 
   num= 0
   for i in job_posts:
     num+=1
-    writer.writerow([i,num,i.job_title,i.job_category,i.experience,i.qualification,i.skills,i.role,i.salary,i.location,i.email,i.contact_number,i.last_date_to_apply,i.posted_date,i.job_description])
+    job_description_plain_text = strip_tags(i.job_description)
+    writer.writerow([num, i.job_title, i.companyname.companyname, i.companyname.location, i.companyname.category.Jobcategory_name, i.companyname.hrname, i.companyname.email, i.post_date, i.salary, i.last_date_to_apply, job_description_plain_text])
+
 
   return response
 
@@ -9586,7 +9590,7 @@ def FeedbackForm(request, id):
       body_language=int(request.POST.get('body_language'))
       logical_thinking=int(request.POST.get('logical_thinking'))
       technical_skills=int(request.POST.get('technical_skills'))
-      suggestion=request.POST.get('suggestion')
+      suggestion=request.POST.get('suggestion_3')
       send_attachment=request.FILES.get('send_attachment')
       status=request.POST.get('status')
 
@@ -10004,8 +10008,22 @@ def completed_mock(request):
     'feedbacks': feedbacks,
     'student_id': student_id,
   }
-    
   return render(request,'mock_interview/admin_completed_interviews.html', context)
+
+
+
+
+def completed_student_mock(request, student_id):
+   students = Feedback.objects.filter(interview__student_name=student_id)
+   context = {
+          'students': students,
+       }
+    
+   return render(request,'mock_interview/adcompleted_student.html', context)
+
+
+
+
 
 
 # faculty scheduled  total interviews

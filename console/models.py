@@ -631,6 +631,7 @@ class Employee_model(models.Model):
     aadhar_card_pdf= models.FileField(upload_to='aadhar_card_pdf',null=True,blank=True)
     pan_card_pdf= models.FileField(upload_to='pan_card_pdf',default=None,blank=True)
     status = models.CharField(max_length=20, choices=choice_status, default='Active')
+    joining_date= models.DateField(default=datetime.now().date())
     def generate_employee_id(self):
             prefix = f'{self.crn_number.company_short_name}E'
             today = datetime.now().date()
@@ -1237,7 +1238,8 @@ class Scheduling_mock_model(models.Model):
         ('Reschedule', 'Reschedule'))
     interview_status = [
         ('completed', 'Completed'),
-        ('pending', 'Pending')
+        ('pending', 'Pending'),
+        ('not_completed', 'Not Completed')
     ]
     crn= models.ForeignKey(Register_model, on_delete=models.CASCADE,related_name="schedule")
     student_name=models.ForeignKey(LeadModel, on_delete=models.CASCADE,null=True)
@@ -1251,7 +1253,7 @@ class Scheduling_mock_model(models.Model):
     reschedule_reason=models.CharField(max_length=50,null=True)
     cancel_reason = models.CharField(max_length=50,null=True)
     attach_Resume = models.FileField(upload_to='resumes/',null=True)  
-    interview_status = models.CharField(choices=interview_status, max_length=10,default="pending")
+    interview_status = models.CharField(choices=interview_status, max_length=20,default="Not Completed")
     
     
 
