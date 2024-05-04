@@ -4,12 +4,12 @@
 
 <!-- Breadcrumb -->
 <div class="hk-pg-header d-flex justify-content-between mb-0">
-  <h4 class="hk-pg-title m-3">HR Information [{{hr_details.count}}]</h4>
+  <h4 class="hk-pg-title m-3">HR Details [{{hr_details.count}} Members]</h4>
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb bg-transparent mb-0">
       <li class="breadcrumb-item"><a href="{% url 'placement_dashboard' %}">Dashboard</a></li>
       <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">{{request.session.admin_user.company_name}}</a></li>
-      <li class="breadcrumb-item active" aria-current="page">HR details</li>
+      <li class="breadcrumb-item active" aria-current="page">HR details ({{hr_details.count}}) </li>
     </ol>
   </nav>
 </div>
@@ -49,6 +49,7 @@
               <th class="text-white">Email</th>
               <th class="text-white">Phone</th>
               <th class="text-white">Branch</th>
+              <th class="text-white text-center">Total Jobs Posted</th>
               <!-- <th class="text-white text-center">Action</th> -->
           </tr>
       </thead>
@@ -58,11 +59,19 @@
               <td class="text-center">
               {{forloop.counter}}  <!-- <input type="checkbox" class="row-checkbox" data-id="{{i.id}}"> -->
               </td>
-              <td>{{i.Employee_id}}</td>
+              <td><a href="{% url 'jobdetails' i.id %}">{{i.Employee_id}}</a></td>
               <td><a href="{% url 'jobdetails' i.id %}">{{i.first_name}} {{i.last_name}}</a></td>
               <td>{{i.personal_email}}</td>
               <td>{{i.personal_number}}</td>
               <td>{{i.branch.branch_name}}</td>
+
+              <td class="text-center">
+                <a href="{% url 'jobdetails' i.id %}" class="badge {% if i.job_count == 0 %} badge-danger {% else %} badge-success {% endif %}">
+                  {{i.job_count}}
+
+                </a>
+
+              </td>
               <!-- <td class="text-center">
                   <button
                       class="btn btn-primary m-1"data-toggle="modal"data-target="#Edithr">

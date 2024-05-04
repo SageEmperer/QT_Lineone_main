@@ -29,29 +29,24 @@
           <thead class="bg-dark">
             <tr>
               <th class="text-white text-center">S.No</th>
-              <th class="text-white text-center">Faculty</th>
               <th class="text-white text-center">Student</th>
-              <th class="text-white text-center">Student Email id</th>
+              <th class="text-white text-center">Roll Number</th>
+              <th class="text-white text-center">Batch Number</th>
+              <th class="text-white text-center">Mobile No</th>
+              <th class="text-white text-center">Email ID</th>
               <th class="text-white text-center">Course</th>
-              <th class="text-white text-center">Date Of Interview</th>
-              <th class="text-white text-center">Resume</th>
             </tr>
           </thead>
           <tbody>
-            {% for i in feedbacks %}
+            {% for i in student_id %}
             <tr>
-              <td>{{i.id}}</td>
-              <td class="text-center">{{i.interview.faculty_name.first_name}} {{i.interview.faculty_name.last_name}}
-              </td>
-              <td class="text-center"><a class="nav-link"
-                  href="{% url 'student_feedback' %}">{{i.interview.student_name.first_name}}
-                  {{i.interview.student_name.last_name}}</a></td>
-              <td class="text-center">{{i.interview.student_name.email}}</td>
-              <td class="text-center">{{i.interview.student_name.course_name}}</td>
-              <td class="text-center">{{i.interview.available_slot.available_slot}}</td>
-              <td class="text-center"><a href="{% url 'open_pdf' i.id %} title=" Image from freeiconspng.com"><img
-                    src="https://www.freeiconspng.com/uploads/pdf-icon-png-pdf-zum-download-2.png" width="35"
-                    alt="Student resume" /></a></td>
+              <td>{{forloop.counter}}</td>
+              <td class="text-center"><a class="nav-link" href="{% url 'completed_student_mock' i.id %}">{{i.first_name}} {{i.last_name}}</a></td>
+              <td class="text-center">{{i.token_id}}</td>
+              <td class="text-center">{{i.batch_number.batch_number}}</td>
+              <td class="text-center">{{i.mobile_number}}</td>
+              <td class="text-center">{{i.email}}</td>
+              <td class="text-center">{{i.course_name}}</td>
             </tr>
             {% endfor %}
           </tbody>

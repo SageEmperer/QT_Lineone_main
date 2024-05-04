@@ -2,6 +2,7 @@ import csv
 from django.http import FileResponse
 from datetime import date, timedelta
 
+from django.db.models import Count
 import io
 from team_panel.models import *
 from django.http import FileResponse, Http404, HttpResponse, HttpResponseRedirect, JsonResponse
@@ -8871,31 +8872,43 @@ def fetch_employee_details(request, employee_id):
 def hr_details(request):
     crn = request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
-    if register_user.employee.filter(department_name__department_name = 'Human Resources').exists():
-      hr_details = register_user.employee.filter(department_name__department_name = 'Human Resources')
-      
+    if register_user.employee.filter(department_name__department_name='Human Resources').exists():
+        hr_details = register_user.employee.filter(department_name__department_name='Human Resources')
+        hr_details = hr_details.annotate(job_count=Count('job_post'))
+        job_postes = register_user.job_post.all()
     else:
-      hr_details = None
+        hr_details = None
+        job_postes = None
 
-       
-    context={
-       'hr_details':hr_details
-    } 
-    
-    return render(request,'hr_portal/HR details/hrdetails.html',context)
+    context = {
+        'hr_details': hr_details,
+        'job_postes': job_postes
+    }
+
+    return render(request, 'hr_portal/HR details/hrdetails.html', context)
 
 
 @admin_required
 def job_detailes(request,id):
     crn=request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
+
+    # if not register_user.employee.filter(department_name__department_name='Human Resources',id=id).exist():
+    #    return redirect('hr_details')
+       
     
     if register_user.job_post.filter(post_by=id).exists():
       job_posts = register_user.job_post.filter(post_by=id)
       employee = register_user.employee.get(id=id)
 
+
     else:
       job_posts = None
+      employee = register_user.employee.get(id=id)
+      
+    
+
+
     context= {
       'job_posts':job_posts,
       'employee':employee
@@ -8919,6 +8932,10 @@ def job_details_export(request,id):
   num= 0
   for i in job_posts:
     num+=1
+    writer.writerow([i,num,i.job_title,i.job_category,i.experience,i.qualification,i.skills,i.role,i.salary,i.location,i.email,i.contact_number,i.last_date_to_apply,i.posted_date,i.job_description])
+
+  return response
+
 
 
 
@@ -9203,6 +9220,7 @@ def createvendor(request):
 
 
 # company vendor edit
+@admin_required
 def company_vendor_edit(request,id):
   crn = request.session.get('admin_user').get('crn')
   register_user = Register_model.objects.get(crn=crn)
@@ -9251,6 +9269,7 @@ def company_vendor_edit(request,id):
 
 
 # company delete
+@admin_required
 def delete_company_vendor(request,id):
   crn = request.session.get('admin_user').get('crn')
   register_user = Register_model.objects.get(crn=crn)
@@ -9282,7 +9301,7 @@ def company_vendor_mul_delter(request):
      return redirect('createvendor')   
 
 
-
+@admin_required
 def company_vendor_export(request):
     crn = request.session.get('admin_user').get('crn')
     if crn:
@@ -9321,7 +9340,7 @@ def company_vendor_export(request):
 
 
 # moke interview sart here
-
+@admin_required
 def getting_employ_slot(request,course_id,spc_id):
   employee_details = Employee_model.objects.filter(course_id = course_id,specialization_id = spc_id)
   employee_list = [{'id': emp.id, 'first_name': emp.first_name, 'last_name':emp.last_name} for emp in employee_details]
@@ -9347,8 +9366,8 @@ def student_Book_an_interview(request):
     return render(request, 'faculty/student.html')
 
 
-from django.http import JsonResponse
 
+@admin_required
 def get_specializations(request,id):
     if request.is_ajax() and request.method == 'GET':
         course_id = request.GET.get(id)
@@ -9358,7 +9377,10 @@ def get_specializations(request,id):
             return JsonResponse(data, safe=False)
     return JsonResponse([], safe=False)
 
+
+
 # PDF_view start here
+@admin_required
 def open_pdf(request, document_id):
     document = Student_Book_Interview_modal.objects.get(id=document_id)
     pdf_file = document.attach_Resume
@@ -9366,6 +9388,8 @@ def open_pdf(request, document_id):
     return response
 
 
+
+@admin_required
 def submit_feedback(request, interview_id):
     if request.method == 'POST':
         form = Feedback(request.POST)
@@ -9379,7 +9403,11 @@ def submit_feedback(request, interview_id):
     return render(request, 'feedback_form.html', {'form': form})
 
 
+
+
+
 # Faculty slot availbility
+@admin_required
 def faculty_slot(request):
     crn=request.session.get('admin_user').get('crn')
     register_user=Register_model.objects.get(crn=crn)
@@ -9402,7 +9430,10 @@ def faculty_slot(request):
 
 
 
+
+
 # edit  faculty slot
+@admin_required
 def edit_faculty_slot(request, slot_id):  
     crn = request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
@@ -9459,7 +9490,15 @@ def edit_faculty_slot(request, slot_id):
         return redirect('faculty_slot')
 
     
+
+
+
+
+
+
+
 # faculty slot import
+@admin_required
 def faculty_slot_import(request):
     crn = request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
@@ -9507,7 +9546,13 @@ def faculty_slot_import(request):
     return render(request, 'mock_interview/slot_management.html', context)
 
 
+
+
+
+
+
 # faculty slot export
+@admin_required
 def faculty_slot_export(request):
    crn = request.session.get('admin_user').get('crn')
    register_user = Register_model.objects.get(crn=crn)
@@ -9530,7 +9575,7 @@ def faculty_slot_export(request):
 
 
 
-
+@admin_required
 def FeedbackForm(request, id):
     crn = request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
@@ -9556,7 +9601,7 @@ def FeedbackForm(request, id):
 
       feedback=Feedback.objects.create(
          crn_number=register_user,
-         interview = Student_Book_Interview_modal.objects.get(pk=id),
+         interview = Scheduling_mock_model.objects.get(pk=id),
          attendance_status=attendance_status,
          communication_skills=int(communication_skills),
          technical_skills=int(technical_skills),
@@ -9574,7 +9619,20 @@ def FeedbackForm(request, id):
       feedback.interview.save()
 
       subject = 'Feedback Submitted'
-      message = "hello"
+      message = f'''
+      +---------------------------------------------+
+      |                Feedback Summary            |
+      +---------------------------------------------+
+      | Attendance Status:     {attendance_status}   |
+      | Communication Skills:  {communication_skills}|
+      | Technical Skills:      {technical_skills}    |
+      | Body Language:         {body_language}       |
+      | Logical Thinking:      {logical_thinking}    |
+      | Suggestion:            {suggestion}          |
+      | Overall Rating:        {overall_rating}      |
+      | Status:                {status}              |
+      +---------------------------------------------+
+      '''
       from_email = settings.EMAIL_HOST_USER
       to_email = [feedback.interview.student_name.email] 
       try:
@@ -9584,79 +9642,104 @@ def FeedbackForm(request, id):
           pass
       
       return redirect('total_interviews')
-    
+            
+
+
+
+
+
 
 @admin_required
-
 def total_interviews(request):
-    # crn = request.session.get('admin_user').get('crn')
-    # register_user = Register_model.objects.get(crn=crn)
-    # faculty_id = register_user.employee.all().order_by("-id")
-    
-    # today = datetime.now().date()
-    # print("Today:", today)
+    crn = request.session.get('admin_user').get('crn')
+    register_user = Register_model.objects.get(crn=crn)
+    faculty_id = register_user.employee.all().order_by("-id")
+    faculty = Scheduling_mock_model.objects.filter(crn=register_user)
 
-    # tomorrow = today + timedelta(days=1)
-    # print("Tomorrow:", tomorrow)
-
-    # upcoming=date.today() + timedelta(days=2)
-    # print("Upcoming:",upcoming)
-
-    # # Filter interviews for today, tomorrow, and upcoming days
-    # today_interviews = Student_Book_Interview_modal.objects.filter(
-    #     crn_number=register_user, available_slot__available_slot__date=today
-    # ).exclude(interview_status__in=['completed', 'pending'])
-    # print("Today Interviews:", today_interviews)
     
-    # tomorrow_interviews = Student_Book_Interview_modal.objects.filter(
-    #     crn_number=register_user, available_slot__available_slot__date=tomorrow
-    # ).exclude(interview_status__in=['completed', 'pending'])
-    # print("Tomorrow Interviews:", tomorrow_interviews)
+    today = datetime.now().date()
+    print("Today:", today)
+
+    tomorrow = today + timedelta(days=1)
+    print("Tomorrow:", tomorrow)
+
+    upcoming=date.today() + timedelta(days=2)
+    print("Upcoming:",upcoming)
+
+    # Filter interviews for today, tomorrow, and upcoming days
+    today_interviews =faculty.filter(available_slot__date=today).exclude(interview_status__in=['completed', 'pending'])
+    print("Today Interviews:", today_interviews)
+
+    expired_interviews = faculty.filter(available_slot__date__lt=today, interview_status='not_completed')
+    for interview in expired_interviews:
+        interview.interview_status = 'pending'
+        interview.save()
     
-    # upcoming_interviews = Student_Book_Interview_modal.objects.filter(
-    #     crn_number=register_user, available_slot__available_slot__date__gte=upcoming
-    # ).exclude(interview_status__in=['completed', 'pending'])
-    # print("Upcoming Interviews:", upcoming_interviews)
+    tomorrow_interviews =faculty.filter(available_slot__date=tomorrow).exclude(interview_status__in=['completed', 'pending'])
+    print("Tomorrow Interviews:", tomorrow_interviews)
+    
+    upcoming_interviews =faculty.filter(available_slot__date__gte=upcoming).exclude(interview_status__in=['completed', 'pending'])
+    print("Upcoming Interviews:", upcoming_interviews)
 
   
-    # completed_interviews = Feedback.objects.filter(crn_number=register_user)
-    # document = Student_Book_Interview_modal.objects.get(id=1)
-    # pdf_file = document.attach_Resume
+    completed_interviews = Feedback.objects.filter(crn_number=register_user, interview__interview_status='completed')
     
+    
+
     context = {
-        # 'faculty_id': faculty_id,
-        # 'today_interviews': today_interviews,
-        # 'pdf_file': pdf_file,
-        # 'tomorrow_interviews': tomorrow_interviews,
-        # 'upcoming_interviews': upcoming_interviews,
-        # 'completed_interviews': completed_interviews,
+        'faculty_id': faculty_id,
+        'today_interviews': today_interviews,
+        'tomorrow_interviews': tomorrow_interviews,
+        'upcoming_interviews': upcoming_interviews,
+        'completed_interviews': completed_interviews,
+        
     }
     return render(request, 'mock_interview/interview_list.html', context)
 
 
 
+    
+
+
+
 # Student Past Interviews with feedback details
+@admin_required
 def student_feedback(request):
   crn = request.session.get('admin_user').get('crn')
   register_user = Register_model.objects.get(crn=crn)
   student_id=register_user.leads.filter(lead_position="ADMITTED").order_by("-id")
-  document = Feedback.objects.get(id=1)
-  pdf_file = document.send_attachment
   feedbacks = Feedback.objects.filter(crn_number=register_user, interview__interview_status='completed')
   context = {
     'feedbacks': feedbacks,
     'student_id': student_id,
-    'pdf_file': pdf_file,
   }
   return render(request,'mock_interview/student_past_interviews.html', context)
 
+
+
+
+
+@admin_required
 def open_pdf(request, document_id):
+    # Retrieve the Feedback object by its ID
     document = Feedback.objects.get(id=document_id)
-    pdf_file = document.send_attachment
-    response = FileResponse(pdf_file, content_type='application/pdf')
-    return response
+    
+    # Check if the Feedback object has a file associated with it
+    if document.send_attachment:
+        # Get the file path
+        file_path = document.send_attachment.path
+        
+        # Open the file in binary mode and create an HttpResponse with its content
+        with open(file_path, 'rb') as pdf_file:
+            response = HttpResponse(pdf_file.read(), content_type='application/pdf')
+            return response
+    else:
+        # Handle the case where no file is associated with send_attachment
+        return HttpResponse("No file associated with send_attachment", status=404)
+        
 
 # Admin mock slot scheduling
+@admin_required
 def admin_mock(request):
     crn = request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
@@ -9711,6 +9794,10 @@ def admin_mock(request):
     return render(request, 'mock_interview/adminmock_slot.html', context)
 
 
+
+
+
+@admin_required
 def edit_admin_mock(request, slot_id):  
     crn = request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
@@ -9740,7 +9827,7 @@ def edit_admin_mock(request, slot_id):
 
 
 
-
+@admin_required
 def admin_slot_import(request):
     crn = request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
@@ -9794,6 +9881,10 @@ def admin_slot_import(request):
 
 
 
+
+
+
+@admin_required
 def admin_slot_export(request):
    crn = request.session.get('admin_user').get('crn')
    register_user = Register_model.objects.get(crn=crn)
@@ -9810,7 +9901,11 @@ def admin_slot_export(request):
 
 
 
+
+
+
 #  mock slot rescheduling
+@admin_required
 def reschedule(request):
     crn = request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
@@ -9820,7 +9915,11 @@ def reschedule(request):
     
     return render(request,'mock_interview/reschedule.html',{'scheduling':scheduling,'student':student})
 
+
+
+
 #  admin interview list
+@admin_required
 def admin_interview_list(request):
     crn = request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
@@ -9828,53 +9927,42 @@ def admin_interview_list(request):
     today = datetime.now().date()
     print("Today:", today)
 
-    tomorrow = today + timedelta(days=1)
-    print("Tomorrow:", tomorrow)
-
-    upcoming=date.today() + timedelta(days=2)
-    print("Upcoming:",upcoming)
 
     # Filter interviews for today, tomorrow, and upcoming days
-    today_interviews = Student_Book_Interview_modal.objects.filter(
-        crn_number=register_user, available_slot__available_slot__date=today
-    ).exclude(interview_status__in=['completed', 'pending'])
+    today_interviews = Scheduling_mock_model.objects.filter(crn=register_user, available_slot__date=today).exclude(interview_status__in=['completed', 'pending'])
     print("Today Interviews:", today_interviews)
-    
-    tomorrow_interviews = Student_Book_Interview_modal.objects.filter(
-        crn_number=register_user, available_slot__available_slot__date=tomorrow
-    ).exclude(interview_status__in=['completed', 'pending'])
-    print("Tomorrow Interviews:", tomorrow_interviews)
-    
-    upcoming_interviews = Student_Book_Interview_modal.objects.filter(
-        crn_number=register_user, available_slot__available_slot__date__gte=upcoming
-    ).exclude(interview_status__in=['completed', 'pending'])
-    print("Upcoming Interviews:", upcoming_interviews)
 
     Faculty=Employee_model.objects.all()
-
-  
-    completed_interviews = Feedback.objects.filter(crn_number=register_user)
-    document = Student_Book_Interview_modal.objects.get(id=1)
-    pdf_file = document.attach_Resume
     
     context = {
         'today_interviews': today_interviews,
-        'pdf_file': pdf_file,
-        'tomorrow_interviews': tomorrow_interviews,
-        'upcoming_interviews': upcoming_interviews,
-        'completed_interviews': completed_interviews,
         'Faculty':Faculty,
     }
     return render(request,'mock_interview/admin_interview_list.html', context)
 
+
+
+
+
+
+
+
+
 #  faculty dashboard
+@admin_required
 def faculty_dashboard(request):
     return render(request,'mock_interview/faculty_dashboard.html')
 
+
+
+
+
+
 # admin to watch separate faculty slots by clicking faculty name
+@admin_required
 def separate_faculty_list(request,faculty_id):
     # Filter students associated with the selected faculty
-    students = Student_Book_Interview_modal.objects.filter(faculty_name=faculty_id)
+    students = Scheduling_mock_model.objects.filter(faculty=faculty_id)
 
     
     today = datetime.now().date()
@@ -9887,47 +9975,38 @@ def separate_faculty_list(request,faculty_id):
     print("Upcoming:",upcoming)
 
     # Filter interviews for today, tomorrow, and upcoming days
-    today_interviews = Student_Book_Interview_modal.objects.filter(
-        crn_number=students, available_slot__available_slot__date=today
-    ).exclude(interview_status__in=['completed', 'pending'])
-    print("Today Interviews:", today_interviews)
-    
-    tomorrow_interviews = Student_Book_Interview_modal.objects.filter(
-        crn_number=students, available_slot__available_slot__date=tomorrow
-    ).exclude(interview_status__in=['completed', 'pending'])
-    print("Tomorrow Interviews:", tomorrow_interviews)
-    
-    upcoming_interviews = Student_Book_Interview_modal.objects.filter(
-        crn_number=students, available_slot__available_slot__date__gte=upcoming
-    ).exclude(interview_status__in=['completed', 'pending'])
-    print("Upcoming Interviews:", upcoming_interviews)
+    today_interviews = students.filter(available_slot__date=today).exclude(interview_status__in=['completed', 'pending'])
+    tomorrow_interviews = students.filter(available_slot__date=tomorrow).exclude(interview_status__in=['completed', 'pending'])
+    upcoming_interviews = students.filter(available_slot__date__gte=upcoming).exclude(interview_status__in=['completed', 'pending'])
 
-    document = Student_Book_Interview_modal.objects.get(id=1)
-    pdf_file = document.attach_Resume
 
     # Pass the filtered students to the template
     context = {
         'students': students,
         'today_interviews': today_interviews,
-        'pdf_file': pdf_file,
         'tomorrow_interviews': tomorrow_interviews,
         'upcoming_interviews': upcoming_interviews,
     }
     return render(request,'mock_interview/admin-facultylist.html',context)
 
+
+
+
+
 # admin can watch all completed mocks
+@admin_required
 def completed_mock(request):
   crn = request.session.get('admin_user').get('crn')
   register_user = Register_model.objects.get(crn=crn)
-  document = Feedback.objects.get(id=1)
-  pdf_file = document.send_attachment
+  student_id=LeadModel.objects.filter(lead_position="ADMITTED").order_by("-id")
   feedbacks = Feedback.objects.filter(crn_number=register_user, interview__interview_status='completed')
   context = {
     'feedbacks': feedbacks,
-    'pdf_file': pdf_file,
+    'student_id': student_id,
   }
     
   return render(request,'mock_interview/admin_completed_interviews.html', context)
+
 
 # faculty scheduled  total interviews
 def faculty_schedule_list(request):
@@ -10396,8 +10475,10 @@ def create_certification(request):
   return render(request,'settings_page/certification_name.html',context)
 
 
-# Dependances from Courses to Specialization
 
+
+
+# Dependances from Courses to Specialization
 @admin_required
 def depnd_specilization(request, id_course):
   crn=request.session.get('admin_user').get('crn')

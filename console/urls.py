@@ -202,6 +202,8 @@ urlpatterns = [
 
      path('export_job_posts_to_csv/',views.export_job_posts_to_csv,name="export_job_posts_to_csv"),
 
+     path('job_details_export/<int:id>',views.job_details_export,name="job_details_export"),
+
 
 
      path('get_company_vendor/<int:id>',views.get_company_vendor,name="get_company_vendor"),
@@ -235,7 +237,6 @@ urlpatterns = [
     path('facultyschedule/', views.faculty_schedule_list, name="faculty_schedule_list"),
     path('faculty_completed/', views.faculty_completed_mocklist, name="faculty_completed_mocklist"),
     path('facultypending/', views.faculty_pending_mocks, name="faculty_pending_mocks"),
-
 
 
 

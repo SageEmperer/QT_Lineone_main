@@ -93,10 +93,10 @@
               <tr>
                 <td>{{ forloop.counter }}</td>
                 <td class="text-center">{{i.course_name.course_name}}</td>
-                <td class="text-center">{{i.curse_name.specilalization_name.specilalization_name}}</td>
-                <td class="text-center">Jahnavi</td>
+                <td class="text-center">{{i.specilalization_name.specilalization_name}}</td>
+                <td class="text-center">{{i.faculty.first_name}} {{i.faculty.last_name}}</td>
                 <td class="text-center">
-                  {{ slot.date_time}} April 29, 2024 11:00 AM
+                  {{ i.available_slot}}
                 </td>
                 <!-- <td class="text-center">
  <button type="button" class="btn btn-link" data-toggle="tooltip" data-html="true"
@@ -107,8 +107,8 @@
  </button>
  </td> -->
                 <td class="text-center">
-                  <span class="badge badge-success badge-pill mt-15 mr-10"
-                    >Active</span
+                  <span class="badge {% if i.interview_status == 'completed' %} badge-success {% elif i.interview_status == 'pending' %} badge-warning {% endif %}  badge-pill mt-15 mr-10"
+                    >{{i.interview_status}}</span
                   >
                 </td>
               </tr>
@@ -341,5 +341,39 @@
     });
   });
 </script>
+
+<script>
+    $(document).ready(function() {
+      $('#slot_add').validate({
+        rules: {
+          course_name: "required",
+          specialization: "required",
+          faculty: "required",
+          available_slot: "required",
+          attach_Resume: {
+            required: true,
+            accept: "application/pdf"
+          }
+        },
+        messages: {
+          course_name: "Please select a course",
+          specialization: "Please select a specialization",
+          faculty: "Please select a faculty",
+          available_slot: "Please select an available slot",
+          attach_Resume: {
+            required: "Please upload your resume",
+            accept: "Please upload only PDF files"
+          }
+        },
+        errorElement: "span",
+        errorClass: "text-danger",
+        submitHandler: function(form) {
+          form.submit();
+        }
+      });
+    });
+  </script>
+  
+
 
 {% endblock %}

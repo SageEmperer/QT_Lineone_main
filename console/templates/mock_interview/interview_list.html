@@ -57,25 +57,24 @@
             </tr>
           </thead>
           <tbody>
-
-            {% for Student_Book_Interview_modal in today_interviews %}
+            {% for i in today_interviews %}
             <tr>
-              <td class="text-center">{{Student_Book_Interview_modal.id}}</td>
-              <td class="text-center">{{Student_Book_Interview_modal.student_name.first_name}}
-                {{Student_Book_Interview_modal.student_name.last_name}}</td>
-              <td class="text-center">{{Student_Book_Interview_modal.student_name.token_id}}</td>
-              <td class="text-center">{{Student_Book_Interview_modal.student_name.batch_number.batch_number}}</td>
-              <td class="text-center">{{Student_Book_Interview_modal.student_name.mobile_number}}</td>
-              <td class="text-center">{{Student_Book_Interview_modal.student_name.email}}</td>
-              <td class="text-center">{{Student_Book_Interview_modal.course_name}}</td>
-              <td class="text-center">{{Student_Book_Interview_modal.available_slot.available_slot}}</td>
+              <td class="text-center">{{forloop.counter}}</td>
+              <td class="text-center">{{i.student_name.first_name}} {{i.student_name.last_name}}</td>
+              <td class="text-center">{{i.student_name.token_id}}</td>
+              <td class="text-center">{{i.student_name.batch_number.batch_number}}</td>
+              <td class="text-center">{{i.student_name.mobile_number}}</td>
+              <td class="text-center">{{i.student_name.email}}</td>
+              <td class="text-center">{{i.course_name.course_name}}</td>
+              <td class="text-center">{{i.available_slot}}</td>
               <td class="text-center">
-                <a href="{% url 'open_pdf' Student_Book_Interview_modal.id %}" title="Image from freeiconspng.com"><img
+                <a href="" title="Image from freeiconspng.com"><img
                     src="https://www.freeiconspng.com/uploads/pdf-icon-png-pdf-zum-download-2.png" width="35"
                     alt="Student resume" /></a>
               </td>
               <td class="text-center">
-                <button type="button" class="btn btn-icon btn-success" data-toggle="modal" data-target="#todayinterviewfeedback{{forloop.counter}}">
+                <button type="button" class="btn btn-icon btn-success" data-toggle="modal"
+                  data-target="#todayinterviewfeedback{{forloop.counter}}">
                   <span class="btn-icon-wrap"><i class="fa fa-rocket"></i></span>
 
                 </button>
@@ -93,8 +92,8 @@
 
 <!-- create model start here -->
 {% for i in today_interviews %}
-<div class="modal fade" id="todayinterviewfeedback{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="FeedbackForm"
-  aria-hidden="true">
+<div class="modal fade" id="todayinterviewfeedback{{forloop.counter}}" tabindex="-1" role="dialog"
+  aria-labelledby="FeedbackForm" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header bg-dark">
@@ -104,8 +103,8 @@
         </button>
       </div>
 
-    
-      <form action="{% url 'FeedbackForm' i.id %}" method="post" id="createFeed">
+
+      <form action="{% url 'FeedbackForm' i.id %}" method="post" id="feedbackForm{{ forloop.counter }}">
         {% csrf_token %}
         <div class="modal-body">
           <div class="container-fluid">
@@ -113,9 +112,8 @@
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
                   <label for="" class="form-label">Full Name </label>
-                  <input value="{{i.student_name.first_name}} {{i.student_name.last_name}}" name="batchtype_name" class="form-control" readonly>
-                  <input type="hidden" name="studend_id" value="{{i.student_name.id}}">
-                  <input type="hidden" name="faculty_id" value="{{i.faculty_name.id}}">
+                  <input value="{{i.student_name.first_name}} {{i.student_name.last_name}}" name="batchtype_name"
+                    class="form-control" readonly>
                 </div>
               </div>
               <div class="col-md-6 col-sm-12 col-lg-6">
@@ -127,7 +125,8 @@
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
                   <label for="" class="form-label">Batch Number </label>
-                  <input value="{{i.student_name.batch_number.batch_number}}" name="batchtype_name" class="form-control" readonly>
+                  <input value="{{i.student_name.batch_number.batch_number}}" name="batchtype_name" class="form-control"
+                    readonly>
                 </div>
               </div>
 
@@ -146,49 +145,53 @@
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
                   <label for="" class="form-label">Date of Interview </label>
-                  <input value="{{i.available_slot.available_slot}}" name="batchtype_name" class="form-control" readonly>
+                  <input value="{{i.available_slot}}" name="batchtype_name" class="form-control" readonly>
                 </div>
               </div>
 
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
-                  <label for="" class="form-label">Attendance <span class="text-danger">*</span></label>
+                  <label for="attendance{{ forloop.counter }}" class="form-label">Attendance <span class="text-danger">*</span></label>
 
-                  <select class="form-control select2" name="attendance_status" id="attendanceStatus">
+                  <select class="form-control select2" name="attendance_status" name="attendance"
+                    id="attendanceStatus{{ forloop.counter }}" data-counter="{{ forloop.counter }}">
                     <option value="" disabled selected>Please Select</option>
-                    <option value="1">Present</option>
-                    <option value="2">Absent</option>
+                    <option value="Present">Present</option>
+                    <option value="Absent">Absent</option>
                   </select>
 
                 </div>
               </div>
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
-                  <label for="" class="form-label">Communication Skills <span class="text-danger">*</span></label>
-                  <select class="form-control select2" name="communication_skills" id="communication">
+                  <label for="communication{{ forloop.counter }}" class="form-label">Communication Skills <span
+                      class="text-danger">*</span></label>
+                  <select class="form-control select2" name="communication_skills" name="communication"
+                    id="communication{{ forloop.counter }}" data-counter="{{ forloop.counter }}">
                     <option value="" disabled selected>Please Select</option>
-                    <option value="1">0</option>
-                    <option value="2">1</option>
-                    <option value="3">2</option>
-                    <option value="4">3</option>
-                    <option value="5">4</option>
-                    <option value="6">5</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
                   </select>
                 </div>
               </div>
 
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
-                  <label for="" class="form-label">Body Language <span class="text-danger">*</span></label>
+                  <label for="bodyLanguage{{ forloop.counter }}" class="form-label">Body Language <span class="text-danger">*</span></label>
 
-                  <select class="form-control select2" name="body_language" id="bodyLanguage">
+                  <select class="form-control select2" name="body_language" name=""
+                    id="bodyLanguage{{ forloop.counter }}" data-counter="{{ forloop.counter }}">
                     <option value="" disabled selected>Please Select</option>
-                    <option value="1">0</option>
-                    <option value="2">1</option>
-                    <option value="3">2</option>
-                    <option value="4">3</option>
-                    <option value="5">4</option>
-                    <option value="6">5</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
                   </select>
 
                 </div>
@@ -196,32 +199,36 @@
 
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
-                  <label for="" class="form-label">Technical Skills <span class="text-danger">*</span></label>
+                  <label for="technicalSkills{{ forloop.counter }}" class="form-label">Technical Skills <span
+                      class="text-danger">*</span></label>
 
-                  <select class="form-control select2" name="technical_skills" id="technicalSkills">
+                  <select class="form-control select2" name="technical_skills" name=""
+                    id="technicalSkills{{ forloop.counter }}" data-counter="{{ forloop.counter }}">
                     <option value="" disabled selected>Please Select</option>
-                    <option value="1">0</option>
-                    <option value="2">1</option>
-                    <option value="3">2</option>
-                    <option value="4">3</option>
-                    <option value="5">4</option>
-                    <option value="6">5</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
                   </select>
                 </div>
               </div>
 
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
-                  <label for="" class="form-label">Logical Thinking<span class="text-danger">*</span></label>
+                  <label for="logicalThinking{{ forloop.counter }}" class="form-label">Logical Thinking<span
+                      class="text-danger">*</span></label>
 
-                  <select class="form-control select2" name="logical_thinking" id="logicalThinking">
+                  <select class="form-control select2" name="logical_thinking" name="logicalThinking"
+                    id="logicalThinking{{ forloop.counter }}" data-counter="{{ forloop.counter }}">
                     <option value="" disabled selected>Please Select</option>
-                    <option value="1">0</option>
-                    <option value="2">1</option>
-                    <option value="3">2</option>
-                    <option value="4">3</option>
-                    <option value="5">4</option>
-                    <option value="6">5</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
                   </select>
                 </div>
               </div>
@@ -239,7 +246,8 @@
                     <span class="input-group-append">
                       <span class=" btn btn-primary btn-file"><span class="fileinput-new">Select file</span><span
                           class="fileinput-exists">Change</span>
-                        <input type="file" name="send_attachment" id="sendAttachment" disabled>
+                        <input type="file" name="send_attachment" id="sendAttachment{{ forloop.counter }}"
+                          data-counter="{{ forloop.counter }}" disabled>
                       </span>
                     </span>
                   </div>
@@ -248,9 +256,10 @@
 
               <div class="col-md-12 ">
                 <div class="form-group">
-                  <label for="">Suggestions </label>
-                  <textarea class="form-control" id="suggestions" name="suggestion"
-                    placeholder="What Would you like to say?" rows="3" disabled></textarea>
+                  <label for="suggestions{{ forloop.counter }}">Suggestions </label>
+                  <textarea class="form-control"  id="suggestions{{ forloop.counter }}"
+                    data-counter="{{ forloop.counter }}" name="suggestion" placeholder="What Would you like to say?"
+                    rows="3"></textarea>
                 </div>
               </div>
             </div>
@@ -303,19 +312,18 @@
           </thead>
           <tbody>
 
-            {% for Student_Book_Interview_modal in tomorrow_interviews %}
+            {% for i in tomorrow_interviews %}
             <tr>
-              <td class="text-center">{{Student_Book_Interview_modal.id}}</td>
-              <td class="text-center">{{Student_Book_Interview_modal.student_name.first_name}}
-                {{Student_Book_Interview_modal.student_name.last_name}}</td>
-              <td class="text-center">{{Student_Book_Interview_modal.student_name.token_id}}</td>
-              <td class="text-center">{{Student_Book_Interview_modal.student_name.batch_number}}</td>
-              <td class="text-center">{{Student_Book_Interview_modal.student_name.mobile_number}}</td>
-              <td class="text-center">{{Student_Book_Interview_modal.student_name.email}}</td>
-              <td class="text-center">{{Student_Book_Interview_modal.course_name}}</td>
-              <td class="text-center">{{Student_Book_Interview_modal.available_slot.available_slot}}</td>
-              <td>
-                <a href="{% url 'open_pdf' Student_Book_Interview_modal.id %}" title="Image from freeiconspng.com"><img
+              <td class="text-center">{{forloop.counter}}</td>
+              <td class="text-center">{{i.student_name.first_name}} {{i.student_name.last_name}}</td>
+              <td class="text-center">{{i.student_name.token_id}}</td>
+              <td class="text-center">{{i.student_name.batch_number}}</td>
+              <td class="text-center">{{i.student_name.mobile_number}}</td>
+              <td class="text-center">{{i.student_name.email}}</td>
+              <td class="text-center">{{i.course_name}}</td>
+              <td class="text-center">{{i.available_slot}}</td>
+              <td class="text-center">
+                <a href="" title="Image from freeiconspng.com"><img
                     src="https://www.freeiconspng.com/uploads/pdf-icon-png-pdf-zum-download-2.png" width="35"
                     alt="Student resume" /></a>
               </td>
@@ -337,8 +345,8 @@
 <!-- Tomorrow interviews Ends here -->
 
 {% for i in tomorrow_interviews %}
-<div class="modal fade" id="tomorrowinterviewfeedback{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="FeedbackForm"
-  aria-hidden="true">
+<div class="modal fade" id="tomorrowinterviewfeedback{{forloop.counter}}" tabindex="-1" role="dialog"
+  aria-labelledby="FeedbackForm" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header bg-dark">
@@ -348,8 +356,8 @@
         </button>
       </div>
 
-    
-      <form action="{% url 'FeedbackForm' i.id %}" method="post" id="createFeed">
+
+      <form action="{% url 'FeedbackForm' i.id %}" method="post" id="feedbackForm_2{{ forloop.counter }}">
         {% csrf_token %}
         <div class="modal-body">
           <div class="container-fluid">
@@ -357,9 +365,8 @@
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
                   <label for="" class="form-label">Full Name </label>
-                  <input value="{{i.student_name.first_name}} {{i.student_name.last_name}}" name="batchtype_name" class="form-control" readonly>
-                  <input type="hidden" name="studend_id" value="{{i.student_name.id}}">
-                  <input type="hidden" name="faculty_id" value="{{i.faculty_name.id}}">
+                  <input value="{{i.student_name.first_name}} {{i.student_name.last_name}}" name="batchtype_name"
+                    class="form-control" readonly>
                 </div>
               </div>
               <div class="col-md-6 col-sm-12 col-lg-6">
@@ -371,7 +378,8 @@
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
                   <label for="" class="form-label">Batch Number </label>
-                  <input value="{{i.student_name.batch_number.batch_number}}" name="batchtype_name" class="form-control" readonly>
+                  <input value="{{i.student_name.batch_number.batch_number}}" name="batchtype_name" class="form-control"
+                    readonly>
                 </div>
               </div>
 
@@ -390,49 +398,53 @@
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
                   <label for="" class="form-label">Date of Interview </label>
-                  <input value="{{i.available_slot.available_slot}}" name="batchtype_name" class="form-control" readonly>
+                  <input value="{{i.available_slot}}" name="batchtype_name" class="form-control" readonly>
                 </div>
               </div>
 
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
-                  <label for="" class="form-label">Attendance <span class="text-danger">*</span></label>
+                  <label for="attendance{{ forloop.counter }}" class="form-label">Attendance <span class="text-danger">*</span></label>
 
-                  <select class="form-control select2" name="attendance_status" id="attendanceStatus">
+                  <select class="form-control select2" name="attendance_status" name="attendance"
+                    id="attendanceStatus_2{{ forloop.counter }}" data-counter="{{ forloop.counter }}">
                     <option value="" disabled selected>Please Select</option>
-                    <option value="1">Present</option>
-                    <option value="2">Absent</option>
+                    <option value="Present">Present</option>
+                    <option value="Absent">Absent</option>
                   </select>
 
                 </div>
               </div>
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
-                  <label for="" class="form-label">Communication Skills <span class="text-danger">*</span></label>
-                  <select class="form-control select2" name="communication_skills" id="communication">
+                  <label for="communication{{ forloop.counter }}" class="form-label">Communication Skills <span
+                      class="text-danger">*</span></label>
+                  <select class="form-control select2" name="communication_skills" name="communication"
+                    id="communication_2{{ forloop.counter }}" data-counter="{{ forloop.counter }}">
                     <option value="" disabled selected>Please Select</option>
-                    <option value="1">0</option>
-                    <option value="2">1</option>
-                    <option value="3">2</option>
-                    <option value="4">3</option>
-                    <option value="5">4</option>
-                    <option value="6">5</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
                   </select>
                 </div>
               </div>
 
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
-                  <label for="" class="form-label">Body Language <span class="text-danger">*</span></label>
+                  <label for="bodyLanguage{{ forloop.counter }}" class="form-label">Body Language <span class="text-danger">*</span></label>
 
-                  <select class="form-control select2" name="body_language" id="bodyLanguage">
+                  <select class="form-control select2" name="body_language" name=""
+                    id="bodyLanguage_2{{ forloop.counter }}" data-counter="{{ forloop.counter }}">
                     <option value="" disabled selected>Please Select</option>
-                    <option value="1">0</option>
-                    <option value="2">1</option>
-                    <option value="3">2</option>
-                    <option value="4">3</option>
-                    <option value="5">4</option>
-                    <option value="6">5</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
                   </select>
 
                 </div>
@@ -440,32 +452,36 @@
 
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
-                  <label for="" class="form-label">Technical Skills <span class="text-danger">*</span></label>
+                  <label for="technicalSkills{{ forloop.counter }}" class="form-label">Technical Skills <span
+                      class="text-danger">*</span></label>
 
-                  <select class="form-control select2" name="technical_skills" id="technicalSkills">
+                  <select class="form-control select2" name="technical_skills" name=""
+                    id="technicalSkills_2{{ forloop.counter }}" data-counter="{{ forloop.counter }}">
                     <option value="" disabled selected>Please Select</option>
-                    <option value="1">0</option>
-                    <option value="2">1</option>
-                    <option value="3">2</option>
-                    <option value="4">3</option>
-                    <option value="5">4</option>
-                    <option value="6">5</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
                   </select>
                 </div>
               </div>
 
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
-                  <label for="" class="form-label">Logical Thinking<span class="text-danger">*</span></label>
+                  <label for="logicalThinking{{ forloop.counter }}" class="form-label">Logical Thinking<span
+                      class="text-danger">*</span></label>
 
-                  <select class="form-control select2" name="logical_thinking" id="logicalThinking">
+                  <select class="form-control select2" name="logical_thinking" name="logicalThinking"
+                    id="logicalThinking_2{{ forloop.counter }}" data-counter="{{ forloop.counter }}">
                     <option value="" disabled selected>Please Select</option>
-                    <option value="1">0</option>
-                    <option value="2">1</option>
-                    <option value="3">2</option>
-                    <option value="4">3</option>
-                    <option value="5">4</option>
-                    <option value="6">5</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
                   </select>
                 </div>
               </div>
@@ -483,7 +499,8 @@
                     <span class="input-group-append">
                       <span class=" btn btn-primary btn-file"><span class="fileinput-new">Select file</span><span
                           class="fileinput-exists">Change</span>
-                        <input type="file" name="send_attachment" id="sendAttachment" disabled>
+                        <input type="file" name="send_attachment" id="sendAttachment_2{{ forloop.counter }}"
+                          data-counter="{{ forloop.counter }}" disabled>
                       </span>
                     </span>
                   </div>
@@ -492,9 +509,10 @@
 
               <div class="col-md-12 ">
                 <div class="form-group">
-                  <label for="">Suggestions </label>
-                  <textarea class="form-control" id="suggestions" name="suggestion"
-                    placeholder="What Would you like to say?" rows="3" disabled></textarea>
+                  <label for="suggestions{{ forloop.counter }}">Suggestions </label>
+                  <textarea class="form-control" name="suggestion_2" id="suggestions_2{{ forloop.counter }}"
+                    data-counter="{{ forloop.counter }}" name="suggestion" placeholder="What Would you like to say?"
+                    rows="3"></textarea>
                 </div>
               </div>
             </div>
@@ -543,26 +561,25 @@
           </thead>
           <tbody>
 
-            {% for Student_Book_Interview_modal in upcoming_interviews %}
+            {% for i in upcoming_interviews %}
             <tr>
-              <td class="text-center">{{Student_Book_Interview_modal.id}}</td>
-              <td class="text-center">{{Student_Book_Interview_modal.student_name.first_name}}
-                {{Student_Book_Interview_modal.student_name.last_name}}</td>
-              <td class="text-center">{{Student_Book_Interview_modal.student_name.token_id}}</td>
-              <td class="text-center">{{Student_Book_Interview_modal.student_name.batch_number}}</td>
-              <td class="text-center">{{Student_Book_Interview_modal.student_name.mobile_number}}</td>
-              <td class="text-center">{{Student_Book_Interview_modal.student_name.email}}</td>
-              <td class="text-center">{{Student_Book_Interview_modal.course_name}}</td>
-              <td class="text-center">{{Student_Book_Interview_modal.available_slot.available_slot}}</td>
+              <td class="text-center">{{forloop.counter}}</td>
+              <td class="text-center">{{i.student_name.first_name}} {{i.student_name.last_name}}</td>
+              <td class="text-center">{{i.student_name.token_id}}</td>
+              <td class="text-center">{{i.student_name.batch_number}}</td>
+              <td class="text-center">{{i.student_name.mobile_number}}</td>
+              <td class="text-center">{{i.student_name.email}}</td>
+              <td class="text-center">{{i.course_name}}</td>
+              <td class="text-center">{{i.available_slot}}</td>
               <td class="text-center">
-                <a href="{% url 'open_pdf' Student_Book_Interview_modal.id %}" title="Image from freeiconspng.com"><img
+                <a href="" title="Image from freeiconspng.com"><img
                     src="https://www.freeiconspng.com/uploads/pdf-icon-png-pdf-zum-download-2.png" width="35"
                     alt="Student resume" /></a>
               </td>
               <td class="text-center">
-                <button type="button" class="btn btn-icon btn-success" data-toggle="modal" data-target="#upcominginterviewfeedback">
+                <button type="button" class="btn btn-icon btn-success btn-action" data-toggle="modal"
+                  data-target="#upcominginterviewfeedback{{forloop.counter}}">
                   <span class="btn-icon-wrap"><i class="fa fa-rocket"></i></span>
-
                 </button>
               </td>
             </tr>
@@ -577,8 +594,8 @@
 <!-- Upcoming interviews Ends here -->
 
 {% for i in upcoming_interviews %}
-<div class="modal fade" id="upcominginterviewfeedback{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="FeedbackForm"
-  aria-hidden="true">
+<div class="modal fade" id="upcominginterviewfeedback{{forloop.counter}}" tabindex="-1" role="dialog"
+  aria-labelledby="FeedbackForm" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header bg-dark">
@@ -588,8 +605,8 @@
         </button>
       </div>
 
-    
-      <form action="{% url 'FeedbackForm' i.id %}" method="post" id="createFeed">
+
+      <form action="{% url 'FeedbackForm' i.id %}" method="post" id="feedbackForm_3{{ forloop.counter }}">
         {% csrf_token %}
         <div class="modal-body">
           <div class="container-fluid">
@@ -597,9 +614,8 @@
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
                   <label for="" class="form-label">Full Name </label>
-                  <input value="{{i.student_name.first_name}} {{i.student_name.last_name}}" name="batchtype_name" class="form-control" readonly>
-                  <input type="hidden" name="studend_id" value="{{i.student_name.id}}">
-                  <input type="hidden" name="faculty_id" value="{{i.faculty_name.id}}">
+                  <input value="{{i.student_name.first_name}} {{i.student_name.last_name}}" name="batchtype_name"
+                    class="form-control" readonly>
                 </div>
               </div>
               <div class="col-md-6 col-sm-12 col-lg-6">
@@ -611,7 +627,8 @@
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
                   <label for="" class="form-label">Batch Number </label>
-                  <input value="{{i.student_name.batch_number.batch_number}}" name="batchtype_name" class="form-control" readonly>
+                  <input value="{{i.student_name.batch_number.batch_number}}" name="batchtype_name" class="form-control"
+                    readonly>
                 </div>
               </div>
 
@@ -630,49 +647,53 @@
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
                   <label for="" class="form-label">Date of Interview </label>
-                  <input value="{{i.available_slot.available_slot}}" name="batchtype_name" class="form-control" readonly>
+                  <input value="{{i.available_slot}}" name="batchtype_name" class="form-control" readonly>
                 </div>
               </div>
 
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
-                  <label for="" class="form-label">Attendance <span class="text-danger">*</span></label>
+                  <label for="attendance{{ forloop.counter }}" class="form-label">Attendance <span class="text-danger">*</span></label>
 
-                  <select class="form-control select2" name="attendance_status" id="attendanceStatus">
+                  <select class="form-control select2" name="attendance_status" name="attendance"
+                    id="attendanceStatus_3{{ forloop.counter }}" data-counter="{{ forloop.counter }}">
                     <option value="" disabled selected>Please Select</option>
-                    <option value="1">Present</option>
-                    <option value="2">Absent</option>
+                    <option value="Present">Present</option>
+                    <option value="Absent">Absent</option>
                   </select>
 
                 </div>
               </div>
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
-                  <label for="" class="form-label">Communication Skills <span class="text-danger">*</span></label>
-                  <select class="form-control select2" name="communication_skills" id="communication">
+                  <label for="communication{{ forloop.counter }}" class="form-label">Communication Skills <span
+                      class="text-danger">*</span></label>
+                  <select class="form-control select2" name="communication_skills" name="communication"
+                    id="communication_3{{ forloop.counter }}" data-counter="{{ forloop.counter }}">
                     <option value="" disabled selected>Please Select</option>
-                    <option value="1">0</option>
-                    <option value="2">1</option>
-                    <option value="3">2</option>
-                    <option value="4">3</option>
-                    <option value="5">4</option>
-                    <option value="6">5</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
                   </select>
                 </div>
               </div>
 
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
-                  <label for="" class="form-label">Body Language <span class="text-danger">*</span></label>
+                  <label for="bodyLanguage{{ forloop.counter }}" class="form-label">Body Language <span class="text-danger">*</span></label>
 
-                  <select class="form-control select2" name="body_language" id="bodyLanguage">
+                  <select class="form-control select2" name="body_language" name=""
+                    id="bodyLanguage_3{{ forloop.counter }}" data-counter="{{ forloop.counter }}">
                     <option value="" disabled selected>Please Select</option>
-                    <option value="1">0</option>
-                    <option value="2">1</option>
-                    <option value="3">2</option>
-                    <option value="4">3</option>
-                    <option value="5">4</option>
-                    <option value="6">5</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
                   </select>
 
                 </div>
@@ -680,32 +701,36 @@
 
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
-                  <label for="" class="form-label">Technical Skills <span class="text-danger">*</span></label>
+                  <label for="technicalSkills{{ forloop.counter }}" class="form-label">Technical Skills <span
+                      class="text-danger">*</span></label>
 
-                  <select class="form-control select2" name="technical_skills" id="technicalSkills">
+                  <select class="form-control select2" name="technical_skills" name=""
+                    id="technicalSkills_3{{ forloop.counter }}" data-counter="{{ forloop.counter }}">
                     <option value="" disabled selected>Please Select</option>
-                    <option value="1">0</option>
-                    <option value="2">1</option>
-                    <option value="3">2</option>
-                    <option value="4">3</option>
-                    <option value="5">4</option>
-                    <option value="6">5</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
                   </select>
                 </div>
               </div>
 
               <div class="col-md-6 col-sm-12 col-lg-6">
                 <div class="form-group">
-                  <label for="" class="form-label">Logical Thinking<span class="text-danger">*</span></label>
+                  <label for="logicalThinking{{ forloop.counter }}" class="form-label">Logical Thinking<span
+                      class="text-danger">*</span></label>
 
-                  <select class="form-control select2" name="logical_thinking" id="logicalThinking">
+                  <select class="form-control select2" name="logical_thinking" name="logicalThinking"
+                    id="logicalThinking_3{{ forloop.counter }}" data-counter="{{ forloop.counter }}">
                     <option value="" disabled selected>Please Select</option>
-                    <option value="1">0</option>
-                    <option value="2">1</option>
-                    <option value="3">2</option>
-                    <option value="4">3</option>
-                    <option value="5">4</option>
-                    <option value="6">5</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
                   </select>
                 </div>
               </div>
@@ -723,7 +748,8 @@
                     <span class="input-group-append">
                       <span class=" btn btn-primary btn-file"><span class="fileinput-new">Select file</span><span
                           class="fileinput-exists">Change</span>
-                        <input type="file" name="send_attachment" id="sendAttachment" disabled>
+                        <input type="file" name="send_attachment" id="sendAttachment_3{{ forloop.counter }}"
+                          data-counter="{{ forloop.counter }}" disabled>
                       </span>
                     </span>
                   </div>
@@ -732,9 +758,10 @@
 
               <div class="col-md-12 ">
                 <div class="form-group">
-                  <label for="">Suggestions </label>
-                  <textarea class="form-control" id="suggestions" name="suggestion"
-                    placeholder="What Would you like to say?" rows="3" disabled></textarea>
+                  <label for="suggestions{{ forloop.counter }}">Suggestions </label>
+                  <textarea class="form-control" name="suggestion_3" id="suggestions_3{{ forloop.counter }}"
+                    data-counter="{{ forloop.counter }}" name="suggestion" placeholder="What Would you like to say?"
+                    rows="3"></textarea>
                 </div>
               </div>
             </div>
@@ -786,19 +813,19 @@
           <tbody>
 
             <tr>
-              {% for feedback in completed_interviews %}
-              <td>{{feedback.id}}</td>
-              <td>{{feedback.interview.student_name.first_name}} {{feedback.interview.student_name.last_name}}</td>
-              <td>{{feedback.interview.student_name.email}}</td>
-              <td class="text-center text-info" style="font-weight:bold;">{{feedback.attendance_status}}</td>
-              <td class="text-center">{{feedback.logical_thinking}}</td>
-              <td class="text-center">{{feedback.technical_skills}}</td>
-              <td class="text-center">{{feedback.communication_skills}}</td>
-              <td class="text-center">{{feedback.body_language}}</td>
-              <td class="text-center">{{feedback.overall_rating}}</td>
-              <td class="text-center text-success" style="font-weight:bold;">{{feedback.status}}</td>
+              {% for i in completed_interviews %}
+              <td>{{i.id}}</td>
+              <td>{{i.interview.student_name.first_name}} {{i.interview.student_name.last_name}}</td>
+              <td>{{i.interview.student_name.email}}</td>
+              <td class="text-center text-info" style="font-weight:bold;">{{i.attendance_status}}</td>
+              <td class="text-center">{{i.logical_thinking}}</td>
+              <td class="text-center">{{i.technical_skills}}</td>
+              <td class="text-center">{{i.communication_skills}}</td>
+              <td class="text-center">{{i.body_language}}</td>
+              <td class="text-center">{{i.overall_rating}}</td>
+              <td class="text-center text-success" style="font-weight:bold;">{{i.status}}</td>
               <td class="text-center">
-                <a href="{% url 'open_pdf' feedback.id %}" title=""><img
+                <a href="{% url 'open_pdf' document_id=i.id %}"  title=""><img
                     src="https://www.freeiconspng.com/uploads/pdf-icon-png-pdf-zum-download-2.png" width="35"
                     alt="Student resume" /></a>
               </td>
@@ -820,38 +847,276 @@
 
 
 
+<script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
+<!-- Include jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Include jQuery Validation Plugin -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+<script>
+  $(document).ready(function () {
+    // Function to enable/disable fields based on attendance status
+    function toggleFields(counter) {
+      var attendanceStatus = $('#attendanceStatus' + counter).val();
+      if (attendanceStatus === 'Absent') { // '2' corresponds to the value of 'Absent' option
+        $('#communication' + counter).prop('disabled', true);
+        $('#bodyLanguage' + counter).prop('disabled', true);
+        $('#technicalSkills' + counter).prop('disabled', true);
+        $('#logicalThinking' + counter).prop('disabled', true);
+        $('#sendAttachment' + counter).prop('disabled', true);
+        $('#suggestions' + counter).prop('disabled', true);
+        // Destroy CKEditor instance if already initialized
+        if (CKEDITOR.instances['suggestions' + counter]) {
+          CKEDITOR.instances['suggestions' + counter].destroy();
+        }
+      } else {
+        $('#communication' + counter).prop('disabled', false);
+        $('#bodyLanguage' + counter).prop('disabled', false);
+        $('#technicalSkills' + counter).prop('disabled', false);
+        $('#logicalThinking' + counter).prop('disabled', false);
+        $('#sendAttachment' + counter).prop('disabled', false);
+        $('#suggestions' + counter).prop('disabled', false);
+        // Initialize CKEditor if textarea is enabled
+        CKEDITOR.replace('suggestions' + counter);
+      }
+    }
+
+    // Call the function for each interview on page load
+    {% for i in today_interviews %}
+    toggleFields({{ forloop.counter }});
+    // Initialize form validation for each form
+    $("#feedbackForm{{ forloop.counter }}").validate({
+      rules: {
+        attendance_status: {
+          required: true,
+        },
+        communication_skills: {
+          required: true,
+        },
+        body_language: {
+          required: true,
+        },
+        technical_skills: {
+          required: true,
+        },
+        logical_thinking: {
+          required: true,
+        },
+        suggestions: {
+          required: true,
+        },
+      },
+      messages: {
+        attendance_status: {
+          required: "Please select an option",
+        },
+        communication_skills: {
+          required: "Please select an option",
+        },
+        body_language: {
+          required: "Please select an option",
+        },
+        technical_skills: {
+          required: "Please select an option",
+        },
+        logical_thinking: {
+          required: "Please select an option",
+        },
+        suggestions: {
+          required: "Please provide your suggestions",
+        },
+      },
+      submitHandler: function (form) {
+        form.submit();
+      },
+    });
+    {% endfor %}
+
+    // Use event delegation to handle change event for each attendanceStatus
+    $(document).on('change', '[id^="attendanceStatus"]', function () {
+      var counter = $(this).data('counter');
+      toggleFields(counter);
+    });
+  });
+</script>
+
+
+
+
 
 <script>
   $(document).ready(function () {
     // Function to enable/disable fields based on attendance status
-    function toggleFields() {
-      var attendanceStatus = $('#attendanceStatus').val();
-      if (attendanceStatus === '2') { // '2' corresponds to the value of 'Absent' option
-        $('#communication').prop('disabled', true);
-        $('#bodyLanguage').prop('disabled', true);
-        $('#technicalSkills').prop('disabled', true);
-        $('#logicalThinking').prop('disabled', true);
-        $('#sendAttachment').prop('disabled', true);
-        $('#suggestions').prop('disabled', true);
+    function toggleFields(counter) {
+      var attendanceStatus = $('#attendanceStatus_2' + counter).val();
+      if (attendanceStatus === 'Absent') { // '2' corresponds to the value of 'Absent' option
+        $('#communication_2' + counter).prop('disabled', true);
+        $('#bodyLanguage_2' + counter).prop('disabled', true);
+        $('#technicalSkills_2' + counter).prop('disabled', true);
+        $('#logicalThinking_2' + counter).prop('disabled', true);
+        $('#sendAttachment_2' + counter).prop('disabled', true);
+        $('#suggestions_2' + counter).prop('disabled', true);
+        // Destroy CKEditor instance if already initialized
+        if (CKEDITOR.instances['suggestions_2' + counter]) {
+          CKEDITOR.instances['suggestions_2' + counter].destroy();
+        }
       } else {
-        $('#communication').prop('disabled', false);
-        $('#bodyLanguage').prop('disabled', false);
-        $('#technicalSkills').prop('disabled', false);
-        $('#logicalThinking').prop('disabled', false);
-        $('#sendAttachment').prop('disabled', false);
-        $('#suggestions').prop('disabled', false);
+        $('#communication_2' + counter).prop('disabled', false);
+        $('#bodyLanguage_2' + counter).prop('disabled', false);
+        $('#technicalSkills_2' + counter).prop('disabled', false);
+        $('#logicalThinking_2' + counter).prop('disabled', false);
+        $('#sendAttachment_2' + counter).prop('disabled', false);
+        $('#suggestions_2' + counter).prop('disabled', false);
+        // Initialize CKEditor if textarea is enabled
+        CKEDITOR.replace('suggestions_2' + counter);
       }
     }
 
-    // Call the function on page load
-    toggleFields();
+    // Call the function for each interview on page load
+    {% for i in tomorrow_interviews %}
+    toggleFields({{ forloop.counter }});
+    // Initialize form validation for each form
+    $("#feedbackForm_2{{ forloop.counter }}").validate({
+      rules: {
+        attendance_status: {
+          required: true,
+        },
+        communication_skills: {
+          required: true,
+        },
+        body_language: {
+          required: true,
+        },
+        technical_skills: {
+          required: true,
+        },
+        logical_thinking: {
+          required: true,
+        },
+        suggestions: {
+          required: true,
+        },
+      },
+      messages: {
+        attendance_status: {
+          required: "Please select an option",
+        },
+        communication_skills: {
+          required: "Please select an option",
+        },
+        body_language: {
+          required: "Please select an option",
+        },
+        technical_skills: {
+          required: "Please select an option",
+        },
+        logical_thinking: {
+          required: "Please select an option",
+        },
+        suggestions: {
+          required: "Please provide your suggestions",
+        },
+      },
+      submitHandler: function (form) {
+        form.submit();
+      },
+    });
+    {% endfor %}
 
-    // Call the function whenever attendance status selection changes
-    $('#attendanceStatus').change(function () {
-      toggleFields();
+    // Use event delegation to handle change event for each attendanceStatus
+    $(document).on('change', '[id^="attendanceStatus_2"]', function () {
+      var counter = $(this).data('counter');
+      toggleFields(counter);
     });
   });
 </script>
+
+<script>
+  $(document).ready(function () {
+    // Function to enable/disable fields based on attendance status
+    function toggleFields(counter) {
+      var attendanceStatus = $('#attendanceStatus_3' + counter).val();
+      if (attendanceStatus === 'Absent') { // '2' corresponds to the value of 'Absent' option
+        $('#communication_3' + counter).prop('disabled', true);
+        $('#bodyLanguage_3' + counter).prop('disabled', true);
+        $('#technicalSkills_3' + counter).prop('disabled', true);
+        $('#logicalThinking_3' + counter).prop('disabled', true);
+        $('#sendAttachment_3' + counter).prop('disabled', true);
+        $('#suggestions_3' + counter).prop('disabled', true);
+        // Destroy CKEditor instance if already initialized
+        if (CKEDITOR.instances['suggestions_3' + counter]) {
+          CKEDITOR.instances['suggestions_3' + counter].destroy();
+        }
+      } else {
+        $('#communication_3' + counter).prop('disabled', false);
+        $('#bodyLanguage_3' + counter).prop('disabled', false);
+        $('#technicalSkills_3' + counter).prop('disabled', false);
+        $('#logicalThinking_3' + counter).prop('disabled', false);
+        $('#sendAttachment_3' + counter).prop('disabled', false);
+        $('#suggestions_3' + counter).prop('disabled', false);
+        // Initialize CKEditor if textarea is enabled
+        CKEDITOR.replace('suggestions_3' + counter);
+      }
+    }
+
+    // Call the function for each interview on page load
+    {% for i in upcoming_interviews %}
+    toggleFields({{ forloop.counter }});
+    // Initialize form validation for each form
+    $("#feedbackForm_3{{ forloop.counter }}").validate({
+      rules: {
+        attendance_status: {
+          required: true,
+        },
+        communication_skills: {
+          required: true,
+        },
+        body_language: {
+          required: true,
+        },
+        technical_skills: {
+          required: true,
+        },
+        logical_thinking: {
+          required: true,
+        },
+        suggestions: {
+          required: true,
+        },
+      },
+      messages: {
+        attendance_status: {
+          required: "Please select an option",
+        },
+        communication_skills: {
+          required: "Please select an option",
+        },
+        body_language: {
+          required: "Please select an option",
+        },
+        technical_skills: {
+          required: "Please select an option",
+        },
+        logical_thinking: {
+          required: "Please select an option",
+        },
+        suggestions: {
+          required: "Please provide your suggestions",
+        },
+      },
+      submitHandler: function (form) {
+        form.submit();
+      },
+    });
+    {% endfor %}
+
+    // Use event delegation to handle change event for each attendanceStatus
+    $(document).on('change', '[id^="attendanceStatus_3"]', function () {
+      var counter = $(this).data('counter');
+      toggleFields(counter);
+    });
+  });
+</script>
+
 
 
 
@@ -918,202 +1183,81 @@
 
 {% endblock %}
 
-{% block scripts %}
-
-
-<script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
-<script>
-  CKEDITOR.replace('Suggestions')
-
-</script>
 
 <script>
-  // Define handleOptionChange function
-  function handleOptionChange() {
-    var rescheduleRadio = document.getElementById("customRadio1");
-    var cancelRadio = document.getElementById("customRadio2");
-    var dateTimeInput = document.getElementById("dateTime");
-    var linkTextarea = document.getElementById("mockLink");
-    var reasonTextarea = document.getElementById("reasonField");
-
-    if (rescheduleRadio.checked) {
-      dateTimeInput.disabled = false;
-      linkTextarea.disabled = false;
-      reasonTextarea.disabled = true;
-      reasonTextarea.value = ''; // Clear the value
-      $('#radioError').html(''); // Clear error message
-    } else if (cancelRadio.checked) {
-      dateTimeInput.disabled = true;
-      dateTimeInput.value = ''; // Clear the value
-      linkTextarea.disabled = true;
-      linkTextarea.value = ''; // Clear the value
-      reasonTextarea.disabled = false;
-      $('#radioError').html(''); // Clear error message
-    }
-  }
-
-  // Validate form using jQuery Validation Plugin
-  $(document).ready(function () {
-    $.validator.addMethod("overspecialization", function (value, element) {
-      return !/\d/.test(value);
-    }, "Please enter a valid value.");
-
-    $.validator.addMethod("radioRequired", function (value, element) {
-      return $('input[name="customRadio"]:checked').length > 0;
-    }, "Please select an option.");
-
-    $("#Edit_slot").validate({
-      rules: {
-        dateTime: {
-          required: true,
-          overspecialization: false
-        },
-        link: {
-          required: true,
-          overspecialization: true
-        },
-        feedback: {
-          required: true,
-        },
-        customRadio: {
-          radioRequired: true
-        }
-
-      },
-      messages: {
-        dateTime: {
-          required: "Please Select Slot."
-        },
-        link: {
-          required: "Please provide link."
-        },
-        feedback: {
-          required: " Please enter a reason",
-        },
-        customRadio: {
-          radioRequired: "Please select an option."
-        }
-
-      },
-      errorPlacement: function (error, element) {
-        if (element.attr("name") == "customRadio") {
-          error.appendTo("#radioError");
-        } else {
-          error.insertAfter(element);
-        }
-      },
-      submitHandler: function (form) {
-        form.submit();
-      },
-    });
-  });
-</script>
-<!-- script for reschedule and cancel ends here-->
-<!-- radio buttons -->
-<script>
-  // JavaScript to handle radio button selection and modal display
-  document.getElementById("confirmAction").addEventListener("click", function () {
-    var selectedAction = document.querySelector('input[name="customRadio"]:checked').value;
-    if (selectedAction === "Reschedule Slot") {
-      $('#rescheduleModal').modal('show');
-    } else if (selectedAction === "Cancel Slot") {
-      $('#cancelModal').modal('show');
-    }
-  });
-</script>
-<script>
-  $(document).ready(function () {
-    //validationf for special charector
-    $.validator.addMethod("noSpecialChars", function (value, element) {
-      return /^[a-zA-Z0-9\s]*$/.test(value);
-    }, "Special characters are not allowed.");
-    //no numbers
-    $.validator.addMethod("noNumbers", function (value, element) {
-      return !/\d/.test(value);
-    }, "Numbers are not allowed in the course name.");
-
-    $.validator.addMethod("selectRequired", function (value, element) {
-      return value !== "" && value !== null && value !== "0";
-    },
-      "Please select an option."
-    );
-    // Resume upload Validation
-    $.validator.setDefaults({
-      errorPlacement: function (error, element) {
-        if (element.attr('name') === 'resume') {
-          error.appendTo("#resume_upload");
-        }
-        else { error.insertAfter(element); }
-      }
-    })
-
-
-    $("#createFeed").validate({
-      rules: {
-        Attendance: {
-
-          required: true,
-        },
-        Communication: {
-          selectRequired: true,
-        },
-        'Body Language': {
-          selectRequired: true,
-        },
-        'Technical Performance': {
-          selectRequired: true,
-        },
-        'Logical Thinking': {
-          selectRequired: true,
-        },
-        Suggestions: {
-          selectRequired: true,
-        },
-
-        resume: {
-          required: true,
-          accept: 'pdf',
-        }
-
-
-      },
-      messages: {
-        Attendance: {
-          required: "Please Select an option",
-        },
-        Communication: {
-          selectRequired: "Please Select an option",
-        },
-        'Body Language': {
-          selectRequired: " Please Select an option"
-        },
-        'Technical Performance': {
-          selectRequired: 'Please Select an option'
-        },
-        'Logical Thinking': {
-          selectRequired: "Please Select an option",
-        },
-        Suggestions: {
-          selectRequired: "Text here",
-        },
-        resume: {
-          required: " please upload your Resume",
-          accept: "only PDF are allowed"
-        }
-
-      },
-
-      submitHandler: function (form) {
-        form.submit();
-      },
-
-    });
-  });
-
-  $.validator.addMethod("pdfOnly", function (value, element) {
-    // Check if the file extension is pdf
-    return this.optional(element) || /\.(pdf)$/i.test(value);
-  }, "Please select a PDF file.");
-</script>
-
-{% endblock %}
+  //  $(document).ready(function () {
+  //    //validationf for special charector
+  //    $.validator.addMethod("noSpecialChars", function (value, element) {
+  //      return /^[a-zA-Z0-9\s]*$/.test(value);
+  //    }, "Special characters are not allowed.");
+  //    //no numbers
+  //    $.validator.addMethod("noNumbers", function (value, element) {
+  //      return !/\d/.test(value);
+  //    }, "Numbers are not allowed in the course name.");
+  //
+  //    $.validator.addMethod("selectRequired", function (value, element) {
+  //      return value !== "" && value !== null && value !== "0";
+  //    },
+  //      "Please select an option."
+  //    );
+  //
+  //
+  //    $("#createFeed").validate({
+  //      rules: {
+  //        Attendance: {
+  //
+  //          required: true,
+  //        },
+  //        Communication: {
+  //          selectRequired: true,
+  //        },
+  //        'Body Language': {
+  //          selectRequired: true,
+  //        },
+  //        'Technical Performance': {
+  //          selectRequired: true,
+  //        },
+  //        'Logical Thinking': {
+  //          selectRequired: true,
+  //        },
+  //        Suggestions: {
+  //          selectRequired: true,
+  //        },
+  //
+  //
+  //      },
+  //      messages: {
+  //        Attendance: {
+  //          required: "Please Select an option",
+  //        },
+  //        Communication: {
+  //          selectRequired: "Please Select an option",
+  //        },
+  //        'Body Language': {
+  //          selectRequired: " Please Select an option"
+  //        },
+  //        'Technical Performance': {
+  //          selectRequired: 'Please Select an option'
+  //        },
+  //        'Logical Thinking': {
+  //          selectRequired: "Please Select an option",
+  //        },
+  //        Suggestions: {
+  //          selectRequired: "Text here",
+  //        },
+  //
+  //
+  //      },
+  //
+  //      submitHandler: function (form) {
+  //        form.submit();
+  //      },
+  //
+  //    });
+  //  });
+  //
+  //  $.validator.addMethod("pdfOnly", function (value, element) {
+  //    // Check if the file extension is pdf
+  //    return this.optional(element) || /\.(pdf)$/i.test(value);
+  //  }, "Please select a PDF file.");
+//</script>

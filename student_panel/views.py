@@ -130,8 +130,10 @@ def mocks(request):
         if Scheduling_mock_model.objects.filter(id=available_slot, student_name = credentials.studend_id).exists():
             messages.error(request, 'Already Booked')
             return redirect('mocks')
+        
         if schedule.exists():
             Scheduling_mock_model.objects.filter(id=available_slot).update(attach_Resume=attach_Resume, course_name=course_name, specilalization_name=specialization,student_name = credentials.studend_id)
+            
         messages.success(request, 'Slot Booked successfully')
         return redirect('mocks')
     

@@ -9,7 +9,7 @@
       <li class="breadcrumb-item"><a href="{% url 'placement_dashboard' %}">Dashboard</a></li>
       <li class="breadcrumb-item"><a href="{% url 'hr' %}">HR details</a></li>
       <li class="breadcrumb-item"><a href="">Quality Thoughts</a></li>
-      <li class="breadcrumb-item active" aria-current="page">posted jobs</li>
+      <li class="breadcrumb-item active" aria-current="page">posted jobs ({{job_posts.count}})</li>
     </ol>
   </nav>
 </div>
@@ -20,8 +20,72 @@
 
 
 <section class="hk-sec-wrapper">
+  <div class="d-flex row justify-content-between g-2">
+    <div class="card col-sm-12 col-lg-4 col-md-4">
+      <div class="card-body ">
+        
+          <img src="{{employee.profile_image.url}}" class="img-fluid shadow-lg rounded-lg"alt="">
+
+        </div>
+    </div>
+    <div class="col-sm-12 col-lg-8 col-md-8">
+      <div class="row">
+        <div class="col-md-12 col-lg-12 col-sm-12 ">
+          
+              <div class="card ">
+                <div class="card-body d-flex justify-content-center" >
+                    
+                  <table class="table table-hover table-bordered table-responsive">
+                      <thead class="bg-dark">
+                        <tr>
+                          <td class="text-white">Name</td>
+                          <td class="text-white">Email</td>
+                          <td class="text-white">Department</td>
+                          <td class="text-white">Designation</td>
+                          <td class="text-white">Contact</td>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>{{employee.first_name}} {{employee.last_name}}</td>
+                          <td>{{employee.personal_email}}</td>
+                          <td>{{employee.department_name.department_name}}</td>
+                          <td>{{employee.designation_name.designation_name}}</td>
+                          <td>{{employee.personal_number}}</td>
+                        </tr>
+                      </tbody>
+                  </table>
+                </div>
+              </div>
+
+        </div>
+        <div class="col-md-12 col-lg-12 col-sm-12">
+
+          <div class="card card-sm shadow-lg" >
+            <div class="card-body">
+              <div class="d-flex justify-content-between mb-5">
+                <div>
+                  <span class="d-block font-15 text-dark font-weight-500">Total Jobs Posted</span>
+                </div>
+                <div>
+                  <span class="text-success font-14 font-weight-500"></span>
+                </div>
+              </div>
+              <div class="text-center">
+                <span class="d-block display-4 text-dark mb-5"><span class="counter-anim">{{job_posts.count}}</span></span>
+                <small class="d-block">472,458 Targeted</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+  </div>
+
+  </div>
   <div class="d-flex justify-content-end">
-    <a href='#' type="button" class="btn btn-success mr-2 mb-3"><i class="fa fa-download"></i> Print</a>  
+    <a href="{% url 'job_details_export' employee.id %}" type="button" class="btn btn-success mr-2 mb-3"><i class="fa fa-download"></i> Print</a>  
   </div>
   <div class="row">
     <div class="col-sm">
@@ -35,7 +99,7 @@
                       <th class="text-white">Location</th>
                       <th class="text-white">Package</th>
                       <th class="text-white">Last Date to Apply</th>
-                      <th class="text-white text-center">Placed/Applied</th>
+                      <th class="text-white text-center">Applied / Eligible / In Progress / Placed</th>
                   </tr>
               </thead>
               <tbody>
@@ -49,7 +113,10 @@
                       <td> {{i.salary}} LPA</td>
                       <td>{{i.last_date_to_apply}}</td>
                       <td class="text-center">
-                           <span class="bg-success rounded-pill py-1 px-2"><a href="{% url 'placed' %}" class="text-white">1</a></span> / <span class="bg-primary py-1 px-2 rounded-pill"><a href="{% url 'applied' %}" class="text-white">100</a></span>
+                        <a href="{% url 'jobgalleryapplied' %}"><i class="glyphicon glyphicon-user text-primary fs-4"></i></a>120 /
+                        <a href="{% url 'jobgalleryeligible' %}"><i class="glyphicon glyphicon-user text-secondary fs-4"></i></a>60 /
+                        <a href="{% url 'jobgalleryinprogress' %}"><i class="glyphicon glyphicon-user text-warning fs-4"></i></a>10 /
+                        <a href="{% url 'jobgalleryplaced' %}"><i class="glyphicon glyphicon-user text-success fs-4"></i></a>1
                       </td>                         
                   </tr>
                   {% endfor %}

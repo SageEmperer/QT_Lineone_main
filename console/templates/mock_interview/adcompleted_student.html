@@ -60,13 +60,14 @@
             </tr>
           </thead>
           <tbody>
-            {% for i in feedbacks %}
+            {% for i in students %}
             <tr>
               <td>{{i.id}}</td>
-              <td class="">{{ i.interview.faculty.first_name}} {{ i.interview.faculty.first_name}}</td>
-              <td>{{ i.interview.available_slot}}</td>
-              <td class="text-center text-info" style="font-weight:bold;">{{i.attendance_status}}</td>
-              <td class="text-center">{{i.logical_thinking}}</td>
+              <td class="">{{ i.interview.faculty.first_name}} {{ i.interview.faculty.last_name}}</td>
+              <td>{{ i.interview.available_slot }}</td>
+
+               <td class="text-center text-info" style="font-weight:bold;">{{i.attendance_status}}</td>
+               <td class="text-center">{{i.logical_thinking}}</td>
               <td class="text-center">{{i.technical_skills}}</td>
               <td class="text-center">{{i.communication_skills}}</td>
               <td class="text-center">{{i.body_language}}</td>

@@ -1251,7 +1251,7 @@ class Scheduling_mock_model(models.Model):
     reschedule_reason=models.CharField(max_length=50,null=True)
     cancel_reason = models.CharField(max_length=50,null=True)
     attach_Resume = models.FileField(upload_to='resumes/',null=True)  
-    interview_status = models.CharField(choices=interview_status, max_length=10,null=True)
+    interview_status = models.CharField(choices=interview_status, max_length=10,default="pending")
     
     
 
