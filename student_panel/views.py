@@ -201,7 +201,22 @@ def Test_card(request):
 
 @student_required    
 def matched_jobs(request):
-    return render(request,'matched_jobs.html')
+    student_id = request.session.get('student').get('student_id')
+    credentials = Studen_credentials.objects.get(id=student_id)
+    print(credentials.studend_id)
+    crn = credentials.studend_id.crn_number.crn
+    register_user = Register_model.objects.get(crn=crn)
+    jobs = register_user.job_post.all()
+    print("studentid",student_id)
+    student = credentials.studend_id
+    context = {
+
+        'jobs':jobs,
+        'student':student
+
+    }
+
+    return render(request,'matched_jobs.html',context)
 
 
 
