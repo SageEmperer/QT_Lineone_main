@@ -26,6 +26,7 @@ class Register_model(models.Model):
     password = models.CharField(max_length=255, null=True)
     otp = models.CharField(max_length=6, null=True)
     terms_and_conditions = models.BooleanField(default=False)
+    register_date = models.DateField(default=datetime.now().date())
 
     def __str__(self):
         return f"{self.crn}"
@@ -632,6 +633,8 @@ class Employee_model(models.Model):
     pan_card_pdf= models.FileField(upload_to='pan_card_pdf',default=None,blank=True)
     status = models.CharField(max_length=20, choices=choice_status, default='Active')
     joining_date= models.DateField(default=datetime.now().date())
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
     def generate_employee_id(self):
             prefix = f'{self.crn_number.company_short_name}E'
             today = datetime.now().date()
@@ -889,7 +892,7 @@ class LeadModel(models.Model):
     batch_number = models.ForeignKey(Regulations, on_delete=models.SET_NULL, null=True)
     faculty = models.ForeignKey(Employee_model, on_delete=models.SET_NULL, null=True)   
     token_id = models.CharField(max_length=100, unique=True, editable=False)
-    # token_generated_date = models.DateTimeField(null=True, blank=True)
+    token_generated_date = models.DateTimeField(null=True, blank=True)
     plan = models.ForeignKey(Plan, on_delete=models.SET_NULL, null=True)
     prospect_taken = models.BooleanField(default=False)
     lead_description = models.TextField(null=True)
@@ -911,21 +914,22 @@ class LeadModel(models.Model):
     
     
 
-    def save(self, *args, **kwargs):
+    def generate_token(self, *args, **kwargs):
         today = timezone.now()
         token_prefix = f"{self.crn_number.company_short_name}S{today.day:02d}{today.month:02d}{today.year % 100:02d}"
-
-        last_token_id = LeadModel.objects.filter(crn_number=self.crn_number).aggregate(Max('token_id'))['token_id__max']
-
+    
+        last_token_id = LeadModel.objects.filter(token_id__startswith=token_prefix).aggregate(Max('token_id'))['token_id__max']
+    
         if last_token_id:
             last_count = int(last_token_id[len(token_prefix):])
             new_count = last_count + 1
             self.token_id = f"{token_prefix}{new_count:03d}"
         else:
             self.token_id = f"{token_prefix}001"
-
+    
         self.token_generated_date = datetime.now()
-        super().save(*args, **kwargs)    
+        super().save(*args, **kwargs)
+
 
 
 class Student_payment(models.Model):
@@ -1239,13 +1243,14 @@ class Scheduling_mock_model(models.Model):
     interview_status = [
         ('completed', 'Completed'),
         ('pending', 'Pending'),
-        ('not_completed', 'Not Completed')
+        ('not_completed', 'Not_Completed'),
+        ('not_booked', 'Not_booked')
     ]
     crn= models.ForeignKey(Register_model, on_delete=models.CASCADE,related_name="schedule")
     student_name=models.ForeignKey(LeadModel, on_delete=models.CASCADE,null=True)
     faculty = models.ForeignKey(Employee_model, on_delete=models.CASCADE, null=True)
     course_name=models.ForeignKey(Course,on_delete=models.CASCADE,null=True)
-    specilalization_name = models.ForeignKey(Specialization, on_delete=models.CASCADE, null=True)
+    specialization_name = models.ForeignKey(Specialization, on_delete=models.CASCADE, null=True)
     available_slot = models.DateTimeField(default=timezone.now)
     rescheduled_slot = models.DateTimeField(default=timezone.now)
     mock_link = models.CharField(max_length=30,null=True)
@@ -1253,7 +1258,7 @@ class Scheduling_mock_model(models.Model):
     reschedule_reason=models.CharField(max_length=50,null=True)
     cancel_reason = models.CharField(max_length=50,null=True)
     attach_Resume = models.FileField(upload_to='resumes/',null=True)  
-    interview_status = models.CharField(choices=interview_status, max_length=20,default="Not Completed")
+    interview_status = models.CharField(choices=interview_status, max_length=20, default='not_booked')
     
     
 
@@ -1287,8 +1292,7 @@ class Feedback(models.Model):
     body_language=models.IntegerField(choices=marks, default=0)
     technical_skills=models.IntegerField(choices=marks, default=0)
     logical_thinking=models.IntegerField(choices=marks, default=0)
-    send_attachment=models.FileField(upload_to='feedback/')
-    suggestion=models.TextField()
+    send_attachment=models.FileField(upload_to='feedback/' ,null=False)
+    suggestion=models.TextField(null=True,blank=True)
     status = models.CharField(choices=Status, max_length=20)
     overall_rating = models.IntegerField(choices=marks, default=0)
-   

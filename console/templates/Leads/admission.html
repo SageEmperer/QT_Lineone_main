@@ -30,14 +30,14 @@
                               <div class="font-14 text-white">
                                   <span class="mr-5">
                                       <span class="font-weight-bold pr-5">JOINING DATE:</span>
-                                      <span class="mr-5">12/03/24</span>
+                                      <span class="mr-5">{{request.session.admin_user.register_date}}</span>
                                   </span>
                                 </div>
                                 <div class="font-14 text-white" >
 
                                   <span>
                                     <span class="font-weight-bold pr-5">Department:</span>
-                                    <span>Python Department</span>
+                                    <span>{% if request.session.admin_user %} Admin  {% endif %}</span>
                                   </span>
                                 </div>
                                   
@@ -492,7 +492,7 @@
                             </tr>
                             <tr>
                                 <th class="p-2"><strong>Plan</strong></th>
-                                <td class="p-2">{{i.course_name.plan_name}}</td>
+                                <td class="p-2">{{i.course_name.course_plan.plan_name}}</td>
                             </tr>
                             <tr>
                                 <th class="p-2"><strong>Batch No</strong></th>
@@ -503,7 +503,7 @@
                                 <td class="p-2">{{i.admission_date}}</td>
                             </tr>
                             <tr>
-                                <th class="p-2"><strong>Course Fee</strong></th>
+                                <th class="p-2"><strong id="course_fee_label{{i.id}}">Course Fee</strong></th>
                                 <td class="p-2">{{i.course_name.course_fee}}</td>
                             </tr>
                             <tr>
@@ -516,18 +516,29 @@
                             </tr>
                             <tr>
                                 <th class="p-2"><strong>Admission Fee</strong></th>
-                                <td class="p-2">{{i.admission_fee}}</td>
+                                <td class="p-2">{{i.amount_paid}}</td>
                                 
                             </tr>
                             <tr>
                                 <th class="p-2"><strong>Remaining Fee</strong></th>
-                                <td class="p-2"></td>
+                                <td class="p-2" id="remaining_fee_{{ i.id }}" > 
+                                
+                                </td>
+                                <script>
+                                  // Calculate remaining fee for this lead
+                                  var courseFee = {{ i.course_name.course_fee }};
+                                  var amountPaid = {{ i.amount_paid }};
+                                  var remainingFee = courseFee - amountPaid;
+                                  
+                                  // Update the corresponding element with the calculated remaining fee
+                                  document.getElementById("remaining_fee_{{ i.id }}").textContent = remainingFee;
+                              </script>
                             </tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="modal-footer d-flex justify-content-center">
-                    <button type="submit" class="btn btn-secondary"><i class="fa fa-print"></i> Print</button>
+                    <a href="{% url 'admission_recipt' i.id %}" target="_blank" class="btn btn-secondary"><i class="fa fa-print"></i> Print</a>
                 </div>
             </form>
         </div>

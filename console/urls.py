@@ -127,6 +127,8 @@ urlpatterns = [
     path('enquiry_verify_otp/', views.enquiry_verify_otp, name='enquiry_verify_otp'),
     path('multiple_mark_as_spam/', views.multiple_mark_as_spam, name='multiple_mark_as_spam'), 
 
+    path('admission_recipt/<int:id>',views.admission_recipt,name="admission_recipt"),
+
 
 
 
@@ -177,6 +179,7 @@ urlpatterns = [
     path('profilesent/',views.profilesent, name='profilesent'),
     path('job_gallery',views.job_gallery,name='job_gallery.html'),
     path('Studentfilter',views.Student_filter,name="student_filter.html"),
+    path('student_details_json/',views.student_details_json,name="student_details_json"),
     path('jobgalleryapplied/',views.job_gallery_applied, name='jobgalleryapplied'),
     path('jobgalleryqualified/',views.job_gallery_qualified, name='jobgalleryqualified'),
     path('jobgalleryplaced/',views.job_gallery_placed, name='jobgalleryplaced'),
@@ -213,31 +216,34 @@ urlpatterns = [
 
 
    #  mock start here
-  path('faculty_login/',views.faculty_login,name="faculty_login"),
+    path('faculty_login/',views.faculty_login,name="faculty_login"),
     path('mock_dashboard/',views.mock_dashboard,name="mock_dashboard"),
     path('student/',views.student,name="student"),
     path('faculty/',views.faculty_slot,name="faculty_slot"),
     path('editfacultyslots/<int:slot_id>/', views.edit_faculty_slot, name='edit_faculty_slot'),
     path('facultyslotimport/', views.faculty_slot_import, name='faculty_slot_import'),
     path('facultyslotexport/', views.faculty_slot_export, name='faculty_slot_export'),
-    path('facultymocks/', views.total_interviews, name="total_interviews"),
+    path('facultymocks/<int:f_id>/', views.total_interviews, name="total_interviews"),
     path('FeedbackForm/<int:id>',views.FeedbackForm,name="FeedbackForm"),
-    path('past/', views.student_feedback, name="student_feedback"),
+    path('FeedbackForm_2/<int:id>',views.FeedbackForm_2,name="FeedbackForm_2"),
+    path('past/<int:s_id>', views.student_feedback, name="student_feedback"),
     path('open_pdf/<int:document_id>/', views.open_pdf, name='open_pdf'),
-    path('admin/', views.admin_mock, name="admin_mock"),
+    path('admin_mock/', views.admin_mock, name="admin_mock"),
     path('editadmin_mock/<int:slot_id>/', views.edit_admin_mock, name='edit_admin_mock'),
     path('adminslotimport/', views.admin_slot_import, name='admin_slot_import'),
     path('adminslotexport/', views.admin_slot_export, name='admin_slot_export'),
-    
-    path('reschedule/', views.reschedule, name="reschedule"),
+    path('admin_reschedule/', views.admin_reschedule, name="admin_reschedule"),
+    path('faculty_reschedule/', views.faculty_reschedule, name="faculty_reschedule"),
     path('adinterview/', views.admin_interview_list, name="admin_interview_list"),
     path('facultydashboard/', views.faculty_dashboard, name="faculty_dashboard"),
-    path('facultydetails/<int:faculty_id>/', views.separate_faculty_list, name="separate_faculty_list"),
-    path('completed_mock/', views.completed_mock, name="completed_mock"),
+    path('separate_faculty_list/<int:faculty_id>/', views.separate_faculty_list, name="separate_faculty_list"),
+    path('admin_complete/', views.admin_completed_mock, name="admin_complete"),
     path('facultyschedule/', views.faculty_schedule_list, name="faculty_schedule_list"),
     path('faculty_completed/', views.faculty_completed_mocklist, name="faculty_completed_mocklist"),
     path('facultypending/', views.faculty_pending_mocks, name="faculty_pending_mocks"),
     path('completed_student_mock/<int:student_id>', views.completed_student_mock, name="completed_student_mock"),
+    path('spec_ajax/<int:id>',views.spec_ajax,name="spec_ajax"),
+   path('faculty_ajax/<int:id>',views.faculty_ajax,name="faculty_ajax"),
 
 
 

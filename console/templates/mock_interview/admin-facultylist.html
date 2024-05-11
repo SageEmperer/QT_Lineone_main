@@ -45,6 +45,7 @@
           </thead>
           <tbody>
             {% for i in today_interviews %}
+
             <tr>
               <td class="text-center">{{forloop.counter}}</td>
               <td class="text-center">{{i.student_name.first_name}} {{i.student_name.last_name}}</td>
@@ -84,7 +85,7 @@
       </div>
 
 
-      <form action="{% url 'FeedbackForm' i.id %}" method="post" id="feedbackForm{{ forloop.counter }}">
+      <form action="{% url 'FeedbackForm_2' i.id %}" method="post" id="feedbackForm{{ forloop.counter }}">
         {% csrf_token %}
         <div class="modal-body">
           <div class="container-fluid">
@@ -322,7 +323,7 @@
       </div>
 
 
-      <form action="{% url 'FeedbackForm' i.id %}" method="post" id="feedbackForm_2{{ forloop.counter }}">
+      <form action="{% url 'FeedbackForm_2' i.id %}" method="post" id="feedbackForm_2{{ forloop.counter }}">
         {% csrf_token %}
         <div class="modal-body">
           <div class="container-fluid">
@@ -475,8 +476,8 @@
               <div class="col-md-12 ">
                 <div class="form-group">
                   <label for="suggestions{{ forloop.counter }}">Suggestions </label>
-                  <textarea class="form-control" name="suggestion_2" id="suggestions_2{{ forloop.counter }}"
-                    data-counter="{{ forloop.counter }}" name="suggestion" placeholder="What Would you like to say?"
+                  <textarea class="form-control" name="suggestion" id="suggestions_2{{ forloop.counter }}"
+                    data-counter="{{ forloop.counter }}" placeholder="What Would you like to say?"
                     rows="3"></textarea>
                 </div>
               </div>
@@ -560,7 +561,7 @@
       </div>
 
 
-      <form action="{% url 'FeedbackForm' i.id %}" method="post" id="feedbackForm_3{{ forloop.counter }}">
+      <form action="{% url 'FeedbackForm_2' i.id %}" method="post" id="feedbackForm_3{{ forloop.counter }}">
         {% csrf_token %}
         <div class="modal-body">
           <div class="container-fluid">
@@ -713,8 +714,8 @@
               <div class="col-md-12 ">
                 <div class="form-group">
                   <label for="suggestions{{ forloop.counter }}">Suggestions </label>
-                  <textarea class="form-control" name="suggestion_3" id="suggestions_3{{ forloop.counter }}"
-                    data-counter="{{ forloop.counter }}" name="suggestion" placeholder="What Would you like to say?"
+                  <textarea class="form-control" name="suggestion" id="suggestions_3{{ forloop.counter }}"
+                    data-counter="{{ forloop.counter }}"  placeholder="What Would you like to say?"
                     rows="3"></textarea>
                 </div>
               </div>

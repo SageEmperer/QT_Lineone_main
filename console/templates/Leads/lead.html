@@ -66,14 +66,14 @@
                               <div class="font-14 text-white">
                                   <span class="mr-5">
                                       <span class="font-weight-bold pr-5">JOINING DATE:</span>
-                                      <span class="mr-5">12/03/24</span>
+                                      <span class="mr-5">{{request.session.admin_user.register_date}}</span>
                                   </span>
                                 </div>
                                 <div class="font-14 text-white" >
 
                                   <span>
                                     <span class="font-weight-bold pr-5">Department:</span>
-                                    <span>Python Department</span>
+                                    <span>{% if request.session.admin_user %} Admin  {% endif %}</span>
                                   </span>
                                 </div>
                                   
@@ -273,7 +273,7 @@
           
           <td><input type="checkbox" class="row-checkbox" id="selectAll" data-id="{{i.id}}"></td>
           <td>
-            <span data-toggle="tooltip" data-html="true" title="Name: Veerasimha Reddy<br>ID: {{i.token_id}}<br>Department: {{i.course_interested_in}}">
+            <span data-toggle="tooltip" data-html="true" >
               {{i.token_id}}
             </span>
           </td>
@@ -374,7 +374,7 @@
           {% csrf_token %}
           <div class="mb-3">
             <label for="leadstage" class="form-label">Lead Stage <span class="text-danger">*</span></label>
-            <select id="leadstage" class="form-select form-control" name="leadstage">
+            <select id="leadstage" class="custom-select form-control" name="leadstage">
               <option selected disabled>Select Lead Stage</option>
               {% for i in lead_stage %}
               <option value="{{i.id}}" >{{i.Leadstage_name}}</option>
@@ -493,11 +493,11 @@
                 </div>
                 <div class="col-md-6 mb-3">
                   <label for="courseFaculty" class="form-label">Course Faculty <span class="text-danger">*</span></label>
-                  <select class="form-select form-control" name="courseFaculty" >
+                  <select class="custom-select form-control" name="courseFaculty" >
                     <option value="" selected>Select your Faculty</option>
                   
                       {% for emp in faculty %}
-                          {% if emp.branch == i.branch_name %}
+                          {% if emp.branch == i.branch_name and emp.course_id == i.course_name.course_name and emp.specialization_id == i.course_name.specialization %}
                           <option value="{{emp.id}}" {% if i.faculty == emp.id %} selected {% endif %}  >{{emp.first_name}} {{emp.last_name}}</option>
                           {% endif %}
                           {% endfor %}
@@ -528,10 +528,12 @@
                 </div>
                 <div class="col-md-6 mb-3">
                   <label for="demodate" class="form-label">Schedule Demo <span class="text-danger">*</span></label>
-                  <select id="demodate" class="form-select form-control" name="demodate">
+                  <select id="demodate" class="custom-select form-control" name="demodate">
                     <option selected disabled>Select Demo Date</option>
                     {% for demos in demo %}
+                    {% if demos.course == i.course_name.course_name and demos.specialization == i.course_name.specialization %}
                     <option value="{{demos.id}}">{{demos.datestartat}} - {{demos.dateendat}}</option>
+                    {% endif %}
                     {% endfor %}
                     
                   </select>
@@ -594,13 +596,13 @@
               <div class="col-md-6 mb-3">
                 <label for="courseFaculty" class="form-label">Course Faculty <span class="text-danger">*</span></label>
       
-<select class="form-select form-control" name="courseFaculty" >
+<select class="custom-select form-control" name="courseFaculty" >
 <option value="" selected>Select your Faculty</option>
-  {% for emp in faculty %}
-      {% if emp.branch == i.branch_name %}
-      <option value="{{emp.id}}">{{emp.first_name}}</option>
-      {% endif %}
-      {% endfor %}
+{% for emp in faculty %}
+{% if emp.branch == i.branch_name and emp.course_id == i.course_name.course_name and emp.specialization_id == i.course_name.specialization %}
+<option value="{{emp.id}}" {% if i.faculty == emp.id %} selected {% endif %}  >{{emp.first_name}} {{emp.last_name}}</option>
+{% endif %}
+{% endfor %}
 </select>
 
               </div>
@@ -617,7 +619,7 @@
               </div>
               <div class="col-md-4 mb-3">
                 <label for="batchno" class="form-label">Batch Number <span class="text-danger">*</span></label>
-                <select id="batchno" class="form-select form-control" name="batchno">
+                <select id="batchno" class="custom-select form-control" name="batchno">
                   <option selected disabled>Select the Batch Number</option>
                   {% for batch in batches %}
                   {% if i.course_name.course_name == batch.course_id and i.course_name.specialization == batch.spec_id %}
@@ -662,13 +664,13 @@
               </div>
               
               <div class="col-md-6 mb-3">
-                <label for="remainingfee" class="form-label">Remainingfee Fee <span class="text-danger">*</span></label>
+                <label for="remainingfee" class="form-label">Remaining Fee <span class="text-danger">*</span></label>
                 <input type="text" class="form-control text-secondary" id="remainingfee" name="remainingfee" placeholder="0.00" readonly>
               </div>
               <!-- payment details -->
               <div class="col-md-6 mb-3">
                 <label for="paymenttype" class="form-label">Mode of Payment <span class="text-danger">*</span></label>
-                <select id="paymenttype" class="form-select form-control payment_type" name="paymenttype">
+                <select id="paymenttype" class="custom-select form-control payment_type" name="paymenttype">
                     <option selected disabled>Select Mode of Payment</option>
                     <option value="UPI">UPI</option>
                     <option value="Cash">Cash</option>
@@ -679,7 +681,7 @@
             <!-- UPI Details -->
             <div class="col-md-6 mb-3 upi_dropdown" id="UPI" style="display: none;">
                 <label for="" class="form-label">UPI Payment</label>
-                <select name="upi_id_id" class="form-select form-control upi_drop_select" id="">
+                <select name="upi_id_id" class="custom-select form-control upi_drop_select" id="">
                     <option value="" selected>Select your UPI</option>
                     {% for i in upi %}
                     <option value="{{i.id}}">{{i.upipayments_name}} {{i.upiid}}</option>
@@ -689,6 +691,7 @@
             
             {% for i in upi %}
             <div class="col-md-6 mb-3 upi_id" id="upi_id{{i.id}}" style="display: none;">
+              <label for="" class="form-label">UPI ID</label>
                 <input type="text" readonly  value="{{i.upiid}}" class="form-control upi_id_input">
             </div>
             {% endfor %}
@@ -702,8 +705,8 @@
             
             <div class="col-md-6 mb-3 net_banking_div" style="display: none;">
                 <label for="" class="form-label">Net Banking</label>
-                <select name="net_banking_id" class="form-select form-control net_banking_select" id="">
-                    <option value="" selected>Select your netbanking"</option>
+                <select name="net_banking_id" class="custom-select form-control net_banking_select" id="">
+                    <option value="" selected>Select your Net Banking</option>
                     {% for net in net_banking %}
                     <option value="{{net.id}}">{{net.netbanking_name}}</option>
                     {% endfor %}
@@ -713,13 +716,21 @@
             {% for net in net_banking %}
             <div class="col-md-6 mb-3 net-baking_all net-baking_all{{net.id}}" style="display: none;">
                 <div class="">
+                  <label for="" class="form-label">Net Banking Name</label> 
                     <input type="text" readonly value="{{net.netbanking_name}}" class="form-control">
                 </div>
             </div>
             
             <div class="col-md-6 mb-3 net-baking_all net-baking_all{{net.id}}" style="display: none;">
                 <div class="">
+                  <label for="" class="form-label">IFSC code</label>
                     <input type="text" readonly value="{{net.ifscode}}" class="form-control">
+                </div>
+            </div>
+            <div class="col-md-6 mb-3 net-baking_all net-baking_all{{net.id}}" style="display: none;">
+                <div class="">
+                  <label for="" class="form-label">Account Number</label>
+                    <input type="text" readonly value="{{net.accountnumber}}" class="form-control">
                 </div>
             </div>
             {% endfor %}
@@ -1252,7 +1263,7 @@ $('.modal').on('input', '#admissionFee', function() {
 </script>
 
 
-  
+  v
 <script>
   $(document).ready(function() {
     // Initialize visibility of elements
@@ -1282,6 +1293,12 @@ $('.modal').on('input', '#admissionFee', function() {
             upiDropdown.hide();
             netBankingDiv.hide();
             transactionIdDiv.hide();
+            
+            $('.upi_drop_select').val('');
+            $('.upi_id, .upi_id_img').hide();
+            
+            $('.net_banking_select').val('');
+            $('.net-baking_all').hide();
         }
     });
 

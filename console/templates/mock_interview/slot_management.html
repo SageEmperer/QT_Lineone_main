@@ -191,6 +191,7 @@
                         <input type="text" class="form-control" value=" {{ scheduled.student_name.token_id }}" id="student"   readonly>
                     </div>
                 </div>
+                </div>
 
               </div>
                 <div class="mb-3" id="rescheduleFields-{{scheduled.id}}">
@@ -281,6 +282,9 @@
                 required: true,
                 overspecialization: false
             },
+          faculty:{
+            required:true,
+          },
           link: {
                 required: true,
                 overspecialization: false

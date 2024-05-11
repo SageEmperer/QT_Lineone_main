@@ -151,18 +151,20 @@
                 </tr>
             </thead>
             <tbody>
+              {% for i in student %}
             <tr>
-                <td>123</td>
-                <td>Dhana laskhmi</td>
-                <td>9390961447</td>
-                <td>dhana@gmail.com</td>
-                <td>Python</td>
+                <td>{{forloop.counter}}</td>
+                <td>{{i.fields.first_name}} {{i.last_name}}</td>
+                <td>{{i.mobile_number}}</td>
+                <td>{{i.email}}</td>
+                <td>{{i.course_name.course_name}}</td>
                 <td>0-1</td>
                 <td>2</td>
                 <td><i class="fa fa-file-pdf-o" style="font-size:25px;margin-left:10px; color:red;" data-toggle="modal" data-target="#resumeModal"></i></td>
                 <td><i class="fa fa-file-pdf-o" style="font-size:25px;margin-left:10px; color:red;" data-toggle="modal" data-target="#resumeModal"></i>
                 </td>
             </tr>
+            {% endfor %}
         </tbody>
 
         </table>
@@ -263,8 +265,24 @@ function printResume() {
 //   // Placeholder for share functionality
 //   alert('Share functionality to be implemented.');
 // } 
+</script>
 
 
+{% endblock %}
 
+{% block scripts %}
+<script>
+  $(document).ready(function(){
+    $.getJSON("/student_details_json/", function(data) {
+        console.log(data); // Log the entire JSON data
+        // Iterate over the JSON data and log each student
+        data.forEach(function(student) {
+            console.log(student); // Log each student object
+            console.log(student.fields.first_name); // Log the first name of each student
+            console.log(student.fields.faculty.first_name); // Log the first name of each student
+            // Add more logging as needed to inspect the structure
+        });
+    });
+});
 </script>
 {% endblock %}

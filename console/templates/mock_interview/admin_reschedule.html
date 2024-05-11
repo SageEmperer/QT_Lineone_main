@@ -1,0 +1,79 @@
+{% extends 'base/base.html' %}
+
+{% block title %}MOCKS | Interviews Lists{% endblock %}
+
+{% block breadCrum %}
+
+<!-- Breadcrumb -->
+
+<div class="hk-pg-header d-flex justify-content-between mb-0">
+  <h4 class="hk-pg-title m-3">Reschedule Interviews</h4>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb bg-transparent mb-0">
+      <li class="breadcrumb-item"><a href="{% url 'faculty_dashboard'%}">Dashboard</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Interviews</li>
+    </ol>
+  </nav>
+</div>
+<!-- /Breadcrumb -->
+
+{% endblock %}
+{% block content %}
+
+
+<section class="hk-sec-wrapper">
+    <div class="row">
+      <div class="col-sm">
+        <div class="table-wrap">
+          <table id="datable_1" class="table table-hover w-100 pb-30 table-bordered">
+            <thead class="bg-dark">
+              <tr>
+                <th class="text-white text-center">S.No</th>
+                <th class="text-white text-center">Faculty Name</th>
+                <th class="text-white text-center">Student Name</th>
+                <th class="text-white text-center">Student Email </th>
+                <th class="text-white text-center">Course</th>
+                <th class="text-white text-center">Past Interview Date</th>
+                <th class="text-white text-center">Updated Interview Date</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              {% for reschedule in scheduling %}
+              {% if reschedule.student_name %}
+              <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{reschedule.faculty.first_name }}&nbsp;&nbsp;{{reschedule.faculty.last_name }}</td>
+                <td>{{reschedule.student_name.first_name }}&nbsp;&nbsp;{{reschedule.student_name.last_name }}</td>
+                <td>{{reschedule.student_name.email}}</td>
+                <td>{{reschedule.course_name}}</td>
+                <td>{{reschedule.available_slot}}</td>
+                <td>{{reschedule.rescheduled_slot}}</td>
+              </tr>
+              {% endif %}
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ensure jQuery and Bootstrap are included -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="path/to/bootstrap.min.js"></script>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", function() {
+      // Select the button
+      const openFeedbackFormButton = document.querySelector('.open-feedback-form');
+
+      // Add click event listener
+      openFeedbackFormButton.addEventListener('click', function() {
+          // Show the modal by directly setting its display style
+          document.getElementById('reschedule').style.display = 'block';
+      });
+  });
+  </script>
+
+{% endblock %}

@@ -345,6 +345,7 @@
 <!-- Tomorrow interviews Ends here -->
 
 {% for i in tomorrow_interviews %}
+
 <div class="modal fade" id="tomorrowinterviewfeedback{{forloop.counter}}" tabindex="-1" role="dialog"
   aria-labelledby="FeedbackForm" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
@@ -529,6 +530,7 @@
     </div>
   </div>
 </div>
+
 {% endfor %}
 
 <!-- Upcoming interviews starts here -->
@@ -562,6 +564,7 @@
           <tbody>
 
             {% for i in upcoming_interviews %}
+
             <tr>
               <td class="text-center">{{forloop.counter}}</td>
               <td class="text-center">{{i.student_name.first_name}} {{i.student_name.last_name}}</td>
@@ -583,6 +586,7 @@
                 </button>
               </td>
             </tr>
+
             {% endfor %}
           </tbody>
         </table>
@@ -594,6 +598,7 @@
 <!-- Upcoming interviews Ends here -->
 
 {% for i in upcoming_interviews %}
+
 <div class="modal fade" id="upcominginterviewfeedback{{forloop.counter}}" tabindex="-1" role="dialog"
   aria-labelledby="FeedbackForm" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
@@ -778,6 +783,7 @@
     </div>
   </div>
 </div>
+
 {% endfor %}
 
 
@@ -814,7 +820,8 @@
 
             <tr>
               {% for i in completed_interviews %}
-              <td>{{i.id}}</td>
+
+              <td>{{forloop.counter}}</td>
               <td>{{i.interview.student_name.first_name}} {{i.interview.student_name.last_name}}</td>
               <td>{{i.interview.student_name.email}}</td>
               <td class="text-center text-info" style="font-weight:bold;">{{i.attendance_status}}</td>
@@ -830,6 +837,7 @@
                     alt="Student resume" /></a>
               </td>
             </tr>
+
             {% endfor %}
 
           </tbody>
@@ -881,10 +889,8 @@
     }
 
     // Call the function for each interview on page load
-    {% for i in today_interviews %}
-    toggleFields({{ forloop.counter }});
-    // Initialize form validation for each form
-    $("#feedbackForm{{ forloop.counter }}").validate({
+    $(this).each(function(){
+        $("#feedbackForm").validate( {
       rules: {
         attendance_status: {
           required: true,
@@ -929,14 +935,8 @@
         form.submit();
       },
     });
-    {% endfor %}
-
-    // Use event delegation to handle change event for each attendanceStatus
-    $(document).on('change', '[id^="attendanceStatus"]', function () {
-      var counter = $(this).data('counter');
-      toggleFields(counter);
-    });
   });
+});
 </script>
 
 
@@ -972,10 +972,8 @@
     }
 
     // Call the function for each interview on page load
-    {% for i in tomorrow_interviews %}
-    toggleFields({{ forloop.counter }});
-    // Initialize form validation for each form
-    $("#feedbackForm_2{{ forloop.counter }}").validate({
+    $(this).each(function(){
+        $("#feedbackForm_2").validate( {
       rules: {
         attendance_status: {
           required: true,
@@ -1020,12 +1018,7 @@
         form.submit();
       },
     });
-    {% endfor %}
 
-    // Use event delegation to handle change event for each attendanceStatus
-    $(document).on('change', '[id^="attendanceStatus_2"]', function () {
-      var counter = $(this).data('counter');
-      toggleFields(counter);
     });
   });
 </script>
@@ -1059,10 +1052,9 @@
     }
 
     // Call the function for each interview on page load
-    {% for i in upcoming_interviews %}
-    toggleFields({{ forloop.counter }});
+    $(this).each(function(){
+        $("#feedbackForm_3").validate( {
     // Initialize form validation for each form
-    $("#feedbackForm_3{{ forloop.counter }}").validate({
       rules: {
         attendance_status: {
           required: true,
@@ -1107,12 +1099,6 @@
         form.submit();
       },
     });
-    {% endfor %}
-
-    // Use event delegation to handle change event for each attendanceStatus
-    $(document).on('change', '[id^="attendanceStatus_3"]', function () {
-      var counter = $(this).data('counter');
-      toggleFields(counter);
     });
   });
 </script>
@@ -1182,82 +1168,3 @@
 
 
 {% endblock %}
-
-
-<script>
-  //  $(document).ready(function () {
-  //    //validationf for special charector
-  //    $.validator.addMethod("noSpecialChars", function (value, element) {
-  //      return /^[a-zA-Z0-9\s]*$/.test(value);
-  //    }, "Special characters are not allowed.");
-  //    //no numbers
-  //    $.validator.addMethod("noNumbers", function (value, element) {
-  //      return !/\d/.test(value);
-  //    }, "Numbers are not allowed in the course name.");
-  //
-  //    $.validator.addMethod("selectRequired", function (value, element) {
-  //      return value !== "" && value !== null && value !== "0";
-  //    },
-  //      "Please select an option."
-  //    );
-  //
-  //
-  //    $("#createFeed").validate({
-  //      rules: {
-  //        Attendance: {
-  //
-  //          required: true,
-  //        },
-  //        Communication: {
-  //          selectRequired: true,
-  //        },
-  //        'Body Language': {
-  //          selectRequired: true,
-  //        },
-  //        'Technical Performance': {
-  //          selectRequired: true,
-  //        },
-  //        'Logical Thinking': {
-  //          selectRequired: true,
-  //        },
-  //        Suggestions: {
-  //          selectRequired: true,
-  //        },
-  //
-  //
-  //      },
-  //      messages: {
-  //        Attendance: {
-  //          required: "Please Select an option",
-  //        },
-  //        Communication: {
-  //          selectRequired: "Please Select an option",
-  //        },
-  //        'Body Language': {
-  //          selectRequired: " Please Select an option"
-  //        },
-  //        'Technical Performance': {
-  //          selectRequired: 'Please Select an option'
-  //        },
-  //        'Logical Thinking': {
-  //          selectRequired: "Please Select an option",
-  //        },
-  //        Suggestions: {
-  //          selectRequired: "Text here",
-  //        },
-  //
-  //
-  //      },
-  //
-  //      submitHandler: function (form) {
-  //        form.submit();
-  //      },
-  //
-  //    });
-  //  });
-  //
-  //  $.validator.addMethod("pdfOnly", function (value, element) {
-  //    // Check if the file extension is pdf
-  //    return this.optional(element) || /\.(pdf)$/i.test(value);
-  //  }, "Please select a PDF file.");
-//</script>

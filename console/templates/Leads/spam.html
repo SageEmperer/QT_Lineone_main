@@ -31,14 +31,14 @@
                               <div class="font-14 text-white">
                                   <span class="mr-5">
                                       <span class="font-weight-bold pr-5">JOINING DATE:</span>
-                                      <span class="mr-5">12/03/24</span>
+                                      <span class="mr-5">{{request.session.admin_user.register_date}}</span>
                                   </span>
                                 </div>
                                 <div class="font-14 text-white" >
 
                                   <span>
                                     <span class="font-weight-bold pr-5">Department:</span>
-                                    <span>Python Department</span>
+                                    <span>{% if request.session.admin_user %} Admin  {% endif %}</span>
                                   </span>
                                 </div>
                                   
@@ -298,13 +298,13 @@
               <div class="col-md-6 mb-3">
                 <label for="courseFaculty" class="form-label">Course Faculty <span class="text-danger">*</span></label>
       
-<select class="form-select form-control" name="courseFaculty" >
+<select class="custom-select form-control" name="courseFaculty" >
 <option value="" selected>Select your Faculty</option>
-  {% for emp in faculty %}
-      {% if emp.branch == i.branch_name %}
-      <option value="{{emp.id}}">{{emp.first_name}}</option>
-      {% endif %}
-      {% endfor %}
+{% for emp in faculty %}
+{% if emp.branch == i.branch_name and emp.course_id == i.course_name.course_name and emp.specialization_id == i.course_name.specialization %}
+<option value="{{emp.id}}" {% if i.faculty == emp.id %} selected {% endif %}  >{{emp.first_name}} {{emp.last_name}}</option>
+{% endif %}
+{% endfor %}
 </select>
 
               </div>
@@ -321,7 +321,7 @@
               </div>
               <div class="col-md-4 mb-3">
                 <label for="batchno" class="form-label">Batch Number <span class="text-danger">*</span></label>
-                <select id="batchno" class="form-select form-control" name="batchno">
+                <select id="batchno" class="custom-select form-control" name="batchno">
                   <option selected disabled>Select the Batch Number</option>
                   {% for batch in batches %}
                   {% if i.course_name.course_name == batch.course_id and i.course_name.specialization == batch.spec_id %}
@@ -338,7 +338,7 @@
                 <input type="text" class="form-control  bg-light text-secondary" id="courseFee" value="{{i.course_name.course_fee}}" disabled>
               </div>
               <div class="col-md-4 mb-3">
-                <label for="discount" class="form-label">Discount Fee <span class="text-danger">*</span></label>
+                <label for="discount" class="form-label">Discount Fee up to  <span class="text-danger">*</span></label>
                 <input type="text" class="form-control bg-light text-secondary" id="discount" placeholder="Discount Fee (%)" value="{{i.course_name.discount}}%" disabled>
               </div>
               <div class="col-md-4 mb-3">
@@ -364,14 +364,15 @@
                 <label for="admissionFee" class="form-label">Admission Fee <span class="text-danger" >*</span></label>
                 <input type="text" class="form-control text-secondary" id="admissionFee" name="admissionFee" placeholder="0.00">
               </div>
+              
               <div class="col-md-6 mb-3">
-                <label for="remainingfee" class="form-label">Remainingfee Fee <span class="text-danger">*</span></label>
+                <label for="remainingfee" class="form-label">Remaining Fee <span class="text-danger">*</span></label>
                 <input type="text" class="form-control text-secondary" id="remainingfee" name="remainingfee" placeholder="0.00" readonly>
               </div>
               <!-- payment details -->
               <div class="col-md-6 mb-3">
                 <label for="paymenttype" class="form-label">Mode of Payment <span class="text-danger">*</span></label>
-                <select id="paymenttype" class="form-select form-control payment_type" name="paymenttype">
+                <select id="paymenttype" class="custom-select form-control payment_type" name="paymenttype">
                     <option selected disabled>Select Mode of Payment</option>
                     <option value="UPI">UPI</option>
                     <option value="Cash">Cash</option>
@@ -382,7 +383,7 @@
             <!-- UPI Details -->
             <div class="col-md-6 mb-3 upi_dropdown" id="UPI" style="display: none;">
                 <label for="" class="form-label">UPI Payment</label>
-                <select name="upi_id_id" class="form-select form-control upi_drop_select" id="">
+                <select name="upi_id_id" class="custom-select form-control upi_drop_select" id="">
                     <option value="" selected>Select your UPI</option>
                     {% for i in upi %}
                     <option value="{{i.id}}">{{i.upipayments_name}} {{i.upiid}}</option>
@@ -392,6 +393,7 @@
             
             {% for i in upi %}
             <div class="col-md-6 mb-3 upi_id" id="upi_id{{i.id}}" style="display: none;">
+              <label for="" class="form-label">UPI ID</label>
                 <input type="text" readonly  value="{{i.upiid}}" class="form-control upi_id_input">
             </div>
             {% endfor %}
@@ -405,8 +407,8 @@
             
             <div class="col-md-6 mb-3 net_banking_div" style="display: none;">
                 <label for="" class="form-label">Net Banking</label>
-                <select name="net_banking_id" class="form-select form-control net_banking_select" id="">
-                    <option value="" selected>Select your netbanking"</option>
+                <select name="net_banking_id" class="custom-select form-control net_banking_select" id="">
+                    <option value="" selected>Select your Net Banking</option>
                     {% for net in net_banking %}
                     <option value="{{net.id}}">{{net.netbanking_name}}</option>
                     {% endfor %}
@@ -416,13 +418,21 @@
             {% for net in net_banking %}
             <div class="col-md-6 mb-3 net-baking_all net-baking_all{{net.id}}" style="display: none;">
                 <div class="">
+                  <label for="" class="form-label">Net Banking Name</label> 
                     <input type="text" readonly value="{{net.netbanking_name}}" class="form-control">
                 </div>
             </div>
             
             <div class="col-md-6 mb-3 net-baking_all net-baking_all{{net.id}}" style="display: none;">
                 <div class="">
+                  <label for="" class="form-label">IFSC code</label>
                     <input type="text" readonly value="{{net.ifscode}}" class="form-control">
+                </div>
+            </div>
+            <div class="col-md-6 mb-3 net-baking_all net-baking_all{{net.id}}" style="display: none;">
+                <div class="">
+                  <label for="" class="form-label">Account Number</label>
+                    <input type="text" readonly value="{{net.accountnumber}}" class="form-control">
                 </div>
             </div>
             {% endfor %}
@@ -438,31 +448,6 @@
     
     
 
-                
-            
-            <!-- Paytm Details -->
-            <div class="col-md-6 mb-3 payment-details{{i.id}}" id="Paytm{{i.id}}" style="display: none;">
-                <label for="paytmNumber" class="form-label">Paytm Number <span class="text-danger">*</span></label>
-                <input type="text" class="form-control text-secondary" id="paytmNumber" name="paytmNumber" placeholder="Paytm Number">
-                <div>
-                  <label for="paytmTransactionId" class="form-label">Transaction Id <span class="text-danger">*</span></label>
-                  <input type="text" class="form-control text-secondary" id="paytmTransactionId" name="paytmTransactionId" placeholder="TransactionId">
-                </div>
-            </div>
-            
-            <!-- Bank Transfer Details -->
-            <div class="col-md-6 mb-3 payment-details{{i.id}}" id="BankTransfer{{i.id}}" style="display: none;">
-                <div>
-                  <label for="bankAccount" class="form-label">Bank Account Number <span class="text-danger">*</span></label>
-                  <input type="text" class="form-control text-secondary" id="bankAccount" name="bankAccount" placeholder="Bank Account Number">
-                </div>
-                <div>
-                  <label for="bankTransactionId" class="form-label">Transaction Id <span class="text-danger">*</span></label>
-                  <input type="text" class="form-control text-secondary" id="bankTransactionId" name="bankTransactionId" placeholder="TransactionId">
-                </div>
-                
-            </div>
-            
               
               <div class="modal-footer d-flex justify-content-center col-md-12 mb-3">
                 <button type="submit" class="btn btn-primary">Submit</button>
@@ -884,6 +869,66 @@
     </script>
 
 
+
+    <script>
+      $(document).ready(function() {
+        // Initialize visibility of elements
+        var upiDropdown = $('.upi_dropdown');
+        var netBankingDiv = $('.net_banking_div');
+        var transactionIdDiv = $('.transaction-id');
+        upiDropdown.hide();
+        netBankingDiv.hide();
+        transactionIdDiv.hide();
+    
+        $('.payment_type').change(function() {
+            var paymentType = $(this).val();
+    
+            if (paymentType === 'UPI') {
+                upiDropdown.show();
+                netBankingDiv.hide();
+                $('.net_banking_select').val('');
+                $('.net-baking_all').hide();
+                transactionIdDiv.show();
+            } else if (paymentType === 'netbanking') {
+                upiDropdown.hide();
+                netBankingDiv.show();
+                $('.upi_drop_select').val('');
+                $('.upi_id, .upi_id_img').hide();
+                transactionIdDiv.show();
+            } else {
+                upiDropdown.hide();
+                netBankingDiv.hide();
+                transactionIdDiv.hide();
+                
+                $('.upi_drop_select').val('');
+                $('.upi_id, .upi_id_img').hide();
+                
+                $('.net_banking_select').val('');
+                $('.net-baking_all').hide();
+            }
+        });
+    
+        $('.upi_drop_select').change(function() {
+            var selectedUpiId = $(this).val();
+            $('.upi_id, .upi_id_img').hide();
+            if (selectedUpiId !== '') {
+                $('#upi_id' + selectedUpiId).show();
+                $('#upi_id_img' + selectedUpiId).show();
+            }
+        });
+    
+        $('.net_banking_select').change(function() {
+            var selectedNetBankingId = $(this).val();
+            $('.net-baking_all').hide();
+            if (selectedNetBankingId !== '') {
+                $('.net-baking_all' + selectedNetBankingId).show();
+            }
+        });
+    });
+    
+    
+    </script>
+    
   
   
 {% endblock %}

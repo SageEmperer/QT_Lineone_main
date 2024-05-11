@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admission Receipt | {{ leads.token_id }}</title>
+  <style>
+    table {
+      width: 100%;
+      margin-bottom: 1rem;
+      color: #212529; /* Text color */
+      border-collapse: collapse;
+    }
+    
+    table th,
+    table td {
+      padding: 0.75rem;
+      vertical-align: top;
+      border-top: 1px solid #dee2e6; /* Top border color */
+      text-align: left;
+    }
+    
+    table thead th {
+      vertical-align: bottom;
+      border-bottom: 2px solid #dee2e6; /* Bottom border color */
+      text-align: left;
+    }
+    
+    table tbody + tbody {
+      border-top: 2px solid #dee2e6; /* Border between tbody sections */
+    }
+    .row{
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    
+  </style>
+</head>
+
+<body>
+
+<div style="display: flex; justify-content: center; align-items: center; min-height: 100vh;">
+  <div style="border: 1px solid #dee2e6; border-radius: 0.25rem; box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);">
+    <div style="background-color: #343a40; color: #fff; padding: 0.75rem 1.25rem; border-top-left-radius: 0.25rem; border-top-right-radius: 0.25rem;">
+      <h5 style="margin: 0;">Receipt</h5>
+    </div>
+    <div style="padding: 1.25rem;">
+      <table style="width: 100%;">
+        <tr>
+          <td style="padding: 0.75rem; border-bottom: 1px solid #dee2e6;"> <b>Token : </b> <b>{{ leads.token_id }}</b></td>
+        </tr>
+        <tr>
+          <td style="padding: 0.75rem; border-bottom: 1px solid #dee2e6;"><b>Full Name :</b> {{ leads.first_name }} {{ leads.last_name }}</td>
+        </tr>
+        <tr>
+          <td style="padding: 0.75rem; border-bottom: 1px solid #dee2e6;"><b>Mobile Number :</b> {{ leads.mobile_number }}</td>
+        </tr>
+        <tr>
+          <td style="padding: 0.75rem; border-bottom: 1px solid #dee2e6;"><b>Email :</b> {{ leads.email }}</td>
+        </tr>
+        <tr>
+          <td style="padding: 0.75rem; border-bottom: 1px solid #dee2e6;"><b>Course Name :</b> {{ leads.course_name }}</td>
+        </tr>
+       <tr>
+          <td style="padding: 0.75rem; border-bottom: 1px solid #dee2e6;"><b>Branch Name : </b>{{ leads.branch_name }}</td>
+        </tr>
+       <tr>
+          <td style="padding: 0.75rem; border-bottom: 1px solid #dee2e6;"><b>Teaching Faculty : </b>{{ leads.faculty.first_name }}</td>
+        </tr>
+       <tr>
+          <td style="padding: 0.75rem; border-bottom: 1px solid #dee2e6;"><b>Course Plan : </b>{{ leads.course_name.course_plan.plan_name }}</td>
+        </tr>
+       <tr>
+          <td style="padding: 0.75rem; border-bottom: 1px solid #dee2e6;"><b>Batch Name : </b>{{ leads.batch_number.batch_number }}</td>
+        </tr>
+        <tr>
+          <td style="padding: 0.75rem; border-bottom: 1px solid #dee2e6;"><b>Admission Date : </b>{{ leads.admission_date }}</td>
+        </tr>
+        <tr>
+          <td style="padding: 0.75rem; border-bottom: 1px solid #dee2e6;"><b>Course Fee : </b> <span id="course_fee">{{ leads.course_name.course_fee }}</span></td>
+        </tr>
+        <tr>
+          <td style="padding: 0.75rem; border-bottom: 1px solid #dee2e6;"><b>Discount % : </b>{{ leads.course_name.discount }} %</td>
+        </tr>
+        <tr>
+          <td style="padding: 0.75rem; border-bottom: 1px solid #dee2e6;"><b>Final Price : </b>{{ leads.course_name.final_price }}</td>
+        </tr>
+        <tr>
+          <td style="padding: 0.75rem; border-bottom: 1px solid #dee2e6;"><b>Amount Paid : </b><span id="amount_paid">{{ leads.amount_paid }}</span></td>
+         </tr>
+        <tr>
+          <td style="padding: 0.75rem; border-bottom: 1px solid #dee2e6;" id="remaining_fee"><b>Remaining Fee : </b>{{remaining_fee}}</td>
+        </tr>
+  
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- <div style="display: flex; justify-content: center; width: 100%; margin-top: 1rem;">
+  <div style="padding: 1rem;">
+    <table >
+      <thead>
+        <th colspan="2" class="hello">
+          hello
+        </th>
+
+      </thead>
+      <tbody>
+        <tr>
+          <th>Token ID</th>
+          <td>{{ leads.token_id }}</td>
+        </tr>
+        <tr>
+          <th>Full Name</th>
+          <td>{{ leads.first_name }} {{leads.last_name}}</td>
+        </tr>
+        <tr>
+          <th>Mobile</th>
+          <td>{{ leads.mobile_number }}</td>
+        </tr>
+        <tr>
+          <th>Email</th>
+          <td>{{ leads.email }}</td>
+        </tr>
+        <tr>
+          <th>Course</th>
+          <td>{{ leads.course_name.course_name }}</td>
+        </tr>
+        <tr>
+          <th>Branch Name</th>
+          <td>{{ leads.branch_name }}</td>
+        </tr>
+        <tr>
+          <th>Teaching Faculty</th>
+          <td>{{ leads.faculty.first_name }} {{leads.faculty.last_name}}</td>
+        </tr>
+        <tr>
+          <th>Course Plan</th>
+          <td>{{ leads.course_name.course_plan.plan_name }}</td>
+        </tr>
+        <tr>
+          <th>Batch Number</th>
+          <td>{{ leads.batch_number.batch_number}}</td>
+        </tr>
+        <tr>
+          <th>Admission Date</th>
+          <td>{{ leads.admission_date}}</td>
+        </tr>
+        <tr>
+          <th>Course</th>
+          <td>{{ leads.admission_date}}</td>
+        </tr>
+        <tr>
+          <th>Course</th>
+          <td>{{ leads.course_feename.course_fee}}</td>
+        </tr>
+        <tr>
+          <th>Course</th>
+          <td>{{ leads.course_feename.discount}}</td>
+        </tr>
+        <tr>
+          <th>Course</th>
+          <td>{{ leads.course_feename.final_price}}</td>
+        </tr>
+        <tr>
+          <th>Course</th>
+          <td>{{ leads.amount_paid}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div> -->
+
+<!-- <div class="row">
+  <div class="col-6">
+    Lorem ipsum dolor
+  </div>
+  <div class="col-6">
+    Lorem ipsum dolor sit a
+  </div>
+</div>
+<div class="row">
+  <table>
+    <thead>
+      <tr>
+        <td>hello</td>
+        <td>hello</td>
+        <td>hello</td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>hello</td>
+        <td>hello</td>
+        <td>hello</td>
+      </tr>
+    </tbody>
+      
+  </table>
+  <table>
+    <thead>
+      <tr>
+        <td>hello</td>
+        <td>hello</td>
+        <td>hello</td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>hello</td>
+        <td>hello</td>
+        <td>hello</td>
+      </tr>
+    </tbody>
+      
+  </table>
+</div> -->
+
+</body>
+</html>

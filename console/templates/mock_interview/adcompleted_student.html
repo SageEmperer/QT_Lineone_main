@@ -66,13 +66,13 @@
               <td class="">{{ i.interview.faculty.first_name}} {{ i.interview.faculty.last_name}}</td>
               <td>{{ i.interview.available_slot }}</td>
 
-               <td class="text-center text-info" style="font-weight:bold;">{{i.attendance_status}}</td>
-               <td class="text-center">{{i.logical_thinking}}</td>
+              <td class="text-center {% if i.attendance_status == 'Present' %}text-info{% elif i.attendance_status == 'Absent' %}text-danger{% endif %}" style="font-weight:bold;">{{ i.attendance_status }}</td>
+              <td class="text-center">{{i.logical_thinking}}</td>
               <td class="text-center">{{i.technical_skills}}</td>
               <td class="text-center">{{i.communication_skills}}</td>
               <td class="text-center">{{i.body_language}}</td>
               <td class="text-center">{{i.overall_rating}}</td>
-              <td class="text-center text-success" style="font-weight:bold;">{{i.status}}</td>
+              <td class="text-center {% if i.status == 'qualified' %}text-success{% elif i.status == 'not qualified' %}text-danger{% endif %}" style="font-weight:bold;">{{ i.status }}</td>
               <td class=" text-center" >{{i.suggestion}}</td>
               <td class="text-center">
                 <a href="{% url 'open_pdf' i.id %}" title=""><img src="https://www.freeiconspng.com/uploads/pdf-icon-png-pdf-zum-download-2.png" width="35" alt="Student resume" /></a>

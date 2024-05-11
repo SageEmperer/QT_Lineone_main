@@ -25,7 +25,7 @@ from django.utils.timezone import make_aware
 from django.db.models import Q
 import re
 from django.utils.dateparse import parse_datetime ,parse_date
-
+from django.core import serializers
 from django.utils.timezone import now
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
@@ -72,7 +72,8 @@ def admin_login(request):
                 'id': admin_user_log.id,
                 'company_name':admin_user_log.company_name,
                 'company_short_name':admin_user_log.company_short_name,
-                'terms_and_conditions':admin_user_log.terms_and_conditions
+                'terms_and_conditions':admin_user_log.terms_and_conditions,
+                'register_date':admin_user_log.register_date.isoformat()
             }
             return redirect('dashboard')
         else:
@@ -131,7 +132,7 @@ def register_page(request):
 
 
 def register_resend_otp(request):
-  mobile_number = request.session.get('register_data')['phone_number']
+  mobile_number = request.session.get('register_data').get('phone_number')
   otp = send_otp_to_phone(mobile_number)
   if otp:
     request.session['otp'] = otp
@@ -147,8 +148,6 @@ def otp_page(request):
   if request.method=='POST':
     entered_otp=request.POST.get('otp')
     session_otp = request.session.get('otp')
-    print("otp ",session_otp)
-    print("terms",request.session.get('register_data')['terms_and_conditions'])
     if entered_otp == session_otp:
       register_data=request.session.get('register_data')
       hash_password=register_data['password']
@@ -927,6 +926,7 @@ def verify_otp(request):
                         lead_sourse=register_user.prospect_types.get(pk=lead_data.get('lead_sourse')),
                         crn_number=register_user
                     )
+                    lead.generate_token()
                     subject = 'Registration Successful'
                     message = (
                     f"Hello {lead_data.get('first_name')},\n\n"
@@ -7585,6 +7585,7 @@ def enquiry_verify_otp(request):
                     lead_sourse=register_user.prospect_types.get(pk=lead_data.get('lead_source')),
                     crn_number=register_user
                 )
+                lead.generate_token()
                 print("created")
 
                 subject = 'Registration Successful'
@@ -7630,6 +7631,7 @@ def mark_as_lead(request, prospect_id):
         prospect = register_user.leads.get(id=prospect_id)
         prospect.lead_position = 'LEAD'
         prospect.save(update_fields=['lead_position'])
+        messages.success(request, 'Prospect marked as LEAD successfully')
         return redirect('lead_prospects')
     else:
         messages.error(request, 'Prospect not found')
@@ -7652,6 +7654,7 @@ def lead_move_to_mql(request,id):
        demo_assigned = request.POST.get('demodate')
        Leaddescription = request.POST.get('Leaddescription')
        courseFaculty = request.POST.get('courseFaculty')
+       student = register_user.leads.get(id=id)
        register_user.leads.filter(id=id).update(
 
           lead_type = leadType,
@@ -7660,6 +7663,16 @@ def lead_move_to_mql(request,id):
           lead_position = 'MQL',
           faculty = register_user.employee.get(pk=courseFaculty)
        )
+       demo = register_user.demo.get(pk=demo_assigned)
+       message = f""" Hello {student.first_name} {student.last_name},\n\n
+       Thank you for your interest in {request.session.get("admin_user").get("company_name")}. We are happy to have you onboard. \n\n
+       Your Demo for {demo.demotitle} has been scheduled. \n\n
+       Demo Link: {demo.meetinglink }
+       Demo Date: {demo.datestartat} \n\n
+       """
+       subject = 'Demo Scheduled'
+
+       send_mail(subject, message, settings.EMAIL_HOST_USER, [student.email])
 
        messages.success(request,'Lead moved to MQL')   
        return redirect('leads')
@@ -7689,6 +7702,7 @@ def mql(request):
   opportunity_count = register_user.leads.filter(lead_position = 'OPPORTUNITY').count()
   admission_count = register_user.leads.filter(lead_position = 'ADMITTED').count()
   spam_count = register_user.leads.filter(lead_position = 'SPAM').count()  
+  
 
   context={
      "leads":leads,
@@ -7704,8 +7718,8 @@ def mql(request):
      'request_discount_count':request_discount_count,
      'opportunity_count':opportunity_count,
      'admission_count':admission_count,
-     'spam_count':spam_count
-    
+     'spam_count':spam_count,
+     
   }
   return render(request,'Leads/mql.html', context)
 
@@ -7719,9 +7733,20 @@ def reschedule_demo(request,id):
   if request.method == "POST":
      demo_assigned = request.POST.get('demodate')
      if demo_assigned:
-        register_user.leads.filter(id=id).update(
+        dem=register_user.leads.filter(id=id).update(
            demo = register_user.demo.get(pk=demo_assigned)
         )
+        demo = register_user.demo.get(id=demo_assigned)
+        message = f""" Hello {register_user.leads.get(id=id).first_name} {register_user.leads.get(id=id).last_name},\n\n
+          Your Demo has been scheduled. \n\n
+          Demo Link: {demo.meetinglink }
+          Demo Date: {demo.datestartat} \n\n
+        """
+        subject = 'Demo Scheduled'
+
+        send_mail(subject, message, settings.EMAIL_HOST_USER, [register_user.leads.get(id=id).email])
+
+        messages.success(request,'Demo rescheduled successfully')  
         return redirect('mql')
      else:
        messages.error(request,'Demo not found')
@@ -7744,15 +7769,14 @@ def move_to_sql(request,id):
      mql_description = request.POST.get('mqldescription')
      courseFaculty = request.POST.get('courseFaculty')
      leadType = request.POST.get('leadType')
-     print("faculty",request.POST.get('courseFaculty'))
      if register_user.leads.filter(id=id).exists():
         register_user.leads.filter(id=id).update(
            lead_position = 'SQL',
            mql_description = mql_description,
            lead_type = leadType,
-           faculty = register_user.employee.get(pk=courseFaculty)
         )
         messages.success(request,'MQL Lead moved to SQL')
+     
         return redirect('mql')
      else:
       messages.error(request,'MQL Lead not found')
@@ -7818,7 +7842,6 @@ def move_to_opportunity(request,id):
           lead_position = 'OPPORTUNITY',
           lead_type = request.POST.get("leadType"),
           sql_description = request.POST.get("sqldescription"),
-          faculty = register_user.employee.get(pk=request.POST.get('courseFaculty'))   
         )
 
         messages.success(request,'SQL Lead moved to OPPORTUNITY')
@@ -7889,9 +7912,10 @@ def move_to_admission(request, id):
                 opportunity_lead.faculty = register_user.employee.get(pk=request.POST.get('courseFaculty'))
                 opportunity_lead.batch_number = register_user.regulations.get(pk=request.POST.get("batchno"))
                 opportunity_lead.admission_date = timezone.now()
+                opportunity_lead.amount_paid = request.POST.get('admissionFee')
 
                 # Exclude token_id from the update
-                opportunity_lead.save(update_fields=['lead_position', 'faculty', 'batch_number', 'admission_date'])
+                opportunity_lead.save(update_fields=['lead_position', 'faculty', 'batch_number', 'admission_date','amount_paid'])
 
                 # Restore the existing token_id
                 opportunity_lead.token_id = existing_token_id
@@ -7906,19 +7930,7 @@ def move_to_admission(request, id):
                     date_of_payment=timezone.now()
                 )
 
-                password = generate_password()
-                Studen_credentials.objects.create(
-                    crn=register_user,
-                    studend_id=opportunity_lead,
-                    email=opportunity_lead.email,
-                    password=password
-                )
-
-                email_from = settings.EMAIL_HOST_USER
-                recipient_list = [opportunity_lead.email]
-                subject = 'Admission Confirmation'
-                message = f'Your Admission has been confirmed. Your username is {opportunity_lead.email} and password is {password} \n\nThank you for using {request.session.get("admin_user").get("company_name")}. \n\n Your Link to Login: http://192.168.1.87:8080/student_panel/'
-                send_mail(subject, message, email_from, recipient_list)   
+                
 
                 messages.success(request, 'Lead moved to Admission')
                 return redirect('admissions')
@@ -7928,9 +7940,11 @@ def move_to_admission(request, id):
                 opportunity_lead.faculty = register_user.employee.get(pk=request.POST.get('courseFaculty'))
                 opportunity_lead.batch_number = register_user.regulations.get(pk=request.POST.get("batchno"))
                 opportunity_lead.admission_date = timezone.now()
+                opportunity_lead.amount_paid = request.POST.get('admissionFee')
+
 
                 # Exclude token_id from the update
-                opportunity_lead.save(update_fields=['lead_position', 'faculty', 'batch_number', 'admission_date'])
+                opportunity_lead.save(update_fields=['lead_position', 'faculty', 'batch_number', 'admission_date','amount_paid'])
 
                 # Restore the existing token_id
                 opportunity_lead.token_id = existing_token_id
@@ -7943,22 +7957,9 @@ def move_to_admission(request, id):
                     transaction_id=request.POST.get('transactionId'),
                     course_id=opportunity_lead.course_name,
                     date_of_payment=timezone.now(),
+
                     upi_id=register_user.upi.get(pk=request.POST.get('upi_id_id'))
                 )
-
-                password = generate_password()
-                Studen_credentials.objects.create(
-                    crn=register_user,
-                    studend_id=opportunity_lead,
-                    email=opportunity_lead.email,
-                    password=password
-                )
-
-                email_from = settings.EMAIL_HOST_USER
-                recipient_list = [opportunity_lead.email]
-                subject = 'Admission Confirmation'
-                message = f'Your Admission has been confirmed. Your username is {opportunity_lead.email} and password is {password} \n\nThank you for using {request.session.get("admin_user").get("company_name")}. \n\n Your Link to Login: http://192.168.1.87:8080/student_panel/'
-                send_mail(subject, message, email_from, recipient_list)   
 
                 messages.success(request, 'Lead moved to Admission')
                 return redirect('admissions')
@@ -7968,9 +7969,12 @@ def move_to_admission(request, id):
                 opportunity_lead.faculty = register_user.employee.get(pk=request.POST.get('courseFaculty'))
                 opportunity_lead.batch_number = register_user.regulations.get(pk=request.POST.get("batchno"))
                 opportunity_lead.admission_date = timezone.now()
+                opportunity_lead.amount_paid = request.POST.get('admissionFee')
+
+
 
                 # Exclude token_id from the update
-                opportunity_lead.save(update_fields=['lead_position', 'faculty', 'batch_number', 'admission_date'])
+                opportunity_lead.save(update_fields=['lead_position', 'faculty', 'batch_number', 'admission_date','amount_paid'])
 
                 # Restore the existing token_id
                 opportunity_lead.token_id = existing_token_id
@@ -7986,19 +7990,7 @@ def move_to_admission(request, id):
                     net_banking=register_user.net_banking.get(pk=request.POST.get('net_banking_id'))
                 )
 
-                password = generate_password()
-                Studen_credentials.objects.create(
-                    crn=register_user,
-                    studend_id=opportunity_lead,
-                    email=opportunity_lead.email,
-                    password=password
-                )
-
-                email_from = settings.EMAIL_HOST_USER
-                recipient_list = [opportunity_lead.email]
-                subject = 'Admission Confirmation'
-                message = f'Your Admission has been confirmed. Your username is {opportunity_lead.email} and password is {password} \n\nThank you for using {request.session.get("admin_user").get("company_name")}. \n\n Your Link to Login: http://192.168.1.87:8080/student_panel/'
-                send_mail(subject, message, email_from, recipient_list)   
+             
 
                 messages.success(request, 'Lead moved to Admission')
                 return redirect('admissions')
@@ -8067,6 +8059,28 @@ def move_to_admission(request, id):
     #         return redirect('admissions')
 
 
+@admin_required
+def admission_recipt(request, id):
+    crn = request.session.get('admin_user').get('crn')
+    register_user = Register_model.objects.get(crn=crn)
+    # Fetch the lead based on the provided ID
+    leads = get_object_or_404(register_user.leads, id=id)
+    total_paid = leads.amount_paid
+    remaining_fee = leads.course_name.course_fee - total_paid
+    print("total value",total_paid)
+    # Render HTML template with lead details
+    html_template = render_to_string('Leads/lead_pdf.html', {'leads': leads,'remaining_fee':remaining_fee})
+    # Create PDF response
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'filename="{leads.first_name}_{leads.last_name}_receipt.pdf"'
+    # Convert HTML to PDF and attach to response
+    pisa_status = pisa.CreatePDF(html_template, dest=response)
+    if pisa_status.err:
+        return HttpResponse('We encountered some errors while generating the PDF.')
+    return response
+
+
+
 
 @admin_required
 def request_dis(request,id):
@@ -8115,17 +8129,11 @@ def request_discounts(request):
      'admission_count':admission_count,
      'spam_count':spam_count
   }
-  return render(request,'Leads/request_discounts.html', context) 
+  return render(request,'Leads/request_discounts.html', context)
 
 
 
 
-
-
-
-
-
-            
 
 
 
@@ -8143,6 +8151,7 @@ def admissions(request):
   opportunity_count = register_user.leads.filter(lead_position = 'OPPORTUNITY').count()
   admission_count = register_user.leads.filter(lead_position = 'ADMITTED').count()
   spam_count = register_user.leads.filter(lead_position = 'SPAM').count() 
+  
 
 
   context={
@@ -8925,12 +8934,10 @@ def hr_details(request):
     else:
         hr_details = None
         job_postes = None
-
     context = {
         'hr_details': hr_details,
         'job_postes': job_postes
     }
-
     return render(request, 'hr_portal/HR details/hrdetails.html', context)
 
 
@@ -8998,7 +9005,11 @@ def job_description(request):
 def lokesh(request):
     return render(request,'hr_portal/lokesh.html')
 
+
+
+@admin_required
 def Student_details(request):
+  
     return render(request, 'hr_portal/students/student_Details.html')
 
 def Student_report(request):
@@ -9200,8 +9211,29 @@ def job_gallery_elgible(request):
 def job_gallery_inprogress(request):
     return render(request,'hr_portal/job gallery/jobgalleryinprogress.html')
 
+
+def student_details_json(request):
+    crn = request.session.get('admin_user').get('crn')
+    register_user = Register_model.objects.get(crn=crn)
+    student = register_user.leads.all().order_by('-id')
+    student_json = serializers.serialize('json', student)
+    return HttpResponse(student_json, content_type='application/json')
+
+
 def Student_filter(request):
-    return render(request, 'hr_portal/student filters/student_filter.html')    
+    crn = request.session.get('admin_user').get('crn')
+    register_user = Register_model.objects.get(crn=crn)
+    student = register_user.leads.all().order_by('-id')
+    url = "http://127.0.0.1:8080/student_details_json"
+    
+    
+    context = {
+       'student':url,
+       
+    }
+    return render(request, 'hr_portal/student filters/student_filter.html',context)    
+
+
 
 def placement_status(request):
     return render(request,'hr_portal/placement status/placementstatus.html')
@@ -9389,7 +9421,13 @@ def company_vendor_export(request):
 
 
 # moke interview sart here
-@admin_required
+
+
+
+
+
+
+
 def getting_employ_slot(request,course_id,spc_id):
   employee_details = Employee_model.objects.filter(course_id = course_id,specialization_id = spc_id)
   employee_list = [{'id': emp.id, 'first_name': emp.first_name, 'last_name':emp.last_name} for emp in employee_details]
@@ -9416,7 +9454,7 @@ def student_Book_an_interview(request):
 
 
 
-@admin_required
+
 def get_specializations(request,id):
     if request.is_ajax() and request.method == 'GET':
         course_id = request.GET.get(id)
@@ -9428,17 +9466,6 @@ def get_specializations(request,id):
 
 
 
-# PDF_view start here
-@admin_required
-def open_pdf(request, document_id):
-    document = Student_Book_Interview_modal.objects.get(id=document_id)
-    pdf_file = document.attach_Resume
-    response = FileResponse(pdf_file, content_type='application/pdf')
-    return response
-
-
-
-@admin_required
 def submit_feedback(request, interview_id):
     if request.method == 'POST':
         form = Feedback(request.POST)
@@ -9452,11 +9479,7 @@ def submit_feedback(request, interview_id):
     return render(request, 'feedback_form.html', {'form': form})
 
 
-
-
-
 # Faculty slot availbility
-@admin_required
 def faculty_slot(request):
     crn=request.session.get('admin_user').get('crn')
     register_user=Register_model.objects.get(crn=crn)
@@ -9477,12 +9500,7 @@ def faculty_slot(request):
 
 
 
-
-
-
-
 # edit  faculty slot
-@admin_required
 def edit_faculty_slot(request, slot_id):  
     crn = request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
@@ -9509,7 +9527,7 @@ def edit_faculty_slot(request, slot_id):
                 f" Alotted Time : {slot.rescheduled_slot}\n"
                 f"link: {slot.mock_link}.\n"
             
-                "Should you have any questions or need further information, please do not hesitate to contact us.\n\n"
+                "If you have any questions or need further information, please do not hesitate to contact us.\n\n"
                 "Best Regards,\n"
                 f"{request.session.get('admin_user').get('company_name')}\n"
                 "Contact Information")
@@ -9539,15 +9557,7 @@ def edit_faculty_slot(request, slot_id):
         return redirect('faculty_slot')
 
     
-
-
-
-
-
-
-
 # faculty slot import
-@admin_required
 def faculty_slot_import(request):
     crn = request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
@@ -9595,13 +9605,7 @@ def faculty_slot_import(request):
     return render(request, 'mock_interview/slot_management.html', context)
 
 
-
-
-
-
-
 # faculty slot export
-@admin_required
 def faculty_slot_export(request):
    crn = request.session.get('admin_user').get('crn')
    register_user = Register_model.objects.get(crn=crn)
@@ -9618,92 +9622,149 @@ def faculty_slot_export(request):
 
 
 
-
-
-
-
-
-
 @admin_required
 def FeedbackForm(request, id):
     crn = request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
     
     if request.method == 'POST':
-      attendance_status=request.POST.get('attendance_status')
-      communication_skills=int(request.POST.get('communication_skills'))
-      body_language=int(request.POST.get('body_language'))
-      logical_thinking=int(request.POST.get('logical_thinking'))
-      technical_skills=int(request.POST.get('technical_skills'))
-      suggestion=request.POST.get('suggestion_3')
-      send_attachment=request.FILES.get('send_attachment')
-      status=request.POST.get('status')
+        # Get POST data safely
+        attendance_status = request.POST.get('attendance_status')
+        communication_skills = float(request.POST.get('communication_skills', 0))
+        body_language = float(request.POST.get('body_language', 0))
+        logical_thinking = float(request.POST.get('logical_thinking', 0))
+        technical_skills = float(request.POST.get('technical_skills', 0))
+        suggestion = request.POST.get('suggestion')
+        send_attachment = request.FILES.get('send_attachment')
+        status = request.POST.get('status')
 
-      # Calculate the overall rating
-      overall_rating = (communication_skills + body_language + logical_thinking + technical_skills) / 4
+        # Calculate the overall rating
+        overall_rating = (communication_skills + body_language +
+                          logical_thinking + technical_skills) / 4
+
 
         # Set status based on overall_rating
-      if overall_rating > 3.5:
+        if overall_rating > 3.5:
           status = 'qualified'
-      else:
+        else:
           status = 'not qualified'
-
-      feedback=Feedback.objects.create(
-         crn_number=register_user,
-         interview = Scheduling_mock_model.objects.get(pk=id),
-         attendance_status=attendance_status,
-         communication_skills=int(communication_skills),
-         technical_skills=int(technical_skills),
-         body_language=int(body_language),
-         logical_thinking=int(logical_thinking),
-         suggestion=suggestion,
-         send_attachment=send_attachment,
-         overall_rating=int(overall_rating),
-         status=status
-
-      )
-
-      
-      feedback.interview.interview_status = 'Completed'
-      feedback.interview.save()
-
-      subject = 'Feedback Submitted'
-      message = f'''
-      +---------------------------------------------+
-      |                Feedback Summary            |
-      +---------------------------------------------+
-      | Attendance Status:     {attendance_status}   |
-      | Communication Skills:  {communication_skills}|
-      | Technical Skills:      {technical_skills}    |
-      | Body Language:         {body_language}       |
-      | Logical Thinking:      {logical_thinking}    |
-      | Suggestion:            {suggestion}          |
-      | Overall Rating:        {overall_rating}      |
-      | Status:                {status}              |
-      +---------------------------------------------+
-      '''
-      from_email = settings.EMAIL_HOST_USER
-      to_email = [feedback.interview.student_name.email] 
-      try:
-          send_mail(subject, message, from_email, to_email, fail_silently=True)
-      except Exception as e:
+        feedback = Feedback.objects.create(
+            crn_number=register_user,
+            interview=Scheduling_mock_model.objects.get(pk=id),
+            attendance_status=attendance_status,
+            communication_skills=communication_skills,
+            technical_skills=technical_skills,
+            body_language=body_language,
+            logical_thinking=logical_thinking,
+            suggestion=suggestion,
+            send_attachment=send_attachment,
+            overall_rating=overall_rating,
+            status=status
+        )
+        feedback.interview.interview_status = 'Completed'
+        feedback.interview.save()
+        subject = 'Feedback Submitted'
+        if attendance_status == 'Present':
+            message = f'''
+            Feedback Summary:
+            Communication Skills:  {communication_skills}
+            Technical Skills:      {technical_skills}
+            Body Language:         {body_language}
+            Logical Thinking:      {logical_thinking}
+            Suggestion:            {suggestion}
+            Overall Rating:        {overall_rating}
+            Status:                {status}
+            '''
+        else:
+            message = f'''
+            Unfortunately,  You are absent during the scheduled interview.
+            '''
+        from_email = settings.EMAIL_HOST_USER
+        to_email = [feedback.interview.student_name.email]
+        try:
+            send_mail(subject, message, from_email, to_email, fail_silently=True)
+        except Exception as e:
             # Handle email sending failure gracefully
-          pass
-      
-      return redirect('total_interviews')
-            
-
-
-
-
-
+            pass
+        return redirect('total_interviews')
+    
 
 @admin_required
-def total_interviews(request):
+def FeedbackForm_2(request, id):
+    crn = request.session.get('admin_user').get('crn')
+    register_user = Register_model.objects.get(crn=crn)
+    
+    if request.method == 'POST':
+        # Get POST data safely
+        attendance_status = request.POST.get('attendance_status')
+        communication_skills = float(request.POST.get('communication_skills', 0))
+        body_language = float(request.POST.get('body_language', 0))
+        logical_thinking = float(request.POST.get('logical_thinking', 0))
+        technical_skills = float(request.POST.get('technical_skills', 0))
+        suggestion = request.POST.get('suggestion')
+        send_attachment = request.FILES.get('send_attachment')
+        status = request.POST.get('status')
+
+        # Calculate the overall rating
+        overall_rating = (communication_skills + body_language +
+                          logical_thinking + technical_skills) / 4
+
+
+        # Set status based on overall_rating
+        if overall_rating > 3.5:
+          status = 'qualified'
+        else:
+          status = 'not qualified'
+        feedback = Feedback.objects.create(
+            crn_number=register_user,
+            interview=Scheduling_mock_model.objects.get(pk=id),
+            attendance_status=attendance_status,
+            communication_skills=communication_skills,
+            technical_skills=technical_skills,
+            body_language=body_language,
+            logical_thinking=logical_thinking,
+            suggestion=suggestion,
+            send_attachment=send_attachment,
+            overall_rating=overall_rating,
+            status=status
+        )
+        feedback.interview.interview_status = 'Completed'
+        feedback.interview.save()
+        subject = 'Feedback Submitted'
+        if attendance_status == 'Present':
+            message = f'''
+            Feedback Summary:
+            Communication Skills:  {communication_skills}
+            Technical Skills:      {technical_skills}
+            Body Language:         {body_language}
+            Logical Thinking:      {logical_thinking}
+            Suggestion:            {suggestion}
+            Overall Rating:        {overall_rating}
+            Status:                {status}
+            '''
+        else:
+            message = f'''
+            Unfortunately,  You are absent during the scheduled interview.
+            '''
+        from_email = settings.EMAIL_HOST_USER
+        to_email = [feedback.interview.student_name.email]
+        try:
+            send_mail(subject, message, from_email, to_email, fail_silently=True)
+        except Exception as e:
+            # Handle email sending failure gracefully
+            pass
+        return render(request, 'mock_interview/admin-facultylist.html')
+
+
+    
+
+@admin_required
+
+def total_interviews(request, f_id):
     crn = request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
     faculty_id = register_user.employee.all().order_by("-id")
-    faculty = Scheduling_mock_model.objects.filter(crn=register_user)
+    Faculty = Scheduling_mock_model.objects.filter(crn=register_user, faculty=f_id)
 
     
     today = datetime.now().date()
@@ -9716,22 +9777,22 @@ def total_interviews(request):
     print("Upcoming:",upcoming)
 
     # Filter interviews for today, tomorrow, and upcoming days
-    today_interviews =faculty.filter(available_slot__date=today).exclude(interview_status__in=['completed', 'pending'])
+    today_interviews =Faculty.filter(available_slot__date=today)
     print("Today Interviews:", today_interviews)
 
-    expired_interviews = faculty.filter(available_slot__date__lt=today, interview_status='not_completed')
+    expired_interviews = Faculty.filter(available_slot__date__lt=today).exclude(interview_status__in=['completed', 'pending', 'not_booked'])
     for interview in expired_interviews:
         interview.interview_status = 'pending'
         interview.save()
     
-    tomorrow_interviews =faculty.filter(available_slot__date=tomorrow).exclude(interview_status__in=['completed', 'pending'])
+    tomorrow_interviews =Faculty.filter(available_slot__date=tomorrow).exclude(interview_status__in=['completed', 'pending', 'not_booked'])
     print("Tomorrow Interviews:", tomorrow_interviews)
     
-    upcoming_interviews =faculty.filter(available_slot__date__gte=upcoming).exclude(interview_status__in=['completed', 'pending'])
+    upcoming_interviews =Faculty.filter(available_slot__date__gte=upcoming).exclude(interview_status__in=['completed', 'pending', 'not_booked'])
     print("Upcoming Interviews:", upcoming_interviews)
 
   
-    completed_interviews = Feedback.objects.filter(crn_number=register_user, interview__interview_status='completed')
+    completed_interviews =Feedback.objects.filter(crn_number=register_user, interview__interview_status='completed', interview__faculty=f_id)
     
     
 
@@ -9747,60 +9808,40 @@ def total_interviews(request):
 
 
 
-    
-
-
-
 # Student Past Interviews with feedback details
-@admin_required
-def student_feedback(request):
+def student_feedback(request, s_id):
   crn = request.session.get('admin_user').get('crn')
   register_user = Register_model.objects.get(crn=crn)
   student_id=register_user.leads.filter(lead_position="ADMITTED").order_by("-id")
-  feedbacks = Feedback.objects.filter(crn_number=register_user, interview__interview_status='completed')
+  feedbacks = Feedback.objects.filter(crn_number=register_user, interview__interview_status='completed', interview__student_name=s_id)
   context = {
     'feedbacks': feedbacks,
     'student_id': student_id,
   }
   return render(request,'mock_interview/student_past_interviews.html', context)
 
-
-
-
-
-@admin_required
 def open_pdf(request, document_id):
-    # Retrieve the Feedback object by its ID
-    document = Feedback.objects.get(id=document_id)
-    
-    # Check if the Feedback object has a file associated with it
-    if document.send_attachment:
-        # Get the file path
-        file_path = document.send_attachment.path
-        
-        # Open the file in binary mode and create an HttpResponse with its content
-        with open(file_path, 'rb') as pdf_file:
-            response = HttpResponse(pdf_file.read(), content_type='application/pdf')
-            return response
-    else:
-        # Handle the case where no file is associated with send_attachment
-        return HttpResponse("No file associated with send_attachment", status=404)
-        
+    document = Scheduling_mock_model.objects.get(id=document_id)
+    pdf_file = document.send_attachment
+    response = FileResponse(pdf_file, content_type='application/pdf')
+    return response
 
 # Admin mock slot scheduling
-@admin_required
 def admin_mock(request):
     crn = request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
     courses = Course.objects.all()
     specializations = Specialization.objects.all()
-    faculty = Employee_model.objects.all()
+    faculties = Employee_model.objects.all()
     assigning = Scheduling_mock_model.objects.all() 
 
     if request.method == 'POST':
         Available_Slot = request.POST.get('datetime')
         Mock_Link = request.POST.get('link')
-        Course_Name = Course.objects.get(id=request.POST.get('course'))
+        course =request.POST.get('course')        
+        Course_Name = Course.objects.get(id = course)
+        specialization = request.POST.get('specialization')
+        Specialization_Name = Specialization.objects.get(id = specialization)
         Faculty = Employee_model.objects.get(id=request.POST.get('faculty'))
         
         # Check if the slot has already been scheduled for the faculty
@@ -9813,21 +9854,22 @@ def admin_mock(request):
             available_slot=Available_Slot, 
             mock_link=Mock_Link, 
             course_name=Course_Name, 
+            specialization_name=Specialization_Name,
             faculty=Faculty,
             crn=register_user
         )
         subject='Mock Scheduled successfully'
-        message=(f"Hello {faculty.first_name},\n\n" 
+        message=(f"Hello {Faculty.first_name},\n\n" 
                 "Your mock has been scheduled  successfully" 
                   "Here are your Scheduled details:\n\n"
                 f" Alotted Time : {Available_Slot}\n"
                 f"link: {Mock_Link}.\n"
-                "Should you have any questions or need further information, please do not hesitate to contact us.\n\n"
+                "If you have any questions or need further information, please do not hesitate to contact us.\n\n"
                 "Best Regards,\n"
                 f"{request.session.get('admin_user').get('company_name')}\n"
                 "Contact Information")
         email_from=settings.EMAIL_HOST_USER
-        to_email=f'{faculty.personal_email}'
+        to_email=f'{Faculty.personal_email}'
         send_mail(subject,message,email_from,[to_email], fail_silently=False)
         messages.success(request, "Slot has been scheduled successfully")
         return redirect('admin_mock')
@@ -9836,17 +9878,30 @@ def admin_mock(request):
     context = {
         'courses': courses,  
         'specializations': specializations,
-        'faculty': faculty,
+        'faculty': faculties,
         'assigning': assigning,
         # 'faculty_slots_count': faculty_slots_count
     }
     return render(request, 'mock_interview/adminmock_slot.html', context)
 
+def spec_ajax(request, id):
+    # Filter specializations based on the selected course
+    specializations = Specialization.objects.filter(course_name=id)
+    # Prepare a list of dictionaries containing specialization details
+    specialization_list = [{"id": spec.id, "name": spec.specilalization_name} for spec in specializations]
+    # Return JSON response containing the specialization list
+    return JsonResponse({"specialization_list": specialization_list})
+
+def faculty_ajax(request, id):
+    # Filter faculty based on the selected specialization name
+    faculty = Employee_model.objects.filter(specialization_id_id=id)
+    faculty_list = [{"id": f.id, "first_name": f.first_name , "last_name":f.last_name} for f in faculty]
+    # Return JSON response containing the faculty list
+    return JsonResponse({"faculty_list": faculty_list})
 
 
 
-
-@admin_required
+# edit mock slot assiging
 def edit_admin_mock(request, slot_id):  
     crn = request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
@@ -9856,7 +9911,7 @@ def edit_admin_mock(request, slot_id):
             Available_Slot = request.POST.get('available_slot')
             Mock_Link = request.POST.get('mock_link')
             Reschedule_Reason = request.POST.get('reschedule_reason')
-            if register_user.assigning.filter(available_slot=Available_Slot).exists():
+            if register_user.schedule.filter(available_slot=Available_Slot).exists():
                 messages.error(request, "This slot has already been scheduled.")
                 return redirect('admin_mock')
             register_user.schedule.filter(id=slot_id).update(
@@ -9865,7 +9920,7 @@ def edit_admin_mock(request, slot_id):
                 status='Reschedule',
                 reschedule_reason=Reschedule_Reason,
                 crn=register_user
-            )
+               )
             messages.success(request, "Slot rescheduled successfully.")
         elif selected_option == 'Cancel Slot':
             print(selected_option)
@@ -9876,7 +9931,7 @@ def edit_admin_mock(request, slot_id):
 
 
 
-@admin_required
+
 def admin_slot_import(request):
     crn = request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
@@ -9911,7 +9966,7 @@ def admin_slot_import(request):
                         Scheduling_mock_model.objects.create(
                             faculty=faculty_import,
                             course_name=course_import,
-                            specilalization_name=specialization_import,
+                            specialization_name=specialization_import,
                             available_slot=slot_import,
                             mock_link=mock_link_import,
                             crn=register_user
@@ -9930,10 +9985,6 @@ def admin_slot_import(request):
 
 
 
-
-
-
-@admin_required
 def admin_slot_export(request):
    crn = request.session.get('admin_user').get('crn')
    register_user = Register_model.objects.get(crn=crn)
@@ -9943,19 +9994,23 @@ def admin_slot_export(request):
    i=0
    for slot in register_user.schedule.all():
      i+=1
-     writer.writerow([i,slot.faculty,slot.course_name,slot.specilalization_name ,slot.available_slot,slot.mock_link])
+     writer.writerow([i,slot.faculty.first_name,slot.course_name,slot.specialization_name ,slot.available_slot,slot.mock_link])
 
    response['Content-Disposition'] = 'attachment; filename="Admin_slot_assigning.csv"'
    return response
 
-
-
-
-
+# admin mock rescheduling
+def admin_reschedule(request):
+    crn = request.session.get('admin_user').get('crn')
+    register_user = Register_model.objects.get(crn=crn)
+    student = Scheduling_mock_model.objects.all()
+    faculty = Employee_model.objects.all()
+    scheduling = Scheduling_mock_model.objects.filter(status='Reschedule')
+    
+    return render(request,'mock_interview/admin_reschedule.html',{'scheduling':scheduling,'student':student,'faculty':faculty})
 
 #  mock slot rescheduling
-@admin_required
-def reschedule(request):
+def faculty_reschedule(request):
     crn = request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
 
@@ -9964,11 +10019,7 @@ def reschedule(request):
     
     return render(request,'mock_interview/reschedule.html',{'scheduling':scheduling,'student':student})
 
-
-
-
 #  admin interview list
-@admin_required
 def admin_interview_list(request):
     crn = request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
@@ -9978,10 +10029,10 @@ def admin_interview_list(request):
 
 
     # Filter interviews for today, tomorrow, and upcoming days
-    today_interviews = Scheduling_mock_model.objects.filter(crn=register_user, available_slot__date=today).exclude(interview_status__in=['completed', 'pending'])
+    today_interviews = Scheduling_mock_model.objects.filter(crn=register_user, available_slot__date=today).exclude(interview_status__in=['completed', 'pending', 'not_booked'])
     print("Today Interviews:", today_interviews)
 
-    Faculty=Employee_model.objects.all()
+    Faculty = Employee_model.objects.filter(designation_name__designation_name='Teaching Staff')
     
     context = {
         'today_interviews': today_interviews,
@@ -9990,25 +10041,11 @@ def admin_interview_list(request):
     return render(request,'mock_interview/admin_interview_list.html', context)
 
 
-
-
-
-
-
-
-
 #  faculty dashboard
-@admin_required
 def faculty_dashboard(request):
     return render(request,'mock_interview/faculty_dashboard.html')
 
-
-
-
-
-
 # admin to watch separate faculty slots by clicking faculty name
-@admin_required
 def separate_faculty_list(request,faculty_id):
     # Filter students associated with the selected faculty
     students = Scheduling_mock_model.objects.filter(faculty=faculty_id)
@@ -10024,9 +10061,9 @@ def separate_faculty_list(request,faculty_id):
     print("Upcoming:",upcoming)
 
     # Filter interviews for today, tomorrow, and upcoming days
-    today_interviews = students.filter(available_slot__date=today).exclude(interview_status__in=['completed', 'pending'])
-    tomorrow_interviews = students.filter(available_slot__date=tomorrow).exclude(interview_status__in=['completed', 'pending'])
-    upcoming_interviews = students.filter(available_slot__date__gte=upcoming).exclude(interview_status__in=['completed', 'pending'])
+    today_interviews = students.filter(available_slot__date=today).exclude(interview_status__in=['completed', 'pending', 'not_booked'])
+    tomorrow_interviews = students.filter(available_slot__date=tomorrow).exclude(interview_status__in=['completed', 'pending', 'not_booked'])
+    upcoming_interviews = students.filter(available_slot__date__gte=upcoming).exclude(interview_status__in=['completed', 'pending', 'not_booked'])
 
 
     # Pass the filtered students to the template
@@ -10040,11 +10077,8 @@ def separate_faculty_list(request,faculty_id):
 
 
 
-
-
 # admin can watch all completed mocks
-@admin_required
-def completed_mock(request):
+def admin_completed_mock(request):
   crn = request.session.get('admin_user').get('crn')
   register_user = Register_model.objects.get(crn=crn)
   student_id=LeadModel.objects.filter(lead_position="ADMITTED").order_by("-id")
@@ -10055,17 +10089,13 @@ def completed_mock(request):
   }
   return render(request,'mock_interview/admin_completed_interviews.html', context)
 
-
-
-
 def completed_student_mock(request, student_id):
-   students = Feedback.objects.filter(interview__student_name=student_id)
+   students = Feedback.objects.filter(interview__student_name=student_id, interview__interview_status='completed')
    context = {
           'students': students,
        }
     
    return render(request,'mock_interview/adcompleted_student.html', context)
-
 
 
 
@@ -10082,6 +10112,17 @@ def faculty_completed_mocklist(request):
 # faculty pending interviews
 def faculty_pending_mocks(request):
     return render(request, 'mock_interview/faculty_pending_mocks.html')
+
+
+
+
+
+
+
+
+
+
+
 
 
 

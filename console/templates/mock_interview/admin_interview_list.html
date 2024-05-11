@@ -111,64 +111,6 @@
     </div>
   </div>
 </section>
-<!--
-<div class="hk-pg-header d-flex justify-content-between mb-0">
-  <h4 class="hk-pg-title m-3">Completed Interviews</h4>
-</div>
-
-<section class="hk-sec-wrapper">
-  <div class="row">
-    <div class="col-sm">
-      <div class="table-wrap">
-        <table id="example_3" class="table table-hover w-100  pb-30 table-bordered" >
-          <thead class="bg-dark">
-            <tr>
-              <th class="text-white text-center">S.No</th>
-              <th class="text-white text-center">Name</th>
-              <th class="text-white text-center">Email Id</th>
-              <th class="text-white text-center">Attendance</th>
-              <th class="text-white text-center">Technical</th>
-              <th class="text-white text-center">Communication</th>
-              <th class="text-white text-center">Body Language</th>
-              <th class="text-white text-center">Attachment</th>
-              <th class="text-white text-center">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="text-center">1</td>
-              <td class="text-center">Aadil</td>
-              <td class="text-center">aadil5@gmail.com</td>
-              <td class="text-info text-center" style="font-weight:bold;">Present</td>
-              <td class="text-center">8</td>
-              <td class="text-center">10</td>
-              <td class="text-center">7</td>
-              <td class="text-center"><a href="" title="Image from freeiconspng.com"><img
-                    src="https://www.freeiconspng.com/uploads/pdf-icon-png-pdf-zum-download-2.png" width="35"
-                    alt="Student resume" /></a></td>
-              <td class="text-success text-center" style="font-weight:bold;">Pass</td>
-            </tr>
-
-            <tr>
-              <td class="text-center">2</td>
-              <td class="text-center">Aadil</td>
-              <td class="text-center">aadil5@gmail.com</td>
-              <td class="text-danger text-center" style="font-weight:bold;">Absent</td>
-              <td class="text-center">8</td>
-              <td class="text-center">10</td>
-              <td class="text-center">7</td>
-              <td class="text-center"><a href="" title="Image from freeiconspng.com"><img
-                    src="https://www.freeiconspng.com/uploads/pdf-icon-png-pdf-zum-download-2.png" width="35"
-                    alt="Student resume" /></a></td>
-              <td class="text-danger text-center" style="font-weight:bold;">Fail</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</section>
--->
 
 <!-- create model start here -->
 
@@ -185,7 +127,7 @@
       </div>
 
 
-      <form action="{% url 'FeedbackForm' i.id %}" method="post" id="feedbackForm{{ forloop.counter }}">
+      <form action="{% url 'FeedbackForm_2' i.id %}" method="post" id="feedbackForm{{ forloop.counter }}">
         {% csrf_token %}
         <div class="modal-body">
           <div class="container-fluid">

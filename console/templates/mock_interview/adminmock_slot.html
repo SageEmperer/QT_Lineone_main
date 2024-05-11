@@ -67,7 +67,7 @@
               <td>{{forloop.counter}}</td>
               <td class="text-center">{{assign.faculty.first_name}}&nbsp;{{assign.faculty.last_name}}</td>
               <td class="text-center">{{assign.course_name}}</td>
-              <td class="text-center">{{assign.specilalization_name}}</td>
+              <td class="text-center">{{assign.specialization_name}}</td>
               <td class="text-center">{{assign.available_slot}}</td>
               <td class="text-center">
                 <button type="button" class="btn btn-link" data-toggle="tooltip" data-html="true" title="<em>Tooltip</em> <u>on</u> <b>Link</b>">
@@ -111,13 +111,13 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form action="" method="post" id="slot_add">
+      <form action="" method="post" class="Add_slot">
         {% csrf_token %}
         <div class="modal-body">
           <div class="mb-3">
             <label for="" class="form-label">Course<span class="text-danger"> *</span></label>
-              <select class="form-control custom-select select2" name="course" id="course">
-                      <option value="" disabled selected >Please Select</option>
+              <select class="form-control custom-select select2 course-select" name="course" id="course">
+                      <option value="" disabled selected>Please Select</option>
                       {% for c in courses %}
                       <option value="{{c.id}}">{{c.course_name}}</option>
                        {% endfor %}
@@ -125,30 +125,30 @@
           </div>
           <div class="mb-3">
             <label for="" class="form-label">Specialization <span class="text-danger">*</span></label>
-                <select class="form-control custom-select select2"  name="specialization" id="specialization">
-                      <option value="" disabled selected >Please Select</option>
-                      {% for s in specializations %}
-                      <option value="{{s.id}}">{{s.specilalization_name}}</option>
-                      {% endfor %}
-                </select>
+            <select class="form-control custom-select select2 specialization-select" name="specialization" id="specialization">
+              <option value="" disabled selected>Please Select</option>
+              {% for specialization in specializations %}
+                  <option value="{{ specialization.id }}">{{ specialization.specialization_name }}</option>
+              {% endfor %}
+          </select>
           </div>
           <div class="mb-3">
             <label for="" class="form-label">Faculty <span class="text-danger">*</span></label>
-                <select class="form-control custom-select select2" name="faculty" id="faculty" >
+                <select class="form-control custom-select select2 faculty-select " name="faculty" id="faculty" >
                       <option value="" disabled selected >Please Select</option>
-                      {% for f in faculty %}
-                      <option value="{{f.id}}">{{f.faculty}}</option>
+                      {% for f in faculties %}
+                      <option value="{{f.id}}">{{f.first_name}} {{f.last_name}}</option>
                       {% endfor %}
                 </select>
           </div>
 
           <div class="mb-3">
             <label for="" class="form-label">Available  Slot <span class="text-danger">*</span></label>
-                       <input  class="form-control" type="datetime-local" id="datetime" name="datetime" required>
+                       <input  class="form-control" type="datetime-local" id="datetime" name="datetime" >
           </div>
           <div class="mb-3">
               <label for="" class="form-label">Mock Link<span class="text-danger"> *</span></label>
-                      <textarea  class="form-control"  name="link" required></textarea>
+                      <textarea  class="form-control"  name="link" ></textarea>
            </div>
         </div>
         <div class="modal-footer d-flex justify-content-center">
@@ -195,6 +195,21 @@
                     </div>
                   </div>
                   <div class="col-md-6 mt-15" id="radioError{{assign.id}}"></div>
+                </div>
+                <div class="mb-3" id="BookedFields-{{assign.id}}">
+                  <label for="" class="form-label">Booked details</label>
+                  <div class="form-group row">
+                    <label for="" class="col-sm-4 col-form-label" >Student Name:</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" value="{{ assign.student_name.first_name }} {{ assign.student_name.last_name }}" id="student"  readonly>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="" class="col-sm-4 col-form-label" >Student ID:</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" value=" {{ assign.student_name.token_id }}" id="student"   readonly>
+                    </div>
+                </div>
                 </div>
                 <div class="mb-3" id="rescheduleFields-{{assign.id}}">
                   <label for="" class="form-label">Available Slot <span class="text-danger">*</span></label>
@@ -264,6 +279,52 @@
 {% block scripts %}
 <!-- add faculty slots starts -->
 <script>
+  $(document).ready(function () {
+    $(".course-select").change(function () {
+      var course_id = $(this).val();
+      var specialization = $(".specialization-select");
+      specialization.empty().append('<option value="">Select Specialization</option>');
+      if (course_id) {
+        // Make AJAX request to fetch specializations based on the selected course
+        $.getJSON('/spec_ajax/' + course_id, function (data) {
+          // Check if the response contains the specialization_list key
+          if (data.hasOwnProperty('specialization_list')) {
+            $.each(data.specialization_list, function (index, spec) {
+              specialization.append('<option value="' + spec.id + '">' + spec.name + '</option>');
+            });
+          } else {
+            console.error('Error: specialization_list key not found in JSON response');
+          }
+        }).fail(function (jqxhr, testStatus, error) {
+          console.error('Error', testStatus, error);
+        });
+      }
+    });
+  });
+</script>
+<script>
+  $(document).ready(function () {
+    $('.specialization-select').change(function(){
+      var specialization_id= $(this).val();
+      var faculty = $('.faculty-select');
+      faculty.empty().append('<option value="">Select faculty</option>');
+      if(specialization_id){
+        $.getJSON('/faculty_ajax/'+ specialization_id, function (data){
+          if(data.hasOwnProperty('faculty_list')){
+            $.each(data.faculty_list,function(index,f){
+              faculty.append('<option value="'+ f.id + '">' + f.first_name + ' '+ f.last_name + '</option>');
+              });
+            } else{
+              console.error('Error: faculty_list key not found in JSON response');
+            }
+          }).fail(function(jqxhr,testStatus,error){
+              console.error('Error',testStatus,error);
+          });
+        }
+    });
+  });
+</script>
+<script>
   // Validate form using jQuery Validation Plugin
   $(document).ready(function () {
     $.validator.addMethod("overspecialization", function (value, element) {
@@ -277,16 +338,35 @@
     $(".Add_slot").each(function () {
       $(this).validate({
         rules: {
-          datetime: {
+        course:{
+          required: true,
+        },
+        specialization:{
+          required: true,
+
+        },
+        faculty:{
+          required: true,
+        },
+        datetime: {
                 required: true,
                 overspecialization: false
             },
-          link: {
+        link: {
                 required: true,
                 overspecialization: false
             },
         },
         messages: {
+          course:{
+            required: "Please Select Course."
+          },
+          specialization:{
+            required: "Please Select Specialization."
+          },
+          faculty:{
+            required: "Please Select Faculty."
+          },
           datetime: {
                 required: "Please Select Slot."
             },
@@ -316,6 +396,7 @@
     }, "Please select an option.");
 
     $(".Edit_slot").each(function () {
+
       $(this).validate({
         rules: {
           available_slot: {
