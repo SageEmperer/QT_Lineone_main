@@ -1,0 +1,245 @@
+{% extends 'base/base.html' %}
+{% block title %}QTLineone | Courses{% endblock %}
+{% block breadCrum %}
+
+<!-- Breadcrumb -->
+<div class="hk-pg-header d-flex justify-content-between mb-0">
+  <h4 class="hk-pg-title m-3">Courses</h4>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb bg-transparent mb-0">
+      <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'settings' %}">Settings</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Courses</li>
+    </ol>
+  </nav>
+</div>
+<!-- /Breadcrumb -->
+
+{% endblock %}
+{% block content %}
+<!-- message here -->
+
+{% if messages %}
+{% for message in messages %}
+{% if message.tags == "error" %}
+<div class="h-25 alert alert-danger alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
+{% elif message.tags == "success" %}
+<div class="h-25 alert alert-success alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
+{% else %}
+<div class="h-25 alert alert-info alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
+{% endif %}
+{% endfor %}
+{% endif %}
+
+<!-- message end here -->
+<section class="hk-sec-wrapper">
+  <div class="d-flex justify-content-between">
+    
+    <div class="">
+      <button type="button" class="btn btn-primary mr-2 mb-3" data-toggle="modal" data-target="#Createchapter">
+        <i class="glyphicon glyphicon-plus"></i> Create Chapter
+      </button>
+  
+    </div>
+    <div class="">
+  
+      <button type="button" class="btn btn-danger mr-2 mb-3" id="deleteButton" data-toggle="modal"
+      data-target="#deleteModal" style="display: none;">
+      <i class="glyphicon glyphicon-trash"></i> Delete
+    </button>
+    </div>
+  </div>
+
+
+
+  <div class="row">
+  <div class="col-12">
+    <div class="accordion" id="accordion_1">
+      <div class="card">
+          <div class="card-header d-flex justify-content-between activestate">
+              <a > <span role="button" data-toggle="collapse" href="#collapse_1" aria-expanded="true">Chapter name  </span><div  style="float: right;">&ensp; <button class="btn btn-secondary"  data-toggle="modal" data-target="#Createlesson"><i class="glyphicon glyphicon-plus"></i> Create lesson</button>&ensp;<button class="btn btn-secondary" data-toggle="modal" data-target="#Createtopic"><i class="glyphicon glyphicon-plus"></i> Create topic</button>&ensp;<button class="btn btn-success" data-toggle="modal" data-target="#Createquiz"><i class="glyphicon glyphicon-plus"></i> Create quiz</button>&ensp;&ensp;</div>
+              </div></a>
+              
+          <div id="collapse_1" class="collapse" data-parent="#accordion_1" role="tabpanel">
+              <div class="card-body"> 
+                    <section class="hk-sec-wrapper">
+                      <div class="row">
+                        <div class="col-sm">
+                          <div class="table-wrap">
+                              <table class="table tablesaw  table-hover  mb-0" >
+                                      <tr>
+                                          <td class="title">Lesson 1</td>
+                                          <td></td>
+                                          <td></td>
+                                          <td><a href=""><i class="fa fa-youtube-play" style="color: orange;">  watch</i> </a></td>
+                                          <td>time</td>
+                                      </tr>
+                                      <tr>
+                                          <td class="title">Lesson 2</td>
+                                          <td></td>
+                                          <td></td>
+                                          <td><a href=""><i class="fa fa-youtube-play" style="color: orange;">  watch</i> </a></td>
+                                          <td>time</td>
+                                      </tr>  
+                              </table>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+              </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  </div>
+
+
+
+<!-- creating chapter popup -->
+<div class="modal fade" id="Createchapter" tabindex="-1" role="dialog" aria-labelledby="Createchapter" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-dark">
+        <h5 class="modal-title text-white">create Chapter name</h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="" method="post" id="sub_category_form">
+        {% csrf_token %}
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="" class="form-label">Chapter name <span class="text-danger">*</span></label>
+            <input name="" type="text" placeholder="Ex: Programming Language, Testing" class="form-control" />
+          </div>
+        </div>
+        <div class="mb-3  d-flex justify-content-center">
+          <button type="submit" class="btn btn-primary m-1">Submit</button>
+          <button type="reset" class="btn btn-secondary m-1">Reset</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<!-- adding lesson popup -->
+<div class="modal fade" id="Createlesson" tabindex="-1" role="dialog" aria-labelledby="Createlesson" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-dark">
+        <h5 class="modal-title text-white">create lesson name</h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="{% url 'sub_category' %}" method="post" id="sub_category_form">
+        {% csrf_token %}
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="" class="form-label">lesson name <span class="text-danger">*</span></label>
+            <input name="" type="text" placeholder="Ex: Programming Language, Testing" class="form-control" />
+          </div>
+        </div>
+        <div class="mb-3  d-flex justify-content-center">
+          <button type="submit" class="btn btn-primary m-1">Submit</button>
+          <button type="reset" class="btn btn-secondary m-1">Reset</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- create topics popup -->
+<div class="modal fade" id="Createtopic" tabindex="-1" role="dialog" aria-labelledby="Createtopic" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-dark">
+        <h5 class="modal-title text-white">create topic name</h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="" method="post" id="sub_category_form">
+        {% csrf_token %}
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="" class="form-label">Topic name <span class="text-danger">*</span></label>
+            <input name="" type="text" placeholder="Ex: Programming Language, Testing" class="form-control" />
+          </div>
+        </div>
+        <div class="mb-3  d-flex justify-content-center">
+          <button type="submit" class="btn btn-primary m-1">Submit</button>
+          <button type="reset" class="btn btn-secondary m-1">Reset</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- create Quiz popup -->
+<div class="modal fade" id="Createquiz" tabindex="-1" role="dialog" aria-labelledby="Createquiz" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-dark">
+        <h5 class="modal-title text-white">create Quiz</h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+        <div>
+          <form action="" method="post" id="sub_category_form">
+            {% csrf_token %}
+            <div class="modal-body">
+              <div >
+                <label for="" class="form-label">Quetion<span class="text-danger">*</span></label>
+                <input name="" type="text" placeholder="Ex: Programming Language, Testing" class="form-control" />
+              </div>
+              <div class="mb-3">
+                <label for="" class="form-label">1<span class="text-danger">*</span></label>
+                <input name="" type="text" placeholder="Ex: Programming Language, Testing" class="form-control" />
+              </div>
+              <div class="mb-3">
+                <label for="" class="form-label">2<span class="text-danger">*</span></label>
+                <input name="" type="text" placeholder="Ex: Programming Language, Testing" class="form-control" />
+              </div>
+              <div class="mb-3" >
+                <label for="" class="form-label">3<span class="text-danger">*</span></label>
+                <input name="" type="text" placeholder="Ex: Programming Language, Testing" class="form-control" />
+              </div>
+              <div class="mb-3" >
+                <label for="" class="form-label">4<span class="text-danger">*</span></label>
+                <input name="" type="text" placeholder="Ex: Programming Language, Testing" class="form-control" />
+              </div>
+              <div class="mb-3">
+                <label for="" class="form-label">Correct option<span class="text-danger">*</span></label>
+                <div>
+                  <select name="" id="">
+                    <option value="">1</option>
+                    <option value="">2</option>
+                    <option value="">3</option>
+                    <option value="">4</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="mb-3  d-flex justify-content-center">
+              <button type="submit" class="btn btn-primary m-1">Submit</button>
+              <button type="reset" class="btn btn-secondary m-1">Reset</button>
+            </div>
+          </form>
+        </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

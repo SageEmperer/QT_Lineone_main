@@ -12,7 +12,7 @@ from django.core.files.base import ContentFile
 from django.utils import timezone
 from django.utils.timezone import now
 from django.db.models import Max
-
+from django.conf import settings
 
 
 class Register_model(models.Model):
@@ -300,7 +300,7 @@ class BranchModel(models.Model):
         if not self.id:
             return
 
-        qr_url = f"http://192.168.1.10:8080/inquiry_form/{self.id}/{self.crn_number.crn}"
+        qr_url = f"{settings.URL_DOMAIN}/{self.id}/{self.crn_number.crn}"
 
         qr = qrcode.make(qr_url)
         buffer = BytesIO()
@@ -425,7 +425,7 @@ class Forumcategories_model(models.Model):
         ('Active', 'Active'),
         ('Deactive', 'Deactive'))
     crn_number = models.ForeignKey(Register_model, on_delete=models.CASCADE, related_name='forumcategories')
-    forum_category = models.CharField(max_length=40,unique=True)
+    forum_category = models.CharField(max_length=40)
     status = models.CharField(
         max_length=100, choices=choice_status, default='Active')
     created_at = models.DateTimeField(default=datetime.now)

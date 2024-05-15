@@ -32,6 +32,7 @@ from django.db import IntegrityError
 from django.db.models.functions import TruncMonth
 from django.core.exceptions import ObjectDoesNotExist
 from student_panel.models import *
+from django.conf import settings
 # decorator for admin login
 def admin_required(view_func):
     @wraps(view_func)
@@ -2567,6 +2568,9 @@ def video_player(request):
 # Quiz
 def quiz(request):
    return render(request,'settings_page/quiz.html')
+
+def sample_course(request):
+  return render(request,'sample_course.html')   
 
 def create_quiz(request):
    return render(request,'settings_page/create_quiz.html')
@@ -5977,7 +5981,7 @@ def employee_list(request):
           f'Salary: Rs.{salary}\n'
           f'Username: {personal_email}\n'
           f'Password: {rand_password}\n\n'
-          f'To Login Click here URL: http://192.168.1.87:8080/\n\n'
+          f'To Login Click here URL: {settings.URL_DOMAI}\n\n'
           f'Regards,\n'
           f'{request.session.get("admin_user").get("company_name")}'
           f'\n')
@@ -5993,7 +5997,7 @@ def employee_list(request):
           f'Salary: Rs.{salary}\n'
           f'Username: {personal_email}\n'
           f'Password: {rand_password}\n\n'
-          f'To Login Click here URL: http://192.168.1.87:8080/\n\n'
+          f'To Login Click here URL: {settings.URL_DOMAI}\n\n'
           f'Regards,\n'
           f'{request.session.get("admin_user").get("company_name")}'
           
@@ -6289,7 +6293,7 @@ def employee_update(request,id):
           f'Salary: Rs.{salary}\n'
           f'Username: {personal_email}\n'
           f'Password: {rand_password}\n\n'
-          f'To Login Click here URL: http://192.168.1.87:8080/\n\n'
+          f'To Login Click here URL: {settings.URL_DOMAI}\n\n'
           f'Regards,\n'
           f'{request.session.get("admin_user").get("company_name")}'
           )
@@ -6305,7 +6309,7 @@ def employee_update(request,id):
           f'Salary: Rs.{salary}\n'
           f'Username: {personal_email}\n'
           f'Password: {rand_password}\n\n'
-          f'To Login Click here URL: http://192.168.1.87:8080/\n\n'
+          f'To Login Click here URL: {settings.URL_DOMAI}\n\n'
           f'Regards,\n'
           f'{request.session.get("admin_user").get("company_name")}'
           
@@ -7923,7 +7927,7 @@ def move_to_admission(request, id):
                 Student_payment.objects.create(
                     crn_number=register_user,
                     payment_amount=request.POST.get('admissionFee'),
-                    studend_id=opportunity_lead,
+                    student_id=opportunity_lead,
                     mode_of_payment=request.POST.get('paymenttype'),
                     transaction_id=request.POST.get('transactionId'),
                     course_id=opportunity_lead.course_name,
@@ -7952,7 +7956,7 @@ def move_to_admission(request, id):
                 Student_payment.objects.create(
                     crn_number=register_user,
                     payment_amount=request.POST.get('admissionFee'),
-                    studend_id=opportunity_lead,
+                    student_id=opportunity_lead,
                     mode_of_payment=request.POST.get('paymenttype'),
                     transaction_id=request.POST.get('transactionId'),
                     course_id=opportunity_lead.course_name,
@@ -7982,7 +7986,7 @@ def move_to_admission(request, id):
                 Student_payment.objects.create(
                     crn_number=register_user,
                     payment_amount=request.POST.get('admissionFee'),
-                    studend_id=opportunity_lead,
+                    student_id=opportunity_lead,
                     mode_of_payment=request.POST.get('paymenttype'),
                     transaction_id=request.POST.get('transactionId'),
                     course_id=opportunity_lead.course_name,
@@ -8026,7 +8030,7 @@ def move_to_admission(request, id):
     #         register_user.leads.filter(id=id).update(**data)
             
     #         payment_data = {
-    #             'studend_id': student,
+    #             'student_id': student,
     #             'payment_amount': request.POST.get('admissionFee'),
     #             'mode_of_payment': request.POST.get('paymenttype'),
     #             'transaction_id': request.POST.get('transactionId'),
@@ -8614,63 +8618,63 @@ def student_payment_update(request):
       for obj in register_user.student_payment.filter(id=verify_id):
         subject=f'{request.session.get("admin_user").get("company_name")}'
         message=(
-          f'Hi {obj.studend_id.first_name} {obj.studend_id.last_name},\n\n'
+          f'Hi {obj.student_id.first_name} {obj.student_id.last_name},\n\n'
           f'Thank You for joining {request.session.get("admin_user").get("company_name")}. we are happy to have you onboard. \n\n'
-          f'Your Token Id is: {obj.studend_id.token_id}. You have successfully completed your registration, for course {obj.studend_id.course_name}. and specialization {obj.studend_id.course_name.specialization}.Your Batch Number is {obj.studend_id.batch_number.batch_number}.  \n\n'
-          f'Your username is {obj.studend_id.email} and password is {password} \n\n'
-          f'To Login Click here URL: http://192.168.1.87:8080/\n\n'
+          f'Your Token Id is: {obj.student_id.token_id}. You have successfully completed your registration, for course {obj.student_id.course_name}. and specialization {obj.student_id.course_name.specialization}.Your Batch Number is {obj.student_id.batch_number.batch_number}.  \n\n'
+          f'Your username is {obj.student_id.email} and password is {password} \n\n'
+          f'To Login Click here URL: {settings.URL_DOMAI}\n\n'
           f'In case of any query, please contact us at {request.session.get("admin_user").get("name")}.\n\n'
           f'Thank you for using {request.session.get("admin_user").get("company_name")}.'
         )
-        Studen_credentials.objects.create(
-          studend_id=obj.studend_id,
-          email=obj.studend_id.email,
+        StudentCredentials.objects.create(
+          student_id=obj.student_id,
+          email=obj.student_id.email,
           password=password,
           crn = register_user
         )
 
         #send email to the student
         email_form=settings.EMAIL_HOST_USER
-        to_email=[obj.studend_id.email]
+        to_email=[obj.student_id.email]
         send_mail(subject,message,email_form,to_email)
       return redirect('payment_verification')
     elif payment_verification =='Not Received':
       for obj in register_user.student_payment.filter(id=verify_id):
         subject=f'{request.session.get("admin_user").get("company_name")}'
         message=(
-          f"Dear {obj.studend_id.faculty.first_name} {obj.studend_id.faculty.last_name},\n\n"
+          f"Dear {obj.student_id.faculty.first_name} {obj.student_id.faculty.last_name},\n\n"
           f'We hope this email finds you well\n\n'
-          f'It is with a sense of duty that we inform you of an issue regarding the payment status of {obj.studend_id.first_name} {obj.studend_id.last_name} ({obj.studend_id.token_id}), for the course "{obj.studend_id.course_name}" in batch number {obj.studend_id.batch_number.batch_number}. We request you to please update the payment status of this student. Student currently has {obj.payment_amount}. Your attention to this matter is greatly appreciated, as it is crucial for maintaining the integrity of our enrollment process.\n\n'
+          f'It is with a sense of duty that we inform you of an issue regarding the payment status of {obj.student_id.first_name} {obj.student_id.last_name} ({obj.student_id.token_id}), for the course "{obj.student_id.course_name}" in batch number {obj.student_id.batch_number.batch_number}. We request you to please update the payment status of this student. Student currently has {obj.payment_amount}. Your attention to this matter is greatly appreciated, as it is crucial for maintaining the integrity of our enrollment process.\n\n'
           f'Thank you for your cooperation and support.\n\n'
           f'Your Sincerely,\n{request.session.get("admin_user").get("company_name")}\n'
           )
         #send email to the BD
         email_form=settings.EMAIL_HOST_USER
-        to_email=[obj.studend_id.faculty.personal_email]
+        to_email=[obj.student_id.faculty.personal_email]
         send_mail(subject,message,email_form,to_email)
       return redirect('payment_verification')
     elif payment_verification =='Pending':
       for obj in register_user.student_payment.filter(id=verify_id):
         subject=f'{request.session.get("admin_user").get("company_name")}'
         message=(
-          f"Hi {obj.studend_id.first_name} {obj.studend_id.last_name},\n\n"
+          f"Hi {obj.student_id.first_name} {obj.student_id.last_name},\n\n"
           f'We hope this email finds you well\n\n'
-          f'This is gentel reminder that payment for {obj.payment_amount} for the course "{obj.studend_id.course_name}" in batch number {obj.studend_id.batch_number.batch_number} is {obj.payment_status}.\n\n'
+          f'This is gentel reminder that payment for {obj.payment_amount} for the course "{obj.student_id.course_name}" in batch number {obj.student_id.batch_number.batch_number} is {obj.payment_status}.\n\n'
           f'Thank you for your cooperation and support.\n\n'
           f'Your Sincerely,\n{request.session.get("admin_user").get("company_name")}\n'
           
         )
         message2=(
-          f'Dear {obj.studend_id.faculty.first_name} {obj.studend_id.faculty.last_name},\n\n'
+          f'Dear {obj.student_id.faculty.first_name} {obj.student_id.faculty.last_name},\n\n'
           f'We hope this email finds you well\n\n'
-          f'This to inform that {obj.studend_id.first_name} {obj.studend_id.last_name} ({obj.studend_id.token_id}) payment is pending  currently has {obj.payment_amount} for the course "{obj.studend_id.course_name}" in batch number {obj.studend_id.batch_number.batch_number}. \n\n'
+          f'This to inform that {obj.student_id.first_name} {obj.student_id.last_name} ({obj.student_id.token_id}) payment is pending  currently has {obj.payment_amount} for the course "{obj.student_id.course_name}" in batch number {obj.student_id.batch_number.batch_number}. \n\n'
           f'Thank you for your cooperation and support.\n\n'
           f'Your Sincerely,\n{request.session.get("admin_user").get("company_name")}\n'
           
         )
         email_form=settings.EMAIL_HOST_USER
-        to_email=[obj.studend_id.faculty.personal_email]
-        to_student=[obj.studend_id.email]
+        to_email=[obj.student_id.faculty.personal_email]
+        to_student=[obj.student_id.email]
         send_mail(subject,message,email_form,to_student)
         send_mail(subject,message2,email_form,to_email)
       return redirect('payment_verification')
@@ -8678,14 +8682,14 @@ def student_payment_update(request):
       for obj in register_user.student_payment.filter(id=verify_id):
         subject=f'{request.session.get("admin_user").get("company_name")}'
         message=(
-          f'Dear {obj.studend_id.faculty.first_name} {obj.studend_id.faculty.last_name},\n\n'
+          f'Dear {obj.student_id.faculty.first_name} {obj.student_id.faculty.last_name},\n\n'
           f'We hope this email finds you well\n\n'
-          f'It has come to our attention that there is a discrepancy or suspicious activity. The student {obj.studend_id.first_name} {obj.studend_id.last_name} ({obj.studend_id.token_id}) payment status is {obj.payment_status}. We kindly request your immediate attention and further investigation into this matter. Your cooperation in resolving this issue is greatly appreciated.\n\n'
+          f'It has come to our attention that there is a discrepancy or suspicious activity. The student {obj.student_id.first_name} {obj.student_id.last_name} ({obj.student_id.token_id}) payment status is {obj.payment_status}. We kindly request your immediate attention and further investigation into this matter. Your cooperation in resolving this issue is greatly appreciated.\n\n'
           f'Thank you for your cooperation and support.\n\n'
           f'Your Sincerely,\n{request.session.get("admin_user").get("company_name")}\n'
         )
         email_form=settings.EMAIL_HOST_USER
-        to_email=[obj.studend_id.faculty.personal_email]
+        to_email=[obj.student_id.faculty.personal_email]
         send_mail(subject,message,email_form,to_email)
      
     messages.success(request,'Payment verification updated successfully')
@@ -9224,11 +9228,11 @@ def Student_filter(request):
     crn = request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
     student = register_user.leads.all().order_by('-id')
-    url = "http://127.0.0.1:8080/student_details_json"
+   
     
     
     context = {
-       'student':url,
+       'student':student,
        
     }
     return render(request, 'hr_portal/student filters/student_filter.html',context)    
@@ -9368,6 +9372,7 @@ def delete_company_vendor(request,id):
     return redirect('createvendor')  
 
 
+@admin_required
 def company_vendor_mul_delter(request):
   crn=request.session.get('admin_user').get('crn')
   register_user=Register_model.objects.get(crn=crn)
@@ -9427,7 +9432,7 @@ def company_vendor_export(request):
 
 
 
-
+@admin_required
 def getting_employ_slot(request,course_id,spc_id):
   employee_details = Employee_model.objects.filter(course_id = course_id,specialization_id = spc_id)
   employee_list = [{'id': emp.id, 'first_name': emp.first_name, 'last_name':emp.last_name} for emp in employee_details]
@@ -9437,24 +9442,30 @@ def getting_employ_slot(request,course_id,spc_id):
 
 
 # faculty login
+@admin_required
 def faculty_login(request):
     return render(request,'mock_interview/faculty_login.html')
 
 
 # dashboard
+
+@admin_required
 def mock_dashboard(request):
     return render(request,'mock_interview/dashboard.html')
 
 # Student booking slots
+@admin_required
 def student(request):
     return render(request,'mock_interview/student.html')
 # student book an interview view start here
+@admin_required
 def student_Book_an_interview(request):
     return render(request, 'faculty/student.html')
 
 
 
 
+@admin_required
 def get_specializations(request,id):
     if request.is_ajax() and request.method == 'GET':
         course_id = request.GET.get(id)
@@ -9466,6 +9477,7 @@ def get_specializations(request,id):
 
 
 
+@admin_required
 def submit_feedback(request, interview_id):
     if request.method == 'POST':
         form = Feedback(request.POST)
@@ -9480,6 +9492,7 @@ def submit_feedback(request, interview_id):
 
 
 # Faculty slot availbility
+@admin_required
 def faculty_slot(request):
     crn=request.session.get('admin_user').get('crn')
     register_user=Register_model.objects.get(crn=crn)
@@ -9501,6 +9514,7 @@ def faculty_slot(request):
 
 
 # edit  faculty slot
+@admin_required
 def edit_faculty_slot(request, slot_id):  
     crn = request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
@@ -9558,6 +9572,7 @@ def edit_faculty_slot(request, slot_id):
 
     
 # faculty slot import
+@admin_required
 def faculty_slot_import(request):
     crn = request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
@@ -9606,6 +9621,7 @@ def faculty_slot_import(request):
 
 
 # faculty slot export
+@admin_required
 def faculty_slot_export(request):
    crn = request.session.get('admin_user').get('crn')
    register_user = Register_model.objects.get(crn=crn)
@@ -9759,7 +9775,6 @@ def FeedbackForm_2(request, id):
     
 
 @admin_required
-
 def total_interviews(request, f_id):
     crn = request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
@@ -9809,6 +9824,7 @@ def total_interviews(request, f_id):
 
 
 # Student Past Interviews with feedback details
+@admin_required
 def student_feedback(request, s_id):
   crn = request.session.get('admin_user').get('crn')
   register_user = Register_model.objects.get(crn=crn)
@@ -9820,6 +9836,7 @@ def student_feedback(request, s_id):
   }
   return render(request,'mock_interview/student_past_interviews.html', context)
 
+@admin_required
 def open_pdf(request, document_id):
     document = Scheduling_mock_model.objects.get(id=document_id)
     pdf_file = document.send_attachment
@@ -9827,6 +9844,7 @@ def open_pdf(request, document_id):
     return response
 
 # Admin mock slot scheduling
+@admin_required
 def admin_mock(request):
     crn = request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
@@ -9884,6 +9902,7 @@ def admin_mock(request):
     }
     return render(request, 'mock_interview/adminmock_slot.html', context)
 
+@admin_required
 def spec_ajax(request, id):
     # Filter specializations based on the selected course
     specializations = Specialization.objects.filter(course_name=id)
@@ -9892,6 +9911,7 @@ def spec_ajax(request, id):
     # Return JSON response containing the specialization list
     return JsonResponse({"specialization_list": specialization_list})
 
+@admin_required
 def faculty_ajax(request, id):
     # Filter faculty based on the selected specialization name
     faculty = Employee_model.objects.filter(specialization_id_id=id)
@@ -9902,6 +9922,7 @@ def faculty_ajax(request, id):
 
 
 # edit mock slot assiging
+@admin_required
 def edit_admin_mock(request, slot_id):  
     crn = request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
@@ -9932,6 +9953,7 @@ def edit_admin_mock(request, slot_id):
 
 
 
+@admin_required
 def admin_slot_import(request):
     crn = request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
@@ -9985,6 +10007,7 @@ def admin_slot_import(request):
 
 
 
+@admin_required
 def admin_slot_export(request):
    crn = request.session.get('admin_user').get('crn')
    register_user = Register_model.objects.get(crn=crn)
@@ -10000,6 +10023,7 @@ def admin_slot_export(request):
    return response
 
 # admin mock rescheduling
+@admin_required
 def admin_reschedule(request):
     crn = request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
@@ -10010,6 +10034,7 @@ def admin_reschedule(request):
     return render(request,'mock_interview/admin_reschedule.html',{'scheduling':scheduling,'student':student,'faculty':faculty})
 
 #  mock slot rescheduling
+@admin_required
 def faculty_reschedule(request):
     crn = request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
@@ -10020,6 +10045,7 @@ def faculty_reschedule(request):
     return render(request,'mock_interview/reschedule.html',{'scheduling':scheduling,'student':student})
 
 #  admin interview list
+@admin_required
 def admin_interview_list(request):
     crn = request.session.get('admin_user').get('crn')
     register_user = Register_model.objects.get(crn=crn)
@@ -10042,10 +10068,12 @@ def admin_interview_list(request):
 
 
 #  faculty dashboard
+@admin_required
 def faculty_dashboard(request):
     return render(request,'mock_interview/faculty_dashboard.html')
 
 # admin to watch separate faculty slots by clicking faculty name
+@admin_required
 def separate_faculty_list(request,faculty_id):
     # Filter students associated with the selected faculty
     students = Scheduling_mock_model.objects.filter(faculty=faculty_id)
@@ -10078,6 +10106,7 @@ def separate_faculty_list(request,faculty_id):
 
 
 # admin can watch all completed mocks
+@admin_required
 def admin_completed_mock(request):
   crn = request.session.get('admin_user').get('crn')
   register_user = Register_model.objects.get(crn=crn)
@@ -10089,6 +10118,7 @@ def admin_completed_mock(request):
   }
   return render(request,'mock_interview/admin_completed_interviews.html', context)
 
+@admin_required
 def completed_student_mock(request, student_id):
    students = Feedback.objects.filter(interview__student_name=student_id, interview__interview_status='completed')
    context = {
@@ -10102,14 +10132,17 @@ def completed_student_mock(request, student_id):
 
 
 # faculty scheduled  total interviews
+@admin_required
 def faculty_schedule_list(request):
     return render(request, 'mock_interview/faculty_scheduled_interview.html')
 
 # faculty completed interviews
+@admin_required
 def faculty_completed_mocklist(request):
     return render(request, 'mock_interview/faculty_completed_mocks.html')
 
 # faculty pending interviews
+@admin_required
 def faculty_pending_mocks(request):
     return render(request, 'mock_interview/faculty_pending_mocks.html')
 
@@ -10138,7 +10171,7 @@ def faculty_pending_mocks(request):
 def dashboard_certification(request):
   return render(request,'certifications/certif_dashboard.html')
 #Filter
-def student_filter(request):
+def student_filter_cert(request):
     # crn = request.session.get('admin_user').get('crn')
     # register_user = Register_model.objects.get(crn=crn)
     # if request.method == 'POST':

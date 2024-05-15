@@ -141,6 +141,7 @@ MEDIA_URL = '/media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+URL_DOMAIN = 'http://172.29.240.1:8080'
 
 
 

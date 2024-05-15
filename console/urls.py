@@ -258,7 +258,7 @@ urlpatterns = [
     path('certif_dashboard',views.dashboard_certification,name='certif_dashboard'),
 # Filter Mails
     path('send_email/', views.send_email, name='send_email'),
-    path('student-filter/', views.student_filter, name='student_filter'),
+    path('student_filter_cert/', views.student_filter_cert, name='student_filter_cert'),
 #Craete Student
     # certification list of students
     path('list_student/',views.list_student,name='list_student'),
@@ -438,6 +438,7 @@ urlpatterns = [
    path("lesson_edit/<int:id>",views.lesson_edit,name="lesson_edit"),
    # lesson delete
    path('lesson_delete/<int:id>',views.lesson_delete,name="lesson_delete"),
+   path('sample_course/',views.sample_course,name="sample_course"),
 
    
    # topic edit

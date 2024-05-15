@@ -1,0 +1,1430 @@
+<!DOCTYPE html>
+<!--
+Template Name: Deepor - Responsive Bootstrap 4 Admin Dashboard Template
+Author: Hencework
+
+License: You must have a valid license purchased only from templatemonster to legally use the template for your project.
+-->
+<html lang="en">
+<!-- Mirrored from hencework.com/theme/deepor/dashboard1.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 08 Nov 2023 13:25:35 GMT -->
+    {% load static %}
+<head>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>QT LINE ONE STUDENT</title>
+    <meta name="description" content="A responsive bootstrap 4 admin dashboard template by hencework" />
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="icon" href="../../static/images/logo/qt_instance.png" type="image/x-icon" />
+    <!-- Data Table CSS -->
+    <link href="../../static/data-table/datatables.net-dt/css/jquery.dataTables.min.css" rel="stylesheet"
+        type="text/css" />
+    <link rel="stylesheet" href="../../static/data-table/datatables.net-responsive-dt/css/responsive.dataTables.min.css"
+        type="text/css" />
+
+    <!-- Toggles CSS -->
+    <link href="../../static/css/jquery-toggles/css/toggles.css" rel="stylesheet" type="text/css" />
+    <link href="../../static/css/jquery-toggles/css/themes/toggles-light.css" rel="stylesheet" type="text/css" />
+    <!-- Morris Charts CSS -->
+
+    <link rel="stylesheet" href="../../static/temp/morris.js/morris.css" type="text/css" />
+
+    <!-- Toastr CSS -->
+
+    <link rel="stylesheet" href="../../static/css/jquery-toast-plugin/dist/jquery.toast.min.css" type="text/css" />
+
+    <!-- Custom CSS -->
+    <link href="../../static/dist/css/style.css" rel="stylesheet" type="text/css" />
+    <!-- bootstrap css -->
+    <link rel="stylesheet" href="../../static/vendors4/bootstrap/dist/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/css/bootstrap.min.css" type="text/css">
+
+    <!--  -->
+    <link rel="stylesheet" href="../../static/css/owl.carousel/dist/assets/owl.carousel.min.css" />
+    <link rel="stylesheet" href="../../static/css/owl.carousel/dist/assets/owl.theme.default.min.css" />
+    <!-- icons -->
+
+    <link rel="stylesheet" href="../../console/static/dist/css/font-awesome.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../console/static/dist/css/animate.css" type="text/css" />
+    <link rel="stylesheet" href="../../console/static/dist/css/dripicons.css" type="text/css" />
+    <link rel="stylesheet" href="../../console/static/dist/css/glyphicons.css" type="text/css" />
+    <link rel="stylesheet" href="../../console/static/dist/css/ionicons.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../console/static/dist/css/lightgallery.css" type="text/css" />
+    <link rel="stylesheet" href="../../console/static/dist/css/linea-icon.css" type="text/css" />
+    <link rel="stylesheet" href="../../console/static/dist/css/material-design-iconic-font.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../console/static/dist/css/pe-icon-7-stroke.css" type="text/css" />
+    <link rel="stylesheet" href="../../console/static/dist/css/simple-line-icons.css" type="text/css" />
+    <link rel="stylesheet" href="../../console/static/dist/css/themify-icons.css" type="text/css" />
+    <link rel="stylesheet" href="../../console/static/wp-content-Admin/themes/freeio/css/all-awesomeaec5.css"
+        type="text/css" />
+
+    
+
+    <!-- dropify css cdns -->
+    <!-- Bootstrap Dropzone CSS -->
+
+    <link href="../../console/static/css/dropzone/dist/dropzone.css" rel="stylesheet" type="text/css" />
+
+    <!-- Bootstrap Dropzone CSS -->
+
+    <link href="../../console/static/css/dropify/dist/css/dropify.min.css" rel="stylesheet" type="text/css" />
+    <!-- select 2 -->
+
+    <link rel="stylesheet" href="../../console/static/vendors4/select2/dist/css/select2.min.css">
+   
+</head>
+<style>
+    .cards {
+        transition: transform 0.3s ease;
+    }
+
+    .cards:hover {
+        transform: translateY(-7px);
+
+    }
+
+    a:hover {
+        text-decoration: none;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+    }
+
+    .flip-card {
+        width: 300px;
+        height: 450px;
+        perspective: 900px;
+        margin: auto;
+    }
+
+    .flip-card-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.6s;
+        transform-style: preserve-3d;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    .flip-card:hover .flip-card-inner {
+        transform: rotateY(180deg);
+    }
+
+    .flip-card-front,
+    .flip-card-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+    }
+
+    .flip-card-front {
+        background-color: white;
+        color: black;
+    }
+
+    .flip-card-back {
+        background-color: white;
+        text-align: center;
+
+        transform: rotateY(180deg);
+    }
+
+    .qr {
+        text-align: center;
+        position: absolute;
+        top: 10%;
+        left: 20%;
+    }
+
+    .center {
+        margin: auto;
+        width: 30%;
+        padding: 9px;
+    }
+
+    address {
+        font-size: small;
+    }
+
+    .card-img-top {
+        height: 50%;
+        margin-top: 2%;
+        margin-bottom: 0px;
+        padding: 2%;
+        /* object-fit: cover; */
+        width: 100%;
+    }
+
+    .horizontal-line {
+        position: absolute;
+        bottom: 40%;
+        /* Adjust as needed */
+        left: 0;
+        width: 100%;
+        border-bottom: 1px solid #ccc;
+        /* Customize the line color */
+    }
+
+    .line {
+        max-width: 300px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .table-hover tbody tr:hover td {
+        color: black;
+    }
+
+    .accordion {
+        --bs-accordion-btn-bg: #12141e;
+
+        --bs-accordion-btn-focus-box-shadow: none;
+
+        --bs-accordion-active-bg: #12141e;
+        --bs-accordion-border-color: #12141e;
+    }
+
+
+    .accordion-a:not(.collapsed) {
+        box-shadow: none;
+    }
+
+    .accordion-button::after {
+        background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='white'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>");
+    }
+
+    .accordion-button:not(.collapsed)::after {
+        background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='white'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>");
+
+    }
+</style>
+
+<body>
+    <!-- HK Wrapper -->
+    <div class="hk-wrapper hk-vertical-nav">
+        <!-- Top Navbar -->
+        <nav class="navbar navbar-expand-xl navbar-light fixed-top hk-navbar" style="background-color: #132649; ">
+            <a id="navbar_toggle_btn" class="navbar-toggle-btn nav-link-hover" href="javascript:void(0);"><i
+                    class="ion ion-ios-menu" style='color:white;'></i></a>
+            <a class="navbar-brand" href="dashboard1.html">
+                <img class="brand-img d-inline-block mr-5" src="../../static/images/logo/Quality_thought_logo.png"
+                    width="150" alt="" />
+            </a>
+            <ul class="navbar-nav hk-navbar-content">
+                <li class="nav-item">
+                    <a id="navbar_search_btn" class="nav-link nav-link-hover" href="javascript:void(0);"><i
+                            class="ion ion-ios-search text-white"></i></a>
+                </li>
+                <!-- <li class="nav-item">
+                    <a id="settings_toggle_btn" class="nav-link nav-link-hover" href="javascript:void(0);"><i class="ion ion-ios-settings"></i></a>
+                </li> -->
+                <li class="nav-item dropdown dropdown-notifications">
+                    <a class="nav-link dropdown-toggle no-caret" href="#" role="button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false"><i
+                            class="ion ion-ios-notifications text-white"></i><span class="badge-wrap"><span
+                                class="badge badge-primary badge-indicator badge-indicator-sm badge-pill pulse"></span></span></a>
+                    <div class="dropdown-menu dropdown-menu-right" data-dropdown-in="fadeIn"
+                        data-dropdown-out="fadeOut">
+                        <h6 class="dropdown-header">
+                            Notifications
+                            <a href="javascript:void(0);" class="">View all</a>
+                        </h6>
+                        <!-- <div class="notifications-nicescroll-bar">
+                            <a href="javascript:void(0);" class="dropdown-item">
+                                <div class="media">
+                                    <div class="media-img-wrap">
+                                        <div class="avatar avatar-sm">
+                                            <img src="dist/img/avatar1.jpg" alt="user" class="avatar-img rounded-circle">
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <div>
+                                            <div class="notifications-text"><span class="text-dark text-capitalize">Evie Ono</span> accepted your invitation to join the team</div>
+                                            <div class="notifications-time">12m</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="javascript:void(0);" class="dropdown-item">
+                                <div class="media">
+                                    <div class="media-img-wrap">
+                                        <div class="avatar avatar-sm">
+                                            <img src="dist/img/avatar2.jpg" alt="user" class="avatar-img rounded-circle">
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <div>
+                                            <div class="notifications-text">New message received from <span class="text-dark text-capitalize">Misuko Heid</span></div>
+                                            <div class="notifications-time">1h</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="javascript:void(0);" class="dropdown-item">
+                                <div class="media">
+                                    <div class="media-img-wrap">
+                                        <div class="avatar avatar-sm">
+                                            <span class="avatar-text avatar-text-primary rounded-circle">
+													<span class="initial-wrap"><span><i class="zmdi zmdi-account font-18"></i></span></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <div>
+                                            <div class="notifications-text">You have a follow up with<span class="text-dark text-capitalize"> Deepor head</span> on <span class="text-dark text-capitalize">friday, dec 19</span> at <span class="text-dark">10.00 am</span></div>
+                                            <div class="notifications-time">2d</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="javascript:void(0);" class="dropdown-item">
+                                <div class="media">
+                                    <div class="media-img-wrap">
+                                        <div class="avatar avatar-sm">
+                                            <span class="avatar-text avatar-text-success rounded-circle">
+													<span class="initial-wrap"><span>A</span></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <div>
+                                            <div class="notifications-text">Application of <span class="text-dark text-capitalize">Sarah Williams</span> is waiting for your approval</div>
+                                            <div class="notifications-time">1w</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="javascript:void(0);" class="dropdown-item">
+                                <div class="media">
+                                    <div class="media-img-wrap">
+                                        <div class="avatar avatar-sm">
+                                            <span class="avatar-text avatar-text-warning rounded-circle">
+													<span class="initial-wrap"><span><i class="zmdi zmdi-notifications font-18"></i></span></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <div>
+                                            <div class="notifications-text">Last 2 days left for the project</div>
+                                            <div class="notifications-time">15d</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div> -->
+                    </div>
+                </li>
+                <li class="nav-item dropdown dropdown-authentication">
+                    <a class="nav-link dropdown-toggle no-caret" href="#" role="button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        <div class="media">
+                            <div class="media-img-wrap">
+                                <div class="avatar">
+                                    <img src="../../static/dist/img/avatar1.jpg" alt="user"
+                                        class="avatar-img rounded-circle" />
+                                </div>
+                                <span class="badge badge-success badge-indicator"></span>
+                            </div>
+                            <div class="media-body">
+                                <span class="text-white">Madelyn Shane<i class="zmdi zmdi-chevron-down"></i></span>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" data-dropdown-in="flipInX"
+                        data-dropdown-out="flipOutX">
+                        <a class="dropdown-item" href="{% url 'student_profile' %}"><i
+                                class="dropdown-icon zmdi zmdi-account"></i><span>Profile</span></a>
+                        <a class="dropdown-item" href="" data-toggle="modal" data-target="#exampleModal">
+                            <i class="dropdown-icon zmdi zmdi-account"></i><span>ID</span></a>
+                        <!-- <a class="dropdown-item" href="#"><i class="dropdown-icon zmdi zmdi-card"></i><span>My balance</span></a> -->
+                        <a class="dropdown-item" href="#"><i
+                                class="dropdown-icon zmdi zmdi-email"></i><span>Inbox</span></a>
+                        <a class="dropdown-item" href="#"><i
+                                class="dropdown-icon zmdi zmdi-settings"></i><span>Settings</span></a>
+
+                        <div class="dropdown-divider"></div>
+                        <div class="sub-dropdown-menu show-on-hover">
+                            <a class="dropdown-item" href="#" onclick="document.getElementById('logout-form').submit(); return false;">
+                                <i class="dropdown-icon zmdi zmdi-power"></i>
+                                <span>Log out</span>
+                            </a>
+                            <form id="logout-form" method="post" action="{% url 'student_logout' %}" style="display: none;">
+                                {% csrf_token %}
+                            </form>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+        <form role="search" class="navbar-search">
+            <div class="position-relative">
+                <a href="javascript:void(0);" class="navbar-search-icon"><i class="ion ion-ios-search"></i></a>
+                <input type="text" name="example-input1-group2" class="form-control" 
+                    placeholder="Type here to Search" />
+                <a id="navbar_search_close" class="navbar-search-close" href="#"><i class="ion ion-ios-close"></i></a>
+            </div>
+        </form>
+        <!-- /Top Navbar -->
+
+        <!-- Vertical Nav -->
+        <nav class="hk-nav hk-nav-light" style="background-color: #132649;">
+            <a href="javascript:void(0);" id="hk_nav_close" class="hk-nav-close"><span
+                    class="feather-icon text-white"><i data-feather="x"></i></span></a>
+            <div class="nicescroll-bar" style="background-color: #132649;">
+                <div class="navbar-nav-wrap">
+                    <ul class="navbar-nav flex-column">
+                        <li class="nav-item active">
+                            <a class="nav-link text-white" href="{% url 'dash' %}">
+                                <i class="ion ion-ios-keypad"></i>
+                                <span class="nav-link-text">Dashboard</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="{% url 'my_courses' %}">
+                                <i class="fa fa-bookmark"></i>
+                                <span class="nav-link-text">Courses</span>
+                            </a>
+                            
+                        </li>
+                        <!--              <li class="nav-item">-->
+                        <!--                <a-->
+                        <!--                  class="nav-link"-->
+                        <!--                  href="javascript:void(0);"-->
+                        <!--                  data-toggle="collapse"-->
+                        <!--                  data-target="#pages_drp"-->
+                        <!--                >-->
+                        <!--                  <i class="ion ion-ios-copy"></i>-->
+                        <!--                  <span class="nav-link-text">Assignments</span>-->
+                        <!--                </a>-->
+                        <!--                <ul-->
+                        <!--                  id="pages_drp"-->
+                        <!--                  class="nav flex-column collapse collapse-level-1"-->
+                        <!--                >-->
+                        <!--                  <li class="nav-item">-->
+                        <!--                    <ul class="nav flex-column">-->
+                        <!--                      <li class="nav-item">-->
+                        <!--                        <a class="nav-link" href="#">Mock tests</a>-->
+                        <!--                      </li>-->
+                        <!--                      <li class="nav-item">-->
+                        <!--                        <a class="nav-link" href="#">Results</a>-->
+                        <!--                      </li>-->
+                        <!--                      <li class="nav-item">-->
+                        <!--                        <a class="nav-link" href="#">Resources</a>-->
+                        <!--                      </li>-->
+                        <!--                    </ul>-->
+                        <!--                  </li>-->
+                        <!--                </ul>-->
+                        <!--              </li>-->
+                    </ul>
+                    <!-- <hr class="nav-separator">
+                    <div class="nav-header">
+                        <span>User Interface</span>
+                        <span>UI</span>
+                    </div> -->
+                    <ul class="navbar-nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="javascript:void(0);" data-toggle="collapse"
+                                data-target="#Components_drp">
+                                <i class="fa fa-building"></i>
+                                <span class="nav-link-text">Placements</span>
+                            </a>
+                            <ul id="Components_drp" class="nav flex-column collapse collapse-level-1">
+                                <li class="nav-item">
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link text-white" href="{% url 'jobs' %}"><span><i class="icon-arrow-right" style="font-size: 10px;"></i></span>&nbsp;My Job</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link text-white" href="{% url 'mocks' %}"><span><i class="icon-arrow-right" style="font-size: 10px;"></i></span>&nbsp;Mocks</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="javascript:void(0);" data-toggle="collapse"
+                                data-target="#content_drp">
+                                <i class="ion ion-ios-calendar"></i>
+                                <span class="nav-link-text ">Attendence / Schedules</span>
+                            </a>
+                            <ul id="content_drp" class="nav flex-column collapse collapse-level-1">
+                                <li class="nav-item">
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link text-white" href="{% url 'student_attendance' %}"><span><i class="icon-arrow-right" style="font-size: 10px;"></i></span>&nbsp;Student
+                                                Attendence</a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a class="nav-link text-white" href="{% url 'calendar' %}"><span><i class="icon-arrow-right" style="font-size: 10px;"></i></span>&nbsp;Calendar</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="javascript:void(0);" data-toggle="collapse"
+                                data-target="#utilities_drp">
+                                <i class="fa fa-credit-card"></i>
+                                <span class="nav-link-text">Payment Info</span>
+                            </a>
+                            <ul id="utilities_drp" class="nav flex-column collapse collapse-level-1">
+                                <li class="nav-item">
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link text-white" href="{% url 'payments' %}"><span><i class="icon-arrow-right" style="font-size: 10px;"></i></span>&nbsp;Course
+                                                Payment</a>
+                                        </li>
+                                        <!-- <li class="nav-item">
+                                            <a class="nav-link" href="#">Other Payments</a>
+                                        </li> -->
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="{% url 'internship' %}" >
+                                <i class="fa fa-laptop"></i>
+                                <span class="nav-link-text">Internship</span>
+                            </a>
+                            
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="javascript:void(0);" data-toggle="collapse"
+                                data-target="#tables_drp">
+                                <i class="glyphicon glyphicon-file"></i>
+                                <span class="nav-link-text ">Certifications</span>
+                            </a>
+                            <ul id="tables_drp" class="nav flex-column collapse collapse-level-1">
+                                <li class="nav-item">
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item ">
+                                            <a class="nav-link text-white" href="{% url 'certificate' %}"><span><i class="icon-arrow-right" style="font-size: 10px;"></i></span>&nbsp;Course
+                                                Certificates</a>
+                                        </li>
+
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <hr class="nav-separator" />
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="#" onclick="document.getElementById('logout-form').submit(); return false;">
+                                <i class="ion ion-ios-power"></i>
+                                <span class="nav-link-text">Logout</span>
+                            </a>
+                            <form id="logout-form" method="post" action="{% url 'student_logout' %}" style="display: none;">
+                                {% csrf_token %}
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div id="hk_nav_backdrop" class="hk-nav-backdrop"></div>
+        <!-- /Vertical Nav -->
+
+        <!-- Setting Panel -->
+        <!-- <div class="hk-settings-panel">
+            <div class="nicescroll-bar position-relative">
+                <div class="settings-panel-wrap">
+                    <div class="settings-panel-head mb-15">
+                       <a href="javascript:void(0);" id="settings_panel_close" class="settings-panel-close"><span class="feather-icon"><i data-feather="x"></i></span></a>
+                    </div>
+
+                    <h6 class="mb-5">Layout</h6>
+                    <p class="font-14">Choose your preferred layout</p>
+                    <div class="layout-img-wrap">
+                        <div class="row">
+                            <a href="javascript:void(0);" class="col-6 mb-30 active">
+                                <img class="rounded opacity-70" src="dist/img/layout1.png" alt="layout">
+                                <i class="zmdi zmdi-check"></i>
+                            </a>
+                            <a href="dashboard2.html" class="col-6 mb-30">
+                                <img class="rounded opacity-70" src="dist/img/layout2.png" alt="layout">
+                                <i class="zmdi zmdi-check"></i>
+                            </a>
+                            <a href="dashboard3.html" class="col-6">
+                                <img class="rounded opacity-70" src="dist/img/layout3.png" alt="layout">
+                                <i class="zmdi zmdi-check"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <hr>
+                    <h6 class="mb-5">Navigation</h6>
+                    <p class="font-14">Menu comes in two modes: dark & light</p>
+                    <div class="button-list hk-nav-select mb-10">
+                        <button type="button" id="nav_light_select" class="btn btn-outline-primary btn-sm btn-wth-icon icon-wthot-bg"><span class="icon-label"><i class="fa fa-sun-o"></i> </span><span class="btn-text">Light Mode</span></button>
+                        <button type="button" id="nav_dark_select" class="btn btn-outline-light btn-sm btn-wth-icon icon-wthot-bg"><span class="icon-label"><i class="fa fa-moon-o"></i> </span><span class="btn-text">Dark Mode</span></button>
+                    </div>
+                    <hr>
+                    <h6 class="mb-5">Top Nav</h6>
+                    <p class="font-14">Choose your liked color mode</p>
+                    <div class="button-list hk-navbar-select mb-10">
+                        <button type="button" id="navtop_light_select" class="btn btn-outline-light btn-sm btn-wth-icon icon-wthot-bg"><span class="icon-label"><i class="fa fa-sun-o"></i> </span><span class="btn-text">Light Mode</span></button>
+                        <button type="button" id="navtop_dark_select" class="btn btn-outline-primary btn-sm btn-wth-icon icon-wthot-bg"><span class="icon-label"><i class="fa fa-moon-o"></i> </span><span class="btn-text">Dark Mode</span></button>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6>Scrollable Header</h6>
+                        <div class="toggle toggle-sm toggle-simple toggle-light toggle-bg-primary scroll-nav-switch"></div>
+                    </div>
+                    <button id="reset_settings" class="btn btn-primary btn-block btn-reset mt-30">Reset</button>
+                </div>
+            </div>
+            <img class="d-none" src="dist/img/logo-light.html" alt="brand" />
+            <img class="d-none" src="dist/img/logo-dark.html" alt="brand" />
+        </div> -->
+        <!-- /Setting Panel -->
+
+        <!-- Main Content -->
+        <div class="hk-pg-wrapper bg-light">
+            <!-- Container -->
+              <!-- content start here -->
+
+         
+                <div class="d-flex justify-content-center">
+                  <div class="card row shadow-lg w-100">
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+                          <label for="" class="form-label">First Name : <span class="text-danger">*</span></label>
+                          <input type="text" class="form-control" readonly value="{{student.first_name}}">
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+                          <label for="" class="form-label">Last Name : <span class="text-danger">*</span></label>
+                          <input type="text" class="form-control" readonly value="{{student.last_name}}">
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+                          <label for="" class="form-label">Mobile Number : <span class="text-danger">*</span></label>
+                          <input type="text" class="form-control" readonly value="{{student.mobile_number}}">
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+                          <label for="" class="form-label">Email : <span class="text-danger">*</span></label>
+                          <input type="text" class="form-control" readonly value="{{student.email}}">
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+                          <label for="" class="form-label">Token ID : <span class="text-danger">*</span></label>
+                          <input type="text" class="form-control" readonly value="{{student.token_id}}">
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+                          <label for="" class="form-label">Course : <span class="text-danger">*</span></label>
+                          <input type="text" class="form-control" readonly value="{{student.course_name.course_name}}">
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+                          <label for="" class="form-label">Gender : <span class="text-danger">*</span></label>
+                          <select class="form-control custom-select" name="gender">
+                            <option selected value="">Select Your Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                          </select>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+                          <label for="" class="form-label">Qualification : <span class="text-danger">*</span></label>
+                          <select class="form-control custom-select" name="Qualification">
+                            <option selected value="">Select Your Qualification</option>
+                            {% for i in qualification %}
+                            <option  value="{{i.id}}">{{i.qualification_name}}</option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+                          <label for="" class="form-label">linkedin : <span class="text-danger">*</span></label>
+                          <input type="text" class="form-control"  >
+                        </div>
+                      </div>
+
+
+
+                      <!--  -->
+
+                      <h5 class="hk-pg-title mb-3">Current Address</h5>
+                      
+                      <div class="row mb-3">
+                        <div class="col-sm-12 col-md-6 col-lg-4">
+                          <label for="" class="form-label">Country <span class="text-danger">*</span></label>
+                          <select class="form-control custom-select country-select" name="country">
+                            <option selected value="">Select Your Country</option>
+                            <option value="India">India</option>
+                            <option value="USA">USA</option>
+                            <option value="UK">UK</option>
+                            <option value="England">England</option>
+                            
+                          </select>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-4">
+                          <label for="" class="form-label">State <span class="text-danger">*</span></label>
+                          <select class="form-control custom-select state-select" name="state">
+                            <option selected value="">Select Your State</option>
+                            
+                        
+                          </select>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-4">
+                          <label for="" class="form-label">City <span class="text-danger">*</span></label>
+                          <select class="form-control custom-select city-select" name="city">
+                            <option selected value="">Select Your City</option>
+                            
+                        
+                          </select>
+                        </div>
+                      </div>
+      
+
+                        <!-- education start here -->
+
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between mb-3">
+                                <div></div>
+                                <div>
+                                    <button data-toggle="modal" data-target="#add_education" type="button" class="btn btn-primary btn-sm">Add Qualification</button>
+                                </div>
+                            </div>
+                            <table class="table table-bordered border">
+                                <thead class=" bg-dark text-white" id="education_table">
+                                    <tr>
+                                        <th class="text-white">S.No</th>
+                                        <th class="text-white">City</th>
+                                        <th class="text-white">Department</th>
+                                        <th class="text-white">Year of pass</th>
+                                        <th class="text-white">Percentage</th>
+                                        <th class="text-white">Qualification</th>
+                                        <th class="text-white d-none">Data</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="education_table_body"></tbody>
+                            </table>
+                        </div>
+
+                        <!-- education end here -->
+                        <!-- add button for project start here -->
+                      
+                        <div class="d-flex justify-content-between mb-3">
+                            <div></div>
+                            <div>
+                                <button data-toggle="modal" data-target="#add_project" type="button" class="btn btn-primary btn-sm">Add Project</button>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <table class="table table-bordered border">
+                                <thead class=" bg-dark text-white">
+                                    <tr>
+                                        <th class="text-white">Project Name</th>
+                                        <th class="text-white">Company Name</th>
+                                        <th class="text-white">Department/Designation</th>
+                                        <th class="text-white">Skills</th>
+                                        <th class="text-white">Project Short Description</th>
+                                        <th class="text-white">Starting/Ending Date</th>
+                                        <th class="text-white">State/City</th>
+                                        <th class="text-white d-none">Data</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="project_table_body"></tbody>
+                            </table>
+                        </div>
+                        
+
+
+
+
+                        <!-- project ene here -->
+
+                      <!-- IT certificate add start here -->
+
+                      <div class="d-flex justify-content-between mb-3">
+                        <div></div> 
+                        <div>
+                          <button data-toggle="modal" data-target="#add_certificate" type="submit" class="btn btn-primary btn-sm">Add Certificate</button>
+                        </div>
+                      </div>
+
+
+                      <!-- IT certificate add end here -->
+                        <!-- it certificat start here -->
+                        <table class="table table-bordered border bg-dark text-white">
+                            <thead>
+                                <tr>
+                                    <th  class="text-white">S.No</th>
+                                    <th  class="text-white">Certificate Name</th>
+                                    <th  class="text-white">Certificate ID</th>
+                                    <th  class="text-white">Certificate Expiry Date</th>
+                                    <th  class="text-white">Experience Status</th>
+
+                                </tr>
+                            </thead>
+
+                        </table>
+                    
+
+                        <!-- it certificate end here -->
+
+
+
+
+
+                      </div>
+                    </div>
+                  </div>
+                
+              </div>
+              
+          
+              
+<!-- popup for education  -->
+
+
+
+<div class="modal fade" id="add_education" tabindex="-1" role="dialog" aria-labelledby="add_education" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title text-white">Add Qualification</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="education_form">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="mb-3 col-sm-12 col-lg-6 col-md-6">
+                            <label for="" class="form-label">University Name <span class="text-danger">*</span></label>
+                            <input name="university_name" type="text" placeholder="Ex: Osmania University" class="form-control" />
+                        </div>
+                        <div class="mb-3 col-sm-12 col-lg-6 col-md-6">
+                            <label for="" class="form-label">City <span class="text-danger">*</span></label>
+                            <input type="text" placeholder="Ex: Hyderabad, Banglore" name="city" class="form-control">
+                        </div>
+                        <div class="mb-3 col-sm-12 col-lg-6 col-md-6">
+                            <label for="" class="form-label">Department <span class="text-danger">*</span></label>
+                            <select name="department" id="" class="form-control custom-select">
+                                <option value="" selected>Select your Department</option>
+                                {% for i in qualification %}
+                                <option value="{{i.id}}">{{i.qualification_name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3 col-sm-12 col-lg-6 col-md-6">
+                            <label for="" class="form-lable">Percentage <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" name="percentage">
+                        </div>
+                        <div class="mb-3 col-sm-12 col-lg-6 col-md-6">
+                            <label for="" class="form-label">Year of Passing <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" name="year_of_passing" id="year_of_passing_select">
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3 d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary m-1">Submit</button>
+                    <button type="reset" class="btn btn-secondary m-1">Reset</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+  <!-- popup end here -->
+
+
+
+
+  <!-- popup project start here -->
+  <div class="modal fade" id="add_project" tabindex="-1" role="dialog" aria-labelledby="add_project" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title text-white">Add Project</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="project_form">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="mb-3 col-sm-12 col-lg-6 col-md-6">
+                            <label for="" class="form-label">Project Name <span class="text-danger">*</span></label>
+                            <input name="project_name" type="text" placeholder="Ex: Osmania University" class="form-control" />
+                        </div>
+                        <div class="mb-3 col-sm-12 col-lg-6 col-md-6">
+                            <label for="" class="form-label">Company Name <span class="text-danger">*</span></label>
+                            <input name="company_name" type="text" placeholder="Ex: RamanaSoft,Self" class="form-control" />
+                        </div>
+                        <div class="mb-3 col-sm-12 col-lg-6 col-md-6">
+                            <label for="" class="form-label">Department Name <span class="text-danger">*</span></label>
+                            <input type="text" placeholder="Ex: IT, B.tech" class="form-control" name="department_name">
+                        </div>
+                        <div class="mb-3 col-sm-12 col-lg-6 col-md-6">
+                            <label for="" class="form-label">Designation Name <span class="text-danger">*</span></label>
+                            <input type="text" placeholder="Python Developer, Automobile Engineering" name="designation_name" class="form-control">
+                        </div>
+                        <div class="mb-3 col-sm-12 col-lg-6 col-md-6">
+                            <label for="" class="form-lable">Skills <span class="text-danger">*</span></label>
+                            <input type="text" name="skills" placeholder="Ex: Python, C++" class="form-control">
+                        </div>
+                        <div class="mb-3 col-sm-12 col-lg-12 col-md-12">
+                            <label for="" class="form-label">Project Short Description <span class="text-danger">*</span></label>
+                            <textarea class="form-control" name="description" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3 col-sm-12 col-lg-6 col-md-6">
+                            <label for="" class="form-lable">Project Start Date <span class="text-danger">*</span></label>
+                            <input type="date" name="project_start_date" class="form-control">
+                        </div>
+                        <div class="mb-3 col-sm-12 col-lg-6 col-md-6">
+                            <label for="" class="form-lable">Project End Date <span class="text-danger">*</span></label>
+                            <input type="date" name="project_end_date" class="form-control">
+                        </div>
+                        <div class="mb-3 col-sm-12 col-lg-6 col-md-6">
+                            <label for="" class="form-lable">State <span class="text-danger">*</span></label>
+                            <input type="text" name="state" placeholder="Telangana" class="form-control">
+                        </div>
+                        <div class="mb-3 col-sm-12 col-lg-6 col-md-6">
+                            <label for="" class="form-lable">City <span class="text-danger">*</span></label>
+                            <input type="text" name="city" placeholder="Hyderabad" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3 d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary m-1">Submit</button>
+                    <button type="reset" class="btn btn-secondary m-1">Reset</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+  <!-- popup project end here -->
+
+
+<!-- popup for certifate start here -->
+
+
+<div class="modal fade" id="add_certificate" tabindex="-1" role="dialog" aria-labelledby="add_certificate" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header bg-dark">
+          <h5 class="modal-title text-white">Add Certificate</h5>
+          <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="" method="post"  >
+          {% csrf_token %}
+          <div class="modal-body">
+            <div class="row">
+            
+            <div class="mb-3 col-sm-12 col-lg-6 col-md-6">
+              <label for="" class="form-label">Certificate Name <span class="text-danger">*</span></label>
+              <input name="" type="text" placeholder="Ex: Python Fullstack, Internship" class="form-control" />
+            </div>
+          
+
+          <div class="mb-3 col-sm-12 col-lg-6 col-md-6">
+            <label for="" class="form-label">Certificate ID <span class="text-danger">*</span></label>
+            <input type="text" placeholder="Ex: ID58784" class="form-control">
+          </div>
+
+          <div class="mb-3 col-sm-12 col-lg-6 col-md-6">
+            <label for="" class="form-label">Expeiry Date <span class="text-danger">*</span></label>
+            <input type="date"  class="form-control">
+          </div>
+          
+
+
+        </div>
+        </div>
+            
+          <div class="mb-3  d-flex justify-content-center">
+            <button type="submit" class="btn btn-primary m-1">Submit</button>
+            <button type="reset" class="btn btn-secondary m-1">Reset</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+<!-- popup for certificate end here -->
+
+
+
+
+
+
+
+
+
+              <!-- content end here -->
+            <div class="container-fluid">
+                <!-- Row -->
+                <div class="row ">
+                    <div class="col-xl-12">
+                        <div class="hk-row"></div>
+                    </div>
+                </div>
+                <!-- /Row -->
+            </div>
+            <!-- /Container -->
+
+            <!-- Footer -->
+            <div class="hk-footer-wrap container">
+                <footer class="footer">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12">
+                            <p>
+                                Powered by<a href="#" class="text-dark">Quality Thought</a> ©
+                                2024
+                            </p>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                            <p class="d-inline-block">Follow us</p>
+                            <a href="#"
+                                class="d-inline-block btn btn-icon btn-icon-only btn-indigo btn-icon-style-4"><span
+                                    class="btn-icon-wrap"><i class="fa fa-facebook"></i></span></a>
+                            <a href="#"
+                                class="d-inline-block btn btn-icon btn-icon-only btn-indigo btn-icon-style-4"><span
+                                    class="btn-icon-wrap"><i class="fa fa-twitter"></i></span></a>
+                            <a href="#"
+                                class="d-inline-block btn btn-icon btn-icon-only btn-indigo btn-icon-style-4"><span
+                                    class="btn-icon-wrap"><i class="fa fa-google-plus"></i></span></a>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+            <!-- /Footer -->
+        </div>
+        <!-- /Main Content -->
+    </div>
+    <!-- /HK Wrapper -->
+        <!-- my script -->
+        <script>
+            const educationForm = document.getElementById('education_form');
+            const educationTableBody = document.getElementById('education_table_body');
+        
+            educationForm.addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent the form from submitting normally
+        
+                // Get the form data
+                const formData = new FormData(event.target);
+                const universityName = formData.get('university_name');
+                const city = formData.get('city');
+                const departmentId = formData.get('department');
+                const percentage = formData.get('percentage');
+                const yearOfPassing = formData.get('year_of_passing');
+        
+                // Create a new table row
+                const newRow = document.createElement('tr');
+        
+                // Add the form data to the new row
+                newRow.innerHTML = `
+                    <td>${educationTableBody.rows.length + 1}</td>
+                    <td>${city}</td>
+                    <td>${universityName}</td>
+                    
+                    <td>${yearOfPassing}</td>
+                    
+                    <td>${percentage}</td>
+                    <td>${document.querySelector(`select[name="department"] option[value="${departmentId}"]`).textContent}</td>
+                    <td class="d-none"><input type="hidden" name="education_data" value="${JSON.stringify({ university_name: universityName, city, department_id: departmentId, year_of_passing: yearOfPassing, percentage })}"></td>
+                `;
+        
+                // Add the new row to the table body
+                educationTableBody.appendChild(newRow);
+        
+                // Reset the form
+                event.target.reset();
+        
+                // Close the modal
+                const modal = document.getElementById('add_education');
+                const modalInstance = bootstrap.Modal.getInstance(modal);
+                modalInstance.hide();
+            });
+        </script>
+        <script>
+       
+                const projectForm = document.getElementById('project_form');
+                const projectTableBody = document.getElementById('project_table_body');
+                console.log(projectForm)
+                console.log(projectTableBody)
+        
+                projectForm.addEventListener('submit', function(event) {
+                    console.log("submitted")
+                    event.preventDefault(); // Prevent the form from submitting normally
+        
+                    // Get the form data
+                    const formData = new FormData(event.target);
+                    const projectName = formData.get('project_name');
+                    const companyName = formData.get('company_name');
+                    const departmentName = formData.get('department_name');
+                    const designationName = formData.get('designation_name');
+                    const skills = formData.get('skills');
+                    const description = formData.get('description');
+                    const projectStartDate = formData.get('project_start_date');
+                    const projectEndDate = formData.get('project_end_date');
+                    const state = formData.get('state');
+                    const city = formData.get('city');
+        
+                    // Create a new table row
+                    const newRow = document.createElement('tr');
+                    newRow.innerHTML = `
+                        <td>${projectName}</td>
+                        <td>${companyName}</td>
+                        <td>${departmentName} / ${designationName}</td>
+                        <td>${skills}</td>
+                        <td>${description}</td>
+                        <td>${projectStartDate} / ${projectEndDate}</td>
+                        <td>${state} / ${city}</td>
+                        <td class="d-none"><input type="hidden" name="project_data" value="${JSON.stringify({ project_name: projectName, company_name: companyName, department_name: departmentName, designation_name: designationName, skills, description, project_start_date: projectStartDate, project_end_date: projectEndDate, state, city })}"></td>
+                    `;
+        
+                    // Add the new row to the table body
+                    projectTableBody.appendChild(newRow);
+        
+                    // Reset the form
+                    event.target.reset();
+        
+                    // Close the modal
+                    const modal = document.getElementById('add_project');
+                    const modalInstance = bootstrap.Modal.getInstance(modal);
+                    modalInstance.hide();
+                });
+    
+        </script>
+        <script>
+            const certificationForm = document.getElementById('certification_form');
+            const certificationTableBody = document.getElementById('certification_table_body');
+            certificationForm.addEventListener('submit',function (event){
+                event.preventDefault();
+                const formData = new FormData(event.target);
+                const certificationName = formData.get('certification_name');
+                const certificateId = formData.get('certificate_id');
+                const certificationExpiry = formData.get('certification_expiry');
+                const date = new Date.now();
+                if (certificationExpiry < date){
+                    const status = "Expired"
+                }
+                else{
+                    const status = "Active"
+                }
+
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                <td>${certificationName}</td>
+                <td>${certificateId}</td>
+                <td>${certificationExpiry}</td>
+                <td>${status}</td>
+                `
+                
+                
+            })
+        </script>
+        <!-- my script end here -->
+        <!-- Select2 JavaScript -->
+        
+         <script src="../../static/vendors4/select2/dist/js/select2.full.min.js"></script>
+    <script src="../../static/dist/js/select2-data.js"></script>
+
+
+
+
+    <!-- jQuery -->
+
+    <script src="../../static/js/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../../static/temp/popper.js/dist/umd/popper.min.js"></script>
+
+    <script src="../../static/js/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../../static/vendors4/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- Slimscroll JavaScript -->
+    <script src="../../static/dist/js/jquery.slimscroll.js"></script>
+
+    <!-- Fancy Dropdown JS -->
+    <script src="../../static/dist/js/dropdown-bootstrap-extended.js"></script>
+
+    <!-- FeatherIcons JavaScript -->
+    <script src="../../static/dist/js/feather.min.js"></script>
+
+    <!-- Toggles JavaScript -->
+    <script src="../../static/temp/jquery-toggles/toggles.min.js"></script>
+
+    <script src="../../static/dist/js/toggle-data.js"></script>
+
+    <!-- Toastr JS -->
+    <script src="../../static/temp/jquery-toast-plugin/dist/jquery.toast.min.js"></script>
+
+    <!-- Counter Animation JavaScript -->
+    <script src="../../static/temp/waypoints/lib/jquery.waypoints.min.js"></script>
+    <script src="../../static/temp/jquery.counterup/jquery.counterup.min.js"></script>
+
+    <!-- Morris Charts JavaScript -->
+    <script src="../../static/temp/raphael/raphael.min.js"></script>
+    <script src="../../static/temp/morris.js/morris.min.js"></script>
+
+    <!-- Easy pie chart JS -->
+    <script src="../../static/vendors4/easy-pie-chart/dist/jquery.easypiechart.min.js"></script>
+
+    <!-- Apex JavaScript -->
+    <script src="../../static/vendors4/apexcharts/dist/apexcharts.min.js"></script>
+
+    <!-- EChartJS JavaScript -->
+    <script src="../../static/vendors4/echarts/dist/echarts-en.min.js"></script>
+
+    <!-- Init JavaScript -->
+    <script src="../../static/dist/js/init.js"></script>
+    <!--	<script src="../../static/dist/js/dashboard2-data.js"></script>-->
+    <!-- data table -->
+
+    <script src="../../static/vendors4/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="../../static/vendors4/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="../../static/vendors4/datatables.net-dt/js/dataTables.dataTables.min.js"></script>
+    <script src="../../static/vendors4/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="../../static/vendors4/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+    <script src="../../static/vendors4/datatables.net-buttons/js/buttons.flash.min.js"></script>
+    <script src="../../static/vendors4/jszip/dist/jszip.min.js"></script>
+    <script src="../../static/vendors4/pdfmake/build/pdfmake.min.js"></script>
+    <script src="../../static/vendors4/pdfmake/build/vfs_fonts.js"></script>
+    <script src="../../static/vendors4/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="../../static/vendors4/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="../../static/vendors4/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="../../static/dist/js/dataTables-data.js"></script>
+
+    <!-- Toggles JavaScript -->
+    <script src="../../static/vendors4/jquery-toggles/toggles.min.js"></script>
+    <script src="../../static/dist/js/toggle-data.js"></script>
+
+    <!-- jquery validations -->
+    <script src="../../static/dist/js/validation-data.js"></script>
+    <script src="/console/static/dist/js/validation-data.js"></script>
+    
+    <script src="/console/static/js/jquery-validations/jquery-validation.js"></script>
+    
+    <script src="/console/static/js/jquery-validations/jquery-additions-validations.js"></script>
+    <!-- dropify -->
+
+    <!-- Dropzone JavaScript -->
+    <script src="../../static/vendors4/dropzone/dist/dropzone.js"></script>
+
+    <!-- Dropify JavaScript -->
+    <script src="../../static/vendors4/dropify/dist/js/dropify.min.js"></script>
+
+    <!-- Form Flie Upload Data JavaScript -->
+    <script src="../../static/dist/js/form-file-upload-data.js"></script>
+
+    <!--  -->
+    <script src="../../static/vendors4/jasny-bootstrap/dist/js/jasny-bootstrap.min.js"></script>
+
+    <!--ID card modal-->
+    <!-- <div class="modal fade" id="exampleModal"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="margin-right: 50%; margin-left:15%">
+                <div class="modal-body">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="flip-card  m-3" onclick="flipCard()">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front">
+                                    <div class="card">
+                                        <img src="https://ihubtalent.com/wp-content/uploads/2022/06/ihublogo.png"
+                                            style="height: 60px; width: 60px; margin: 0 auto" alt="iHub Talent Logo"
+                                            class="card-logo" />
+                                        <img src="../../static/dist/img/avatar2.jpg" style="height: 100%; width: 100%"
+                                            class="card-img-top" alt="Front Image" />
+                                        <div class="card-body">
+                                            <table style="margin-left: 5px; margin-top: 0 auto">
+                                                <tbody>
+                                                    <tr>
+                                                        <th><b>Name</b></th>
+                                                        <td>: P Saikiran</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th><b>ID</b></th>
+                                                        <td>: 12345</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th><b>Batch No</b></th>
+                                                        <td>: 25</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th><b>Course</b></th>
+                                                        <td>: Full Stack Developer</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th><b>DOJ</b></th>
+                                                        <td>: 29-09-2023</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <div>
+                                                <i style="color: red"><b>Valid Upto 6 Months(00-00-00)</b></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flip-card-back">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <img src="../../static/dist/img/qrcode.jpg" alt="Found"
+                                                style="position: relative" height="30%" width="30%" />
+                                            <h6 style="color: red">TERMS OF USE</h6>
+                                            <ul style="font-size: small; text-align: start">
+                                                <li>
+                                                    • This card is the property of iHub Talent
+                                                    Management Pvt Ltd and must be returned when you
+                                                    suspend, withdraw from, or complete your course(s).
+                                                </li>
+                                                <li>
+                                                    • You should hold this card when you are on the
+                                                    premises of iHub Talent Campus and should be
+                                                    produced on-demand.
+                                                </li>
+                                                <li>
+                                                    • If your card is lost, stolen, or damaged, you
+                                                    should report this immediately to Student Admission
+                                                    Support. You can request a replacement card for a
+                                                    fee.
+                                                </li>
+                                                <li>• This card is not transferable.</li>
+                                            </ul>
+                                            <p>EMERGENCY NO: 1234567898</p>
+                                            <address>
+                                                #515 NILGIRI BLOCK, ADITYA ENCLAVE, AMEERPET,
+                                                HYDERABAD, TELANGANA-500016
+                                            </address>
+                                            <p>
+                                                <center>1234567896, 3216549878</center>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <script>
+        function flipCard() {
+            var card = document.querySelector(".flip-card");
+            card.classList.toggle("flipped");
+        }
+    </script>
+    <script>
+        $(document).ready(function(){
+            
+    
+        setTimeout(function() {
+            $(".alert").fadeOut("slow", function() {
+                // This function is called after the fadeOut completes
+                $(this).remove(); // Removes the element from the DOM
+            });
+        }, 5000);
+        })
+    </script>
+   <script>
+    $(document).ready(function (){
+      var stateData = {
+        "India": ["Maharashtra", "Delhi", "Punjab", "Karnataka", "Chattisgarh", "Jharkhand", "Haryana", "Uttar Pradesh", "Rajasthan", "Madhya Pradesh", "Gujarat", "Himachal Pradesh", "Sikkim", "Manipur", "Goa", "Tripura", "Arunachal Pradesh", "Nagaland", "Meghalaya", "Mizoram", "Assam", "Bihar", "West Bengal", "Jammu and Kashmir", "Andhra Pradesh", "Kerala", "Tamil Nadu", "Pondicherry", "Andaman and Nicobar Islands", "Telangana", "Lakshadweep"],
+        "USA": ["New York", "California", "Texas", "Florida", "Illinois"],
+        "UK": ["London", "Birmingham", "Manchester", "Glasgow", "Liverpool"],
+        "England": ["London", "Manchester", "Liverpool", "Birmingham", "Leeds"]
+    };
+
+    var cityData = {
+        'Andhra Pradesh': ['Adoni', 'Anantapur', 'Chittoor', 'Kadapa', 'Kakinada', 'Kurnool', 'Nellore', 'Rajahmundry', 'Tirupati', 'Vijayawada', 'Visakhapatnam', 'Guntur', 'Machilipatnam', 'Narsipatnam', 'Srikakulam', 'Vizianagaram', 'Eluru', 'Tirupati', 'Yemmiganur'],
+        'Telengana': ['Adilabad', 'Hyderabad', 'Karimnagar', 'Khammam', 'Mahbubnagar', 'Nizamabad', 'Warangal', 'Ranga Reddy'],
+        'Kerala': ['Alappuzha', 'Ernakulam', 'Idukki', 'Kannur', 'Kasaragod', 'Kollam', 'Kottayam', 'Kozhikode', 'Malappuram', 'Palakkad', 'Pathanamthitta', 'Thiruvananthapuram', 'Thrissur', 'Wayanad'],
+        'Tamil Nadu': ['Chennai', 'Madurai', 'Tiruchirappalli', 'Vellore', 'Viluppuram', 'Virudhunagar', 'Dindigul', 'Erode', 'Kanchipuram', 'Kanniyakumari', 'Krishnagiri', 'Namakkal', 'Salem', 'Thoothukkudi', 'Tirunelveli', 'Tiruppur', 'Tiruvannamalai', 'Vellore', 'Viluppuram', 'Virudhunagar'],
+        'Pondicherry': ['karaikal', 'Mahe', 'puducherry', 'Yanam'],
+        'Punjab': ['Amritsar', 'Batala', 'Firozpur', 'Hoshiarpur', 'Jalandhar', 'Kapurthala', 'Ludhiana', 'Patiala', 'Rupnagar', 'Sangrur', 'SAS Nagar', 'Srinagar', 'Tarn Taran'],
+        'Andaman and Nicobar Islands': ['Port Blair'],
+        'Chandigarh': ['Chandigarh'],
+        'Chhattisgarh': ['Ambikapur', 'Bhilai', 'Bilaspur', 'Durg', 'Raigarh', 'Raipur', 'Rajnandgaon', 'Surguja'],
+        'Himachal Pradesh': ['Bilaspur', 'Chamba', 'Hamirpur', 'Kangra', 'Kullu', 'Mandi', 'Shimla', 'Sirmaur', 'Solan', 'Una'],
+        'Uttarakhand': ['Dehradun', 'Haridwar', 'Nainital', 'Pauri Garhwal', 'Pithoragarh', 'Rudraprayag', 'Tehri Garhwal', 'Udham Singh Nagar', 'Uttarkashi'],
+        'Delhi': ['Delhi', 'New Delhi'],
+        'Jharkhand': ['Dhanbad', 'Jamshedpur', 'Ranchi', 'Wasseypur'],
+        'Rajasthan': ['Ajmer', 'Bikaner', 'Bharatpur', 'Jaipur', 'Jodhpur', 'Kota', 'Udaipur'],
+        'Madhya Pradesh': ['Bhopal', 'Indore', 'Jabalpur', 'Satna'],
+        'Goa': ['Panaji'],
+        'Haryana': ['Ambala', 'Chandigarh', 'Faridabad', 'Gurgaon', 'Hisar', 'Jhajjar', 'Karnal', 'Kurukshetra', 'Panipat', 'Rohtak', 'Sirsa', 'Sonipat', 'Yamunanagar'],
+        'Manipur': ['Bishnupur', 'Chandel', 'Churachandpur', 'Imphal', 'Senapati', 'Tamenglong', 'Thoubal', 'Ukhrul'],
+        'Nagaland': ['Dimapur', 'Kohima', 'Mokokchung', 'Mon', 'Noklak', 'Peren', 'Phek', 'Tuensang', 'Wokha', 'Zunheboto'],
+        'Meghalaya': ['East Garo Hills', 'East Khasi Hills', 'North Garo Hills', 'Ri Bhoi', 'South Garo Hills', 'South West Garo Hills', 'South West Khasi Hills', 'West Garo Hills', 'West Khasi Hills'],
+        'Tripura': ['Dhalai', 'Gomati', 'Khowai', 'North Tripura', 'Sepahijala', 'South Tripura', 'Unokoti', 'West Tripura'],
+        'Sikkim': ['Gangtok', 'Gyalshing', 'Lachung', 'Mangan', 'Namchi', 'Pasangtok', 'Rangpo'],
+        'Mizoram': ['Aizawl', 'Champhai', 'Kolasib', 'Lawngtlai', 'Lunglei', 'Mamit', 'Saiha', 'Saitual', 'Serchhip'],
+        'Arunachal Pradesh': ['Itanagar'],
+        'West Bengal': ['Bardhaman', 'Darjiling', 'Hugli', 'Kharagpur', 'Kolkata', 'Nadia', 'North 24 Parganas', 'Paschim Medinipur', 'Purba Medinipur', 'Purulia', 'South 24 Parganas', 'Uttar Dinajpur'],
+        'Lakshadweep': ['Lakshadweep'],
+        'Rajasthan': ['Ajmer', 'Bikaner', 'Bharatpur', 'Jaipur', 'Jodhpur', 'Kota', 'Udaipur'],
+        'Odisha': ['Bhubaneswar', 'Cuttack', 'Dhenkanal', 'Gangtok', 'Gopalpur', 'Jharsuguda', 'Nabarangpur', 'Nayagarh', 'Puri', 'Raurkela', 'Sambalpur', 'Sundargarh'],
+        'Maharashtra': ['Ahmednagar', 'Aurangabad', 'Beed', 'Chandrapur', 'Dhule', 'Jalgaon', 'Kolhapur', 'Latur', 'Nanded', 'Nagpur', 'Nashik', 'Pune', 'Sangli', 'Satara', 'Sindhudurg', 'Solapur', 'Thane', 'Wardha', 'Washim', 'Yavatmal'],
+        'Gujarat': ['Ahmedabad', 'surat', 'Amreli', 'Anand', 'Bharuch', 'Bhavnagar', 'Dahod', 'Gandhinagar', 'Jamnagar', 'Kutch', 'Narmada', 'Navsari', 'Patan', 'Porbandar', 'Rajkot', 'Sabarkantha', 'Surat', 'Surendranagar', 'Tapi', 'Vadodara', 'Valsad'],
+        'Daman and Diu': ['Daman', 'Diu'],
+        'Telangana': ['Adilabad', 'Hyderabad', 'Karimnagar', 'Khammam', 'Mahabubnagar', 'Medak', 'Nalgonda', 'Nizamabad', 'Warangal'],
+
+
+        // Add more city data as needed...
+    };
+
+      //function for the dropdown dependency for the country , state and city
+
+     
+  $('.country-select').change(function (){
+    var selectedCountry = $(this).val();
+    $('.state-select').empty();
+    $('.city-select').empty();
+    $('.state-select').append('<option selected value="">Select Your State</option>');
+    $('.city-select').append('<option selected value="">Select Your City</option>');
+    if(selectedCountry){
+      $.each(stateData[selectedCountry], function (key, value) {
+        $('.state-select').append('<option value="' + value + '">' + value + '</option>');
+      });
+    }
+  });
+
+  $('.state-select').change(function (){
+    var selectedState = $(this).val();
+    $('.city-select').empty();
+    $('.city-select').append('<option selected value="">Select Your City</option>');
+    if(selectedState){
+      $.each(cityData[selectedState], function (key, value) {
+        $('.city-select').append('<option value="' + value + '">' + value + '</option>');
+      });
+    }
+  });
+
+
+
+    })
+   </script>
+</body>
+
+<!-- Mirrored from hencework.com/theme/deepor/dashboard1.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 08 Nov 2023 13:25:55 GMT -->
+
+</html>

@@ -20,24 +20,33 @@ def student_login(request):
         return redirect('dash')
     
     if request.method == 'POST':
-
         email = request.POST.get('email_id')
         password = request.POST.get('password')
         
-        print("credential")
+        print("Credentials:")
         print(email, password)
-        if Studen_credentials.objects.filter(email=email, password=password, is_active=True).exists():
-            student = Studen_credentials.objects.get(email=email, password=password, is_active=True)
-            student_id = student
-            request.session['student'] = {'email': email, 'password': password, 'student_id': student_id.id}
-            print('success')
-
-            return redirect('dash')
-        else:
-            messages.error(request,'Invalid credential')
-            return redirect('student_login')
         
+        if StudentCredentials.objects.filter(email=email, password=password).exists():
+            student = StudentCredentials.objects.get(email=email, password=password)
+            print(student.is_active)
+            
+            if student.is_active:
+                
+                student_id = LeadModel.objects.get(pk=student.student_id.id)
+                request.session['student'] = {'email': email, 'student_id': student_id.id}
+                print('Success')
+                return redirect('dash')
+            else:
+                messages.error(request, 'Your account is not active. Please contact admin.')
+                return redirect('student_login')
+        else:
+            messages.error(request, 'Invalid credentials.')
+            return redirect('student_login')
+    
     return render(request, 'student_login.html')
+           
+
+        
 
 
 
@@ -51,7 +60,20 @@ def student_logout(request):
         return redirect('student_login')
 
 
-    
+@student_required
+def student_OTP(request):
+    student_id = request.session.get('student').get('student_id')
+
+    student = LeadModel.objects.get(id = student_id)
+    crn = student.crn_number
+    register_user = Register_model.objects.get(crn=crn)
+    qualification = register_user.qualifications.all()
+    context = {
+        'student':student,
+        'qualification':qualification
+    }
+
+    return render(request, 'student_OTP.html',context)
 
 
 
@@ -114,12 +136,12 @@ def find_slot(request,fac_id):
 @student_required    
 def mocks(request):
     student_id = request.session.get('student').get('student_id')
-    credentials = Studen_credentials.objects.get(id = student_id)
-    print(credentials.studend_id)
-    crn = credentials.studend_id.crn_number.crn
+    student = LeadModel.objects.get(id = student_id)
+    crn = student.crn_number
+
     register_user = Register_model.objects.get(crn=crn)
     courses = register_user.courses.all()
-    schedules = Scheduling_mock_model.objects.filter(student_name = credentials.studend_id)
+    schedules = Scheduling_mock_model.objects.filter(student_name = student_id)
     if request.method == 'POST':
         course_name = request.POST.get('course_name')
         specialization = request.POST.get('specialization')
@@ -127,12 +149,12 @@ def mocks(request):
         available_slot = request.POST.get('available_slot')
         attach_Resume = request.FILES.get('attach_Resume')
         schedule = Scheduling_mock_model.objects.filter(id=available_slot)
-        if Scheduling_mock_model.objects.filter(id=available_slot, student_name = credentials.studend_id).exists():
+        if Scheduling_mock_model.objects.filter(id=available_slot, student_name = student_id).exists():
             messages.error(request, 'Already Booked')
             return redirect('mocks')
         
         if schedule.exists():
-            Scheduling_mock_model.objects.filter(id=available_slot).update(attach_Resume=attach_Resume, course_name=course_name, specilalization_name=specialization,student_name = credentials.studend_id)
+            Scheduling_mock_model.objects.filter(id=available_slot).update(attach_Resume=attach_Resume, course_name=course_name, specilalization_name=specialization,student_name = student_id)
             
         messages.success(request, 'Slot Booked successfully')
         return redirect('mocks')
@@ -202,13 +224,11 @@ def Test_card(request):
 @student_required    
 def matched_jobs(request):
     student_id = request.session.get('student').get('student_id')
-    credentials = Studen_credentials.objects.get(id=student_id)
-    print(credentials.studend_id)
-    crn = credentials.studend_id.crn_number.crn
+    student = LeadModel.objects.get(id = student_id)
+    crn = student.crn_number
     register_user = Register_model.objects.get(crn=crn)
     jobs = register_user.job_post.all()
     print("studentid",student_id)
-    student = credentials.studend_id
     context = {
 
         'jobs':jobs,

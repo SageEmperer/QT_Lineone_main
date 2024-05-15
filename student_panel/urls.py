@@ -6,6 +6,7 @@ urlpatterns = [
     path('dash/',views.dash,name='dash'),
     path('student_profile/',views.student_profile,name='student_profile'),
     path('student_id/',views.student_id,name='student_id'),
+    path('student_OTP/',views.student_OTP,name="student_OTP"),
     path('my_job/',views.my_job,name='my_job'),
     path('profile_project/',views.project,name='profile_project'),
     path('profile_certification/',views.certification,name='profile_certification'),
