@@ -61,7 +61,8 @@ License: You must have a valid license purchased only from templatemonster to le
         type="text/css" />
 
     
-
+      <!-- Bootstrap table CSS -->
+      <link href="../../console/static/vendors4/bootstrap-table/dist/bootstrap-table.min.css" rel="stylesheet" type="text/css" />
     <!-- dropify css cdns -->
     <!-- Bootstrap Dropzone CSS -->
 
@@ -212,7 +213,7 @@ License: You must have a valid license purchased only from templatemonster to le
         <nav class="navbar navbar-expand-xl navbar-light fixed-top hk-navbar" style="background-color: #132649; ">
             <a id="navbar_toggle_btn" class="navbar-toggle-btn nav-link-hover" href="javascript:void(0);"><i
                     class="ion ion-ios-menu" style='color:white;'></i></a>
-            <a class="navbar-brand" href="dashboard1.html">
+            <a class="navbar-brand" >
                 <img class="brand-img d-inline-block mr-5" src="../../static/images/logo/Quality_thought_logo.png"
                     width="150" alt="" />
             </a>
@@ -342,7 +343,7 @@ License: You must have a valid license purchased only from templatemonster to le
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" data-dropdown-in="flipInX"
                         data-dropdown-out="flipOutX">
-                        <a class="dropdown-item" href="{% url 'student_profile' %}"><i
+                        <a class="dropdown-item" ><i
                                 class="dropdown-icon zmdi zmdi-account"></i><span>Profile</span></a>
                         <a class="dropdown-item" href="" data-toggle="modal" data-target="#exampleModal">
                             <i class="dropdown-icon zmdi zmdi-account"></i><span>ID</span></a>
@@ -384,14 +385,14 @@ License: You must have a valid license purchased only from templatemonster to le
                 <div class="navbar-nav-wrap">
                     <ul class="navbar-nav flex-column">
                         <li class="nav-item active">
-                            <a class="nav-link text-white" href="{% url 'dash' %}">
+                            <a class="nav-link text-white" >
                                 <i class="ion ion-ios-keypad"></i>
                                 <span class="nav-link-text">Dashboard</span>
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="{% url 'my_courses' %}">
+                            <a class="nav-link text-white" >
                                 <i class="fa fa-bookmark"></i>
                                 <span class="nav-link-text">Courses</span>
                             </a>
@@ -443,10 +444,10 @@ License: You must have a valid license purchased only from templatemonster to le
                                 <li class="nav-item">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link text-white" href="{% url 'jobs' %}"><span><i class="icon-arrow-right" style="font-size: 10px;"></i></span>&nbsp;My Job</a>
+                                            <a class="nav-link text-white" ><span><i class="icon-arrow-right" style="font-size: 10px;"></i></span>&nbsp;My Job</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link text-white" href="{% url 'mocks' %}"><span><i class="icon-arrow-right" style="font-size: 10px;"></i></span>&nbsp;Mocks</a>
+                                            <a class="nav-link text-white" ><span><i class="icon-arrow-right" style="font-size: 10px;"></i></span>&nbsp;Mocks</a>
                                         </li>
                                     </ul>
                                 </li>
@@ -462,12 +463,12 @@ License: You must have a valid license purchased only from templatemonster to le
                                 <li class="nav-item">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link text-white" href="{% url 'student_attendance' %}"><span><i class="icon-arrow-right" style="font-size: 10px;"></i></span>&nbsp;Student
+                                            <a class="nav-link text-white" ><span><i class="icon-arrow-right" style="font-size: 10px;"></i></span>&nbsp;Student
                                                 Attendence</a>
                                         </li>
 
                                         <li class="nav-item">
-                                            <a class="nav-link text-white" href="{% url 'calendar' %}"><span><i class="icon-arrow-right" style="font-size: 10px;"></i></span>&nbsp;Calendar</a>
+                                            <a class="nav-link text-white" ><span><i class="icon-arrow-right" style="font-size: 10px;"></i></span>&nbsp;Calendar</a>
                                         </li>
                                     </ul>
                                 </li>
@@ -483,7 +484,7 @@ License: You must have a valid license purchased only from templatemonster to le
                                 <li class="nav-item">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link text-white" href="{% url 'payments' %}"><span><i class="icon-arrow-right" style="font-size: 10px;"></i></span>&nbsp;Course
+                                            <a class="nav-link text-white" ><span><i class="icon-arrow-right" style="font-size: 10px;"></i></span>&nbsp;Course
                                                 Payment</a>
                                         </li>
                                         <!-- <li class="nav-item">
@@ -494,7 +495,7 @@ License: You must have a valid license purchased only from templatemonster to le
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="{% url 'internship' %}" >
+                            <a class="nav-link text-white"  >
                                 <i class="fa fa-laptop"></i>
                                 <span class="nav-link-text">Internship</span>
                             </a>
@@ -510,7 +511,7 @@ License: You must have a valid license purchased only from templatemonster to le
                                 <li class="nav-item">
                                     <ul class="nav flex-column">
                                         <li class="nav-item ">
-                                            <a class="nav-link text-white" href="{% url 'certificate' %}"><span><i class="icon-arrow-right" style="font-size: 10px;"></i></span>&nbsp;Course
+                                            <a class="nav-link text-white" ><span><i class="icon-arrow-right" style="font-size: 10px;"></i></span>&nbsp;Course
                                                 Certificates</a>
                                         </li>
 
@@ -593,10 +594,12 @@ License: You must have a valid license purchased only from templatemonster to le
             <!-- Container -->
               <!-- content start here -->
 
-         
-                <div class="d-flex justify-content-center">
+                 
+                <div class="d-flex justify-content-center mt-2">
                   <div class="card row shadow-lg w-100">
                     <div class="card-body">
+                        <form action="{% url 'student_OTP' %}" id="student_OTP" method="post" >
+                            {% csrf_token %}   
                       <div class="row">
                         <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
                           <label for="" class="form-label">First Name : <span class="text-danger">*</span></label>
@@ -642,7 +645,7 @@ License: You must have a valid license purchased only from templatemonster to le
                         </div>
                         <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
                           <label for="" class="form-label">linkedin : <span class="text-danger">*</span></label>
-                          <input type="text" class="form-control"  >
+                          <input type="text" class="form-control" name="linkedin"  >
                         </div>
                       </div>
 
@@ -681,7 +684,40 @@ License: You must have a valid license purchased only from templatemonster to le
                           </select>
                         </div>
                       </div>
-      
+                      <h5 class="hk-pg-title mb-3">Permanent Address</h5>
+
+
+                      <div class="row mb-3">
+                        <div class="col-sm-12 col-md-6 col-lg-4">
+                          <label for="" class="form-label">Country <span class="text-danger">*</span></label>
+                          <select class="form-control custom-select permanent_country-select" name="permanent_country">
+                            <option selected value="">Select Your Country</option>
+                            <option value="India">India</option>
+                            <option value="USA">USA</option>
+                            <option value="UK">UK</option>
+                            <option value="England">England</option>
+                            
+                          </select>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-4">
+                          <label for="" class="form-label">State <span class="text-danger">*</span></label>
+                          <select class="form-control custom-select permanent_state-select" name="permanent_state">
+                            <option selected value="">Select Your State</option>
+                            
+                        
+                          </select>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-4">
+                          <label for="" class="form-label">City <span class="text-danger">*</span></label>
+                          <select class="form-control custom-select permanent_city-select" name="permanent_city">
+                            <option selected value="">Select Your City</option>
+                            
+                        
+                          </select>
+                        </div>
+                      </div>
+
+       
 
                         <!-- education start here -->
 
@@ -692,20 +728,26 @@ License: You must have a valid license purchased only from templatemonster to le
                                     <button data-toggle="modal" data-target="#add_education" type="button" class="btn btn-primary btn-sm">Add Qualification</button>
                                 </div>
                             </div>
-                            <table class="table table-bordered border">
-                                <thead class=" bg-dark text-white" id="education_table">
-                                    <tr>
-                                        <th class="text-white">S.No</th>
-                                        <th class="text-white">City</th>
-                                        <th class="text-white">Department</th>
-                                        <th class="text-white">Year of pass</th>
-                                        <th class="text-white">Percentage</th>
-                                        <th class="text-white">Qualification</th>
-                                        <th class="text-white d-none">Data</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="education_table_body"></tbody>
-                            </table>
+                            <div class="table-wrap">
+
+                                <div class="table-responsive">
+                                    
+                                    <table class="table table-bordered border">
+                                        <thead class="bg-dark text-white" id="education_table">
+                                            <tr>
+                                                <th class="text-white">S.No</th>
+                                                <th class="text-white">City</th>
+                                                <th class="text-white">Department</th>
+                                                <th class="text-white">Year of pass</th>
+                                                <th class="text-white">Percentage</th>
+                                                <th class="text-white">Qualification</th>
+                                                <th class="text-white d-none">Data</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="education_table_body"></tbody>
+                                    </table>
+                                </div>
+                            </div> 
                         </div>
 
                         <!-- education end here -->
@@ -722,6 +764,7 @@ License: You must have a valid license purchased only from templatemonster to le
                             <table class="table table-bordered border">
                                 <thead class=" bg-dark text-white">
                                     <tr>
+                                        <th class="text-white">S.No</th>
                                         <th class="text-white">Project Name</th>
                                         <th class="text-white">Company Name</th>
                                         <th class="text-white">Department/Designation</th>
@@ -732,7 +775,7 @@ License: You must have a valid license purchased only from templatemonster to le
                                         <th class="text-white d-none">Data</th>
                                     </tr>
                                 </thead>
-                                <tbody id="project_table_body"></tbody>
+                                <tbody id="projectTableBody"></tbody>
                             </table>
                         </div>
                         
@@ -743,42 +786,57 @@ License: You must have a valid license purchased only from templatemonster to le
                         <!-- project ene here -->
 
                       <!-- IT certificate add start here -->
-
-                      <div class="d-flex justify-content-between mb-3">
-                        <div></div> 
-                        <div>
-                          <button data-toggle="modal" data-target="#add_certificate" type="submit" class="btn btn-primary btn-sm">Add Certificate</button>
+                      <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-3">
+                            <div></div>
+                            <div>
+                                <button data-toggle="modal" data-target="#add_certificate" type="button" class="btn btn-primary btn-sm">Add Certificate</button>
+                            </div>
                         </div>
-                      </div>
-
-
-                      <!-- IT certificate add end here -->
-                        <!-- it certificat start here -->
-                        <table class="table table-bordered border bg-dark text-white">
-                            <thead>
+                        <table class="table table-bordered border">
+                            <thead class=" bg-dark text-white">
                                 <tr>
-                                    <th  class="text-white">S.No</th>
-                                    <th  class="text-white">Certificate Name</th>
-                                    <th  class="text-white">Certificate ID</th>
-                                    <th  class="text-white">Certificate Expiry Date</th>
-                                    <th  class="text-white">Experience Status</th>
-
+                                    <th class="text-white">S.No</th>
+                                    <th class="text-white">Certificate Name</th>
+                                    <th class="text-white">Certificate ID</th>
+                                    <th class="text-white">Certificate Expiry Date</th>
+                                    <th class="text-white">Experience Status</th>
+                                    <th class="text-white d-none">Data</th>
                                 </tr>
                             </thead>
-
+                            <tbody  id="certification_table_body"></tbody>
                         </table>
+                    </div>
                     
 
                         <!-- it certificate end here -->
 
 
+                        
+                      <!-- submit button start here -->
+  
+                      <div class="d-flex justify-content-center">
+  
+                          <button type="submit" class="btn btn-primary m-1">Submit</button>
+                          <button type="reset" class="btn btn-secondary m-1">Reset</button>
+  
+                      </div>
+  
+  
+  
+                      <!-- submit button end here -->
 
 
 
                       </div>
+                    </form>
                     </div>
+
+
+
+
                   </div>
-                
+               
               </div>
               
           
@@ -912,51 +970,41 @@ License: You must have a valid license purchased only from templatemonster to le
 
 <!-- popup for certifate start here -->
 
-
 <div class="modal fade" id="add_certificate" tabindex="-1" role="dialog" aria-labelledby="add_certificate" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-      <div class="modal-content">
-        <div class="modal-header bg-dark">
-          <h5 class="modal-title text-white">Add Certificate</h5>
-          <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <form action="" method="post"  >
-          {% csrf_token %}
-          <div class="modal-body">
-            <div class="row">
-            
-            <div class="mb-3 col-sm-12 col-lg-6 col-md-6">
-              <label for="" class="form-label">Certificate Name <span class="text-danger">*</span></label>
-              <input name="" type="text" placeholder="Ex: Python Fullstack, Internship" class="form-control" />
+        <div class="modal-content">
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title text-white">Add Certificate</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-          
-
-          <div class="mb-3 col-sm-12 col-lg-6 col-md-6">
-            <label for="" class="form-label">Certificate ID <span class="text-danger">*</span></label>
-            <input type="text" placeholder="Ex: ID58784" class="form-control">
-          </div>
-
-          <div class="mb-3 col-sm-12 col-lg-6 col-md-6">
-            <label for="" class="form-label">Expeiry Date <span class="text-danger">*</span></label>
-            <input type="date"  class="form-control">
-          </div>
-          
-
-
+            <form id="certification_form">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="mb-3 col-sm-12 col-lg-6 col-md-6">
+                            <label for="" class="form-label">Certificate Name <span class="text-danger">*</span></label>
+                            <input name="certification_name" type="text" placeholder="Ex: Python Fullstack, Internship" class="form-control" />
+                        </div>
+                        <div class="mb-3 col-sm-12 col-lg-6 col-md-6">
+                            <label for="" class="form-label">Certificate ID <span class="text-danger">*</span></label>
+                            <input type="text" name="certificate_id" placeholder="Ex: ID58784" class="form-control">
+                        </div>
+                        <div class="mb-3 col-sm-12 col-lg-6 col-md-6">
+                            <label for="" class="form-label">Expiry Date <span class="text-danger">*</span></label>
+                            <input type="date" name="certification_expiry" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3 d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary m-1">Submit</button>
+                    <button type="reset" class="btn btn-secondary m-1">Reset</button>
+                </div>
+            </form>
         </div>
-        </div>
-            
-          <div class="mb-3  d-flex justify-content-center">
-            <button type="submit" class="btn btn-primary m-1">Submit</button>
-            <button type="reset" class="btn btn-secondary m-1">Reset</button>
-          </div>
-        </form>
-      </div>
     </div>
-  </div>
-
+</div>
 
 
 
@@ -1017,126 +1065,9 @@ License: You must have a valid license purchased only from templatemonster to le
     </div>
     <!-- /HK Wrapper -->
         <!-- my script -->
-        <script>
-            const educationForm = document.getElementById('education_form');
-            const educationTableBody = document.getElementById('education_table_body');
-        
-            educationForm.addEventListener('submit', function(event) {
-                event.preventDefault(); // Prevent the form from submitting normally
-        
-                // Get the form data
-                const formData = new FormData(event.target);
-                const universityName = formData.get('university_name');
-                const city = formData.get('city');
-                const departmentId = formData.get('department');
-                const percentage = formData.get('percentage');
-                const yearOfPassing = formData.get('year_of_passing');
-        
-                // Create a new table row
-                const newRow = document.createElement('tr');
-        
-                // Add the form data to the new row
-                newRow.innerHTML = `
-                    <td>${educationTableBody.rows.length + 1}</td>
-                    <td>${city}</td>
-                    <td>${universityName}</td>
-                    
-                    <td>${yearOfPassing}</td>
-                    
-                    <td>${percentage}</td>
-                    <td>${document.querySelector(`select[name="department"] option[value="${departmentId}"]`).textContent}</td>
-                    <td class="d-none"><input type="hidden" name="education_data" value="${JSON.stringify({ university_name: universityName, city, department_id: departmentId, year_of_passing: yearOfPassing, percentage })}"></td>
-                `;
-        
-                // Add the new row to the table body
-                educationTableBody.appendChild(newRow);
-        
-                // Reset the form
-                event.target.reset();
-        
-                // Close the modal
-                const modal = document.getElementById('add_education');
-                const modalInstance = bootstrap.Modal.getInstance(modal);
-                modalInstance.hide();
-            });
-        </script>
-        <script>
-       
-                const projectForm = document.getElementById('project_form');
-                const projectTableBody = document.getElementById('project_table_body');
-                console.log(projectForm)
-                console.log(projectTableBody)
-        
-                projectForm.addEventListener('submit', function(event) {
-                    console.log("submitted")
-                    event.preventDefault(); // Prevent the form from submitting normally
-        
-                    // Get the form data
-                    const formData = new FormData(event.target);
-                    const projectName = formData.get('project_name');
-                    const companyName = formData.get('company_name');
-                    const departmentName = formData.get('department_name');
-                    const designationName = formData.get('designation_name');
-                    const skills = formData.get('skills');
-                    const description = formData.get('description');
-                    const projectStartDate = formData.get('project_start_date');
-                    const projectEndDate = formData.get('project_end_date');
-                    const state = formData.get('state');
-                    const city = formData.get('city');
-        
-                    // Create a new table row
-                    const newRow = document.createElement('tr');
-                    newRow.innerHTML = `
-                        <td>${projectName}</td>
-                        <td>${companyName}</td>
-                        <td>${departmentName} / ${designationName}</td>
-                        <td>${skills}</td>
-                        <td>${description}</td>
-                        <td>${projectStartDate} / ${projectEndDate}</td>
-                        <td>${state} / ${city}</td>
-                        <td class="d-none"><input type="hidden" name="project_data" value="${JSON.stringify({ project_name: projectName, company_name: companyName, department_name: departmentName, designation_name: designationName, skills, description, project_start_date: projectStartDate, project_end_date: projectEndDate, state, city })}"></td>
-                    `;
-        
-                    // Add the new row to the table body
-                    projectTableBody.appendChild(newRow);
-        
-                    // Reset the form
-                    event.target.reset();
-        
-                    // Close the modal
-                    const modal = document.getElementById('add_project');
-                    const modalInstance = bootstrap.Modal.getInstance(modal);
-                    modalInstance.hide();
-                });
-    
-        </script>
-        <script>
-            const certificationForm = document.getElementById('certification_form');
-            const certificationTableBody = document.getElementById('certification_table_body');
-            certificationForm.addEventListener('submit',function (event){
-                event.preventDefault();
-                const formData = new FormData(event.target);
-                const certificationName = formData.get('certification_name');
-                const certificateId = formData.get('certificate_id');
-                const certificationExpiry = formData.get('certification_expiry');
-                const date = new Date.now();
-                if (certificationExpiry < date){
-                    const status = "Expired"
-                }
-                else{
-                    const status = "Active"
-                }
 
-                const newRow = document.createElement('tr');
-                newRow.innerHTML = `
-                <td>${certificationName}</td>
-                <td>${certificateId}</td>
-                <td>${certificationExpiry}</td>
-                <td>${status}</td>
-                `
-                
-                
-            })
+        <script>
+            
         </script>
         <!-- my script end here -->
         <!-- Select2 JavaScript -->
@@ -1220,6 +1151,13 @@ License: You must have a valid license purchased only from templatemonster to le
     <script src="/console/static/js/jquery-validations/jquery-validation.js"></script>
     
     <script src="/console/static/js/jquery-validations/jquery-additions-validations.js"></script>
+    <!-- jquery links -->
+
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js" crossorigin="anonymous"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/additional-methods.js" crossorigin="anonymous"></script>
+
     <!-- dropify -->
 
     <!-- Dropzone JavaScript -->
@@ -1234,99 +1172,324 @@ License: You must have a valid license purchased only from templatemonster to le
     <!--  -->
     <script src="../../static/vendors4/jasny-bootstrap/dist/js/jasny-bootstrap.min.js"></script>
 
-    <!--ID card modal-->
-    <!-- <div class="modal fade" id="exampleModal"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content" style="margin-right: 50%; margin-left:15%">
-                <div class="modal-body">
-                    <div class="col-lg-4 col-md-6">
-                        <div class="flip-card  m-3" onclick="flipCard()">
-                            <div class="flip-card-inner">
-                                <div class="flip-card-front">
-                                    <div class="card">
-                                        <img src="https://ihubtalent.com/wp-content/uploads/2022/06/ihublogo.png"
-                                            style="height: 60px; width: 60px; margin: 0 auto" alt="iHub Talent Logo"
-                                            class="card-logo" />
-                                        <img src="../../static/dist/img/avatar2.jpg" style="height: 100%; width: 100%"
-                                            class="card-img-top" alt="Front Image" />
-                                        <div class="card-body">
-                                            <table style="margin-left: 5px; margin-top: 0 auto">
-                                                <tbody>
-                                                    <tr>
-                                                        <th><b>Name</b></th>
-                                                        <td>: P Saikiran</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th><b>ID</b></th>
-                                                        <td>: 12345</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th><b>Batch No</b></th>
-                                                        <td>: 25</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th><b>Course</b></th>
-                                                        <td>: Full Stack Developer</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th><b>DOJ</b></th>
-                                                        <td>: 29-09-2023</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                            <div>
-                                                <i style="color: red"><b>Valid Upto 6 Months(00-00-00)</b></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="flip-card-back">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <img src="../../static/dist/img/qrcode.jpg" alt="Found"
-                                                style="position: relative" height="30%" width="30%" />
-                                            <h6 style="color: red">TERMS OF USE</h6>
-                                            <ul style="font-size: small; text-align: start">
-                                                <li>
-                                                    • This card is the property of iHub Talent
-                                                    Management Pvt Ltd and must be returned when you
-                                                    suspend, withdraw from, or complete your course(s).
-                                                </li>
-                                                <li>
-                                                    • You should hold this card when you are on the
-                                                    premises of iHub Talent Campus and should be
-                                                    produced on-demand.
-                                                </li>
-                                                <li>
-                                                    • If your card is lost, stolen, or damaged, you
-                                                    should report this immediately to Student Admission
-                                                    Support. You can request a replacement card for a
-                                                    fee.
-                                                </li>
-                                                <li>• This card is not transferable.</li>
-                                            </ul>
-                                            <p>EMERGENCY NO: 1234567898</p>
-                                            <address>
-                                                #515 NILGIRI BLOCK, ADITYA ENCLAVE, AMEERPET,
-                                                HYDERABAD, TELANGANA-500016
-                                            </address>
-                                            <p>
-                                                <center>1234567896, 3216549878</center>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                </div>
-            </div>
-        </div>
-    </div> -->
+        <!-- table -->
+
+
+          <!-- Bootstrap-table JavaScript -->
+    <script src="../vendors4/bootstrap-table/dist/bootstrap-table.min.js"></script>
+    <script src="../../static/vendors4/bootstrap-table/dist/bootstrap-table.min.js"></script>
+    
+    <script src="/console/static/dist/js/bootstrap-table-data.html"></script>
+
+
+
+    <script>
+        $(document).ready(function() {
+            $('#education_form').validate({
+                rules: {
+                    university_name: {
+                        required: true
+                    },
+                    city: {
+                        required: true
+                    },
+                    department: {
+                        required: true
+                    },
+                    percentage: {
+                        required: true
+                    },
+                    year_of_passing: {
+                        required: true
+                    }
+                },
+                messages: {
+                    university_name: {
+                        required: "Please Enter University Name"
+                    },
+                    city: {
+                        required: "Please Enter City"
+                    },
+                    department: {
+                        required: "Please Enter Department"
+                    },
+                    percentage: {
+                        required: "Please Enter Percentage"
+                    },
+                    year_of_passing: {
+                        required: "Please Enter Year of Passing"
+                    }
+                },
+                submitHandler: function(form, event) {
+                    event.preventDefault();
+
+                    // Get the form data
+                    const formData = new FormData(form);
+
+                    // Log form data for debugging
+                    for (const [key, value] of formData.entries()) {
+                        console.log(`${key}: ${value}`);
+                    }
+
+                    const universityName = formData.get('university_name');
+                    const city = formData.get('city');
+                    const departmentId = formData.get('department');
+                    const percentage = formData.get('percentage');
+                    const yearOfPassing = formData.get('year_of_passing');
+
+                    // Create a new table row
+                    const newRow = document.createElement('tr');
+
+                    // Add the form data to the new row
+                    newRow.innerHTML = `
+                        <td>${document.getElementById('education_table_body').rows.length + 1}</td>
+                        <td>${city}</td>
+                        <td>${universityName}</td>
+                        <td>${yearOfPassing}</td>
+                        <td>${percentage}</td>
+                        <td>${document.querySelector(`select[name="department"] option[value="${departmentId}"]`).textContent}</td>
+                        <td class="d-none"><input type="hidden" name="education_data" value='${JSON.stringify({ university_name: universityName, city, department_id: departmentId, year_of_passing: yearOfPassing, percentage })}'></td>
+                    `;
+
+                    // Add the new row to the table body
+                    document.getElementById('education_table_body').appendChild(newRow);
+
+                    // Reset the form
+                    form.reset();
+
+                    // Close the modal
+                    const modal = document.getElementById('add_education');
+                    const modalInstance = bootstrap.Modal.getInstance(modal);
+                    modalInstance.hide();
+                }
+            });
+        });
+    </script>
+    <script>
+    $(document).ready(function() {
+        $('#project_form').validate({
+            rules: {
+                project_name: {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 50
+                },
+                company_name: {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 50
+                },
+                department_name: {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 50
+                },
+                designation_name: {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 50
+                },
+                skills: {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 50
+                },
+                description: {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 50
+                },
+                project_start_date: {
+                    required: true
+                },
+                project_end_date: {
+                    required: true
+                },
+                state: {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 50
+                },
+                city:{
+                    required:true,
+                    minlength:3,
+                    maxlength:50
+                }
+            },
+            messages: {
+                project_name: {
+                    required: "Please enter Project Name",
+                    minlength: "Project Name must be at least 3 characters long",
+                    maxlength: "Project Name must not exceed 50 characters"
+                },
+                company_name: {
+                    required: "Please enter Company Name",
+                    minlength: "Company Name must be at least 3 characters long",
+                    maxlength: "Company Name must not exceed 50 characters"
+                },
+                department_name: {
+                    required: "Please enter Department Name",
+                    minlength: "Department Name must be at least 3 characters long",
+                    maxlength: "Department Name must not exceed 50 characters"
+                },
+                designation_name: {
+                    required: "Please enter Designation Name",
+                    minlength: "Designation Name must be at least 3 characters long",
+                    maxlength: "Designation Name must not exceed 50 characters"
+                },
+                skills: {
+                    required: "Please enter Skills",
+                    minlength: "Skills must be at least 3 characters long",
+                    maxlength: "Skills must not exceed 50 characters"
+                },
+                description: {
+                    required: "Please enter Description",
+                    minlength: "Description must be at least 3 characters long",
+                    maxlength: "Description must not exceed 50 characters"
+                },
+                project_start_date: {
+                    required: "Please select Project Start Date"
+                },
+                project_end_date: {
+                    required: "Please select Project End Date"
+                },
+                state: {
+                    required: "Please enter State",
+                    minlength: "State must be at least 3 characters long",
+                    maxlength: "State must not exceed 50 characters"
+                },
+                city:{
+                    required:true,
+                    minlength:3,
+                    maxlength:50
+                }
+            },
+            submitHandler: function(form, event) {
+                event.preventDefault();
+    
+                // Get the form data
+                const formData = new FormData(form);
+    
+                // Get form field values
+                const projectName = formData.get('project_name');
+                const companyName = formData.get('company_name');
+                const departmentName = formData.get('department_name');
+                const designationName = formData.get('designation_name');
+                const skills = formData.get('skills');
+                const description = formData.get('description');
+                const projectStartDate = formData.get('project_start_date');
+                const projectEndDate = formData.get('project_end_date');
+                const state = formData.get('state');
+                const city = formData.get('city')
+    
+                
+                // Add similar validation checks for other fields
+    
+                // Create a new table row
+                const newRow = document.createElement('tr');
+    
+                // Add the form data to the new row
+                newRow.innerHTML = `
+                    <td>${document.getElementById('projectTableBody').rows.length + 1}</td>
+                    <td>${projectName}</td>
+                    <td>${companyName}</td>
+                    <td>${departmentName}/${designationName}</td>
+                    <td>${skills}</td>
+                    <td>${description}</td>
+                    <td>${projectStartDate}/${projectEndDate}</td>
+                    <td>${state}/${city}</td>
+                    
+                    
+                    <td class="d-none"><input type="hidden" name="project_data" value='${JSON.stringify({ project_name: projectName, company_name: companyName, department_name: departmentName, designation_name: designationName, skills, description, project_start_date: projectStartDate, project_end_date: projectEndDate, state })}'></td>
+                `;
+    
+                // Append the new row to the table body
+                const projectTableBody = document.getElementById('projectTableBody');
+                projectTableBody.appendChild(newRow);
+    
+                // Reset the form
+                form.reset();
+    
+                // Close the modal
+                const modal = document.getElementById('add_project');
+                const modalInstance = bootstrap.Modal.getInstance(modal);
+                modalInstance.hide();
+            }
+        });
+    });
+    </script> 
+    <script>
+        $(document).ready(function(){
+            $('#certification_form').validate({
+                rules:{
+                    certification_name:{
+                        required:true,
+                        minlength:3,
+                        maxlength:50
+                    },
+                    certificate_id:{
+                        required:true
+                    },
+                    certification_expiry:{
+                        required:true
+                    }
+
+                },
+                messages:{
+                    certification_name:{
+                        required:"Please enter certificate name",
+                        minlength:"Certificate name should not be less then 3 characters",
+                        maxlength:"Certificate name should not exceed more then 50 characters"
+                    },
+                    certificate_id:{
+                        required:"Please enter certificate ID"
+                    },
+                    certification_expiry:{
+                        required:"Please enter certificate expiry date",
+
+                    }
+                },
+                submitHandler:function(form,event){
+                    event.preventDefault();
+                    
+                    const certificationTableBody = document.getElementById('certification_table_body')    
+                const formData = new FormData(event.target);
+                const certificationName = formData.get('certification_name');
+                const certificateId = formData.get('certificate_id');
+                const certificationExpiryDate = formData.get('certification_expiry');
+        
+                const date = new Date(certificationExpiryDate);
+                const currentDate = new Date();
+                const status = date < currentDate ? 'Expired' : 'Active';
+        
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td>${certificationTableBody.rows.length + 1}</td>
+                    <td>${certificationName}</td>
+                    <td>${certificateId}</td>
+                    <td>${certificationExpiryDate}</td>
+                    <td>${status}</td>
+                    <td class="d-none"><input type="hidden" name="certification_data" value='${JSON.stringify({ certification_name: certificationName, certificate_id: certificateId, certification_expiry: certificationExpiryDate, status })}'></td>
+                `;
+                
+        
+                certificationTableBody.appendChild(newRow);
+                event.target.reset();
+        
+                const modal = document.getElementById('add_certificate');
+                const modalInstance = bootstrap.Modal.getInstance(modal);
+                modalInstance.hide();
+            
+
+
+                }
+
+
+
+            })
+        })
+    </script>
+    
     <script>
         function flipCard() {
             var card = document.querySelector(".flip-card");
@@ -1345,6 +1508,76 @@ License: You must have a valid license purchased only from templatemonster to le
         }, 5000);
         })
     </script>
+    <script>
+        $(document).ready(function(){
+            $('#student_OTP').validate({
+                rules:{
+                    gender:{
+                        required:true,
+                    
+                    },
+                    Qualification:{
+                        required:true,
+                    },
+                    linkedin:{
+                        required:true
+                    },
+                    country:{
+                        required:true
+                    },
+                    state:{
+                        required:true // Corrected typo here
+                    },
+                    city:{
+                        required:true
+                    },
+                    permanent_country:{
+                        required:true
+                    },
+                    permanent_state:{
+                        required:true
+                    },
+                    permanent_city:{
+                        required:true
+                    }
+                },
+                messages:{
+                    gender:{
+                        required:"Please select your gender"
+                    },
+                    Qualification:{
+                        required:"Please select your qualification"
+                    },
+                    linkedin:{
+                        required:"Please enter your Linkedin profile link"
+                    },
+                    country:{
+                        required:"Please select your country"
+                    },
+                    state:{
+                        required:"Please select your state"
+                    },
+                    city:{
+                        required:"Please select your city"
+                    },
+                    permanent_country:{
+                        required:"Please select your country"
+                    },
+                    permanent_state:{
+                        required:"Please select your state"
+                    },
+                    permanent_city:{
+                        required:"Please select your city"
+                    }
+                },
+                submitHandler:function(form){
+                    form.submit();
+                } 
+    
+            });
+        });
+    </script>
+    
    <script>
     $(document).ready(function (){
       var stateData = {
@@ -1421,10 +1654,41 @@ License: You must have a valid license purchased only from templatemonster to le
 
 
 
+  //for parmanent address
+
+
+  $('.permanent_country-select').change(function (){
+    var selectedCountry = $(this).val();
+    $('.permanent_state-select').empty();
+    $('.permanent_city-select').empty();
+    $('.permanent_state-select').append('<option selected value="">Select Your State</option>');
+    $('.permanent_city-select').append('<option selected value="">Select Your City</option>');
+    if(selectedCountry){
+      $.each(stateData[selectedCountry], function (key, value) {
+        $('.permanent_state-select').append('<option value="' + value + '">' + value + '</option>');
+      });
+    }
+  });
+
+
+  $('.permanent_state-select').change(function (){
+    var selectedState = $(this).val();
+    $('.permanent_city-select').empty();
+    $('.permanent_city-select').append('<option selected value="">Select Your City</option>');
+    if(selectedState){
+      $.each(cityData[selectedState], function (key, value) {
+        $('.permanent_city-select').append('<option value="' + value + '">' + value + '</option>');
+      });
+    }
+  });
+
+
+
+
     })
    </script>
 </body>
 
-<!-- Mirrored from hencework.com/theme/deepor/dashboard1.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 08 Nov 2023 13:25:55 GMT -->
+
 
 </html>

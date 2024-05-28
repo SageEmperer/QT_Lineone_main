@@ -4,7 +4,10 @@ from datetime import date, timedelta
 from django.utils.safestring import mark_safe
 from django.db.models import Count
 from django.utils.html import strip_tags
+
+import smtplib, ssl
 import io
+from django.conf import settings
 from team_panel.models import *
 from django.http import FileResponse, Http404, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render,redirect,reverse
@@ -33,6 +36,8 @@ from django.db.models.functions import TruncMonth
 from django.core.exceptions import ObjectDoesNotExist
 from student_panel.models import *
 from django.conf import settings
+from email.message import EmailMessage
+
 # decorator for admin login
 def admin_required(view_func):
     @wraps(view_func)
@@ -8011,57 +8016,7 @@ def move_to_admission(request, id):
         messages.error(request, 'Invalid request')
         return redirect('admissions')          
           
-            
-
-    # if request.method == "POST":
-    #     opportunity_lead = register_user.leads.filter(id=id).first()
-        
-    #     if opportunity_lead:
-    #         student = opportunity_lead
-    #         data = {
-    #             'lead_position': 'ADMITTED',
-    #             'batch_number': register_user.regulations.get(pk=request.POST.get("batchno")),
-    #             'admission_date': datetime.now()
-    #         }
-            
-    #         if request.POST.get("courseFaculty"):
-    #             data['faculty'] = register_user.employee.get(pk=request.POST.get("courseFaculty"))
-            
-    #         register_user.leads.filter(id=id).update(**data)
-            
-    #         payment_data = {
-    #             'student_id': student,
-    #             'payment_amount': request.POST.get('admissionFee'),
-    #             'mode_of_payment': request.POST.get('paymenttype'),
-    #             'transaction_id': request.POST.get('transactionId'),
-    #             'course_id': student.course_name,
-    #             'crn_number': register_user,
-    #             'date_of_payment': datetime.now()
-    #         }
-            
-    #         if request.POST.get('paymenttype') == 'Cash':
-    #             # If the mode of payment is cash, update the student payment and lead model
-    #             Student_payment.objects.create(**payment_data)
-    #             student.admission_date = datetime.now()
-    #             student.amount_paid = request.POST.get('admissionFee')
-    #             student.save()
-    #             messages.success(request, 'OPPORTUNITY Lead moved to ADMITTED')
-    #             return redirect('admissions')
-    #         elif request.POST.get('upi_id_id'):
-    #             payment_data['upi_id'] = register_user.upi.get(pk=request.POST.get('upi_id_id'))
-    #         elif request.POST.get('net_banking_id'):
-    #             payment_data['net_banking'] = register_user.net_banking.get(pk=request.POST.get('net_banking_id'))
-    #         else:
-    #             messages.error(request, "Please select a payment method")
-    #             return redirect('admissions')
-            
-    #         Student_payment.objects.create(**payment_data)
-    #         messages.success(request, 'OPPORTUNITY Lead moved to ADMITTED')
-    #         return redirect('admissions')
-    #     else:
-    #         messages.error(request, 'OPPORTUNITY Lead not found')
-    #         return redirect('admissions')
-
+         
 
 @admin_required
 def admission_recipt(request, id):
@@ -8219,52 +8174,6 @@ def multiple_mark_as_spam(request):
 
 
 
-
-
-
-
-
-
-
-
-
-def admission(request):
-  try:
-     
-     
-     context={}
-     crn = request.session.get('admin_user', {}).get('crn')
-     register_user = Register_model.objects.get(crn=crn)
-     admin_user_info = request.session['admin_user']  # Retrieve the stored dictionary
-     crn1 = admin_user_info.get('id')
-     leads = Lead_generation.objects.filter(lead_position='ADMITTED',crn_number=register_user)
-    #  leads = Lead_generation.objects.filter(lead_postion="ADMITTED").order_by('-token_generated_date')
-     prospect_count = register_user.leads.filter(lead_position = "PROSPECT").count()
-     lead_count = register_user.leads.filter(lead_position = "LEAD").count()
-     mql_count = register_user.leads.filter(lead_position = 'MQL').count()
-     sql_count = register_user.leads.filter(lead_position = 'SQL').count()
-     request_discount_count = register_user.leads.filter(lead_position = 'REQUEST_DISCOUNT').count()
-     opportunity_count = register_user.leads.filter(lead_position = 'OPPORTUNITY').count()
-     admission_count = register_user.leads.filter(lead_position = 'ADMITTED').count()
-     spam_count = register_user.leads.filter(lead_position = 'SPAM').count()      
-  
-     context={
-     "leads":leads,
-     'active_tab': 'admission',
-     'prospect_count':prospect_count,
-     'lead_count':lead_count,
-     'mql_count':mql_count,
-     'sql_count':sql_count,
-     'request_discount_count':request_discount_count,
-     'opportunity_count':opportunity_count,
-     'admission_count':admission_count,
-     'spam_count':spam_count
-    }
-  except:
-     messages.error(request,'data was not found')
-  
-  return render(request,'Leads/admission.html', context) 
-
 def spam(request):
   try:
     crn = request.session.get('admin_user', {}).get('crn')
@@ -8310,24 +8219,6 @@ def spam(request):
 
       
 
-def generate_token_id():
-    current_date = timezone.now()
-    month_year_format = current_date.strftime("%m%y")  # Format: "0424" for April 2024
-
-    # Filter Lead_generation objects created in the current month and year
-    current_month_leads = Lead_generation.objects.annotate(
-        month=TruncMonth('token_generated_date')
-    ).filter(
-        month=current_date.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-    )
-
-    # Get the count of leads this month and increment for the new lead
-    count_this_month = current_month_leads.count() + 1
-    
-
-    # Format the token_id with leading zeros for the count
-    token_id = f"QT{month_year_format}-{count_this_month:03d}"
-    return token_id
 
 
 
@@ -8359,183 +8250,11 @@ def lead_stage(request, lead_id):
         
 
 
-def submit_to_mql(request, lead_id):
-    try:
-        lead = get_object_or_404(Lead_generation, pk=lead_id)
-
-        # Extract and update fields from the form data
-        course_faculty = request.POST.get('courseFaculty')
-        lead_type = request.POST.get('leadType')
-        demo_date = request.POST.get('demodate')
-        lead_description = request.POST.get('Leaddescription')
-
-        lead.course_faculty = course_faculty
-        lead.lead_type = lead_type
-        
-        lead.demo_date = parse_date(demo_date)
-        lead.lead_description = lead_description
-        lead.lead_position = 'ASSIGNED_DEMO'  # Update the lead_position to ASSIGNED_DEMO
-
-        lead.save()
-        messages.success(request, 'Lead successfully updated and demo assigned.')
-    except ValidationError as e:
-        # Handle specific known errors, e.g., validation issues
-        messages.error(request, f'Error updating lead: {e.message}')
-    except Exception as e:
-        # Handle unexpected errors
-        messages.error(request, f'An unexpected error occurred: {str(e)}')
-
-    return redirect('leads')
-
-
-def submit_to_sql(request, lead_id):
-    try:
-        lead = get_object_or_404(Lead_generation, pk=lead_id)
-
-        # Extract and update fields from the form data
-        # lead.course_faculty = request.POST.get('courseFaculty')
-        lead_type = request.POST.get('leadType')
-        
-        mql_description = request.POST.get('mqldescription')
-
-        
-        lead.lead_type = lead_type
-        
-        
-        lead.mql_description = mql_description
-        lead.lead_position = 'ATTENDED_DEMO'  # Update the lead_position to ASSIGNED_DEMO
-
-        lead.save()
-        messages.success(request, 'Lead successfully updated to SQL.')
-    except ValidationError as e:
-        # Handle specific known errors, e.g., validation issues
-        messages.error(request, f'Error updating lead: {e.message}')
-    except Exception as e:
-        # Handle unexpected errors
-        messages.error(request, f'An unexpected error occurred: {str(e)}')
-
-    return redirect('mql')
-
-def submit_to_opportunity(request, lead_id):
-    try:
-        lead = get_object_or_404(Lead_generation, pk=lead_id)
-
-        # Extract and update fields from the form data
-        lead.course_fee = request.POST.get('courseFee')
-        lead_type = request.POST.get('leadType')
-        lead.plan = request.POST.get('plan')
-        lead.sql_description = request.POST.get('sqldescription')
-        lead.discount_fee = request.POST.get('discountFee')
-        lead.Final_fee = request.POST.get('finalFee')
-        
-        lead.lead_type = lead_type
-        
-        
-        
-        lead.lead_position = 'OPPORTUNITY'  # Update the lead_position to ASSIGNED_DEMO
-
-        lead.save()
-        messages.success(request, 'Lead successfully updated to Opportunity.')
-    except ValidationError as e:
-        # Handle specific known errors, e.g., validation issues
-        messages.error(request, f'Error updating lead: {e.message}')
-    except Exception as e:
-        # Handle unexpected errors
-        messages.error(request, f'An unexpected error occurred: {str(e)}')
-
-    return redirect('sql')
-
-
-
-def submit_admission(request, lead_id):
-    try:
-        lead = get_object_or_404(Lead_generation, pk=lead_id)
-
-        # Extract and update fields from the form data
-        lead.course_faculty = request.POST.get('courseFaculty')
-        lead.plan = request.POST.get('plan')
-        lead.lead_postion = 'ADMITTED'  # Set lead_position to ADMITTED upon form submission
-        lead.demo_date=request.POST.get('demodate')
-        # Directly saving fields that need no processing
-        lead.course_fee=request.POST.get('courseFee')
-        lead.discount_fee = request.POST.get('discountFee')
-        lead.final_fee = request.POST.get('finalFee')
-        lead.admission_fee = request.POST.get('admissionFee')
-        
-        lead.batch_no=request.POST.get('batchno')
-        lead.remaining_fee=request.POST.get('remainingfee')
-        lead.paymentMode=request.POST.get('paymenttype')
-        
-        lead.lead_position = 'ADMITTED'  # Update the lead_position to ASSIGNED_DEMO
-        lead.joining_date = now().date()
-
-        lead.save()
-        messages.success(request, 'Lead successfully Admitted.')
-    except ValidationError as e:
-        # Handle specific known errors, e.g., validation issues
-        messages.error(request, f'Error updating lead: {e.message}')
-    except Exception as e:
-        # Handle unexpected errors
-        messages.error(request, f'An unexpected error occurred: {str(e)}')
-   
-    
-    return redirect('admission')  
 
 
 
 
-def re_demo(request, lead_id):
-    if request.method=='POST':
-        try:
-            lead = get_object_or_404(Lead_generation, pk=lead_id)
-            lead.demo_date=request.POST.get("demodate")
-            lead.save()
-            messages.success(request, "Demo  Assigned Successfully.")
-            return redirect('mql')
-        except:
-           
-           messages.error(request,"not found  or some error occured.")
-    return redirect('mql')  # Adjust redirect as needed
 
-
-def request_discount(request, lead_id):
-    try:
-       lead = get_object_or_404(Lead_generation, pk=lead_id)
-       if request.method == 'POST':
-            # Process your form data here. For example:
-            lead.lead_postion = 'REQUEST_DISCOUNT'
-            lead.lead_type = request.POST.get('leadType')
-            lead.plan = request.POST.get('plan')
-            lead.course_fee = request.POST.get('courseFee')
-            lead.discount_fee = request.POST.get('discountFee')
-            lead.final_fee = request.POST.get('finalFee')
-            lead.save()
-            messages.success(request, 'Discount request submitted successfully.')
-
-    except:
-      messages.error(request,'Something went wrong! Please try again later.')
-    return redirect('sql')
-
-
-def submit_admit(request, lead_id):
-    try:
-       lead = get_object_or_404(Lead_generation, pk=lead_id)
-       if request.method == 'POST':
-            # Process your form data here. For example:
-            lead.admission_fee = request.POST.get('admissionFee')
-        
-            lead.batch_no=request.POST.get('batchno')
-            lead.remaining_fee=request.POST.get('remainingfee')
-            lead.paymentMode=request.POST.get('paymenttype')
-            lead.lead_position = 'ADMITTED'
-            lead.joining_date = now().date()  
-            lead.save()
-            messages.success(request, 'Lead successfully Admitted')
-
-    except:
-      messages.error(request,'Something went wrong! Please try again later.')
-    return redirect('admission')
-   
 
 # # demo print
 # def demo_views(request,id):
@@ -8550,28 +8269,6 @@ def submit_admit(request, lead_id):
 #       return HttpResponse('We had some errors <pre>' + html_template + '</pre>')
 
 #     return response
-
-
-def stats_counts(request):
-    crn = request.session.get('admin_user', {}).get('crn')
-    register_user = Register_model.objects.get(crn=crn)
-    admin_user_info = request.session['admin_user']  # Retrieve the stored dictionary
-    crn1 = admin_user_info.get('id')
-    leads_count = Lead_generation.objects.filter(lead_position='LEAD',crn_number=register_user).count()
-    admissions_count = Lead_generation.objects.filter(lead_position='ADMITTED',crn_number=register_user).count()
-    other_count = Lead_generation.objects.filter(
-    crn_number=register_user
-).exclude(
-    Q(lead_position='LEAD') | Q(lead_position='ADMITTED') | Q(lead_position='SPAM')
-).count()
-
-    return {
-        'leads_count': leads_count,
-        'admissions_count': admissions_count,
-        'other_count': other_count,
-    }
-
-
 
 
 
@@ -8968,7 +8665,7 @@ def job_detailes(request,id):
 
     context= {
       'job_posts':job_posts,
-      'employee':employee
+      'employee':employee,
     }  
     return render(request,'hr_portal/HR details/jobdetails.html',context)
 
@@ -8997,6 +8694,25 @@ def job_details_export(request,id):
   return response
 
 
+
+
+# student profile with details the number of jobs he applyed
+def student_profile_console(request,std_id):
+    crn=request.session.get('admin_user').get('crn')
+    register_user = Register_model.objects.get(crn=crn)
+
+    if register_user.student_job_apply.filter(student_id=std_id).exists():
+      student = register_user.leads.get(id=std_id)
+
+    else:
+      student = None
+    jobs_applyed = register_user.student_job_apply.filter(student_id=std_id)  
+
+    context= {
+      'student':student,
+      'jobs_applyed':jobs_applyed
+    }  
+    return render(request,'hr_portal/Profile status/student_profile_console.html',context)
 
 
 
@@ -9046,8 +8762,6 @@ def students_not_intrested(request):
 def profile(request):
     return render(request,'hr_portal/Profile status/profile.html')
 
-def studentreport(request):
-    return render(request,'hr_portal/Profile status/studentreport.html')
 
 def applied_students(request):
     return render(request,'hr_portal/HR details/applied.html')
@@ -9087,8 +8801,10 @@ def job_gallery(request):
     job_category = register_user.job_category.filter(status='Active').all()
     qualification = register_user.qualifications.filter(status='Active')
     job_roles = register_user.jobrole.filter(status = 'Active')
-    job_postes = register_user.job_post.all().order_by('-id')
+    job_postes = register_user.job_post.annotate(apply_count=Count('studetjobapply')).order_by("-id")
     hr_details = register_user.employee.filter(department_name__department_name = 'Human Resources')
+    
+
     if request.method == "POST":
        jobtitle = request.POST.get('jobtitle')
        company = request.POST.get('company')
@@ -9114,6 +8830,8 @@ def job_gallery(request):
         post_by = Employee_model.objects.get(pk=hr),
         job_description = requirements
        )
+       messages.success(request, 'Job Post created successfully.')
+
        return redirect('job_gallery.html')
 
 
@@ -9127,6 +8845,45 @@ def job_gallery(request):
 
     }
     return render(request, 'hr_portal/job gallery/job_gallery.html',context)
+
+
+
+
+
+# job galery edit
+def job_gallery_edit(request,id):
+   if request.method == "POST":
+       jobtitle = request.POST.get('jobtitle')
+       company = request.POST.get('company')
+       experience = request.POST.get('experience')
+       qualification = request.POST.get('qualification')
+       skills = request.POST.get('skills')
+       role = request.POST.get('role')
+       salary = request.POST.get('salary')
+       last_date_to_apply = request.POST.get('last_date_to_apply')
+       hr = request.POST.get('hr')
+       requirements = request.POST.get('requirements')
+       if Job_post.objects.filter(id=id).exists():
+         print(Job_post.objects.filter(id=id))
+         Job_post.objects.filter(id=id).update(
+          companyname = Company_vendor.objects.get(pk=company),
+          job_title = jobtitle,
+          experience = experience,
+          qualification = Qualification.objects.get(pk=qualification),
+          skills = skills,
+          role = Jobrole.objects.get(pk=role),
+          salary = salary,
+          last_date_to_apply = last_date_to_apply,
+          post_by = Employee_model.objects.get(pk=hr),
+          job_description = requirements
+         )
+         messages.success(request, 'Job Post Updated Successfully')
+         return redirect('job_gallery.html')
+       
+   
+
+
+
 
 
 def export_job_posts_to_csv(request):
@@ -9199,9 +8956,153 @@ def get_company_vendor(request, id):
 
 
 
+@admin_required
+def job_gallery_applied(request,job_id):
+    crn= request.session.get('admin_user').get('crn')
+    register_user = Register_model.objects.get(crn=crn)
+    applyed_job = StudetJobApply.objects.filter(job_id=job_id,crn_number=register_user)
+    job_name = Job_post.objects.get(id=job_id)
+    context={
+      'applyed_job':applyed_job,
+      'job_name':job_name
+    }
+    
+    return render(request,'hr_portal/job gallery/jobgalleryapplied.html',context)
 
-def job_gallery_applied(request):
-    return render(request,'hr_portal/job gallery/jobgalleryapplied.html')
+
+@admin_required
+def job_applyed_status_change(request, jobid, apply_id):
+    crn = request.session.get('admin_user').get('crn')
+    register_user = Register_model.objects.get(crn=crn)
+    if request.method == "POST":
+        try:
+            apply = register_user.student_job_apply.get(pk=apply_id)
+            if request.POST.get('status'):
+                apply.status = request.POST.get('status')
+                status = request.POST.get('status')
+                apply.save()
+                port = 587
+                smtp_server = "smtp.zeptomail.in"
+                username = "emailapikey"
+                password = "PHtE6r0NRe3ujm4opxUD4vC6QsSiM94t+elhLQJEuYoWC/UAHE1TrtAplmK3qEx/UfhFFvLIzY5vtbzPseyNdz68N2tLXGqyqK3sx/VYSPOZsbq6x00YuVgYcUHUV47te95s1S3Xvd/SNA=="
+                user_list = {'student_full_name': apply.student_id.first_name, "status":status}
+                if status == "Qualified":
+                  html_message = render_to_string('hr_portal/mail_template/qualified_mail.html', context=user_list)
+                elif status == "Not Placed":
+                  html_message = render_to_string('hr_portal/mail_template/qualified_mail.html', context=user_list)
+                elif status == "Not Interested":
+                  html_message = render_to_string('hr_portal/mail_template/qualified_mail.html', context=user_list)
+                elif status == "Not Attended":
+                  html_message = render_to_string('hr_portal/mail_template/not_attended_mail.html', context=user_list)
+                elif status == "Not Eligible":
+                  html_message = render_to_string('hr_portal/mail_template/not_interested_mail.html', context=user_list)
+                elif status == "Placed":
+                  html_message = render_to_string('hr_portal/mail_template/placed_mail.html', context=user_list)
+                elif status == "Eligible / Profile Sent":
+                  html_message = render_to_string('hr_portal/mail_template/eligible_profile_sent_mail.html', context=user_list)  
+                elif status == "Under Process / Yet To Receive Feedback":
+                  html_message = render_to_string('hr_portal/mail_template/under_process_mail.html', context=user_list)  
+                elif status == "Level 1":
+                  html_message = render_to_string('hr_portal/mail_template/level_1_mail.html', context=user_list)  
+                elif status == "Level 2":
+                  html_message = render_to_string('hr_portal/mail_template/level_2_mail.html', context=user_list)  
+                elif status == "Level 3":
+                  html_message = render_to_string('hr_portal/mail_template/level_3_mail.html', context=user_list)
+                elif status == "Delayed Application":
+                  html_message = render_to_string('hr_portal/mail_template/delayed_application_mail.html', context=user_list)
+                
+                plain_message = strip_tags(html_message)
+                message = plain_message
+                msg = EmailMessage()
+                msg['Subject'] = f"Job Application Status for {apply.job_id.job_title}"
+                msg['From'] = "noreply@qtnext.com"
+                msg['To'] = apply.student_id.email
+                msg.set_content(message)
+                try:
+                    if port == 465:
+                        context = ssl.create_default_context()
+                        with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
+                            server.login(username, password)
+                            server.send_message(msg)
+                    elif port == 587:
+                        with smtplib.SMTP(smtp_server, port) as server:
+                            server.starttls()
+                            server.login(username, password)
+                            server.send_message(msg)
+                            
+                    else:
+                        print("use 465 / 587 as port value")
+                        exit()
+                    print("successfully sent")
+                except Exception as e:
+                    messages.error(request, "Failed to send email")
+                    print(e)
+
+ 
+                messages.success(request, 'Job Status Changed Successfully')
+            else:
+                messages.error(request, 'Status Not Found')
+            return redirect('jobgalleryapplied', job_id=jobid)  
+        except Exception as e:
+            messages.error(request, 'Record Not Found')
+        return redirect('jobgalleryapplied', job_id=jobid)
+    else:
+        return redirect('jobgalleryapplied', job_id=jobid)
+
+
+
+# export details of applyed jobs
+@admin_required
+def job_applyed_export(request, job_id):
+    try:
+        crn = request.session.get('admin_user').get('crn')
+        register_user = Register_model.objects.get(crn=crn)
+        apply_list = register_user.student_job_apply.filter(job_id=job_id)
+        job = register_user.job_post.get(id=job_id)
+        response = HttpResponse(content_type='text/csv')
+        writer = csv.writer(response)
+        writer.writerow(['S.No', 'Company Name', 'City', 'Student Name', 'Job Title', 'Posted Date', 'Last Date To Apply', 'Applied Time', 'Posted By', 'Status', 'Experience Required', 'Qualification', 'Skill','Email', 'Phone Number'])
+
+        i = 0
+        for apply in apply_list:
+            i += 1
+            applied_time_formatted = apply.applyed_date_time.strftime('%Y-%m-%d %H:%M:%S')  # Formatting the datetime
+            writer.writerow([
+                i,
+                apply.job_id.companyname.companyname,
+                apply.job_id.companyname.location,
+                apply.student_id.first_name + ' ' + apply.student_id.last_name,
+                apply.job_id.job_title,
+                apply.job_id.post_date,
+                apply.job_id.last_date_to_apply,
+                applied_time_formatted,  # Using the formatted datetime
+                apply.job_id.post_by,
+                apply.status,
+                apply.job_id.experience,
+                apply.job_id.qualification,
+                apply.job_id.skills,
+                apply.student_id.email,
+                apply.student_id.mobile_number
+            ])
+        
+        response['Content-Disposition'] = f'attachment; filename="{job.job_title}.csv"'
+        return response
+
+    except Exception as e:
+        print(e)
+        messages.error(request, 'Record Not Found')
+        return redirect('jobgalleryapplied', job_id=job_id)
+        
+
+
+
+
+
+
+    
+
+
+
 
 def job_gallery_qualified(request):
     return render(request,'hr_portal/job gallery/jobgalleryqualified.html')

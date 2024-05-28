@@ -34,6 +34,7 @@
           <table id="datable_1" class="table table-hover display pb-30 w-100 table-bordered">
               <thead class="bg-dark">
                   <tr>
+                      <th class="text-white">S.No</th>
                       <th class="text-white">ID</th>
                       <th class="text-white">title</th>
                       <th class="text-white">Company Name</th>
@@ -43,11 +44,13 @@
                       <th class="text-white">Posted Date</th>
                       <th class="text-white">Last Date to apply</th>
                       <th class="text-white text-center">Applied / Eligible / In Progress / Placed</th>
+                      <th class="text-white text-center">Actions</th>
                   </tr>
               </thead>
               <tbody>
                 {% for i in job_postes %}
                   <tr>
+                      <td>{{forloop.counter}}</td>
                       <td>{{i.id}}</td>
                       <td class="text-primary " style="cursor: -webkit-grab; cursor: grab";
                       data-toggle="modal"data-target="#jobdescription{{forloop.counter}}">{{i.job_title}}</td>
@@ -58,11 +61,12 @@
                       <td>{{i.post_date}}</td>
                       <td>{{i.last_date_to_apply}}</td>
                       <td class="text-center">
-                        <a href="{% url 'jobgalleryapplied' %}"><i class="glyphicon glyphicon-user text-primary fs-4"></i></a>120 /
+                        <a href="{% url 'jobgalleryapplied' i.id %}"><i class="glyphicon glyphicon-user text-primary fs-4"></i></a>{{i.apply_count}} /
                         <a href="{% url 'jobgalleryeligible' %}"><i class="glyphicon glyphicon-user text-secondary fs-4"></i></a>60 /
                         <a href="{% url 'jobgalleryinprogress' %}"><i class="glyphicon glyphicon-user text-warning fs-4"></i></a>10 /
                         <a href="{% url 'jobgalleryplaced' %}"><i class="glyphicon glyphicon-user text-success fs-4"></i></a>1
                       </td>
+                      <td><a  class="text-primary" data-toggle="modal" data-target="#editjob{{forloop.counter}}"><i class="glyphicon glyphicon-edit"></i></a></td>
                   </tr>
                   {% endfor %}
               </tfoot>
@@ -420,6 +424,172 @@ aria-hidden="true"
     
     <!-- Create modal ends here -->
 
+            <!-- edit job post start here -->
+            {% for job in job_postes %}
+            <div class="modal fade" 
+            id="editjob{{forloop.counter}}" 
+            tabindex="-1"
+            role="dialog" 
+            aria-labelledby="editjob{{forloop.counter}}" 
+            aria-hidden="true"
+         >
+          <div class="modal-dialog modal-lg  " role="document">
+            <div class="modal-content">
+              <form action="{% url 'job_gallery_edit' job.id %}" class="editform" method="post">
+                {% csrf_token %}
+              <div class="modal-header bg-dark">
+                <h4 class="modal-title text-white" >Add Job Post</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true" class="text-white">&times;</span>
+              </div>
+        
+              <div class="modal-body">
+                <!--  -->
+                <div class="row">
+    
+                  <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+                    <label for="" class="form-label">Job Title <span class="text-danger">*</span></label>
+                    <input type="text"placeholder="Full Stack developer" value="{{job.job_title}}" name="jobtitle" class="form-control jobtitle"/>
+                  </div>
+                  <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+                    <label for="" class="form-label">Company Name <span class="text-danger">*</span></label>
+                    <!-- <input type="text"placeholder="TCS" name="companyname" class="form-control mb-3"/> -->
+                    <select class="form-control custom-select company" aria-label="Default select example" name="company" id="company">
+                      <option selected value="">Select</option>
+                      {% for i in company_vendor %}
+                      <option value="{{i.id}}" {% if job.companyname.id == i.id %} selected {% endif %} data-company-id="{{i.id}}">{{i.companyname}} {{i.location}}</option>
+                      
+                      {% endfor %}
+                  </select>
+    
+                  </div>
+                
+                  <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+                    <label for="" class="form-label">Job Category <span class="text-danger">*</span></label>
+                    <!-- <input type="text"placeholder="Technical" class="form-control mb-3"/> -->
+                    <input type="text" value="{{job.companyname.category}}" name="category" readonly class="form-control category"/>
+    
+                  </div>
+                  <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+                    <label for="" class="form-label">Experience <span class="text-danger">*</span></label>
+                    <input type="text"placeholder="1-2 years" value="{{job.experience}}" name="experience" class="experience form-control"/>
+    
+                  </div>
+                  <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+                    <label for="" class="form-label">Qualification <span class="text-danger">*</span></label>
+                    <!-- <input type="text"placeholder="Btech" name="qualification" class="form-control mb-3"/> -->
+                    <select class="form-control custom-select qualification" aria-label="Default select example" name="qualification" >
+                      <option selected value="">Select Qualification</option>
+                      {% for i in qualification %}
+                      <option value="{{i.id}}" {% if job.qualification.id == i.id %} selected {% endif %}>{{i.qualification_name}}</option>
+                      {% endfor %}
+                    </select>   
+                  </div>
+    
+    
+                  <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+                    <label for="" class="form-label">Skills <span class="text-danger">*</span></label>
+                    <input type="text"placeholder="Python, django skills" value="{{job.skills}}" name="skills" class="form-control"/>
+                  </div>
+    
+    
+    
+                
+    
+                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+                  <label for="" class="form-label">Role <span class="text-danger">*</span></label>
+                  
+                  <select class="form-control custom-select role" aria-label="Default select example" name="role" id="role">
+                    <option selected value="">Select Job Role</option>
+                    {% for role in job_roles %}
+                    
+                    <option value="{{role.id}}" {% if job.role.id == role.id %} selected {% endif %} >{{role.jobrole_name}}</option>
+                    {% endfor %}
+                </select>
+                  
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+                  <label for="" class="form-label">Salary <span class="text-danger">*</span></label>
+                  <input type="text"placeholder="4LPA" name="salary" value="{{job.salary}}" class="salary form-control"/>
+    
+    
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+                  <label for="" class="form-label">Location <span class="text-danger">*</span></label>
+                  <input type="text" readonly placeholder="Hyderabad" name="location" value="{{job.companyname.location}}" class="location form-control"/>
+    
+    
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+                  <label for="" class="form-label">Email <span class="text-danger">*</span></label>
+                  <input type="email" readonly placeholder="Lokesh@gmail.com" name="email" value="{{job.companyname.email}}" class="email form-control"/>
+    
+    
+                </div>
+    
+                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+                  <label for="" class="form-label">Contact Number <span class="text-danger">*</span></label>
+                  <input type="number"placeholder="9876598765" name="contactnumber" readonly value="{{job.companyname.mobile}}" class="contactnumber form-control"/>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+                  
+                  <label for="date-field" class="form-label">Last Date to Apply <span class="text-danger">*</span></label>
+                  <input type="date" id="last_date_to_apply" name="last_date_to_apply" value="{{job.last_date_to_apply | date:'Y-m-d'}}"  class="last_date_to_apply form-control"> 
+    
+                </div>
+    
+                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+                  <label for="" class="form-label">HR Name:  <span class="text-danger">*</span></label>
+                  <select name="hr" class="form-control custom-select" id="">
+                    <option value="" selected>Please select HR</option>
+                    {% for i in hr_details %}
+                    <option value="{{i.id}}" {% if job.post_by.id == i.id %} selected {% endif %}>{{i.first_name}} {{i.last_name}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+    
+    
+    
+                <div class="col-12 ">
+                  <label for="" class="form-label">Job Description <span class="text-danger">*</span></label>
+                  
+                  <textarea name="requirements" id="editor_ck{{forloop.counter}}"  class="form-control mb-3" cols="30" rows="10">
+                    {{job.job_description | safe}}
+    
+                  </textarea>
+                     
+                </div>
+                
+              </div>
+    
+    
+                      </div>
+                      
+        
+                      <div class="mb-3 d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary m-1">Add Job Post</button>
+                        <button type="reset" class="btn btn-secondary m-1">Reset</button>
+                      </div>
+                      <!-- <div class="modal-footer justify-content-md-center d-grid gap-2 col-6 mx-auto ">
+                        <button type="submit" class="btn btn-info btn-md btn-block" data-bs-dismiss="modal">ADD</button>
+                      </div> -->
+                    </form>
+                    </div>
+                  </div>
+                </div>        
+        {% endfor %}
+
+
+
+            <!-- edit job post end here-->
+
+
+
+
+
+
+
+
 {% endblock %}
 
 
@@ -427,6 +597,18 @@ aria-hidden="true"
 {% block scripts %}
 <script>
   $(document).ready(function() {
+    // for date validatios
+    var today = new Date().toISOString().split('T')[0];
+
+    // Set the min attribute of the date input to the current date
+    $('#last_date_to_apply').attr('min', today);
+
+
+  //  $('.edit_last_date_to_apply').each(function() {
+  //    $(this).attr('min', today);
+  //  })
+
+
     $('.company').on('change', function() {
       var companyId = $(this).find(':selected').data('company-id');
       if (companyId) {
@@ -452,7 +634,6 @@ aria-hidden="true"
     });
   });
 </script>
-
 <script>
   $(document).ready(function(){
     $('#createform').validate({
@@ -490,6 +671,11 @@ aria-hidden="true"
         },
         last_date_to_apply: {
           required: true
+        },
+        requirements:{
+          required:true,
+          minlength:3,
+          maxlength:500
         }
       },
       messages: {
@@ -518,16 +704,119 @@ aria-hidden="true"
           required: "Please enter the expected salary",
           number: "Please enter a valid number"
         },
-        last_date_to_apply: "Please enter the last date to apply"
+        last_date_to_apply: "Please enter the last date to apply",
+        requirements:{
+          required:"Please enter the job description",
+          minlength:"Please enter at least 3 characters",
+          maxlength:"Please enter no more than 500 characters"
+        }
+      },
+      submitHandler: function (form) {
+        form.submit();
       }
     });
+
+    // for edit
+    $('.editform').each(function() {
+      $(this).validate({
+        rules: {
+          jobtitle:{
+            required:true,
+            minlength:3,
+            maxlength:50
+          },
+          company: {
+            required: true
+          },
+          experience: {
+            required: true,
+            number: true,
+            minlength: 1
+          },
+          qualification: {
+            required: true
+          },
+          skills: {
+            required: true,
+            minlength: 3,
+            maxlength: 100
+          },
+          role: {
+            required: true
+          },
+          salary: {
+            required: true,
+            number: true
+          },
+          hr:{
+            required:true
+          },
+          last_date_to_apply: {
+            required: true
+          },
+          requirements:{
+            required:true,
+            minlength:3,
+            maxlength:500
+          }
+        },
+        messages: {
+          company: "Please enter the company name",
+          experience: {
+            required: "Please enter your experience",
+            number: "Please enter a valid number",
+            minlength: "Please enter at least 1 year of experience"
+          },
+          jobtitle:{
+            required:"Please enter the job title",
+            minlength:"Please enter at least 3 characters",
+            maxlength:"Please enter no more than 50 characters"
+          },
+          qualification: "Please enter your qualification",
+          skills: {
+            required: "Please enter your skills",
+            minlength: "Please enter at least 3 characters",
+            maxlength: "Please enter no more than 100 characters"
+          },
+          hr:{
+            required:"Please select hr name"
+          },
+          role: "Please enter the job role",
+          salary: {
+            required: "Please enter the expected salary",
+            number: "Please enter a valid number"
+          },
+          last_date_to_apply: "Please enter the last date to apply",
+          requirements:{
+            required:"Please enter the job description",
+            minlength:"Please enter at least 3 characters",
+            maxlength:"Please enter no more than 500 characters"
+          }
+        },
+        submitHandler: function (form) {
+          form.submit();
+        } 
+      });
+    });
   });
-  
 </script>
+
 
 <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
 <script>
 CKEDITOR.replace('Suggestions')
 </script>
+{% for i in job_postes %}
+<script>
+  $(document).ready(function() {
+    function ckeditor(idx) {
+      CKEDITOR.replace('editor_ck' + idx);
+    }
+
+    ckeditor('{{ forloop.counter }}');
+
+  });
+</script>
+{% endfor %}
 
 {% endblock %}

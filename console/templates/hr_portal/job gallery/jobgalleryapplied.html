@@ -1,10 +1,10 @@
 {% extends 'base/base.html' %} 
-{% block title %}QTLineone | Student Details{% endblock %}
+{% block title %}QTLineone | Job Applied Students{% endblock %}
 {% block breadCrum %}
 
   <!-- Breadcrumb -->
   <div class="hk-pg-header d-flex justify-content-between mb-0">
-    <h4 class="hk-pg-title m-3">Students Applied for Python developer[100]</h4>
+    <h4 class="hk-pg-title m-3">Students Applied for {{job_name.job_title}} [{% if applyed_job %} {{applyed_job.count}} {% else %} 0 {% endif %}]</h4>
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb bg-transparent mb-0">
         <li class="breadcrumb-item"><a href="{% url 'placement_dashboard' %}">Dashboard</a></li>
@@ -21,12 +21,32 @@
 
 {% block content %}
 
+ <!-- message here -->
+
+ {% if messages %}
+ {% for message in messages %}
+   {% if message.tags == "error" %}
+     <div class="h-25 alert alert-danger alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
+   {% elif message.tags == "success" %}
+     <div class="h-25 alert alert-success alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
+     {% else %}
+    <div class="h-25 alert alert-info alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
+    {% endif %}
+   {% endfor %}
+ {% endif %}
+
+<!-- message end here -->
 
 
 <section class="hk-sec-wrapper shadow-lg p-3 mb-5 bg-white rounded">
   <div class="d-flex justify-content-end">
-    <a href='#' type="button" class="btn btn-success mr-2 mb-3"><i class="fa fa-download"></i> Print</a>
+    <a href="{% url 'job_applyed_export' job_name.id %}" type="button" class="btn btn-success mr-2 mb-3"><i class="fa fa-download"></i> Print</a>
   </div>
+  <div class="d-flex justify-content-end row">
+    <div id="hidden-btn" class="col-sm-12 col-lg-4 col-md-8 mb-3 d-flex align-items-center row"></div>
+    
+  </div>
+
   <div class="row">
   <div class="col-sm">
     <div class="table-wrap">
@@ -35,10 +55,11 @@
         class="table table-hover display pb-30 w-100 table-bordered">
       <thead class="bg-dark" >
         <tr>
+          <th class="text-white text-center"> All</th>
           <th class="text-white">S.No</th>
+          <th class="text-white">Company</th>
           <th class="text-white">Name</th>
           <th class="text-white">title</th>
-          <th class="text-white">Company</th>
           <th class="text-white">Posted</th>
           <th class="text-white">Last Date</th>
           <th class="text-white">Profile Status</th>
@@ -48,18 +69,21 @@
         </tr>
       </thead>
       <tbody>
+        {% for i in applyed_job %}
         <tr>
-          <td>1</td>
-          <td>Kolluru Lokesh</td>
-          <td>Python</td>
-          <td>Test Press Technology</td>
-          <td>March 14,2024</td>
-          <td>2024-03-14</td>
-          <td class="text-center"><a href=""><span class="badge badge-primary badge-pill">Applied</span></a></td>
-          <td>March 14,2024, 8.00 a.m</td>
+          <td class="text-center"><input type="checkbox" name="stdid" class="row-checkbox" data-id = "{{i.id}}" data-jobid ="{{i.job_id.id}}" ></td>
+          <td>{{forloop.counter}}</td>
+          <td>{{i.job_id.companyname.companyname}}</td>
+          <td><a href="{% url 'student_profile_console' i.student_id.id %}">{{i.student_id.first_name}} {{i.student_id.last_name}}</a></td>
+          <td>{{i.job_id.job_title}}</td>
+          <td>{{i.job_id.post_date}}</td>
+          <td>{{i.job_id.last_date_to_apply}}</td>
+          <td class="text-center"><a><span class="badge badge-primary badge-pill">{{i.status}}</span></a></td>
+          <td>{{i.applyed_date_time}}</td>
           <td><i class="fa fa-file-pdf-o" style="font-size:25px;margin-left:10px; color:red;" data-toggle="modal" data-target="#resumeModal"></i></td>
-          <td>Shyam Srinivas</td>
+          <td>{{i.job_id.post_by.first_name}} {{i.job_id.post_by.last_name}}</td>
         </tr>
+        {% endfor %}
         
       </tbody>
     </table>
@@ -69,7 +93,6 @@
 </section>
 
 <!-- Button trigger modal -->
-
 <!-- Modal -->
 <div class="modal fade" id="resumeModal" tabindex="-1" role="dialog" aria-labelledby="resumeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
@@ -121,5 +144,53 @@ $('#resumeModal').on('show.bs.modal', function (event) {
     $('#example').DataTable();
   });
 </script>
+
+<script>
+  $(document).ready(function () {
+    $(".row-checkbox").click(function () {
+      // If this checkbox is already checked, uncheck it
+      if ($(this).prop('checked')) {
+        $(".row-checkbox").prop('checked', false); // Uncheck all checkboxes
+        $("#hidden-btn").empty(); // Remove select element
+        $(this).prop('checked', true); // Check the current checkbox
+
+        // Append select element if not already present
+        if ($("#hidden-btn select").length === 0) {
+          var applyid = $(this).data('id');
+          var job_id = $(this).data('jobid');
+          console.log(applyid)
+          $("#hidden-btn").append(`
+          <form action="/job_applyed_status_change/${job_id}/${applyid}" class="col-12" method="post">
+            {% csrf_token %}
+            <div class="input-group">
+              <select class="form-control custom-select" name="status">
+                <option value='Applyed'>Applyed</option>
+                <option value='Qualified'>Qualified</option>
+                <option value='Not Placed'>Not Placed</option>
+                <option value='Not Interested'>Not Interested</option>
+                <option value='Not Attended'>Not Attended</option>
+                <option value='Not Eligible'>Not Eligible</option>
+                <option value='Placed'>Placed</option>
+                <option value='Eligible / Profile Sent'>Eligible / Profile Sent</option>
+                <option value='Under Process / Yet To Receive Feedback'>Under Process / Yet To Receive Feedback</option>
+                <option value='Level 1'>Level 1</option>
+                <option value='Level 2'>Level 2</option>
+                <option value='Level 3'>Level 3</option>
+                <option value='Delayed Application'>Delayed Application</option>
+              </select>
+              <div class="input-group-append">
+                <button class="btn btn-sm btn-primary" type="submit">Change Status</button>
+              </div>
+            </div>
+          </form>
+        `);
+               }
+      } else {
+        $("#hidden-btn").empty(); // Remove select element if checkbox is unchecked
+      }
+    });
+  });
+</script>
+
 
 {% endblock %}

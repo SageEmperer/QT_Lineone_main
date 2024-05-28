@@ -1,5 +1,5 @@
 {% extends 'base/base.html' %} 
-{% block title %}QTLineone | Student Details{% endblock %}
+{% block title %}QTLineone | Create Vendor{% endblock %}
 {% block breadCrum %}
 
   <!-- Breadcrumb -->
@@ -280,13 +280,14 @@ aria-hidden="true"
                               <div class="col-md-6">
                                 <label for="" class="form-label">Category <span class="text-danger">*</span></label>
                                 <!-- <input type="text"placeholder="Ex:TCS" name="companyname" class="form-control mb-3"/> -->
-                                <select class="form-control select2 sm-3" aria-label="Default select example" name="category"  required>
-                                  <option  value="">Select</option>
+                                <select class="form-control select2 sm-3" aria-label="Default select example" name="category" required>
+                                  <option value="">Select your job category</option>
                                   {% for jobc in job_category %}
-                                  <option {% if jobc.id == i.category %} selected {% endif %} value="{{jobc.id}}">{{jobc.Jobcategory_name}}</option>
+                                      <option value="{{ jobc.id }}" {% if i.category.id == jobc.id %} selected {% endif %}>
+                                          {{ jobc.Jobcategory_name }}
+                                      </option>
                                   {% endfor %}
-                                  
-                                </select>
+                              </select>
                               </div>
                               
                           </div>
@@ -528,6 +529,9 @@ aria-hidden="true"
 <script>
   $(document).ready(function(){
 
+    
+    
+
     $.validator.addMethod("noSpace", function(value, element) {
       return !(/^\s|\s$|\s{2,}/.test(value));
   }, "No excessive or leading/trailing spaces");
@@ -537,12 +541,13 @@ aria-hidden="true"
 
   $.validator.addMethod("customEmail", function(value, element) {
     // Regular expression for validating email
-    var emailRegex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+    var emailRegex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z]{2,})+$/
+    ;
     return this.optional(element) || emailRegex.test(value);
 }, "Please enter a valid email address.");    
 
 //mobile number
-
+  
 
 $.validator.addMethod(
           "customphone",
@@ -578,9 +583,29 @@ $.validator.addMethod(
             return !/\d/.test(value);
           }, "Numbers are not allowed in the designtion name.");
 
-
-
-
+          $.validator.addMethod('meetingLink', function(value, element) {
+            // Regular expression to match common URL pattern
+            var urlPattern = /^(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/;
+            
+            // List of standard domain extensions to exclude
+            var standardDomains = ['.com', '.net', '.org', '.in', '.co', '.edu', '.gov', '.mil', '.int', 
+                                   '.biz', '.info', '.name', '.pro', '.aero', '.asia', '.cat', 
+                                   '.coop', '.jobs', '.mobi', '.museum', '.tel', '.travel'];
+    
+            // Check if the URL matches the pattern
+            if (!urlPattern.test(value)) {
+                return false;
+            }
+    
+            // Ensure the URL does not end with a standard domain extension
+            for (var i = 0; i < standardDomains.length; i++) {
+                if (value.endsWith(standardDomains[i])) {
+                    return false;
+                }
+            }
+            
+            return true;
+        }, 'Please enter a valid meeting link without standard domain extensions.');
 
 
     $('.company_vendor_create').validate({
@@ -630,7 +655,8 @@ $.validator.addMethod(
           required:true,
           noSpace:true,
           minlength:5,
-          maxlength:200
+          maxlength:200,
+          meetingLink:true
         },
         pocname:{
           required:true,
@@ -740,7 +766,8 @@ $.validator.addMethod(
           required:true,
           noSpace:true,
           minlength:5,
-          maxlength:200
+          maxlength:200,
+          meetingLink:true
         },
         pocname:{
           required:true,

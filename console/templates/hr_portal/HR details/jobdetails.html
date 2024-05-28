@@ -146,7 +146,7 @@
                       <td> {{i.salary}} LPA</td>
                       <td>{{i.last_date_to_apply}}</td>
                       <td class="text-center">
-                        <a href="{% url 'jobgalleryapplied' %}"><i class="glyphicon glyphicon-user text-primary fs-4"></i></a>120 /
+                        <a href="{% url 'jobgalleryapplied' i.id %}"><i class="glyphicon glyphicon-user text-primary fs-4"></i></a>120 /
                         <a href="{% url 'jobgalleryeligible' %}"><i class="glyphicon glyphicon-user text-secondary fs-4"></i></a>60 /
                         <a href="{% url 'jobgalleryinprogress' %}"><i class="glyphicon glyphicon-user text-warning fs-4"></i></a>10 /
                         <a href="{% url 'jobgalleryplaced' %}"><i class="glyphicon glyphicon-user text-success fs-4"></i></a>1

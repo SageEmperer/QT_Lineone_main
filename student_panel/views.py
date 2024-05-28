@@ -9,9 +9,16 @@ def student_required(view_func):
         if 'student' not in request.session:
             # If 'student' is not in session, redirect to login page
             return redirect('student_login')
+        
+
+        
         # If 'student' is in session, proceed to the view
         return view_func(request, *args, **kwargs)
     return wrapper
+
+
+
+        
 
 
 
@@ -50,7 +57,6 @@ def student_login(request):
 
 
 
-
 @student_required
 def student_logout(request):
     if request.method == "POST":
@@ -68,12 +74,58 @@ def student_OTP(request):
     crn = student.crn_number
     register_user = Register_model.objects.get(crn=crn)
     qualification = register_user.qualifications.all()
+    
+
+    if request.method == "POST":
+        gender = request.POST.get('gender')
+        stdQualification =  request.POST.get('Qualification')
+        linkedin = request.POST.get('linkedin')
+        country =  request.POST.get('country')
+        state = request.POST.get('state')
+        city = request.POST.get('city')
+        education_data=request.POST.getlist('education_data')
+        project_data = request.POST.getlist('project_data')
+        certification_data = request.POST.getlist('certification_data')
+        qualification_instance = Qualification.objects.get(pk=stdQualification)
+        permanent_country = request.POST.get('permanent_country')
+        permanent_state = request.POST.get('permanent_state')
+        permanent_city = request.POST.get('permanent_city')
+        StudentOneTimeProfile.objects.create(
+
+            student = LeadModel.objects.get(pk=student_id),
+            gender = gender,
+            Qualification = qualification_instance,
+            linkedin = linkedin,
+            country = country,
+            state = state,
+            city = city,
+            permanent_country = permanent_country,
+            permanent_state = permanent_state,
+            permanent_city = permanent_city,
+            education_data = education_data,
+            project_data = project_data,
+            certification_data = certification_data,
+        )
+        
+        credential = StudentCredentials.objects.get(student_id= student_id)
+        credential.oneTimeProfile = True
+        credential.save()
+        messages.success(request, 'Profile created successfully')
+        return redirect('dash')
+
     context = {
         'student':student,
         'qualification':qualification
     }
 
     return render(request, 'student_OTP.html',context)
+
+
+
+
+
+            
+        
 
 
 
@@ -227,8 +279,30 @@ def matched_jobs(request):
     student = LeadModel.objects.get(id = student_id)
     crn = student.crn_number
     register_user = Register_model.objects.get(crn=crn)
-    jobs = register_user.job_post.all()
+    applied_jobs = StudetJobApply.objects.filter(student_id=student_id).values_list('job_id', flat=True)
+    jobs = register_user.job_post.filter(last_date_to_apply__gte=datetime.now()).exclude(id__in=applied_jobs)
+
     print("studentid",student_id)
+    # method for applying for the jobs by the student
+    if request.method == "POST":
+        job_id = request.POST.get('job_id')
+        print("job_id", job_id)
+        if register_user.job_post.filter(id=job_id).exists():
+            StudetJobApply.objects.create(
+                crn_number = register_user,
+                job_id = Job_post.objects.get(pk=job_id),
+                student_id = LeadModel.objects.get(pk=student.id),
+                applyed_date_time = datetime.now()
+            )
+
+            messages.success(request,'Job Applyed Successfully')
+            return redirect('jobs')
+        else:
+            messages.error(request,'Job Post not found!')
+            return redirect('jobs')
+            
+
+    
     context = {
 
         'jobs':jobs,

@@ -140,8 +140,13 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Email Api key
 
-URL_DOMAIN = 'http://172.29.240.1:8080'
+EMAIL_API_KEY = "HtE6r0NRe3ujm4opxUD4vC6QsSiM94t+elhLQJEuYoWC/UAHE1TrtAplmK3qEx/UfhFFvLIzY5vtbzPseyNdz68N2tLXGqyqK3sx/VYSPOZsbq6x00YuVgYcUHUV47te95s1S3Xvd/SNA=="
+
+
+
+URL_DOMAIN = 'http://192.168.1.49:8080'
 
 
 

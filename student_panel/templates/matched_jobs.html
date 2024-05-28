@@ -3,6 +3,7 @@
 {% block title %} <title> Placements </title> {% endblock %}
 
 {% block content %}
+
 <div>
 
     <nav class="navbar mt-3 mb-2 ">
@@ -21,7 +22,17 @@
         </ul>
     </nav>
 </div>
-
+{% if messages %}
+{% for message in messages %}
+{% if message.tags == "error" %}
+<div class="h-25 alert alert-danger alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
+{% elif message.tags == "success" %}
+<div class="h-25 alert alert-success alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
+{% else %}
+<div class="h-25 alert alert-info alert-dismissible fade show mt-2 h-25 text-center" role="alert">{{ message }}</div>
+{% endif %}
+{% endfor %}
+{% endif %}
 
 <div class="col-xl-12 pa-0 mt-1">
     <div class="profile-cover-wrap overlay-wrap m-3">
@@ -240,11 +251,12 @@
                             <!-- <p class="mb-25">More complex forms can be built using the grid classes. Use these for form layouts that require multiple columns, varied widths, and additional alignment options.</p> -->
                             <div class="row">
                                 <div class="col-sm">
-                                    <form>
+                                    <form method="post" class="" action="" >
+                                        {% csrf_token %}
                                         <div class="row">
                                             <div class="col-md-6 form-group">
                                                 <label for="firstName">Job ID</label>
-                                                <input class="form-control" id=""
+                                                <input class="form-control" name="job_id"
                                                     type="text" readonly value="{{i.id}}">
                                             </div>
                                             <div class="col-md-6 form-group">
@@ -291,7 +303,7 @@
                                             <textarea name="" class="form-control" id="" cols="30" rows="2" placeholder="H No 7-1-618/NG/302, Flat No 302, Aditya Enclave, Ameerpet, Hyderabad, Telangana, 500016 Land Mark: Beside Ameerpet Metro Station"></textarea>
                                         </div>
                                         <div class="modal-footer" style="border: none;">
-                                            <button type="button" class="btn" style="background-color: #132649; color: white;">Submit</button>
+                                            <button type="submit" class="btn" style="background-color: #132649; color: white;">Submit</button>
                                             <button type="button" class="btn btn-secondary"
                                                 data-dismiss="modal">Close</button>
 

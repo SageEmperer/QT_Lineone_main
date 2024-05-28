@@ -35,7 +35,6 @@
                 <th class="text-white">Name</th>
                 <th class="text-white">Email</th>
                 <th class="text-white">Phone</th>
-                <th class="text-white">Alternate Number</th>
                 <th class="text-white">Qualification</th>
                 <th class="text-white">Year of Passing</th>
                 <th class="text-white">Current Location</th>
@@ -43,11 +42,10 @@
             </thead>
             <tbody style="background-color:mistyrose;">
                 <td><img src="../../static/dist/img/avatar1.jpg" alt="user" class="avatar-img rounded-circle" style="width: 70px; height: 70px;"></td>
-                <td>345</td>
-                <td style="font-weight:bold">Gogulakonda sai charan</td>
-                <td>saicharan@gmail.com</td>
-                <td>9390951447</td>
-                <td>8886657890</td>
+                <td class="font-weight-bold">{{student.token_id}}</td>
+                <td style="font-weight:bold">{{student.first_name}} {{student.last_name}}</td>
+                <td>{{student.email}}</td>
+                <td>{{student.mobile_number}}</td>
                 <td>Others</td>
                 <td>2021</td>
                 <td>Hyderabad</td>
@@ -80,17 +78,19 @@
         </tr>
       </thead>
       <tbody>
+        {% for i in jobs_applyed %}
         <tr>
-          <td>1</td>
-          <td>Python</td>
-          <td>Test Press Technology</td>
-          <td>March 14,2024</td>
-          <td>2024-03-14</td>
-         <td class="text-center"><a href=""><span class="badge badge-success badge-pill">Applied</span></a></td>
-          <td>March 14,2024</td>
+          <td>{{forloop.counter}}</td>
+          <td>{{i.job_id.job_title}}</td>
+          <td>{{i.job_id.companyname.companyname}}</td>
+          <td>{{i.job_id.post_date}}</td>
+          <td>{{i.job_id.last_date_to_apply}}</td>
+         <td class="text-center"><span class="badge badge-primary badge-pill">{{i.status}}</span></td>
+          <td>{{i.applyed_date_time}}</td>
           <td class="text-center"><i class="fa fa-file-pdf-o" style="font-size:25px;margin-left:10px; color:red;" data-toggle="modal" data-target="#resumeModal"></i></td>
-          <td>Shyam Srinivas</td>
+          <td>{{i.job_id.post_by.first_name}} {{i.job_id.post_by.last_name}}</td>
         </tr>
+        {% endfor %}
       </tbody>
     </table>
   </div>

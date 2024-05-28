@@ -22,8 +22,6 @@ urlpatterns = [
     path('specialization/',views.specialization,name="specialization"),
     path('plans/',views.plans,name="plans"),
     path('net_banking/',views.net_banking,name="net_banking"),
-    path('register/',views.register_page,name="register"),
-    path('otp_page/',views.otp_page,name="otp_page"),
     path('vendor/',views.vendor,name="vendor"),
     path('purpose_of_visit/',views.purposeOfVisit,name="purpose_of_visit"),
     path('prospect_type/',views.prospect_type,name="prospect_type"),
@@ -112,18 +110,10 @@ urlpatterns = [
     path('mark_as_lead/<int:prospect_id>/', views.mark_as_lead, name='mark_as_lead'),
     path('lead_stage/<int:lead_id>/', views.lead_stage, name='lead_stage'),
 
-    path('re_demo/<int:lead_id>/', views.re_demo, name='re_demo'),
-
-    path('submit_to_opportunity/<int:lead_id>/', views.submit_to_opportunity, name='submit_to_opportunity'),
-
 
     # udpated operations on leads
     path('submit_enquiry/', views.submit_enquiry_form, name='submit_enquiry'),
-    path('submit_to_mql/<int:lead_id>/', views.submit_to_mql, name='submit_to_mql'),
-    path('submit_to_sql/<int:lead_id>/', views.submit_to_sql, name='submit_to_sql'),
-    path('submit_admission/<int:lead_id>/', views.submit_admission, name='submit_admission'),
-    path('request_discount/<int:lead_id>/', views.request_discount, name='request_discount'),
-    path('submit_admit/<int:lead_id>/', views.submit_admit, name='submit_admit'),
+
     path('enquiry_verify_otp/', views.enquiry_verify_otp, name='enquiry_verify_otp'),
     path('multiple_mark_as_spam/', views.multiple_mark_as_spam, name='multiple_mark_as_spam'), 
 
@@ -170,7 +160,7 @@ urlpatterns = [
     path('studentnotplaced/',views.students_notplaced, name='studentsnotplaced'),
     path('totalstudents/',views.total_students_applied, name='totalstudents'),
     path('profile/', views.profile,name='profile'),
-    path('studentsreport/', views.studentreport,name='studentsreport'),
+    path('student_profile_console/<int:std_id>', views.student_profile_console,name='student_profile_console'),
     path('hr_leads', views.hr_leads, name='hr_leads'),
     path('hr_confirmed', views.hr_confirmed, name='hr_confirmed'),
     path('not_interested_hr', views.not_interested_hr, name='not_interested_hr'),
@@ -180,7 +170,9 @@ urlpatterns = [
     path('job_gallery',views.job_gallery,name='job_gallery.html'),
     path('Studentfilter',views.Student_filter,name="student_filter.html"),
     path('student_details_json/',views.student_details_json,name="student_details_json"),
-    path('jobgalleryapplied/',views.job_gallery_applied, name='jobgalleryapplied'),
+    path('jobgalleryapplied/<int:job_id>',views.job_gallery_applied, name='jobgalleryapplied'),
+    path('job_applyed_status_change/<int:jobid>/<int:apply_id>',views.job_applyed_status_change, name='job_applyed_status_change'),
+    path('job_applyed_export/<int:job_id>',views.job_applyed_export,name="job_applyed_export"),
     path('jobgalleryqualified/',views.job_gallery_qualified, name='jobgalleryqualified'),
     path('jobgalleryplaced/',views.job_gallery_placed, name='jobgalleryplaced'),
     path('placementstatus/',views.placement_status, name='placementstatus'),
@@ -592,7 +584,8 @@ urlpatterns = [
    path('jobrole_import/',views.jobrole_import,name="jobrole_import"),
 
 
-
+   # jobpost  edit 
+   path('job_gallery_edit/<int:id>',views.job_gallery_edit,name="job_gallery_edit"),
 
 
 

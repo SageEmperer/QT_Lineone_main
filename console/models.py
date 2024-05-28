@@ -13,6 +13,7 @@ from django.utils import timezone
 from django.utils.timezone import now
 from django.db.models import Max
 from django.conf import settings
+# from ckeditor.fields import RichTextField
 
 
 class Register_model(models.Model):
@@ -300,7 +301,7 @@ class BranchModel(models.Model):
         if not self.id:
             return
 
-        qr_url = f"{settings.URL_DOMAIN}/{self.id}/{self.crn_number.crn}"
+        qr_url = f"{settings.URL_DOMAIN}/inquiry_form/{self.id}/{self.crn_number.crn}"
 
         qr = qrcode.make(qr_url)
         buffer = BytesIO()
@@ -800,60 +801,6 @@ class Qualification(models.Model):
 
 
 
-class Lead_generation(models.Model):
-  
-    crn_number = models.ForeignKey(Register_model, on_delete=models.CASCADE, related_name='Register_model')
-    token_id = models.CharField(max_length=255)
-    token_generated_date = models.DateField(default=now)
-    firstname = models.CharField(max_length=255)
-    lastname = models.CharField(max_length=255)
-    email = models.EmailField(unique=True)
-    phone = models.CharField(max_length=15)
-    lead_source = models.CharField(max_length=255, null=True, blank=True)
-    lead_stage = models.CharField(max_length=255, null=True, blank=True)
-    course_interested_in = models.ForeignKey(Course, on_delete=models.CASCADE)  
-    Training_type = models.ForeignKey(TrainingType, on_delete=models.CASCADE)
-    branch_name = models.ForeignKey(BranchModel, on_delete=models.CASCADE)
-    enquiry_taken_by = models.ForeignKey(Register_model, on_delete=models.CASCADE) 
-
-
-    LEAD_POSITION = (
-        ('LEAD', 'LEAD'),
-        ('ASSIGNED_DEMO', 'ASSIGNED_DEMO'),
-        ('ATTENDED_DEMO', 'ATTENDED_DEMO'),
-        ('REQUEST_DISCOUNT', 'REQUEST_DISCOUNT'),
-        ('OPPORTUNITY', 'OPPORTUNITY'),
-        ('ADMITTED', 'ADMITTED'),
-        ('SPAM', 'SPAM'),
-    )
-    lead_position = models.CharField(max_length=100, choices=LEAD_POSITION)
-    lead_type = models.CharField(max_length=255, null=True, blank=True)
-
-    has_attended_demo = models.BooleanField(default=False)
-    request_acceptance = models.BooleanField(default=False)
-
-    # Course Information
-    plan = models.CharField(max_length=255, null=True, blank=True)
-    course_faculty = models.CharField(max_length=255, null=True, blank=True)
-    course_fee = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    discount_fee = models.IntegerField(null=True, blank=True)
-    Final_fee = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    admission_fee = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    remaining_fee = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-
-    demo_date = models.DateField(null=True, blank=True)
-    batch_no = models.CharField(max_length=255, null=True, blank=True)
-    paymentMode = models.CharField(max_length=255, null=True, blank=True)
-    paymentid = models.CharField(max_length=255, null=True, blank=True)
-    transactionid = models.CharField(max_length=255, null=True, blank=True)
-    joining_date = models.DateField(null=True, blank=True)
-
-    # For description
-    lead_description = models.TextField(null=True, blank=True)
-    mql_description = models.TextField(null=True, blank=True)
-    sql_description = models.TextField(null=True, blank=True)
-
-
 
 
 
@@ -906,6 +853,22 @@ class LeadModel(models.Model):
     amount_paid = models.DecimalField(max_digits=9,decimal_places=2,null=True)
     discount_request_accepted = models.BooleanField(default=False)
     agreed_amount = models.DecimalField(max_digits=9,decimal_places=2,null=True)
+    # student_password = models.CharField(max_length=100)
+    # gender = models.CharField(max_length=100,null=True)
+    # Qualification = models.ForeignKey(Qualification,on_delete=models.SET_NULL,null=True)
+    # linkedin = models.CharField(max_length=100,null=True)
+    # country = models.CharField(max_length=100,null=True)
+    # state = models.CharField(max_length=100,null=True)
+    # city = models.CharField(max_length=100,null=True)
+    # education_data = models.CharField(max_length=2000,null=True)
+    # project_data = models.CharField(max_length=2000,null=True)
+    # certification_data = models.CharField(max_length=2000,null=True)
+
+
+
+    
+
+    # student_is_active = models.BooleanField(default=True)
     # transaction_id = models.CharField(max_length=100,null=True)
     # mode_of_payment = models.CharField(max_length=100,null=True)
     # upi_payment = models.ForeignKey(upipayments,on_delete=models.SET_NULL,null=True)
@@ -1010,6 +973,7 @@ class expences_type(models.Model):
     def __str__(self):
         return str(self.expences_type)
     
+
 class company_and_employee_modal(models.Model):
     crn_number = models.ForeignKey(Register_model, on_delete=models.CASCADE, related_name='company_and_employee_modal')
     category=models.CharField(max_length=100,null=True,blank=True)
@@ -1093,7 +1057,7 @@ class Job_post(models.Model):
     post_date = models.DateField(default=datetime.today())
     last_date_to_apply = models.DateField()
     post_by = models.ForeignKey(Employee_model,on_delete=models.SET_NULL,null=True) 
-    # date_of_post=models.DateTimeField(default=datetime.now())
+   
     job_description = models.TextField()
 
 
@@ -1101,20 +1065,33 @@ class Job_post(models.Model):
         return str(self.job_title)
 
 
+# student job post
+class StudetJobApply(models.Model):
+    STATUS_CHOICES = [
+        ('Applyed', 'Applyed'),
+        ('Qualified', 'Qualified'),
+        ('Not Placed', 'Not Placed'),
+        ('Not Interested', 'Not Interested'),
+        ('Not Attended', 'Not Attended'),
+        ('Not Eligible', 'Not Eligible'),
+        ('Placed', 'Placed'),
+        ('Eligible / Profile Sent', 'Eligible / Profile Sent'),
+        ('Under Process / Yet To Receive Feedback', 'Under Process / Yet To Receive Feedback'),
+        ('Level 1', 'Level 1'),
+        ('Level 2', 'Level 2'),
+        ('Level 3', 'Level 3'),
+        ('Delayed Application', 'Delayed Application'),
+    ]
+    crn_number = models.ForeignKey(Register_model,on_delete=models.CASCADE,related_name="student_job_apply")
+    job_id = models.ForeignKey(Job_post,on_delete=models.CASCADE)
+    student_id = models.ForeignKey(LeadModel,on_delete=models.CASCADE)
+    applyed_date_time = models.DateTimeField()
+    status = models.CharField(max_length=100, choices=STATUS_CHOICES)
 
+    def __self__(self):
+        return f'{self.job_id.job_title}-{self.student_id.first_name} {self.student_id.last_name}'
 
-
-
-
-
-
-
-
-
-
-
-
-
+ 
 
 # certification
 
@@ -1296,3 +1273,42 @@ class Feedback(models.Model):
     suggestion=models.TextField(null=True,blank=True)
     status = models.CharField(choices=Status, max_length=20)
     overall_rating = models.IntegerField(choices=marks, default=0)
+
+
+
+
+
+
+
+
+
+
+    # studend details
+# class Student_Details(models.Model):
+#     crn_number = models.ForeignKey(Register_model, on_delete=models.CASCADE)
+#     lead_id = models.ForeignKey(Le, on_delete=models.CASCADE)
+#     student_payment_id = models.ForeignKey(Student_payment, on_delete=models.CASCADE)
+#     student_admission_id = models.CharField(max_length=100)
+#     student_image = models.ImageField(upload_to="users", null=False)
+#     student_first_name = models.CharField(max_length=100)
+#     student_last_name = models.CharField(max_length=100)
+#     student_mobile_number = models.CharField(max_length=11)
+#     student_email = models.EmailField()
+#     student_password = models.CharField(max_length=225, null=True, blank=True)
+#     student_education_data = models.CharField(max_length=5000, null=True)
+#     student_profile_data = models.CharField(max_length=5000, null=True)
+#     student_certification_data = models.CharField(max_length=5000, null=True)
+#     student_current_location = models.CharField(max_length=200)
+#     student_current_country = models.CharField(max_length=200,null=True)
+#     student_current_state = models.CharField(max_length=200, null=True)
+#     student_current_city = models.CharField(max_length=200, null=True)
+#     student_current_pincode = models.IntegerField(null=True)
+#     student_permanent_location = models.CharField(max_length=200)
+#     student_permanent_country = models.CharField(max_length=200, null=True)
+#     student_permanent_state = models.CharField(max_length=200, null=True)
+#     student_permanent_city = models.CharField(max_length=200, null=True)
+#     student_permanent_pincode = models.IntegerField(null=True)
+#     student_about = RichTextField()
+
+#     def _str_(self):
+#         return str(self.student_first_name)
